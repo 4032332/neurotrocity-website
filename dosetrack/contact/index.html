@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DoseTrack — Contact</title>
+<meta name="description" content="Get in touch with the DoseTrack team.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/dosetrack/assets/css/dosetrack.css">
+</head>
+<body class="dt">
+  <div class="dt-doc">
+    <div class="dt-doc-header">
+      <a class="dt-back" href="/dosetrack/landing/">&larr; DoseTrack</a>
+      <h1>Contact us</h1>
+      <p class="dt-doc-updated">Questions, feedback, or an issue with the app? Send us a message and we'll get back to you at the email you provide.</p>
+    </div>
+
+    <form class="dt-form" action="https://formsubmit.co/dosetrack@neurotrocity.com" method="POST">
+      <!-- FormSubmit config: plain email notification, no captcha page, redirect to our own thank-you page -->
+      <input type="hidden" name="_subject" value="New DoseTrack contact form submission">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://neurotrocity.com/dosetrack/contact/thanks.html">
+      <!-- honeypot field to deter simple bots -->
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+      <div class="dt-field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required autocomplete="name">
+      </div>
+
+      <div class="dt-field">
+        <label for="email">Your email</label>
+        <input id="email" name="email" type="email" required autocomplete="email">
+      </div>
+
+      <div class="dt-field">
+        <label for="topic">Topic</label>
+        <select id="topic" name="topic">
+          <option value="General inquiry">General inquiry</option>
+          <option value="Bug report">Bug report</option>
+          <option value="Billing / subscription">Billing / subscription</option>
+          <option value="Privacy / data request">Privacy / data request</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="dt-field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+
+      <button class="dt-submit" type="submit">Send message</button>
+    </form>
+
+    <footer class="dt-footer">
+      &copy; 2026 Neurotrocity · DoseTrack
+      <nav class="dt-subnav" aria-label="DoseTrack pages">
+        <a href="/dosetrack/landing/">Landing</a>
+        <span class="dt-sep">·</span>
+        <a href="/dosetrack/policies/">Privacy &amp; Terms</a>
+        <span class="dt-sep">·</span>
+        <a href="/dosetrack/merch/">Merch</a>
+      </nav>
+    </footer>
+  </div>
+</body>
+</html>

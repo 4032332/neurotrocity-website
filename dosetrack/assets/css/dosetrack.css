@@ -282,6 +282,58 @@
 .dt-policy-list a:hover { border-color: var(--dt-blue-2); transform: translateY(-1px); }
 .dt-policy-list .dt-arrow { color: var(--dt-blue-2); }
 
+/* Contact form */
+.dt-form { display: grid; gap: 18px; margin-top: 8px; }
+.dt-field { display: grid; gap: 6px; }
+.dt-field label { font-size: 13px; font-weight: 700; color: var(--dt-ink-soft); }
+.dt-field input,
+.dt-field select,
+.dt-field textarea {
+  font: inherit;
+  font-size: 15px;
+  color: var(--dt-ink);
+  background: var(--dt-card);
+  border: 1px solid var(--dt-line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  width: 100%;
+}
+.dt-field textarea { resize: vertical; min-height: 130px; }
+.dt-field input:focus,
+.dt-field select:focus,
+.dt-field textarea:focus {
+  outline: none;
+  border-color: var(--dt-blue-2);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--dt-blue-2) 20%, transparent);
+}
+.dt-submit {
+  justify-self: start;
+  background: linear-gradient(135deg, var(--dt-blue-1), var(--dt-blue-2));
+  color: white;
+  font-weight: 800;
+  font-size: 15px;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 26px;
+  transition: transform .15s ease;
+}
+.dt-submit:hover { transform: translateY(-1px); }
+
+.dt-confirm {
+  text-align: center;
+  padding: 64px 24px;
+}
+.dt-confirm .dt-check {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--dt-green);
+  color: white;
+}
+.dt-confirm h1 { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+.dt-confirm p { color: var(--dt-ink-soft); max-width: 34ch; margin: 0 auto; line-height: 1.5; }
+
 /* Merch placeholder */
 .dt-coming-soon {
   min-height: 70vh;
