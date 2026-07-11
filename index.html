@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NeuroTrocity</title>
+<meta name="description" content="NeuroTrocity — a small holding company building focused, honest software.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<style>
+  :root {
+    --ink: #1A1D24;
+    --paper: #FAFAF9;
+    --accent: #6C63FF;
+    --line: #E4E4E1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #F2F2F0;
+      --paper: #121317;
+      --accent: #9C95FF;
+      --line: #2A2C33;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #F2F2F0;
+    --paper: #121317;
+    --accent: #9C95FF;
+    --line: #2A2C33;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .mark {
+    font-size: clamp(28px, 6vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+  }
+  .mark span { color: var(--accent); }
+
+  .tagline {
+    font-size: 16px;
+    color: color-mix(in srgb, var(--ink) 65%, transparent);
+    max-width: 40ch;
+    line-height: 1.5;
+    margin-bottom: 40px;
+  }
+
+  .ventures {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+  }
+  .venture {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .venture:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .venture .arrow { color: var(--accent); }
+
+  footer {
+    margin-top: 56px;
+    font-size: 12.5px;
+    color: color-mix(in srgb, var(--ink) 45%, transparent);
+  }
+</style>
+</head>
+<body>
+  <div class="mark">Neuro<span>Trocity</span></div>
+  <p class="tagline">A small holding company building focused, honest software.</p>
+
+  <nav class="ventures" aria-label="Ventures">
+    <a class="venture" href="/dosetrack/landing/">
+      DoseTrack <span class="arrow">→</span>
+    </a>
+  </nav>
+
+  <footer>&copy; 2026 NeuroTrocity</footer>
+</body>
+</html>
