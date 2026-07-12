@@ -265,6 +265,18 @@
   border-radius: 12px;
   margin-bottom: 28px;
 }
+.dt-moved-banner {
+  background: color-mix(in srgb, var(--dt-blue-1) 12%, var(--dt-card));
+  border: 1px solid var(--dt-line);
+  color: var(--dt-ink);
+  font-size: 13.5px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 28px;
+}
+.dt-moved-banner a { color: var(--dt-blue-2); font-weight: 700; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dt-moved-banner a { color: var(--dt-blue-1); } }
+:root[data-theme="dark"] .dt-moved-banner a { color: var(--dt-blue-1); }
 .dt-doc-body { font-size: 15.5px; line-height: 1.7; }
 .dt-doc-body h2 { font-size: 19px; font-weight: 800; margin: 32px 0 10px; }
 .dt-doc-body p, .dt-doc-body ul { margin: 0 0 14px; color: var(--dt-ink); }
