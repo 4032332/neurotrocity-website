@@ -195,82 +195,70 @@
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   if(reduce)return;
   var hero=document.querySelector('.hero'),c=document.getElementById('net'),x=c.getContext('2d');
-  var DPR=Math.min(2,devicePixelRatio||1),W,H,cx,cy,R,T=0,mouse={on:false,nx:0,ny:0};
-  var VIOLET=[150,130,255],CYAN=[74,238,224],HOT=[255,110,200];
+  var DPR=Math.min(2,devicePixelRatio||1),W,H,cx,cy,R,T=0;
+  var VIOLET=[150,130,255],CYAN=[74,238,224],GREEN=[120,235,165],HOT=[255,120,205];
   function rgba(c,a){return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
+  function pick(){var r=Math.random();return r<0.5?VIOLET:(r<0.82?CYAN:GREEN);}
   function size(){var r=hero.getBoundingClientRect();W=c.width=r.width*DPR;H=c.height=r.height*DPR;
     c.style.width=r.width+'px';c.style.height=r.height+'px';
-    cx=(r.width<700?W*0.5:W*0.64);cy=H*0.46;R=Math.min(H*0.42,W*0.34);}
+    cx=(r.width<700?W*0.5:W*0.63);cy=H*0.46;R=Math.min(H*0.44,W*0.34);}
   size();addEventListener('resize',size);
-  // neurons distributed on a rotating sphere (fibonacci) + nearest-neighbour mesh
-  var NP=190,base=[],nbr=[];
+  // dense point-cloud sphere (fibonacci) — the dots define the shape; no wireframe.
+  // nearest neighbours are used only as invisible paths for firing sparks.
+  var NP=280,base=[],col=[],nbr=[];
   for(var i=0;i<NP;i++){var yy=1-(i/(NP-1))*2,rad=Math.sqrt(Math.max(0,1-yy*yy)),th=i*2.39996323;
-    base.push({x:Math.cos(th)*rad,y:yy,z:Math.sin(th)*rad});}
+    base.push({x:Math.cos(th)*rad,y:yy,z:Math.sin(th)*rad});col.push(pick());}
   for(var i=0;i<NP;i++){var d=[];for(var j=0;j<NP;j++){if(j!==i)d.push([base[i].x*base[j].x+base[i].y*base[j].y+base[i].z*base[j].z,j]);}
-    d.sort(function(a,b){return b[0]-a[0];});nbr.push([d[0][1],d[1][1],d[2][1]]);}
+    d.sort(function(a,b){return b[0]-a[0];});nbr.push([d[0][1],d[1][1],d[2][1],d[3][1]]);}
   var proj=new Array(NP),flares=[],sparks=[];
   function project(){
-    var ay=T*0.004+(mouse.on?mouse.nx*0.45:0),ax=0.34*Math.sin(T*0.0015)+(mouse.on?mouse.ny*0.3:0);
+    var ay=T*0.0022,ax=0.26*Math.sin(T*0.0009)+0.12;
     var cay=Math.cos(ay),say=Math.sin(ay),cax=Math.cos(ax),sax=Math.sin(ax);
     for(var i=0;i<NP;i++){var p=base[i];
       var x1=p.x*cay-p.z*say,z1=p.x*say+p.z*cay,y1=p.y;
       var y2=y1*cax-z1*sax,z2=y1*sax+z1*cax;
       proj[i]={px:cx+x1*R,py:cy+y2*R,z:z2};}
   }
-  function emit(px,py,n,col,spd){
-    if(flares.length>520)return;
+  function emit(px,py,n,cc,spd){
+    if(flares.length>420)return;
     var ox=px-cx,oy=py-cy,dd=Math.hypot(ox,oy)||1,a0=Math.atan2(oy,ox);
-    for(var k=0;k<n;k++){var a=a0+(Math.random()-.5)*1.05,s=spd*(0.45+Math.random());
-      flares.push({x:px,y:py,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,max:0.55+Math.random()*1.0,sz:(1.0+Math.random()*2.2)*DPR,col:col});}
+    for(var k=0;k<n;k++){var a=a0+(Math.random()-.5)*0.95,s=spd*(0.5+Math.random());
+      flares.push({x:px,y:py,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,max:0.55+Math.random()*0.9,sz:(1.0+Math.random()*1.9)*DPR,col:cc});}
   }
-  function fireRandom(){var i=(Math.random()*NP)|0,p=proj[i];if(!p||p.z<0.12)return;
-    var col=Math.random()<0.5?CYAN:(Math.random()<0.6?VIOLET:HOT);
-    emit(p.px,p.py,6+(Math.random()*8|0),col,(2.1+Math.random()*3.2)*DPR);}
-  function fireSpark(){var i=(Math.random()*NP)|0;sparks.push({a:i,b:nbr[i][(Math.random()*3)|0],t:0,sp:0.08+Math.random()*0.13,col:Math.random()<0.5?CYAN:HOT});}
+  function fireRandom(){var i=(Math.random()*NP)|0,p=proj[i];if(!p||p.z<0.15)return;
+    emit(p.px,p.py,5+(Math.random()*6|0),Math.random()<0.7?col[i]:HOT,(1.3+Math.random()*1.9)*DPR);}
+  function newSpark(){var i=(Math.random()*NP)|0;return {a:i,b:nbr[i][(Math.random()*4)|0],t:Math.random()*0.3,sp:0.018+Math.random()*0.03,col:col[i]};}
   function tick(){
     T++;project();x.clearRect(0,0,W,H);
     x.globalCompositeOperation='lighter';
     // corona glow
-    var pulse=0.5+0.5*Math.sin(T*0.03);
-    var g=x.createRadialGradient(cx,cy,R*0.1,cx,cy,R*2.1);
-    g.addColorStop(0,rgba([95,72,200],0.17+0.10*pulse));
-    g.addColorStop(0.45,rgba([48,110,190],0.05));
+    var pulse=0.5+0.5*Math.sin(T*0.02);
+    var g=x.createRadialGradient(cx,cy,R*0.1,cx,cy,R*1.95);
+    g.addColorStop(0,rgba([90,72,190],0.12+0.06*pulse));
+    g.addColorStop(0.5,rgba([48,120,180],0.04));
     g.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=g;x.fillRect(0,0,W,H);
-    // dense short-range mesh, depth-weighted, with chaotic firing
-    for(var i=0;i<NP;i++){var a=proj[i];
-      for(var kk=0;kk<3;kk++){var j=nbr[i][kk],b=proj[j],front=(a.z+b.z)*0.5;if(front<-0.35)continue;
-        var fire=Math.random()<0.006,o=fire?0.55:(0.05+0.13*Math.max(0,front));
-        x.strokeStyle=rgba(fire?CYAN:VIOLET,o);x.lineWidth=(fire?1.4:0.8)*DPR;
-        x.beginPath();x.moveTo(a.px,a.py);x.lineTo(b.px,b.py);x.stroke();
-        if(fire)sparks.push({a:i,b:j,t:0,sp:0.1,col:CYAN});}
-    }
-    // neurons (front bright, back dim → reads as a sphere)
-    for(var i=0;i<NP;i++){var p=proj[i],vis=(p.z+1)*0.5,br=0.14+vis*0.86,col=(i%5===0)?CYAN:VIOLET,r=(0.8+vis*1.7)*DPR;
-      x.fillStyle=rgba(col,0.09*br);x.beginPath();x.arc(p.px,p.py,r*2.6,0,7);x.fill();
-      x.fillStyle=rgba(col,0.7*br);x.beginPath();x.arc(p.px,p.py,r,0,7);x.fill();}
-    // surface sparks firing across the brain
+    // neurons — dense glowing dots, front bright / back dim, define the sphere
+    for(var i=0;i<NP;i++){var p=proj[i],vis=(p.z+1)*0.5,br=0.12+vis*0.9,cc=col[i],r=(0.7+vis*1.5)*DPR;
+      x.fillStyle=rgba(cc,0.07*br);x.beginPath();x.arc(p.px,p.py,r*3,0,7);x.fill();
+      x.fillStyle=rgba(cc,0.8*br);x.beginPath();x.arc(p.px,p.py,r,0,7);x.fill();}
+    // sparks — a heavy stream firing across the surface, depth-dimmed so the sphere reads
     for(var k=sparks.length-1;k>=0;k--){var s=sparks[k],a=proj[s.a],b=proj[s.b];
-      var px=a.px+(b.px-a.px)*s.t,py=a.py+(b.py-a.py)*s.t;
-      x.fillStyle=rgba(s.col,0.95);x.beginPath();x.arc(px,py,1.8*DPR,0,7);x.fill();
-      s.t+=s.sp;if(s.t>=1)sparks.splice(k,1);}
-    // flares erupting outward like solar storms
+      var px=a.px+(b.px-a.px)*s.t,py=a.py+(b.py-a.py)*s.t,vis=((a.z+b.z)*0.5+1)*0.5;
+      x.fillStyle=rgba(s.col,0.22+0.78*vis);x.beginPath();x.arc(px,py,(1.1+vis*1.0)*DPR,0,7);x.fill();
+      s.t+=s.sp;if(s.t>=1)sparks[k]=newSpark();}
+    while(sparks.length<215)sparks.push(newSpark());
+    // flares — gentle solar eruptions
     for(var k=flares.length-1;k>=0;k--){var f=flares[k];
-      f.x+=f.vx;f.y+=f.vy;f.vx*=0.966;f.vy*=0.966;f.life-=0.016/f.max;
+      f.x+=f.vx;f.y+=f.vy;f.vx*=0.96;f.vy*=0.96;f.life-=0.016/f.max;
       if(f.life<=0){flares.splice(k,1);continue;}
-      x.fillStyle=rgba(f.col,0.9*f.life*f.life);
+      x.fillStyle=rgba(f.col,0.85*f.life*f.life);
       x.beginPath();x.arc(f.x,f.y,f.sz*(0.4+f.life),0,7);x.fill();}
-    // chaotic, patternless spawning
-    if(Math.random()<0.9)fireRandom();
-    if(Math.random()<0.9)fireRandom();
-    if(Math.random()<0.10){var mi=(Math.random()*NP)|0,mp=proj[mi];if(mp&&mp.z>0.1)emit(mp.px,mp.py,20+(Math.random()*16|0),Math.random()<0.6?HOT:CYAN,(3.4+Math.random()*3.6)*DPR);}
-    for(var s2=0;s2<3;s2++)if(Math.random()<0.5)fireSpark();
+    if(Math.random()<0.5)fireRandom();
+    if(Math.random()<0.03){var mi=(Math.random()*NP)|0,mp=proj[mi];if(mp&&mp.z>0.15)emit(mp.px,mp.py,14+(Math.random()*10|0),Math.random()<0.6?HOT:CYAN,(2.4+Math.random()*2.4)*DPR);}
     x.globalCompositeOperation='source-over';
     requestAnimationFrame(tick);
   }
-  hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();mouse.on=true;
-    mouse.nx=((e.clientX-r.left)/r.width-0.5)*2;mouse.ny=((e.clientY-r.top)/r.height-0.5)*2;});
-  hero.addEventListener('mouseleave',function(){mouse.on=false;});
   tick();
 })();
 </script>
