@@ -194,28 +194,72 @@
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
   if(reduce)return;
   var hero=document.querySelector('.hero'),c=document.getElementById('net'),x=c.getContext('2d');
-  var W,H,DPR=Math.min(2,devicePixelRatio||1),pts=[],N=68,mouse={x:-9999,y:-9999};
+  var W,H,DPR=Math.min(2,devicePixelRatio||1),pts=[],N=72,mouse={x:-9999,y:-9999};
+  var edges=[],pulses=[],T=0;
+  var VIOLET=[138,122,255], CYAN=[74,238,224];
+  function rgba(c,a){return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
   function size(){var r=hero.getBoundingClientRect();W=c.width=r.width*DPR;H=c.height=r.height*DPR;
     c.style.width=r.width+'px';c.style.height=r.height+'px';}
   size();addEventListener('resize',size);
-  for(var i=0;i<N;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22*DPR,vy:(Math.random()-.5)*.22*DPR});
+  for(var i=0;i<N;i++)pts.push({x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.24*DPR,vy:(Math.random()-.5)*.24*DPR,
+    cyan:Math.random()<0.28, ph:Math.random()*6.28, flare:0});
   hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();mouse.x=(e.clientX-r.left)*DPR;mouse.y=(e.clientY-r.top)*DPR;});
   hero.addEventListener('mouseleave',function(){mouse.x=mouse.y=-9999;});
+  // fire a signal pulse along a random live connection every ~280ms
+  setInterval(function(){
+    if(!edges.length)return;
+    var e=edges[(Math.random()*edges.length)|0];
+    pulses.push({a:e[0],b:e[1],t:0,sp:0.02+Math.random()*0.02});
+  },280);
+  var MAX=132*DPR;
   function tick(){
-    x.clearRect(0,0,W,H);
+    T++;x.clearRect(0,0,W,H);
     for(var i=0;i<N;i++){var p=pts[i];p.x+=p.vx;p.y+=p.vy;
       if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+      if(p.flare>0)p.flare*=0.9;
       var dm=Math.hypot(p.x-mouse.x,p.y-mouse.y);
-      if(dm<130*DPR&&dm>0){var f=(130*DPR-dm)/(130*DPR);p.x+=(p.x-mouse.x)/dm*f*1.3;p.y+=(p.y-mouse.y)/dm*f*1.3;}
+      if(dm<140*DPR&&dm>0){var f=(140*DPR-dm)/(140*DPR);p.x+=(p.x-mouse.x)/dm*f*1.5;p.y+=(p.y-mouse.y)/dm*f*1.5;}
     }
+    // connections
+    edges.length=0;
     for(var i=0;i<N;i++)for(var j=i+1;j<N;j++){
-      var a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y),max=128*DPR;
-      if(d<max){var o=(1-d/max)*.85;x.strokeStyle='rgba(138,122,255,'+o+')';x.lineWidth=1.1*DPR;
+      var a=pts[i],b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<MAX){edges.push([i,j]);var o=(1-d/MAX)*.9;
+        var mix=(a.cyan||b.cyan)?CYAN:VIOLET;
+        x.strokeStyle=rgba(mix,o*0.55);x.lineWidth=1.1*DPR;
         x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke();}
     }
-    for(var i=0;i<N;i++){var p=pts[i],near=Math.hypot(p.x-mouse.x,p.y-mouse.y)<140*DPR;
-      x.fillStyle=near?'rgba(74,238,224,.98)':'rgba(188,178,255,.9)';
-      x.beginPath();x.arc(p.x,p.y,(near?2.6:1.9)*DPR,0,7);x.fill();}
+    // mouse tether lines
+    if(mouse.x>-9000){for(var i=0;i<N;i++){var p=pts[i],dm=Math.hypot(p.x-mouse.x,p.y-mouse.y);
+      if(dm<150*DPR){x.strokeStyle=rgba(CYAN,(1-dm/(150*DPR))*.5);x.lineWidth=1*DPR;
+        x.beginPath();x.moveTo(p.x,p.y);x.lineTo(mouse.x,mouse.y);x.stroke();}}}
+    // nodes: breathing halo + core
+    for(var i=0;i<N;i++){var p=pts[i];
+      var breathe=0.65+0.35*Math.sin(T*0.045+p.ph);
+      var near=Math.hypot(p.x-mouse.x,p.y-mouse.y)<150*DPR;
+      var hot=Math.min(1,p.flare+(near?1:0));
+      var col=(p.cyan||hot>0.5)?CYAN:VIOLET;
+      var r=(1.8+p.flare*3.2+(near?1:0))*DPR;
+      x.fillStyle=rgba(col,0.14*breathe+p.flare*0.2);
+      x.beginPath();x.arc(p.x,p.y,r*3,0,7);x.fill();
+      x.fillStyle=rgba(col,0.92*breathe+p.flare*0.08);
+      x.beginPath();x.arc(p.x,p.y,r,0,7);x.fill();
+    }
+    // firing pulses travelling along edges
+    x.save();
+    for(var k=pulses.length-1;k>=0;k--){var pu=pulses[k],a=pts[pu.a],b=pts[pu.b];
+      var px=a.x+(b.x-a.x)*pu.t,py=a.y+(b.y-a.y)*pu.t;
+      x.shadowColor=rgba(CYAN,1);x.shadowBlur=10*DPR;
+      x.fillStyle=rgba(CYAN,1);
+      x.beginPath();x.arc(px,py,2.6*DPR,0,7);x.fill();
+      pu.t+=pu.sp;
+      if(pu.t>=1){b.flare=1;pulses.splice(k,1);}
+    }
+    x.restore();
+    // cursor glow
+    if(mouse.x>-9000){x.save();x.shadowColor=rgba(CYAN,1);x.shadowBlur=16*DPR;
+      x.fillStyle=rgba(CYAN,.9);x.beginPath();x.arc(mouse.x,mouse.y,3*DPR,0,7);x.fill();x.restore();}
     requestAnimationFrame(tick);
   }
   tick();
