@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DisPoint deal</title>
+<style>
+  body{font-family:-apple-system,system-ui,sans-serif;background:#12172B;color:#F4F5F7;
+       margin:0;display:grid;place-items:center;min-height:100vh}
+  .card{background:#1B2142;border:1px solid #2B3260;border-radius:16px;padding:24px;
+        max-width:340px;text-align:center;margin:16px}
+  .retailer{font-size:22px;font-weight:700;margin:0 0 4px}
+  .offer{font-size:28px;font-weight:800;color:#FFB627;margin:8px 0}
+  .cta{display:inline-block;margin-top:16px;background:#FFB627;color:#241A02;
+       text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px}
+  .muted{color:#8A90B3;font-size:13px}
+</style></head><body>
+<div class="card">
+  <p class="retailer" id="retailer">DisPoint</p>
+  <p class="offer" id="offer"></p>
+  <p class="muted" id="expiry"></p>
+  <a class="cta" href="https://testflight.apple.com/">Get DisPoint</a>
+  <p class="muted">Open this link on a device with DisPoint installed to add the deal.</p>
+</div>
+<script>
+  function b64urlDecode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';
+    return decodeURIComponent(escape(atob(s)));}
+  try{
+    var p=new URLSearchParams(location.search).get('p');
+    var d=JSON.parse(b64urlDecode(p));
+    document.getElementById('retailer').textContent=d.retailer||'DisPoint';
+    document.getElementById('offer').textContent=
+      (d.kind==='deal'&&d.multiplier)?(d.multiplier+'x points'):(d.discountText||'');
+    if(d.expiry){document.getElementById('expiry').textContent=
+      'Expires '+new Date(d.expiry).toLocaleDateString();}
+  }catch(e){/* leave defaults */}
+</script>
+</body></html>
