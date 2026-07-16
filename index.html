@@ -244,9 +244,10 @@
     for(var i=0;i<NP;i++){var p=proj[i],vis=(p.z+1)*0.5,cc=col[i];
       var tw=Math.pow(0.5+0.5*Math.sin(T*spd[i]+ph[i]),3.0);
       var br=(0.16+vis*0.84)*(0.28+0.72*tw);
-      var r=(0.45+vis*0.75)*DPR*(0.8+0.7*tw);
-      x.fillStyle=rgba(cc,0.11*br);x.beginPath();x.arc(p.px,p.py,r*2.4,0,7);x.fill();
-      x.fillStyle=rgba(cc,0.98*br);x.beginPath();x.arc(p.px,p.py,r,0,7);x.fill();}
+      var r=(0.32+vis*0.5)*DPR*(0.75+0.6*tw);
+      var gr=(2.6+vis*2.8)*DPR;
+      x.fillStyle=rgba(cc,0.045*br);x.beginPath();x.arc(p.px,p.py,gr,0,7);x.fill();
+      x.fillStyle=rgba(cc,1.0*br);x.beginPath();x.arc(p.px,p.py,r,0,7);x.fill();}
     // sparks — a heavy stream firing across the surface, depth-dimmed so the sphere reads
     for(var k=sparks.length-1;k>=0;k--){var s=sparks[k],a=proj[s.a],b=proj[s.b];
       var px=a.px+(b.px-a.px)*s.t,py=a.py+(b.py-a.py)*s.t,vis=((a.z+b.z)*0.5+1)*0.5;
