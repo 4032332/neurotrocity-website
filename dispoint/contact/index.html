@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DisPoint — Contact</title>
+<meta name="description" content="Get in touch with the DisPoint team.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/dispoint/assets/css/dispoint.css">
+</head>
+<body class="dp">
+<div class="dp-doc">
+  <a class="dp-back" href="/dispoint/landing/">&larr; dis<span style="color:var(--dp-accent)">point</span></a>
+  <div class="dp-doc-header">
+    <h1>Contact us</h1>
+    <p class="dp-doc-updated">Feedback, a bug, a privacy request, or a deal we should add? Send a message and we'll reply to the email you provide.</p>
+  </div>
+
+  <form class="dp-form" action="https://formsubmit.co/dispoint@neurotrocity.com" method="POST">
+    <!-- FormSubmit config: emailed notification, no captcha page, redirect to our own thank-you page -->
+    <input type="hidden" name="_subject" value="New DisPoint contact form submission">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://neurotrocity.com/dispoint/contact/thanks.html">
+    <!-- honeypot to deter simple bots -->
+    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+    <div class="dp-field">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" required autocomplete="name">
+    </div>
+    <div class="dp-field">
+      <label for="email">Your email</label>
+      <input id="email" name="email" type="email" required autocomplete="email">
+    </div>
+    <div class="dp-field">
+      <label for="topic">Topic</label>
+      <select id="topic" name="topic">
+        <option>General feedback</option>
+        <option>Bug report</option>
+        <option>Feature request</option>
+        <option>Privacy / data request</option>
+        <option>Suggest a deal for the catalogue</option>
+        <option>Something else</option>
+      </select>
+    </div>
+    <div class="dp-field">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" required></textarea>
+    </div>
+    <button class="dp-submit" type="submit">Send message</button>
+    <p class="dp-note">We'll only use your email to reply. See our <a href="/dispoint/policies/privacy-policy.html" style="color:var(--dp-accent)">Privacy Policy</a>.</p>
+  </form>
+</div>
+</body>
+</html>

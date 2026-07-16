@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DisPoint — Never miss a deal or a points run</title>
+<meta name="description" content="DisPoint is a private iPhone library for Australian discount codes and bonus-points deals — captured from a screenshot, sorted by what's about to expire, with a calculator that turns '20× points' into a real number.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/dispoint/assets/css/dispoint.css">
+</head>
+<body class="dp">
+
+<div class="dp-bar">
+  <div class="wrap">
+    <a class="dp-wordmark" href="/dispoint/landing/">dis<span class="p">point</span><span class="tick"></span></a>
+    <span class="dp-bar-spacer"></span>
+    <nav class="dp-nav-links">
+      <a href="#how">How it works</a>
+      <a href="#calc">Calculator</a>
+      <a href="#trust">Privacy</a>
+    </nav>
+    <div class="dp-themes" id="themes" aria-label="Pick a theme"></div>
+  </div>
+</div>
+
+<header class="dp-hero">
+  <div class="wrap">
+    <div class="eyebrow">AU · Discount codes + points runs</div>
+    <h1>Don't be <span class="u">disappointed</span>. Never miss a <span class="a">deal</span> or a points run.</h1>
+    <p class="dp-lede">Your private library for every code and bonus-points deal you find — captured from a screenshot, sorted by what's about to expire.</p>
+
+    <div class="dp-board" id="board">
+      <div class="dp-board-head"><span class="t">Now boarding</span><span class="dot"></span></div>
+      <div id="rows"></div>
+      <div class="dp-lbls"><span>Retailer</span><span>Deal</span><span>Expires</span></div>
+    </div>
+
+    <div class="dp-cta">
+      <div class="msg">
+        <div class="k">Boarding soon</div>
+        <div class="v">Free on iPhone. Ad-supported, Pro to remove.</div>
+        <span class="dp-softtag">Coming to the App Store</span>
+      </div>
+      <div class="dp-badges">
+        <a class="dp-badge" href="#" aria-label="Download on the App Store (coming soon)">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 1.6c.1 1-.3 2-.9 2.8-.7.8-1.7 1.4-2.7 1.3-.1-1 .4-2 .9-2.7.7-.8 1.8-1.4 2.7-1.4zM19.9 17c-.5 1.2-.8 1.7-1.5 2.7-.9 1.4-2.3 3.2-3.9 3.2-1.5 0-1.8-.9-3.8-.9s-2.4.9-3.8.9c-1.7 0-2.9-1.6-3.9-3-2.6-3.9-2.9-8.4-1.3-10.8C3.1 7.3 4.8 6.3 6.4 6.3c1.6 0 2.6 1 3.9 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.9 6.8 1.9 8.6z"/></svg>
+          <span class="txt"><span class="s">Download on the</span><span class="b">App Store</span></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <div class="dp-kicker">The gap it fills</div>
+    <h2>You find a great code. Then you forget it exists.</h2>
+    <p class="dp-sub">Screenshots pile up in your camera roll; bonus-points offers expire in a tab you closed. DisPoint is the calm, private place they live — captured in a tap and counting down.</p>
+    <div class="dp-grid two">
+      <div class="dp-ticket">
+        <div class="ic">⤢</div>
+        <h3>Capture from a screenshot</h3>
+        <p>Share any screenshot to DisPoint. On-device text recognition reads the store, code, multiplier and expiry — you just confirm. Nothing leaves your phone.</p>
+      </div>
+      <div class="dp-ticket">
+        <div class="ic">◷</div>
+        <h3>Sorted by urgency</h3>
+        <p>A departure-board home screen shows what's boarding next. Countdowns turn amber under a week, coral under a day — you act before it's gone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="calc">
+  <div class="wrap">
+    <div class="dp-kicker">The differentiated brain</div>
+    <h2>What's "20× points" actually worth to you?</h2>
+    <p class="dp-sub">The Point Potential calculator turns a headline multiplier into an estimated figure for your planned spend — and, for store-rewards deals, the frequent-flyer points they convert to.</p>
+    <div class="dp-grid two">
+      <div class="dp-ticket">
+        <div class="ic">×</div>
+        <h3>Coles · 20× Flybuys</h3>
+        <p>Spend $200 on gift cards at this week's bonus rate.</p>
+        <div class="dp-calc-out">
+          <span class="lab">Est.</span>
+          <span class="big mono">2,000</span>
+          <span class="lab">Velocity pts</span>
+        </div>
+      </div>
+      <div class="dp-ticket">
+        <div class="ic">✈</div>
+        <h3>Track a goal</h3>
+        <p>Set a trip — "Bali, 60,000 Velocity" — and every deal you redeem nudges a little plane along the runway toward it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="dp-kicker">Ten runways</div>
+    <h2>Pick a look. The whole app follows.</h2>
+    <p class="dp-sub">Try the swatches up top — that's the real theme system, live. Runway, Midnight, Daylight, Ocean, Sunset, Citrus and more ship in the app.</p>
+    <div class="dp-stats">
+      <div class="dp-stat-tile"><div class="n mono" data-count="128">128</div><div class="l">Codes stacked</div></div>
+      <div class="dp-stat-tile"><div class="n mono" data-count="6">6</div><div class="l">Expiring soon</div></div>
+      <div class="dp-stat-tile"><div class="n mono" data-count="4">4</div><div class="l">Programs added</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="trust" class="dp-trust">
+  <div class="wrap">
+    <div class="dp-kicker">Private by design</div>
+    <h2>Your deals are yours. Full stop.</h2>
+    <p class="dp-sub">DisPoint never links to your Qantas, Velocity or Flybuys account, never stores a loyalty password, and never scrapes a rewards site. Your library lives on your device and syncs privately across your own devices with iCloud.</p>
+    <div class="dp-grid two">
+      <div class="dp-ticket">
+        <div class="ic">⌂</div>
+        <h3>On-device capture</h3>
+        <p>Screenshot text recognition runs locally. No server of ours ever sees your codes.</p>
+      </div>
+      <div class="dp-ticket">
+        <div class="ic">⚿</div>
+        <h3>No account linking, ever</h3>
+        <p>A permanent product boundary — not a feature we haven't built yet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="dp-footer">
+  <div class="wrap">
+    <div class="dp-foot-tear"></div>
+    <div class="dp-foot-grid">
+      <div class="dp-foot-links">
+        <span class="h">DisPoint</span>
+        <a href="/dispoint/landing/">Home</a>
+        <a href="/dispoint/support/">Support</a>
+        <a href="/dispoint/merch/">Merch</a>
+        <a href="/dispoint/contact/">Contact</a>
+      </div>
+      <div class="dp-foot-links">
+        <span class="h">Legal</span>
+        <a href="/dispoint/policies/privacy-policy.html">Privacy Policy</a>
+        <a href="/dispoint/policies/terms.html">Terms of Use</a>
+        <a href="/dispoint/policies/eula.html">EULA</a>
+      </div>
+      <div class="dp-foot-links">
+        <span class="h">Get in touch</span>
+        <a href="mailto:dispoint@neurotrocity.com">dispoint@neurotrocity.com</a>
+        <a href="https://neurotrocity.com">A NeuroTrocity venture</a>
+      </div>
+    </div>
+    <div class="dp-madein">✈ Made in Australia · © 2026 NeuroTrocity</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var THEMES={
+    Runway:{bg:'#12172B',surface:'#1B2142',border:'#2B3260',ink:'#F4F5F7',muted:'#8A90B3',accent:'#FFB627',accentOn:'#241A02',safe:'#2DD8B9',urgent:'#FF5A5F',flap:'#0d1120'},
+    Midnight:{bg:'#0B0A1F',surface:'#171533',border:'#332F5E',ink:'#F1EFFF',muted:'#8B86B8',accent:'#4CF2E0',accentOn:'#022A26',safe:'#B98CFF',urgent:'#FF5C8A',flap:'#080615'},
+    Daylight:{bg:'#F5F6FA',surface:'#FFFFFF',border:'#E1E4F0',ink:'#1B2142',muted:'#686D91',accent:'#E8960F',accentOn:'#2A1B00',safe:'#12A38A',urgent:'#E14B50',flap:'#EEF1FB'},
+    Ocean:{bg:'#08201F',surface:'#0F332F',border:'#1F5C52',ink:'#EAFBF6',muted:'#7FB3A8',accent:'#FF7A5C',accentOn:'#3A0D02',safe:'#4CF2C4',urgent:'#FF5C6C',flap:'#05130F'},
+    Sunset:{bg:'#FFEEE3',surface:'#FFFFFF',border:'#FFC9A8',ink:'#5C2E12',muted:'#936144',accent:'#0F8B8D',accentOn:'#DFFAF8',safe:'#2FB6A3',urgent:'#E85D3A',flap:'#FDE3D2'},
+    Citrus:{bg:'#FFF9E3',surface:'#FFFFFF',border:'#FFE699',ink:'#4A3B00',muted:'#816F2C',accent:'#FF3D7F',accentOn:'#3A0018',safe:'#2FB673',urgent:'#E8555C',flap:'#FBF1C4'}
+  };
+  var root=document.documentElement.style;
+  function applyTheme(name){
+    var t=THEMES[name]; if(!t) return;
+    var m={bg:'--dp-bg',surface:'--dp-surface',border:'--dp-border',ink:'--dp-ink',muted:'--dp-muted',accent:'--dp-accent',accentOn:'--dp-accentOn',safe:'--dp-safe',urgent:'--dp-urgent',flap:'--dp-flap'};
+    for(var k in m){root.setProperty(m[k],t[k]);}
+    [].forEach.call(document.querySelectorAll('.dp-swatch'),function(s){s.setAttribute('aria-pressed',s.dataset.name===name);});
+  }
+  var host=document.getElementById('themes');
+  Object.keys(THEMES).forEach(function(name){
+    var t=THEMES[name];
+    var b=document.createElement('button');
+    b.className='dp-swatch';b.dataset.name=name;b.title=name;
+    b.style.background=t.surface;b.style.setProperty('--sw-accent',t.accent);
+    b.setAttribute('aria-label','Theme: '+name);
+    b.onclick=function(){applyTheme(name);};
+    host.appendChild(b);
+  });
+  applyTheme('Runway');
+
+  var GLYPHS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.%x:→$ ';
+  function makeFlap(text,cls){
+    var f=document.createElement('span');f.className='dp-flap '+(cls||'');
+    text.split('').forEach(function(ch){
+      var cell=document.createElement('span');cell.className='cell';
+      var span=document.createElement('span');span.className='ch';span.textContent=ch;
+      cell.appendChild(span);cell.dataset.target=ch;f.appendChild(cell);
+    });
+    return f;
+  }
+  function countColor(f,kind){
+    var col=kind==='urgent'?'--dp-urgent':kind==='safe'?'--dp-safe':'--dp-accent';
+    f.style.setProperty('--ccolor','var('+col+')');
+  }
+  var DEALS=[
+    {store:'Coles',detail:'20× Flybuys · gift cards',stat:'20x',count:'2D 04H',kind:'accent'},
+    {store:'Kathmandu',detail:'Outdoor sale code',stat:'25%',count:'19H',kind:'urgent'},
+    {store:'Everyday Rewards',detail:'2000 pts · $50 spend',stat:'2000',count:'5D',kind:'accent'},
+    {store:'The Good Guys',detail:'$30 off $150 voucher',stat:'$30',count:'11D',kind:'safe'},
+    {store:'Velocity',detail:'15× on transfers',stat:'15x',count:'6D',kind:'accent'}
+  ];
+  var rowsEl=document.getElementById('rows');
+  DEALS.forEach(function(d){
+    var row=document.createElement('div');row.className='dp-row';
+    var left=document.createElement('div');
+    left.innerHTML='<div class="store">'+d.store+'</div><div class="detail">'+d.detail+'</div>';
+    var stat=makeFlap(d.stat,'stat');
+    var count=makeFlap(d.count,'count');countColor(count,d.kind);
+    row.appendChild(left);row.appendChild(stat);row.appendChild(count);
+    rowsEl.appendChild(row);
+  });
+
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function flipCell(cell){
+    var target=cell.dataset.target;
+    var steps=3+Math.floor(Math.random()*3),i=0;
+    var iv=setInterval(function(){
+      var ch=cell.querySelector('.ch');
+      if(i>=steps){ch.textContent=target;ch.style.animation='none';void ch.offsetWidth;ch.style.animation='dp-flip .28s ease';clearInterval(iv);return;}
+      ch.textContent=GLYPHS[Math.floor(Math.random()*GLYPHS.length)];
+      ch.style.animation='none';void ch.offsetWidth;ch.style.animation='dp-flip .18s ease';i++;
+    },70);
+  }
+  if(!reduce){
+    setInterval(function(){
+      var cells=document.querySelectorAll('.dp-flap .cell');
+      if(!cells.length)return;
+      var n=1+Math.floor(Math.random()*2);
+      for(var k=0;k<n;k++){flipCell(cells[Math.floor(Math.random()*cells.length)]);}
+    },1500);
+    var all=document.querySelectorAll('.dp-flap .cell');
+    [].forEach.call(all,function(c,idx){setTimeout(function(){flipCell(c);},120+idx*45);});
+    [].forEach.call(document.querySelectorAll('.dp-stat-tile .n'),function(el){
+      var end=parseInt(el.dataset.count,10),cur=0,step=Math.max(1,Math.round(end/24));
+      el.textContent='0';
+      var iv=setInterval(function(){cur+=step;if(cur>=end){cur=end;clearInterval(iv);}el.textContent=cur;},34);
+    });
+  }
+})();
+</script>
+</body>
+</html>
