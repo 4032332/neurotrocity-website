@@ -205,9 +205,10 @@
   size();addEventListener('resize',size);
   // dense point-cloud sphere (fibonacci) — the dots define the shape; no wireframe.
   // nearest neighbours are used only as invisible paths for firing sparks.
-  var NP=280,base=[],col=[],nbr=[];
+  var NP=280,base=[],col=[],ph=[],spd=[],nbr=[];
   for(var i=0;i<NP;i++){var yy=1-(i/(NP-1))*2,rad=Math.sqrt(Math.max(0,1-yy*yy)),th=i*2.39996323;
-    base.push({x:Math.cos(th)*rad,y:yy,z:Math.sin(th)*rad});col.push(pick());}
+    base.push({x:Math.cos(th)*rad,y:yy,z:Math.sin(th)*rad});col.push(pick());
+    ph.push(Math.random()*6.283);spd.push(0.02+Math.random()*0.06);}
   for(var i=0;i<NP;i++){var d=[];for(var j=0;j<NP;j++){if(j!==i)d.push([base[i].x*base[j].x+base[i].y*base[j].y+base[i].z*base[j].z,j]);}
     d.sort(function(a,b){return b[0]-a[0];});nbr.push([d[0][1],d[1][1],d[2][1],d[3][1]]);}
   var proj=new Array(NP),flares=[],sparks=[];
@@ -238,10 +239,14 @@
     g.addColorStop(0.5,rgba([48,120,180],0.04));
     g.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=g;x.fillRect(0,0,W,H);
-    // neurons — dense glowing dots, front bright / back dim, define the sphere
-    for(var i=0;i<NP;i++){var p=proj[i],vis=(p.z+1)*0.5,br=0.12+vis*0.9,cc=col[i],r=(0.7+vis*1.5)*DPR;
-      x.fillStyle=rgba(cc,0.07*br);x.beginPath();x.arc(p.px,p.py,r*3,0,7);x.fill();
-      x.fillStyle=rgba(cc,0.8*br);x.beginPath();x.arc(p.px,p.py,r,0,7);x.fill();}
+    // neurons — small focused points that pulse like sparks/fireworks (sharp twinkle),
+    // each with a tight glow; depth still shades front bright / back dim.
+    for(var i=0;i<NP;i++){var p=proj[i],vis=(p.z+1)*0.5,cc=col[i];
+      var tw=Math.pow(0.5+0.5*Math.sin(T*spd[i]+ph[i]),3.0);
+      var br=(0.16+vis*0.84)*(0.28+0.72*tw);
+      var r=(0.45+vis*0.75)*DPR*(0.8+0.7*tw);
+      x.fillStyle=rgba(cc,0.11*br);x.beginPath();x.arc(p.px,p.py,r*2.4,0,7);x.fill();
+      x.fillStyle=rgba(cc,0.98*br);x.beginPath();x.arc(p.px,p.py,r,0,7);x.fill();}
     // sparks — a heavy stream firing across the surface, depth-dimmed so the sphere reads
     for(var k=sparks.length-1;k>=0;k--){var s=sparks[k],a=proj[s.a],b=proj[s.b];
       var px=a.px+(b.px-a.px)*s.t,py=a.py+(b.py-a.py)*s.t,vis=((a.z+b.z)*0.5+1)*0.5;
