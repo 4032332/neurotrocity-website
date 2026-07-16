@@ -16,14 +16,14 @@
     <p class="dp-doc-updated">Feedback, a bug, a privacy request, or a deal we should add? Send a message and we'll reply to the email you provide.</p>
   </div>
 
-  <form class="dp-form" action="https://formsubmit.co/dispoint@neurotrocity.com" method="POST">
-    <!-- FormSubmit config: emailed notification, no captcha page, redirect to our own thank-you page -->
-    <input type="hidden" name="_subject" value="New DisPoint contact form submission">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="hidden" name="_next" value="https://neurotrocity.com/dispoint/contact/thanks.html">
+  <form class="dp-form" action="https://api.web3forms.com/submit" method="POST">
+    <!-- Web3Forms config -->
+    <input type="hidden" name="access_key" value="ef7d715c-a0f3-4978-8b43-54e5a049f0fd">
+    <input type="hidden" name="subject" value="New DisPoint contact form submission">
+    <input type="hidden" name="from_name" value="DisPoint website">
+    <input type="hidden" name="redirect" value="https://neurotrocity.com/dispoint/contact/thanks.html">
     <!-- honeypot to deter simple bots -->
-    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+    <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
 
     <div class="dp-field">
       <label for="name">Name</label>
@@ -49,7 +49,7 @@
       <textarea id="message" name="message" required></textarea>
     </div>
     <button class="dp-submit" type="submit">Send message</button>
-    <p class="dp-note">We'll only use your email to reply. See our <a href="/dispoint/policies/privacy-policy.html" style="color:var(--dp-accent)">Privacy Policy</a>.</p>
+    <p class="dp-note">Prefer email? Write to us directly at <a href="mailto:dispoint@neurotrocity.com" style="color:var(--dp-accent)">dispoint@neurotrocity.com</a>. We'll only use your email to reply — see our <a href="/dispoint/policies/privacy-policy.html" style="color:var(--dp-accent)">Privacy Policy</a>.</p>
   </form>
 </div>
 </body>
