@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["9VY7RCG6Y4.com.robbrown.dispoint"],
+        "components": [
+          { "/": "/dispoint/d/*", "comment": "DisPoint share-a-deal links" }
+        ]
+      }
+    ]
+  }
+}
