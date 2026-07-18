@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewire — Get a free site review</title>
+<meta name="description" content="Tell us about your business and current website — we'll review it and tell you exactly what's not working.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/rewire/assets/css/rewire.css">
+</head>
+<body class="rw">
+  <div class="rw-bar" id="bar">
+    <div class="rw-bar-inner">
+      <a class="rw-mark" href="/">Neuro<span class="g">Trocity</span></a>
+      <span class="rw-spacer"></span>
+      <a class="rw-back" href="/rewire/landing/">&larr; Rewire</a>
+    </div>
+  </div>
+
+  <div class="rw-page" style="padding-top:8vh;padding-bottom:10vh;max-width:640px;">
+    <div class="rw-kick">Free site review</div>
+    <h1 class="rw-h2" style="font-size:clamp(26px,4.6vw,38px);">Tell us about your site</h1>
+    <p class="rw-sub">A few details so we can actually look at your site before we talk — no obligation, no sales call required.</p>
+
+    <form class="rw-form" action="https://formsubmit.co/rewire@neurotrocity.com" method="POST">
+      <input type="hidden" name="_subject" value="New Rewire site review request">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://neurotrocity.com/rewire/contact/thanks.html">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+      <div class="rw-field">
+        <label for="name">Your name</label>
+        <input id="name" name="name" type="text" required autocomplete="name">
+      </div>
+
+      <div class="rw-field">
+        <label for="business">Business name</label>
+        <input id="business" name="business" type="text" required autocomplete="organization">
+      </div>
+
+      <div class="rw-field">
+        <label for="website">Current website URL</label>
+        <input id="website" name="website" type="url" placeholder="https://" required>
+      </div>
+
+      <div class="rw-field">
+        <label for="email">Your email</label>
+        <input id="email" name="email" type="email" required autocomplete="email">
+      </div>
+
+      <div class="rw-field">
+        <label for="issue">What's not working?</label>
+        <select id="issue" name="issue">
+          <option value="Not sure — that's what I need the review for">Not sure — that's what I need the review for</option>
+          <option value="Looks dated">Looks dated</option>
+          <option value="Slow / broken on mobile">Slow / broken on mobile</option>
+          <option value="Traffic isn't converting">Traffic isn't converting</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="rw-field">
+        <label for="message">Anything else we should know?</label>
+        <textarea id="message" name="message"></textarea>
+      </div>
+
+      <button class="rw-submit" type="submit">Request my free review</button>
+    </form>
+  </div>
+
+  <footer class="rw-footer">
+    <div class="rw-page rw-footer-inner">
+      <span>&copy; 2026 NeuroTrocity · Rewire</span>
+      <span class="links">
+        <a href="/rewire/landing/">Rewire</a>
+        <a href="/">NeuroTrocity</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    var bar = document.getElementById('bar');
+    addEventListener('scroll', function () { bar.classList.toggle('scrolled', scrollY > 10); }, { passive: true });
+  </script>
+</body>
+</html>

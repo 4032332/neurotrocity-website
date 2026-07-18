@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewire — Case studies (coming soon)</title>
+<meta name="description" content="Real before/after results from Rewire client projects — coming soon.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/rewire/assets/css/rewire.css">
+</head>
+<body class="rw">
+  <div class="rw-bar" id="bar">
+    <div class="rw-bar-inner">
+      <a class="rw-mark" href="/">Neuro<span class="g">Trocity</span></a>
+      <span class="rw-spacer"></span>
+      <a class="rw-back" href="/rewire/landing/">&larr; Rewire</a>
+    </div>
+  </div>
+
+  <div class="rw-coming-soon">
+    <div class="rw-badge">Coming soon</div>
+    <h1>Case studies are on the way</h1>
+    <p>Rewire is brand new, so there's nothing to show yet — and we're not going to fake it. Real before/after results will land here once we've shipped them for real clients.</p>
+    <p style="margin-top:24px;"><a href="/rewire/contact/" style="color:var(--rw-mint);text-decoration:none;font-weight:700;">Get a free review in the meantime &rarr;</a></p>
+  </div>
+
+  <footer class="rw-footer">
+    <div class="rw-page rw-footer-inner">
+      <span>&copy; 2026 NeuroTrocity · Rewire</span>
+      <span class="links">
+        <a href="/rewire/landing/">Rewire</a>
+        <a href="/">NeuroTrocity</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    var bar = document.getElementById('bar');
+    addEventListener('scroll', function () { bar.classList.toggle('scrolled', scrollY > 10); }, { passive: true });
+  </script>
+</body>
+</html>
