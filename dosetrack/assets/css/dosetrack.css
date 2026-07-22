@@ -150,10 +150,13 @@
   min-width: 150px;
   transition: transform .15s ease;
 }
+/* In dark mode the badge card itself is already dark navy, so a near-black badge on top of
+   it has almost no contrast and reads as blank. Use a light badge with dark text instead —
+   the inverse of the light-mode treatment — so the badge stays visibly distinct from the card. */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .dt-store-badge { background: #050814; }
+  :root:not([data-theme="light"]) .dt-store-badge { background: #EEF1FC; color: #182247; }
 }
-:root[data-theme="dark"] .dt-store-badge { background: #050814; }
+:root[data-theme="dark"] .dt-store-badge { background: #EEF1FC; color: #182247; }
 .dt-store-badge:hover { transform: translateY(-2px); }
 .dt-store-badge--disabled { opacity: .45; cursor: default; pointer-events: none; }
 .dt-store-badge--disabled:hover { transform: none; }
