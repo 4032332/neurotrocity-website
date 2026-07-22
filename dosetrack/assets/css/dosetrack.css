@@ -155,6 +155,8 @@
 }
 :root[data-theme="dark"] .dt-store-badge { background: #050814; }
 .dt-store-badge:hover { transform: translateY(-2px); }
+.dt-store-badge--disabled { opacity: .45; cursor: default; pointer-events: none; }
+.dt-store-badge--disabled:hover { transform: none; }
 .dt-store-badge svg { width: 22px; height: 22px; flex: none; }
 .dt-store-badge .dt-txt { text-align: left; line-height: 1.15; }
 .dt-store-badge .dt-small { font-size: 9.5px; letter-spacing: .04em; text-transform: uppercase; opacity: .75; display: block; }
