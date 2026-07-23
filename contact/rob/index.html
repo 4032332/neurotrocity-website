@@ -17,15 +17,16 @@
     --sans:-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,"SF Mono",Menlo,monospace;
   }
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+  body{color:var(--ink);font-family:var(--sans);overflow-x:hidden}
   a{color:inherit;text-decoration:none}
-  .page{max-width:420px;margin:0 auto;padding-bottom:64px}
+  #bg-net{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;background:var(--bg)}
+  html{background:var(--bg)}
+  .page{max-width:420px;margin:0 auto;padding-bottom:64px;position:relative}
 
   .hero{position:relative;padding:64px 24px 96px;text-align:center;overflow:hidden;
-    background:radial-gradient(120% 100% at 50% -10%,#17173a,var(--bg) 72%)}
-  .hero canvas{position:absolute;inset:0;z-index:0;opacity:.9}
+    background:radial-gradient(120% 100% at 50% -10%,rgba(23,23,58,.6),rgba(8,8,13,.82) 72%)}
   .hero .veil{position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:radial-gradient(120% 90% at 50% 8%,transparent 46%,var(--bg) 92%)}
+    background:radial-gradient(120% 90% at 50% 8%,transparent 40%,rgba(8,8,13,.7) 92%)}
   .hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
     background-image:radial-gradient(rgba(124,107,255,.14) 1.5px,transparent 1.5px);background-size:26px 26px;opacity:.6}
   .avatar{position:relative;z-index:2;width:104px;height:104px;margin:0 auto 22px;border-radius:50%;
@@ -65,9 +66,10 @@
 </head>
 <body>
 
+<canvas id="bg-net"></canvas>
+
 <div class="page">
   <div class="hero" id="hero">
-    <canvas id="rob-net"></canvas>
     <div class="veil"></div>
     <div class="avatar" role="img" aria-label="NeuroTrocity"><svg class="nova-mark" viewBox="-26 -26 252 252" width="68" height="68" aria-hidden="true">  <defs>    <linearGradient id="g-bolt-havatar" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C6BFF"/><stop offset="50%" stop-color="#38E1D6"/><stop offset="100%" stop-color="#38E1D6"/></linearGradient>    <radialGradient id="g-coreavatar" cx="40%" cy="35%" r="75%"><stop offset="0%" stop-color="#D9FFFB"/><stop offset="40%" stop-color="#4AEEE0"/><stop offset="100%" stop-color="#7C6BFF"/></radialGradient>    <radialGradient id="halo-coreavatar" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4AEEE0" stop-opacity="0.55"/><stop offset="45%" stop-color="#7C6BFF" stop-opacity="0.3"/><stop offset="75%" stop-color="#7C6BFF" stop-opacity="0"/></radialGradient>    <radialGradient id="g-node-violetavatar" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#E4DEFF"/><stop offset="55%" stop-color="#9682FF"/><stop offset="100%" stop-color="#6E58F5"/></radialGradient>    <radialGradient id="g-node-cyanavatar" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#D6FFFA"/><stop offset="55%" stop-color="#4AEEE0"/><stop offset="100%" stop-color="#22C6BA"/></radialGradient>    <radialGradient id="g-node-greenavatar" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#E1FFEC"/><stop offset="55%" stop-color="#78EBA5"/><stop offset="100%" stop-color="#3FC97A"/></radialGradient>    <radialGradient id="g-node-hotavatar" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#FFE4F4"/><stop offset="55%" stop-color="#FF78CD"/><stop offset="100%" stop-color="#E8479F"/></radialGradient>    <radialGradient id="halo-node-violetavatar" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9682FF" stop-opacity="0.75"/><stop offset="70%" stop-color="#9682FF" stop-opacity="0"/></radialGradient>    <radialGradient id="halo-node-cyanavatar" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4AEEE0" stop-opacity="0.75"/><stop offset="70%" stop-color="#4AEEE0" stop-opacity="0"/></radialGradient>    <radialGradient id="halo-node-greenavatar" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#78EBA5" stop-opacity="0.75"/><stop offset="70%" stop-color="#78EBA5" stop-opacity="0"/></radialGradient>    <radialGradient id="halo-node-hotavatar" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FF78CD" stop-opacity="0.75"/><stop offset="70%" stop-color="#FF78CD" stop-opacity="0"/></radialGradient>  </defs>  <g>    <circle cx="100" cy="100" r="88" fill="url(#halo-coreavatar)"/>    <g class="nova-spin">      <g stroke="url(#g-bolt-havatar)" fill="none" stroke-linecap="round" stroke-linejoin="round">        <polyline points="100,72 94,54 106,42 100,22" stroke-width="6.5"/>        <polyline points="120,80 138,66 150,74 162,50" stroke-width="6.5"/>        <polyline points="128,102 150,96 160,110 180,108" stroke-width="6.5"/>        <polyline points="118,124 134,138 128,150 150,168" stroke-width="6.5"/>        <polyline points="98,128 106,148 92,160 96,182" stroke-width="6.5"/>        <polyline points="74,122 56,132 60,146 40,164" stroke-width="6.5"/>        <polyline points="72,98 52,92 44,104 22,96" stroke-width="6.5"/>        <polyline points="80,80 64,66 54,72 46,44" stroke-width="6.5"/>        <polyline points="138,66 150,58 156,64" stroke-width="3.2"/>        <polyline points="134,138 146,146 150,138" stroke-width="3.2"/>        <polyline points="56,132 46,140 44,132" stroke-width="3.2"/>        <polyline points="64,66 54,58 60,52" stroke-width="3.2"/>        <polyline points="94,54 82,50 84,44" stroke-width="3.2"/>        <polyline points="106,148 118,152 120,146" stroke-width="3.2"/>      </g>      <g>        <circle class="nova-node" cx="100" cy="22" r="14" fill="url(#halo-node-violetavatar)"/><circle cx="100" cy="22" r="6.5" fill="url(#g-node-violetavatar)"/>        <circle class="nova-node" cx="162" cy="50" r="14" fill="url(#halo-node-cyanavatar)"/><circle cx="162" cy="50" r="6.5" fill="url(#g-node-cyanavatar)"/>        <circle class="nova-node" cx="180" cy="108" r="14" fill="url(#halo-node-greenavatar)"/><circle cx="180" cy="108" r="6.5" fill="url(#g-node-greenavatar)"/>        <circle class="nova-node" cx="150" cy="168" r="14" fill="url(#halo-node-hotavatar)"/><circle cx="150" cy="168" r="6.5" fill="url(#g-node-hotavatar)"/>        <circle class="nova-node" cx="96" cy="182" r="14" fill="url(#halo-node-violetavatar)"/><circle cx="96" cy="182" r="6.5" fill="url(#g-node-violetavatar)"/>        <circle class="nova-node" cx="40" cy="164" r="14" fill="url(#halo-node-cyanavatar)"/><circle cx="40" cy="164" r="6.5" fill="url(#g-node-cyanavatar)"/>        <circle class="nova-node" cx="22" cy="96" r="14" fill="url(#halo-node-greenavatar)"/><circle cx="22" cy="96" r="6.5" fill="url(#g-node-greenavatar)"/>        <circle class="nova-node" cx="46" cy="44" r="14" fill="url(#halo-node-hotavatar)"/><circle cx="46" cy="44" r="6.5" fill="url(#g-node-hotavatar)"/>      </g>      <g fill="#EAFFFF">        <circle class="nova-spark" cx="126" cy="64" r="2.4"/><circle class="nova-spark" cx="152" cy="132" r="2.2"/><circle class="nova-spark" cx="70" cy="152" r="2.4"/><circle class="nova-spark" cx="58" cy="74" r="2.2"/>      </g>    </g>    <circle class="nova-core-ring" cx="100" cy="100" r="30" fill="none" stroke="#4AEEE0" stroke-width="1.5" opacity="0.6"/>    <circle cx="100" cy="100" r="24" fill="url(#g-coreavatar)"/>    <circle cx="100" cy="100" r="10" fill="#F2FFFF"/>  </g></svg></div>
     <div class="name">Rob Brown</div>
@@ -106,7 +108,7 @@
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) return;
-  var host = document.getElementById('hero'), c = document.getElementById('rob-net'), x = c.getContext('2d');
+  var c = document.getElementById('bg-net'), x = c.getContext('2d');
   var DPR = Math.min(1.5, devicePixelRatio || 1), W, H, T = 0;
   var PAL = [[150,130,255],[74,238,224],[255,120,205]];
   function rgba(col, a) { return 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + a + ')'; }
@@ -130,22 +132,22 @@
   }
   function grow() {
     nodes=[]; fibers=[]; somas=[]; signals=[];
-    CXn = 0.5*W; CYn = 0.38*H; SPAN = Math.max(W,H);
-    var hubs = 4;
+    CXn = 0.5*W; CYn = 0.32*H; SPAN = Math.max(W,H);
+    var hubs = 5;
     for (var h=0; h<hubs; h++) {
-      var a = Math.random()*Math.PI*2, rr = Math.random()*SPAN*0.32;
-      var hx = CXn+Math.cos(a)*rr, hy = CYn+Math.sin(a)*rr*0.8;
+      var a = Math.random()*Math.PI*2, rr = Math.random()*SPAN*0.4;
+      var hx = CXn+Math.cos(a)*rr, hy = CYn+Math.sin(a)*rr*0.9;
       var col = pick();
       var hi = addNode(hx, hy, 0, col);
       somas.push(hi);
       var prim = 4+(Math.random()*2|0);
-      for (var i=0;i<prim;i++) branch(hi, (i/prim)*Math.PI*2+Math.random()*0.5, SPAN*0.24, 1, col);
+      for (var i=0;i<prim;i++) branch(hi, (i/prim)*Math.PI*2+Math.random()*0.5, SPAN*0.22, 1, col);
     }
   }
   function size() {
-    var r = host.getBoundingClientRect();
-    W = c.width = Math.max(2, r.width*DPR); H = c.height = Math.max(2, r.height*DPR);
-    c.style.width = r.width+'px'; c.style.height = r.height+'px';
+    var w = window.innerWidth, h = window.innerHeight;
+    W = c.width = Math.max(2, w*DPR); H = c.height = Math.max(2, h*DPR);
+    c.style.width = w+'px'; c.style.height = h+'px';
     grow();
   }
   function fpt(f,t){var A=nodes[f.a],B=nodes[f.b],u=1-t;
@@ -160,22 +162,22 @@
     for (var i=0;i<fibers.length;i++){
       var f=fibers[i]; if(f.energy>0) f.energy*=0.95;
       var A=nodes[f.a],B=nodes[f.b],lit=f.energy;
-      x.strokeStyle = rgba(lit>0.5?[255,255,255]:f.col, 0.28+lit*0.5); x.lineWidth = (f.w+lit*1.8)*DPR;
+      x.strokeStyle = rgba(lit>0.5?[255,255,255]:f.col, 0.16+lit*0.35); x.lineWidth = (f.w+lit*1.4)*DPR;
       x.lineCap='round';
       x.beginPath(); x.moveTo(A.x,A.y); x.quadraticCurveTo(f.kx,f.ky,B.x,B.y); x.stroke();
     }
     for (var i=0;i<nodes.length;i++){
       var n=nodes[i]; n.tw+=n.ts; if(n.energy>0) n.energy*=0.95;
-      var tw=0.5+0.5*Math.sin(n.tw), bright=0.5+0.5*tw+n.energy*0.9;
-      var r=(2.6+n.energy*2.6)*DPR;
-      x.fillStyle=rgba(n.col, Math.min(1,bright)*0.85); x.beginPath(); x.arc(n.x,n.y,r*2.6,0,7); x.fill();
-      x.fillStyle=rgba([255,255,255], Math.min(1,bright)*0.9); x.beginPath(); x.arc(n.x,n.y,r,0,7); x.fill();
+      var tw=0.5+0.5*Math.sin(n.tw), bright=0.35+0.4*tw+n.energy*0.8;
+      var r=(2+n.energy*2)*DPR;
+      x.fillStyle=rgba(n.col, Math.min(1,bright)*0.6); x.beginPath(); x.arc(n.x,n.y,r*2.4,0,7); x.fill();
+      x.fillStyle=rgba([255,255,255], Math.min(1,bright)*0.65); x.beginPath(); x.arc(n.x,n.y,r,0,7); x.fill();
     }
     for (var k=signals.length-1;k>=0;k--){
       var s=signals[k]; s.t+=s.sp; var f=fibers[s.fi];
       if (s.t>=1){ fireNode(f.b); signals.splice(k,1); continue; }
       var p=fpt(f,s.t);
-      x.fillStyle=rgba([255,255,255],0.9); x.beginPath(); x.arc(p.x,p.y,2.2*DPR,0,7); x.fill();
+      x.fillStyle=rgba([255,255,255],0.7); x.beginPath(); x.arc(p.x,p.y,1.9*DPR,0,7); x.fill();
     }
     if (Math.random() < 0.02) fireNode(somas[(Math.random()*somas.length)|0]);
     x.globalCompositeOperation = 'source-over';
