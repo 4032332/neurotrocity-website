@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rob Brown — NeuroTrocity</title>
+<meta name="description" content="Rob Brown, CEO of NeuroTrocity — save contact details.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<style>
+  :root{
+    --bg:#08080D; --panel:#101018; --line:#20202E;
+    --ink:#F3F3F8; --muted:#8C8CA6;
+    --volt:#7C6BFF; --cyan:#38E1D6;
+    --sans:-apple-system,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,monospace;
+  }
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .page{max-width:420px;margin:0 auto;padding-bottom:64px}
+
+  .hero{position:relative;padding:52px 24px 84px;text-align:center;overflow:hidden;
+    background:radial-gradient(120% 100% at 50% -10%,#17173a,var(--bg) 72%)}
+  .hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(124,107,255,.14) 1.5px,transparent 1.5px);background-size:26px 26px;opacity:.6}
+  .avatar{position:relative;z-index:2;width:104px;height:104px;margin:0 auto 20px;border-radius:50%;
+    background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 6px rgba(124,107,255,.08)}
+  .avatar img{width:60px;height:60px}
+  .name{position:relative;z-index:2;font-size:24px;font-weight:800;letter-spacing:-.02em}
+  .role{position:relative;z-index:2;margin-top:4px;font-size:14px;color:var(--muted)}
+  .role .org{color:var(--cyan);font-weight:700}
+
+  .quick{position:relative;z-index:2;display:flex;justify-content:center;gap:14px;margin-top:26px}
+  .quick a{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--panel);border:1px solid var(--line);transition:transform .15s ease,border-color .15s ease}
+  .quick a:hover{transform:translateY(-2px);border-color:var(--volt)}
+  .quick svg{width:20px;height:20px;color:var(--cyan)}
+
+  .save-wrap{padding:0 24px;margin-top:-40px;position:relative;z-index:3}
+  .save{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+    background:linear-gradient(100deg,var(--volt),#5F8BFF);color:#fff;font-weight:800;font-size:16px;
+    padding:16px 20px;border-radius:14px;box-shadow:0 16px 34px -14px rgba(124,107,255,.85);
+    transition:transform .18s ease,box-shadow .18s ease}
+  .save:hover{transform:translateY(-2px)}
+  .save svg{width:20px;height:20px}
+
+  .card{margin:22px 24px 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .row{display:flex;flex-direction:column;gap:3px;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:none}
+  .row .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .row .v{font-size:15.5px;font-weight:600}
+  .row .v a{color:var(--cyan)}
+
+  .foot{text-align:center;margin-top:28px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .foot a{color:var(--muted)}
+  .foot a:hover{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="hero">
+    <div class="avatar"><img src="/assets/img/signature-mark.png" alt="NeuroTrocity"></div>
+    <div class="name">Rob Brown</div>
+    <div class="role">CEO &middot; <span class="org">NeuroTrocity</span></div>
+    <div class="quick">
+      <a href="tel:+61431252419" aria-label="Call">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </a>
+      <a href="mailto:rob@neurotrocity.com" aria-label="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+      </a>
+      <a href="https://neurotrocity.com" aria-label="Website">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20z"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="save-wrap">
+    <a class="save" href="rob-brown.vcf" download="Rob Brown - NeuroTrocity.vcf">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Save to Contacts
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="row"><div class="l">Name</div><div class="v">Rob Brown</div></div>
+    <div class="row"><div class="l">Mobile</div><div class="v"><a href="tel:+61431252419">0431 252 419</a></div></div>
+    <div class="row"><div class="l">Email</div><div class="v"><a href="mailto:rob@neurotrocity.com">rob@neurotrocity.com</a></div></div>
+    <div class="row"><div class="l">Company</div><div class="v"><a href="https://neurotrocity.com">NeuroTrocity</a></div></div>
+  </div>
+
+  <div class="foot">&copy; 2026 NeuroTrocity &middot; <a href="/">neurotrocity.com</a></div>
+</div>
+
+</body>
+</html>
