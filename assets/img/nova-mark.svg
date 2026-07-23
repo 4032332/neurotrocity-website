@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-26 -26 252 252">
+  <defs>
+    <linearGradient id="g-bolt-h" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C6BFF"></stop><stop offset="50%" stop-color="#38E1D6"></stop><stop offset="100%" stop-color="#38E1D6"></stop></linearGradient>
+    <radialGradient id="g-core" cx="40%" cy="35%" r="75%"><stop offset="0%" stop-color="#D9FFFB"></stop><stop offset="40%" stop-color="#4AEEE0"></stop><stop offset="100%" stop-color="#7C6BFF"></stop></radialGradient>
+    <radialGradient id="halo-core" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4AEEE0" stop-opacity="0.55"></stop><stop offset="45%" stop-color="#7C6BFF" stop-opacity="0.3"></stop><stop offset="75%" stop-color="#7C6BFF" stop-opacity="0"></stop></radialGradient>
+    <radialGradient id="g-node-violet" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#E4DEFF"></stop><stop offset="55%" stop-color="#9682FF"></stop><stop offset="100%" stop-color="#6E58F5"></stop></radialGradient>
+    <radialGradient id="g-node-cyan" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#D6FFFA"></stop><stop offset="55%" stop-color="#4AEEE0"></stop><stop offset="100%" stop-color="#22C6BA"></stop></radialGradient>
+    <radialGradient id="g-node-green" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#E1FFEC"></stop><stop offset="55%" stop-color="#78EBA5"></stop><stop offset="100%" stop-color="#3FC97A"></stop></radialGradient>
+    <radialGradient id="g-node-hot" cx="38%" cy="32%" r="72%"><stop offset="0%" stop-color="#FFE4F4"></stop><stop offset="55%" stop-color="#FF78CD"></stop><stop offset="100%" stop-color="#E8479F"></stop></radialGradient>
+    <radialGradient id="halo-node-violet" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9682FF" stop-opacity="0.75"></stop><stop offset="70%" stop-color="#9682FF" stop-opacity="0"></stop></radialGradient>
+    <radialGradient id="halo-node-cyan" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#4AEEE0" stop-opacity="0.75"></stop><stop offset="70%" stop-color="#4AEEE0" stop-opacity="0"></stop></radialGradient>
+    <radialGradient id="halo-node-green" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#78EBA5" stop-opacity="0.75"></stop><stop offset="70%" stop-color="#78EBA5" stop-opacity="0"></stop></radialGradient>
+    <radialGradient id="halo-node-hot" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FF78CD" stop-opacity="0.75"></stop><stop offset="70%" stop-color="#FF78CD" stop-opacity="0"></stop></radialGradient>
+  </defs>
+  <g>
+    <circle cx="100" cy="100" r="88" fill="url(#halo-core)"></circle>
+    <g stroke="url(#g-bolt-h)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="100,72 94,54 106,42 100,22" stroke-width="6.5"></polyline>
+      <polyline points="120,80 138,66 150,74 162,50" stroke-width="6.5"></polyline>
+      <polyline points="128,102 150,96 160,110 180,108" stroke-width="6.5"></polyline>
+      <polyline points="118,124 134,138 128,150 150,168" stroke-width="6.5"></polyline>
+      <polyline points="98,128 106,148 92,160 96,182" stroke-width="6.5"></polyline>
+      <polyline points="74,122 56,132 60,146 40,164" stroke-width="6.5"></polyline>
+      <polyline points="72,98 52,92 44,104 22,96" stroke-width="6.5"></polyline>
+      <polyline points="80,80 64,66 54,72 46,44" stroke-width="6.5"></polyline>
+      <polyline points="138,66 150,58 156,64" stroke-width="3.2"></polyline>
+      <polyline points="134,138 146,146 150,138" stroke-width="3.2"></polyline>
+      <polyline points="56,132 46,140 44,132" stroke-width="3.2"></polyline>
+      <polyline points="64,66 54,58 60,52" stroke-width="3.2"></polyline>
+      <polyline points="94,54 82,50 84,44" stroke-width="3.2"></polyline>
+      <polyline points="106,148 118,152 120,146" stroke-width="3.2"></polyline>
+    </g>
+    <g>
+      <circle cx="100" cy="22" r="14" fill="url(#halo-node-violet)"></circle><circle cx="100" cy="22" r="6.5" fill="url(#g-node-violet)"></circle>
+      <circle cx="162" cy="50" r="14" fill="url(#halo-node-cyan)"></circle><circle cx="162" cy="50" r="6.5" fill="url(#g-node-cyan)"></circle>
+      <circle cx="180" cy="108" r="14" fill="url(#halo-node-green)"></circle><circle cx="180" cy="108" r="6.5" fill="url(#g-node-green)"></circle>
+      <circle cx="150" cy="168" r="14" fill="url(#halo-node-hot)"></circle><circle cx="150" cy="168" r="6.5" fill="url(#g-node-hot)"></circle>
+      <circle cx="96" cy="182" r="14" fill="url(#halo-node-violet)"></circle><circle cx="96" cy="182" r="6.5" fill="url(#g-node-violet)"></circle>
+      <circle cx="40" cy="164" r="14" fill="url(#halo-node-cyan)"></circle><circle cx="40" cy="164" r="6.5" fill="url(#g-node-cyan)"></circle>
+      <circle cx="22" cy="96" r="14" fill="url(#halo-node-green)"></circle><circle cx="22" cy="96" r="6.5" fill="url(#g-node-green)"></circle>
+      <circle cx="46" cy="44" r="14" fill="url(#halo-node-hot)"></circle><circle cx="46" cy="44" r="6.5" fill="url(#g-node-hot)"></circle>
+    </g>
+    <g fill="#EAFFFF">
+      <circle cx="126" cy="64" r="2.4"></circle><circle cx="152" cy="132" r="2.2"></circle><circle cx="70" cy="152" r="2.4"></circle><circle cx="58" cy="74" r="2.2"></circle>
+    </g>
+    <circle cx="100" cy="100" r="30" fill="none" stroke="#4AEEE0" stroke-width="1.5" opacity="0.6"></circle>
+    <circle cx="100" cy="100" r="24" fill="url(#g-core)"></circle>
+    <circle cx="100" cy="100" r="10" fill="#F2FFFF"></circle>
+  </g></svg>
