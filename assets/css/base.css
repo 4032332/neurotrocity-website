@@ -40,3 +40,51 @@ button {
     scroll-behavior: auto !important;
   }
 }
+
+/* NeuroTrocity "nova" mark — animated variant.
+   Wrap the nova-mark.svg content in an element with class "nova-mark" (any size via width/height on that element). */
+.nova-mark { display: inline-block; }
+.nova-mark .nova-spin {
+  transform-origin: 100px 100px;
+  animation: nova-spin 48s linear infinite;
+}
+.nova-mark .nova-core-ring {
+  transform-origin: 100px 100px;
+  animation: nova-breathe 3.6s ease-in-out infinite;
+}
+.nova-mark .nova-node {
+  animation: nova-twinkle 2.8s ease-in-out infinite;
+}
+.nova-mark .nova-spark {
+  animation: nova-twinkle 1.9s ease-in-out infinite;
+}
+.nova-mark .nova-node:nth-of-type(1) { animation-delay: 0s; }
+.nova-mark .nova-node:nth-of-type(2) { animation-delay: .35s; }
+.nova-mark .nova-node:nth-of-type(3) { animation-delay: .7s; }
+.nova-mark .nova-node:nth-of-type(4) { animation-delay: 1.05s; }
+.nova-mark .nova-node:nth-of-type(5) { animation-delay: 1.4s; }
+.nova-mark .nova-node:nth-of-type(6) { animation-delay: 1.75s; }
+.nova-mark .nova-node:nth-of-type(7) { animation-delay: 2.1s; }
+.nova-mark .nova-node:nth-of-type(8) { animation-delay: 2.45s; }
+.nova-mark .nova-spark:nth-of-type(1) { animation-delay: .2s; }
+.nova-mark .nova-spark:nth-of-type(2) { animation-delay: .8s; }
+.nova-mark .nova-spark:nth-of-type(3) { animation-delay: 1.3s; }
+.nova-mark .nova-spark:nth-of-type(4) { animation-delay: 1.9s; }
+
+@keyframes nova-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes nova-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.14); opacity: 1; }
+}
+@keyframes nova-twinkle {
+  0%, 100% { opacity: 0.55; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nova-mark .nova-spin, .nova-mark .nova-core-ring, .nova-mark .nova-node, .nova-mark .nova-spark {
+    animation: none !important;
+  }
+}
