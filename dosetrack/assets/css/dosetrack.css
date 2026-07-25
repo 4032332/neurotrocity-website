@@ -86,7 +86,7 @@
   100% { transform: var(--end) rotate(var(--spin)) scale(1); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .dt-confetti span, .dt-mascot-wrap, .dt-store-badge { animation: none !important; transition: none !important; }
+  .dt-confetti span, .dt-mascot-wrap, .dt-store-badge, .dt-shop-btn { animation: none !important; transition: none !important; }
 }
 
 .dt-mascot-wrap {
@@ -374,3 +374,57 @@
 }
 .dt-coming-soon h1 { font-size: 30px; font-weight: 900; margin: 20px 0 10px; }
 .dt-coming-soon p { color: var(--dt-ink-soft); max-width: 34ch; line-height: 1.5; }
+
+/* Organiser CTA — the physical half of the product.
+   Mirrors .dt-badge-card rather than reusing it: .dt-badge-card p is styled as a
+   label (700/14px/ink-soft), which would leak into the body copy here. */
+.dt-shop { padding: 0 24px; margin-top: 28px; }
+.dt-shop-card {
+  background: var(--dt-card);
+  border: 1px solid var(--dt-line);
+  border-radius: 24px;
+  padding: 22px 20px 26px;
+  box-shadow: var(--dt-shadow);
+  text-align: center;
+}
+.dt-shop-label { font-size: 14px; font-weight: 700; color: var(--dt-ink-soft); margin-bottom: 14px; }
+.dt-shop-img {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  margin: 0 auto 16px;
+  border-radius: 18px;
+  border: 1px solid var(--dt-line);
+}
+.dt-shop-title { font-size: 21px; font-weight: 900; color: var(--dt-ink); margin-bottom: 7px; }
+.dt-shop-note {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--dt-ink-soft);
+  line-height: 1.5;
+  max-width: 32ch;
+  margin: 0 auto 18px;
+}
+.dt-shop-btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--dt-blue-1), var(--dt-blue-2));
+  color: white;
+  font-weight: 800;
+  font-size: 15px;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 15px 28px;
+  transition: transform .15s ease;
+}
+.dt-shop-btn:hover { transform: translateY(-1px); }
+.dt-shop-price { font-size: 13px; font-weight: 700; opacity: .82; }
+.dt-shop-ship {
+  display: block;
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dt-ink-soft);
+}
