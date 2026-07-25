@@ -35,8 +35,11 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p{margin:0}
 .mk .t{color:var(--volt)}.mk .wm{white-space:nowrap}
 @media(prefers-reduced-motion:reduce){.nova-spin,.nova-ring,.nova-node,.nova-spark{animation:none!important}}
 
-#bgnet{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;background:var(--bg)}
-.page{max-width:430px;margin:0 auto;padding-bottom:64px;position:relative}
+/* z-index:0, NOT -1. A fixed element at -1 paints behind the body's own
+   background, so an opaque body hides the canvas completely — the cortex
+   renders correctly and is never seen. Content sits above via .page. */
+#bgnet{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;background:var(--bg)}
+.page{max-width:430px;margin:0 auto;padding-bottom:64px;position:relative;z-index:1}
 .hero{position:relative;padding:64px 24px 92px;text-align:center;overflow:hidden;
   background:radial-gradient(120% 100% at 50% -10%,rgba(23,23,58,.5),rgba(8,8,13,.78) 72%)}
 .hero .veil{position:absolute;inset:0;pointer-events:none;
@@ -133,7 +136,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p{margin:0}
 <script>
 (function(){
 var cx=window.__cx=NTCortex(document.getElementById('bgnet'),
-  {hubs:8,maxFibers:200,branchLen:0.66,spread:0.95,lineAlpha:0.34,nodeAlpha:0.66,fire:0.06,spin:0.05,radius:0.46,cy:0.4});
+  {hubs:11,maxFibers:250,branchLen:0.7,spread:0.9,lineAlpha:0.5,nodeAlpha:0.85,fire:0.07,spin:0.055,radius:0.4,cy:0.36});
 if(window.gsap){
   gsap.registerPlugin(ScrollTrigger);
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
