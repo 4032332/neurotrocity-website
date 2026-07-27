@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northbay Physio — Buderim. One patient an hour.</title>
+<meta name="description" content="Physiotherapy in Buderim, Queensland. One-hour appointments, hands-on every session, never double-booked.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=Karla:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a href="#main" class="skip">Skip to content</a>
+
+<div class="intro" id="intro" aria-hidden="true">
+  <div class="intro__inner"><span class="intro__n" id="introN">60</span><span class="intro__u">minutes</span></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+<div class="prog" id="prog" aria-hidden="true"><span></span></div>
+
+<!-- ══ NAV ══════════════════════════════════════════════ -->
+<aside class="rail" id="rail">
+  <a href="#top" class="rail__mark">
+    <span class="rail__mark-a">Northbay</span>
+    <span class="rail__mark-b">Physiotherapy</span>
+  </a>
+
+  <nav class="rail__nav" aria-label="Sections">
+    <ol class="chap" id="chap">
+      <li><a href="#where"><i></i><span>Where it hurts</span></a></li>
+      <li><a href="#session"><i></i><span>The hour</span></a></li>
+      <li><a href="#why"><i></i><span>The difference</span></a></li>
+      <li><a href="#fees"><i></i><span>Fees</span></a></li>
+      <li><a href="#book"><i></i><span>Book</span></a></li>
+      <li><a href="#who"><i></i><span>Who you'll see</span></a></li>
+      <li><a href="#find"><i></i><span>Find us</span></a></li>
+      <li><a href="#faq"><i></i><span>Questions</span></a></li>
+    </ol>
+  </nav>
+
+  <div class="rail__foot">
+    <a href="tel:0754458820" class="rail__tel mono">07 5445 8820</a>
+    <p class="rail__hrs mono dim">Mon–Thu 7–6<br>Fri 7–2</p>
+  </div>
+
+  <button class="rail__burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+</aside>
+
+<a href="#book" class="pill mag" id="pill">
+  <span class="pill__dot" aria-hidden="true"></span>
+  <span class="pill__t">Book an hour</span>
+  <span class="pill__s mono" id="pillNext"></span>
+</a>
+
+<main id="main">
+
+<!-- ══ HERO ═════════════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero__bg">
+    <div class="hero__frame"><img id="heroImg" src="assets/img/hero-treatment.jpg"
+      alt="A physiotherapist working on a patient's shoulder" width="1600" height="2400"></div>
+    <div class="hero__veil" aria-hidden="true"></div>
+    <div class="hero__vign" aria-hidden="true"></div>
+  </div>
+
+  <div class="hero__inner wrap">
+    <p class="kicker rv-up">Buderim, Queensland</p>
+    <h1 class="hero__title">
+      <span class="l"><span>One patient</span></span>
+      <span class="l"><span>an hour.</span></span>
+      <span class="l"><span><em>Every hour.</em></span></span>
+    </h1>
+    <p class="hero__sub rv-up" data-d="0.5">No double-booking, no being handed to an assistant
+      halfway through, no photocopied exercise sheet at the door. Sixty minutes, hands on,
+      with the same physiotherapist every visit.</p>
+    <div class="hero__cta rv-up" data-d="0.58">
+      <a href="#book" class="btn btn--fill mag">Book an appointment</a>
+      <a href="#where" class="link-quiet">Tell us where it hurts →</a>
+    </div>
+  </div>
+
+  <figcaption class="hero__cap mono">Room one · Tuesday, 10:00</figcaption>
+
+  <div class="avail" id="avail">
+    <div class="avail__lead">
+      <span class="avail__dot" aria-hidden="true"></span>
+      <span class="mono">Next available</span>
+    </div>
+    <div class="avail__slots" id="availSlots"></div>
+    <a href="#book" class="avail__all mono">See all times →</a>
+  </div>
+</section>
+
+<!-- ══ BODY MAP ═════════════════════════════════════════ -->
+<section class="where section" id="where">
+  <div class="wrap">
+    <p class="kicker reveal">Where it hurts</p>
+    <h2 class="h2"><span class="l"><span>Point at it.</span></span></h2>
+    <p class="lede reveal" data-d="0.1">Most people don't know whether their problem is a physio
+      problem. Select the area and we'll tell you honestly, including when you'd be better off
+      seeing someone else.</p>
+
+    <div class="bodymap">
+      <!-- figure -->
+      <div class="bodymap__figwrap"><div class="bodymap__fig">
+        <svg viewBox="0 0 260 620" role="img" aria-label="Diagram of the human body. Select a region."
+             xmlns="http://www.w3.org/2000/svg">
+          <g class="fig">
+            <!-- head + neck -->
+            <circle cx="130" cy="46" r="25"/>
+            <path class="limb" style="stroke-width:22" d="M130 70 L130 94"/>
+            <!-- torso -->
+            <path d="M96 106 C96 96 111 86 130 86 C149 86 164 96 164 106
+                     L172 178 L166 250 L156 302 L104 302 L94 250 L88 178 Z"/>
+            <!-- arms -->
+            <path class="limb" d="M99 116 L76 194 L70 266"/>
+            <path class="limb" d="M161 116 L184 194 L190 266"/>
+            <circle cx="70" cy="280" r="11"/>
+            <circle cx="190" cy="280" r="11"/>
+            <!-- legs -->
+            <path class="limb" style="stroke-width:32" d="M113 300 L109 430 L107 538"/>
+            <path class="limb" style="stroke-width:32" d="M147 300 L151 430 L153 538"/>
+            <!-- feet -->
+            <path class="limb" style="stroke-width:17" d="M107 552 L92 566"/>
+            <path class="limb" style="stroke-width:17" d="M153 552 L168 566"/>
+          </g>
+
+          <g class="hotspots" id="hotspots">
+            <g class="hs" data-region="neck"     transform="translate(130,82)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+            <g class="hs" data-region="shoulder" transform="translate(99,116)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+            <g class="hs" data-region="upper"    transform="translate(130,150)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+            <g class="hs" data-region="elbow"    transform="translate(76,196)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+            <g class="hs" data-region="lower"    transform="translate(130,248)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+            <g class="hs" data-region="hip"      transform="translate(154,300)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+            <g class="hs" data-region="knee"     transform="translate(109,430)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+            <g class="hs" data-region="ankle"    transform="translate(153,532)"><circle class="hit" r="20"/><circle class="ring" r="9"/><circle class="dot" r="7"/></g>
+          </g>
+        </svg>
+
+        </div>
+        <div class="bodymap__chips" id="regionChips" aria-label="Jump to a body region"></div>
+      </div>
+
+      <!-- regions scroll past the held figure -->
+      <div class="bodymap__read" id="regionRead"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE HOUR (pinned) ═══════════════════════════════ -->
+<section class="hour" id="session">
+  <div class="hour__sticky">
+    <div class="wrap hour__inner">
+
+      <div class="hour__lead">
+        <p class="kicker">Your first session</p>
+        <h2 class="hour__h">
+          <span class="l"><span>What the hour</span></span>
+          <span class="l"><span><em>actually looks like.</em></span></span>
+        </h2>
+      </div>
+
+      <div class="hour__stage">
+        <!-- dial -->
+        <div class="dial">
+          <svg viewBox="0 0 400 400" aria-hidden="true">
+            <g class="dial__ticks" id="dialTicks"></g>
+            <circle class="dial__track" cx="200" cy="200" r="164"/>
+            <circle class="dial__arc" id="dialArc" cx="200" cy="200" r="164"
+                    transform="rotate(-90 200 200)"/>
+            <circle class="dial__head" id="dialHead" cx="200" cy="36" r="7"/>
+          </svg>
+          <div class="dial__read">
+            <span class="dial__n" id="dialN">00</span>
+            <span class="dial__u mono">minutes in</span>
+            <span class="dial__c mono" id="dialCount">1 of 5</span>
+          </div>
+        </div>
+
+        <!-- phases -->
+        <div class="hour__right"><div class="hour__phases" id="phases">
+          <article class="ph is-on" data-from="0" data-to="12">
+            <span class="ph__t mono">00 — 12 min</span>
+            <h3>You talk, we listen</h3>
+            <p>What happened, what makes it worse, what you've already tried, and what you're
+              actually trying to get back to. Nobody types into a computer with their back to you.</p>
+          </article>
+          <article class="ph" data-from="12" data-to="25">
+            <span class="ph__t mono">12 — 25 min</span>
+            <h3>Assessment</h3>
+            <p>Movement, strength, and the specific tests that separate the three or four things
+              it's likely to be. You'll be told what we're ruling out, and why.</p>
+          </article>
+          <article class="ph" data-from="25" data-to="30">
+            <span class="ph__t mono">25 — 30 min</span>
+            <h3>The explanation</h3>
+            <p>In plain English, with the diagram if it helps. If we don't know yet, you'll be
+              told that too, along with what would tell us.</p>
+          </article>
+          <article class="ph" data-from="30" data-to="50">
+            <span class="ph__t mono">30 — 50 min</span>
+            <h3>Hands-on treatment</h3>
+            <p>Twenty minutes of actual manual therapy: soft tissue, joint mobilisation, dry
+              needling if it's indicated and you're comfortable with it.</p>
+          </article>
+          <article class="ph" data-from="50" data-to="60">
+            <span class="ph__t mono">50 — 60 min</span>
+            <h3>Two or three things to do</h3>
+            <p>Not twelve. Two or three exercises you'll actually remember, sent to your phone
+              before you've reached the car park, plus what to expect over the next week.</p>
+          </article>
+        </div>
+          <ol class="hour__idx" id="hourIdx" aria-hidden="true">
+            <li><span class="mono">00</span> You talk, we listen</li>
+            <li><span class="mono">12</span> Assessment</li>
+            <li><span class="mono">25</span> The explanation</li>
+            <li><span class="mono">30</span> Hands-on treatment</li>
+            <li><span class="mono">50</span> Two or three things to do</li>
+          </ol>
+        </div>
+      </div>
+
+      <p class="hour__foot mono dim">Scroll to move through the hour</p>
+    </div>
+  </div>
+  <div class="hour__spacer"></div>
+</section>
+
+<!-- ══ PROMISE ══════════════════════════════════════════ -->
+<section class="promise section" id="why">
+  <div class="wrap promise__grid">
+    <div>
+      <p class="kicker reveal">Why we're different</p>
+      <h2 class="h2"><span class="l"><span>The twenty-minute</span></span><span class="l"><span>appointment is a</span></span><span class="l"><span><em>business decision.</em></span></span></h2>
+    </div>
+    <div class="promise__body">
+      <p class="reveal" data-d="0.1">It isn't a clinical one. Booking three patients an hour
+        across two rooms earns a clinic roughly double what we earn, and it's why so many people
+        have been through four sessions of the same ultrasound and left none the wiser.</p>
+      <p class="reveal" data-d="0.14">We charge more per visit and see fewer people. In return you
+        get an hour of somebody's actual attention, and most patients need fewer visits because
+        of it. That's the whole model. There isn't a catch.</p>
+
+      <ul class="promise__list">
+        <li class="reveal" data-d="0.18"><span class="promise__tick" aria-hidden="true"></span>
+          <div><strong>Sixty minutes, every appointment</strong>
+          <p>Initial and follow-up. The clock doesn't change because you're a return patient.</p></div></li>
+        <li class="reveal" data-d="0.21"><span class="promise__tick" aria-hidden="true"></span>
+          <div><strong>Hands on, every session</strong>
+          <p>If a session is only exercise prescription, we'll tell you beforehand so you can
+            decide whether it's worth the trip.</p></div></li>
+        <li class="reveal" data-d="0.24"><span class="promise__tick" aria-hidden="true"></span>
+          <div><strong>The same physio, every time</strong>
+          <p>Northbay is a single-practitioner practice. You will not be reassigned.</p></div></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEES ═════════════════════════════════════════════ -->
+<section class="fees section" id="fees">
+  <div class="wrap">
+    <p class="kicker reveal">Fees</p>
+    <h2 class="h2"><span class="l"><span>All of it, upfront.</span></span></h2>
+    <p class="lede reveal" data-d="0.1">Every appointment is sixty minutes. There is no separate
+      "long consultation" price because there is no short one.</p>
+
+    <div class="fees__table reveal" data-d="0.14">
+      <div class="fees__row fees__row--head">
+        <span class="mono">Appointment</span><span class="mono">Length</span>
+        <span class="mono">Fee</span><span class="mono">Typical out of pocket</span>
+      </div>
+      <div class="fees__row"><span>Initial consultation</span><span class="mono">60 min</span>
+        <span class="mono">$145</span><span class="mono dim">$87 after rebate</span></div>
+      <div class="fees__row"><span>Follow-up consultation</span><span class="mono">60 min</span>
+        <span class="mono">$125</span><span class="mono dim">$67 after rebate</span></div>
+      <div class="fees__row"><span>Extended assessment</span><span class="mono">90 min</span>
+        <span class="mono">$185</span><span class="mono dim">$127 after rebate</span></div>
+      <div class="fees__row"><span>Chronic Disease Management plan</span><span class="mono">60 min</span>
+        <span class="mono">$125</span><span class="mono dim">$66.70 gap</span></div>
+    </div>
+
+    <div class="fees__notes">
+      <div class="reveal" data-d="0.16"><strong>Health funds</strong>
+        <p>HICAPS at the desk, so you only pay the gap. The rebate figures above assume a
+          mid-tier extras policy and will differ with yours.</p></div>
+      <div class="reveal" data-d="0.19"><strong>Medicare</strong>
+        <p>CDM plans accepted with a referral from your GP. Medicare covers $58.30 of a
+          standard consultation; the rest is payable on the day.</p></div>
+      <div class="reveal" data-d="0.22"><strong>DVA and WorkCover</strong>
+        <p>DVA Gold and White Card holders are bulk-billed. Approved WorkCover Queensland
+          claims are invoiced directly, with nothing payable by you.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BOOKING ══════════════════════════════════════════ -->
+<section class="book section" id="book">
+  <div class="wrap">
+    <p class="kicker reveal">Book</p>
+    <h2 class="h2"><span class="l"><span>Four steps.</span></span><span class="l"><span><em>About forty seconds.</em></span></span></h2>
+
+    <div class="bk" id="bk">
+      <ol class="bk__prog" id="bkProg">
+        <li class="is-on"><span class="mono">01</span> Reason</li>
+        <li><span class="mono">02</span> Appointment</li>
+        <li><span class="mono">03</span> Time</li>
+        <li><span class="mono">04</span> Details</li>
+      </ol>
+
+      <div class="bk__panes">
+        <!-- 1 reason -->
+        <div class="bk__pane is-on" data-step="0">
+          <p class="bk__q">What's bringing you in?</p>
+          <div class="bk__opts" id="bkReason"></div>
+        </div>
+        <!-- 2 appointment -->
+        <div class="bk__pane" data-step="1">
+          <p class="bk__q">Which appointment?</p>
+          <div class="bk__opts" id="bkType"></div>
+        </div>
+        <!-- 3 time -->
+        <div class="bk__pane" data-step="2">
+          <p class="bk__q">Pick a day, then a time.</p>
+          <div class="bk__days" id="bkDays"></div>
+          <div class="bk__times" id="bkTimes"></div>
+        </div>
+        <!-- 4 details -->
+        <div class="bk__pane" data-step="3">
+          <p class="bk__q">Last bit.</p>
+          <div class="bk__fields">
+            <div class="field"><label class="mono" for="bkName">Full name</label>
+              <input id="bkName" type="text" placeholder="Your name"></div>
+            <div class="field"><label class="mono" for="bkPhone">Mobile</label>
+              <input id="bkPhone" type="tel" placeholder="04__ ___ ___"></div>
+            <div class="field field--full"><label class="mono" for="bkEmail">Email</label>
+              <input id="bkEmail" type="email" placeholder="you@example.com.au"></div>
+            <div class="field field--full"><label class="mono" for="bkNote">Anything we should know? (optional)</label>
+              <textarea id="bkNote" rows="2" placeholder="Referral from a GP, previous surgery, anything relevant…"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bk__foot">
+        <button class="bk__back" id="bkBack" hidden>← Back</button>
+        <div class="bk__sum mono" id="bkSum"></div>
+        <button class="btn btn--fill mag" id="bkNext" disabled>Continue</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- confirmation -->
+<div class="conf" id="conf" aria-hidden="true">
+  <div class="conf__scrim" data-cclose></div>
+  <div class="conf__card" role="dialog" aria-modal="true" aria-labelledby="confTitle">
+    <button class="conf__close" data-cclose aria-label="Close">✕</button>
+    <div class="conf__tick" aria-hidden="true">✓</div>
+    <p class="mono dim">Appointment held</p>
+    <h3 class="conf__t" id="confTitle">You're booked in.</h3>
+    <dl class="conf__list" id="confList"></dl>
+    <p class="conf__note">A confirmation would normally go to your phone and email, with a
+      reminder the day before.</p>
+    <p class="conf__demo mono dim">Demonstration screen. Nothing has been booked and no
+      details were stored.</p>
+  </div>
+</div>
+
+<!-- ══ WHO ══════════════════════════════════════════════ -->
+<section class="who section" id="who">
+  <div class="who__img">
+    <img src="assets/img/portrait-1.jpg" alt="Daniel Mercer, physiotherapist" loading="lazy">
+    <span class="who__fade" aria-hidden="true"></span>
+  </div>
+  <div class="wrap who__grid">
+    <div class="who__spacer" aria-hidden="true"></div>
+    <div class="who__copy">
+      <p class="kicker reveal">Who you'll see</p>
+      <h2 class="h2"><span class="l"><span>Daniel Mercer</span></span></h2>
+      <p class="who__cred mono reveal" data-d="0.08">B.Physio (UQ) · APA Member · Dry Needling Cert.</p>
+      <p class="reveal" data-d="0.12">I spent six years in a clinic that booked me three patients
+        an hour. I was good at it, and I was still sending people home without having properly
+        worked out what was wrong. Northbay is the practice I wanted to work in.</p>
+      <p class="reveal" data-d="0.15">Fourteen years in practice. Mostly necks, lower backs,
+        shoulders and knees. Particular interest in people who have been told nothing more can
+        be done, because that is almost never true.</p>
+      <blockquote class="who__quote reveal" data-d="0.18">
+        If I can't help you, I'll say so in the first session and tell you who can.
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BAND ═════════════════════════════════════════════ -->
+<section class="band" id="find">
+  <div class="band__media">
+    <video id="bandVideo" autoplay muted loop playsinline poster="assets/img/exterior.jpg">
+      <source src="assets/video/band-exterior.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="band__card">
+    <p class="mono dim">Find us</p>
+    <p class="band__addr">4/62 Burnett Street<br>Buderim QLD 4556</p>
+    <p class="band__note">Off-street parking at the door, ground floor, no stairs.
+      Two minutes from the Buderim village roundabout.</p>
+    <p class="mono"><a href="tel:0754458820">07 5445 8820</a></p>
+  </div>
+</section>
+
+<!-- ══ FAQ ══════════════════════════════════════════════ -->
+<section class="faq section" id="faq">
+  <div class="wrap faq__grid">
+    <div class="faq__side">
+      <p class="kicker reveal">Questions</p>
+      <h2 class="h2"><span class="l"><span>The ones</span></span><span class="l"><span>we're actually</span></span><span class="l"><span><em>asked.</em></span></span></h2>
+      <div class="faq__ask reveal" data-d="0.1">
+        <p class="mono dim">Not answered here?</p>
+        <p>Ring the practice. Daniel answers it himself between patients, and if he
+          can't, he calls back the same day.</p>
+        <a href="tel:0754458820" class="faq__tel">07 5445 8820</a>
+      </div>
+    </div>
+    <div class="acc" id="acc">
+      <div class="acc__i"><button class="acc__q">Do I need a GP referral?<i></i></button>
+        <div class="acc__a"><p>No. Physiotherapy is a primary contact profession in Australia,
+          so you can book directly. You only need a referral if you're claiming through Medicare
+          on a Chronic Disease Management plan, through DVA, or under WorkCover.</p></div></div>
+      <div class="acc__i"><button class="acc__q">Will it hurt?<i></i></button>
+        <div class="acc__a"><p>Some of it, sometimes, briefly. Manual therapy on an irritable
+          joint can be uncomfortable while it's happening. Nothing is done without telling you
+          first, and "stop" means stop immediately, every time.</p></div></div>
+      <div class="acc__i"><button class="acc__q">How many sessions will I need?<i></i></button>
+        <div class="acc__a"><p>You'll get an honest estimate at the end of the first one, and
+          we'd rather under-promise. Most straightforward problems take three to five sessions.
+          If you're not measurably better by the third, we change the plan or refer you on. We
+          don't sell packages of ten.</p></div></div>
+      <div class="acc__i"><button class="acc__q">What should I wear?<i></i></button>
+        <div class="acc__a"><p>Something you can move in and that lets us see the area. Shorts
+          for knees and hips, a singlet or t-shirt for shoulders and necks. There are gowns and
+          a private change space if you'd prefer.</p></div></div>
+      <div class="acc__i"><button class="acc__q">Do you do dry needling?<i></i></button>
+        <div class="acc__a"><p>Yes, when it's indicated, and never as the whole session. It's
+          optional, it's explained first, and plenty of people decline it and get better
+          anyway.</p></div></div>
+      <div class="acc__i"><button class="acc__q">What if I need a scan or a surgeon?<i></i></button>
+        <div class="acc__a"><p>Then you'll be told, and told quickly. Most musculoskeletal
+          problems don't need imaging and scans often show things that aren't causing your pain.
+          When one is genuinely warranted, we'll write to your GP the same day.</p></div></div>
+      <div class="acc__i"><button class="acc__q">Can you help with something long-standing?<i></i></button>
+        <div class="acc__a"><p>Often, yes, and it's most of what we do. Long-standing problems
+          need the hour more than anything else does, which is the reason the practice is set
+          up this way.</p></div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════ -->
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <div class="foot__brand">
+      <span class="nav__mark-a">Northbay</span>
+      <span class="nav__mark-b">Physiotherapy · Buderim</span>
+      <p>One patient an hour, since 2019.</p>
+    </div>
+    <div class="foot__col">
+      <p class="mono dim">Practice</p>
+      <p>4/62 Burnett Street<br>Buderim QLD 4556</p>
+      <p class="mono"><a href="tel:0754458820">07 5445 8820</a></p>
+    </div>
+    <div class="foot__col">
+      <p class="mono dim">Hours</p>
+      <p>Mon – Thu &nbsp;7:00 – 18:00<br>Fri &nbsp;7:00 – 14:00<br>Sat &nbsp;by arrangement</p>
+    </div>
+    <div class="foot__col">
+      <p class="mono dim">Registration</p>
+      <p class="mono dim">AHPRA PHY0002418857<br>ABN 68 411 902 336<br>Australian Physiotherapy<br>Association member</p>
+    </div>
+  </div>
+  <div class="wrap foot__bar">
+    <span class="mono dim">© 2026 Northbay Physiotherapy</span>
+    <span class="mono dim">A fictional brand, built as a design demonstration.</span>
+    <a class="mono foot__credit" href="https://neurotrocity.com" target="_blank" rel="noopener">
+      Created by <strong>NeuroTrocity</strong></a>
+  </div>
+</footer>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/vendor/lenis.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
