@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/img/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<title>Rewire — Sample builds</title>
+<meta name="description" content="Interactive demonstration websites built by Rewire for fictional brands. Click through them and see what we make.">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/rewire/assets/css/rewire.css">
+</head>
+<body class="rw">
+  <div class="rw-bar" id="bar">
+    <div class="rw-bar-inner">
+      <a class="rw-mark" href="/">Neuro<span class="g">Trocity</span></a>
+      <span class="rw-spacer"></span>
+      <a class="rw-back" href="/rewire/landing/">&larr; Rewire</a>
+    </div>
+  </div>
+
+  <header class="rw-hero" style="padding-bottom:4vh">
+    <div class="rw-page">
+      <div class="rw-eyebrow">Sample builds</div>
+      <h1>Made-up brands. <span class="g">Real builds.</span></h1>
+      <p class="rw-lede">These are fully working demonstration sites we built for brands that
+        don't exist. They're not client work and we're not pretending otherwise — they're here
+        so you can click around and see the standard before you spend anything.</p>
+    </div>
+  </header>
+
+  <section class="rw-section" style="padding-top:0">
+    <div class="rw-page">
+      <div class="rw-samples">
+
+        <a class="rw-sample" href="/rewire/sample/apex/">
+          <div class="rw-sample-img">
+            <img src="/rewire/sample/assets/apex-tile.jpg" alt="Apex Motor Club demonstration website" loading="lazy">
+            <span class="rw-sample-live">Live demo</span>
+          </div>
+          <div class="rw-sample-body">
+            <div class="rw-sample-kick">Luxury / Tourism</div>
+            <div class="t">Apex Motor Club</div>
+            <p>Supercar driving tours on the Great Ocean Road. Scroll-driven route map,
+              eight-car fleet browser with full specifications, and a booking builder that
+              prices a trip live.</p>
+            <span class="rw-sample-go">Open the demo &rarr;</span>
+          </div>
+        </a>
+
+        <div class="rw-sample is-soon">
+          <div class="rw-sample-img placeholder"><span>In build</span></div>
+          <div class="rw-sample-body">
+            <div class="rw-sample-kick">Health / Local service</div>
+            <div class="t">Northbay Physio</div>
+            <p>Clinic site with an interactive body map that routes you to the right service,
+              and a full appointment booking flow.</p>
+            <span class="rw-sample-go muted">Coming soon</span>
+          </div>
+        </div>
+
+        <div class="rw-sample is-soon">
+          <div class="rw-sample-img placeholder"><span>In build</span></div>
+          <div class="rw-sample-body">
+            <div class="rw-sample-kick">Software</div>
+            <div class="t">Aperture</div>
+            <p>A working analytics dashboard, not a screenshot of one. Live charts, filters,
+              and a genuinely well-tuned dark and light mode.</p>
+            <span class="rw-sample-go muted">Coming soon</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="rw-teaser" style="margin-top:34px">
+        <div class="t">Why fictional brands?</div>
+        <p>Because inventing fake results for real businesses would be dishonest, and we said
+          we wouldn't. These demos show what we can build without claiming someone hired us
+          to build it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="rw-cta">
+    <div class="rw-page">
+      <div class="rw-kick" style="text-align:center">Get in touch</div>
+      <h2 class="rw-h2" style="margin-inline:auto;text-align:center">Want something like this for your business?</h2>
+      <p class="rw-sub" style="margin-inline:auto;text-align:center">Free review, no obligation, a person replies.</p>
+      <a class="say" href="/rewire/contact/">Start your free review &rarr;</a>
+    </div>
+  </section>
+
+  <footer class="rw-footer">
+    <div class="rw-page rw-footer-inner">
+      <span>&copy; 2026 NeuroTrocity &middot; Rewire</span>
+      <span class="links">
+        <a href="/rewire/landing/">Rewire</a>
+        <a href="/rewire/case-studies/">Case studies</a>
+        <a href="/rewire/contact/">Contact</a>
+        <a href="/">NeuroTrocity</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    var bar = document.getElementById('bar');
+    addEventListener('scroll', function () { bar.classList.toggle('scrolled', scrollY > 10); }, { passive: true });
+  </script>
+</body>
+</html>
