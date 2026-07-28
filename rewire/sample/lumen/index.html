@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lumen &amp; Larch — The 610 shelving system</title>
+<meta name="description" content="One modular shelving system in Australian and European hardwood. Built to order in Bowden, Adelaide. Configure it yourself.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,300;0,400;1,300&family=Hanken+Grotesk:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#build" class="skip">Skip to the configurator</a>
+
+<header class="nav" id="nav">
+  <div class="nav__in">
+    <a class="nav__mark" href="#top">Lumen &amp; Larch</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#system">The system</a>
+      <a href="#build">Build yours</a>
+      <a href="#timber">Timber</a>
+      <a href="#made">How it's made</a>
+    </nav>
+    <a class="btn btn--sm" href="#build">Build yours</a>
+    <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+
+<main>
+
+<!-- ══ THE SYSTEM — assembles itself, then you take over ══ -->
+<section class="sys" id="system">
+  <span id="top"></span>
+  <div class="sys__stick">
+    <div class="sys__plan" id="sysPlan" aria-hidden="true">
+      <span class="sys__plan-note mono">40 mm channel pitch</span>
+    </div>
+    <canvas class="sys__c" id="shelfCanvas"></canvas>
+
+    <!-- the opening, held over the empty stage and handed off to the build -->
+    <div class="sys__hero wrap" id="sysHero">
+      <p class="mono clay">Bowden, Adelaide · Since 2016</p>
+      <h1 class="dsp sys__ht"><span class="ln"><i>One system.</i></span><span class="ln"><i>Ten thousand</i></span><span class="ln"><i><em>arrangements.</em></i></span></h1>
+      <p class="lede">The 610 is an upright, a shelf and nine modules that drop between them,
+        all in solid hardwood. Add to it when you move, take it apart when you move again.
+        It is designed to be the last shelving you buy.</p>
+      <div class="sys__meta">
+        <div><span class="mono dim">Made in</span><span>Bowden, SA</span></div>
+        <div><span class="mono dim">Lead time</span><span>3 – 5 weeks</span></div>
+        <div><span class="mono dim">Assembly</span><span>No tools</span></div>
+        <div><span class="mono dim">Guarantee</span><span>25 years</span></div>
+      </div>
+    </div>
+
+    <div class="sys__ui wrap">
+      <div class="sys__step" id="sysStep">
+        <p class="mono clay" id="stepN">Part one</p>
+        <h2 class="dsp sys__h" id="stepT">The upright</h2>
+        <p class="sys__p" id="stepP">A single length of hardwood with a routed channel every
+          40 millimetres. Everything else in the system hangs off it, and it is the only part
+          that touches your wall.</p>
+      </div>
+
+      <div class="sys__legend">
+        <p class="mono dim">Parts on screen</p>
+        <ul class="tally" id="tally"></ul>
+      </div>
+    </div>
+
+    <p class="sys__hint mono dim" id="sysHint">Scroll</p>
+  </div>
+  <div class="sys__spacer"></div>
+</section>
+
+<!-- ══ CONFIGURATOR ═══════════════════════════════════ -->
+<section class="cfg" id="build">
+  <div class="wrap cfg__head">
+    <div>
+      <p class="mono clay rv">Build yours</p>
+      <h2 class="dsp h2 rv" data-d="0.05">Now move it around.</h2>
+    </div>
+    <p class="lede rv" data-d="0.1">Same object you just watched assemble. Change the size, change
+      the timber, and <strong>click any opening</strong> to choose from nine modules. The price and the shipping weight follow you.</p>
+  </div>
+
+  <div class="wrap cfg__grid">
+    <div class="cfg__stage">
+      <div class="cfg__viewport" id="cfgViewport"></div>
+      <p class="mono dim cfg__tip">Drag to turn it · Click an opening to change it</p>
+    </div>
+
+    <aside class="cfg__panel">
+      <div class="ctl">
+        <div class="ctl__h"><span class="mono dim">Width</span><span class="mono" id="vBays">3 bays</span></div>
+        <div class="stepper"><button data-step="bays:-1" aria-label="Fewer bays">–</button>
+          <span class="stepper__t" id="dBays">2280 mm</span>
+          <button data-step="bays:1" aria-label="More bays">+</button></div>
+      </div>
+      <div class="ctl">
+        <div class="ctl__h"><span class="mono dim">Height</span><span class="mono" id="vRows">4 rows</span></div>
+        <div class="stepper"><button data-step="rows:-1" aria-label="Fewer rows">–</button>
+          <span class="stepper__t" id="dRows">1440 mm</span>
+          <button data-step="rows:1" aria-label="More rows">+</button></div>
+      </div>
+      <div class="ctl">
+        <div class="ctl__h"><span class="mono dim">Timber</span><span class="mono" id="vTimber">European oak</span></div>
+        <div class="swatches" id="swatches"></div>
+        <p class="ctl__note mono dim" id="timberNote"></p>
+      </div>
+      <div class="ctl">
+        <div class="ctl__h"><span class="mono dim">Module</span><span class="mono" id="vSel">No opening selected</span></div>
+        <div class="mods" id="mods"></div>
+        <p class="ctl__note mono dim" id="modNote">Click an opening in the model to change it.</p>
+      </div>
+      <div class="ctl">
+        <div class="ctl__h"><span class="mono dim">Frame options</span></div>
+        <button class="toggle" id="backToggle" aria-pressed="false">
+          <span class="toggle__d"></span><span>Back panels</span></button>
+        <button class="toggle" id="plinthToggle" aria-pressed="false" style="margin-top:6px">
+          <span class="toggle__d"></span><span>Plinth base</span></button>
+        <button class="toggle" id="braceToggle" aria-pressed="false" style="margin-top:6px">
+          <span class="toggle__d"></span><span>Cross-bracing</span></button>
+      </div>
+
+      <div class="quote">
+        <ul class="quote__lines" id="lines"></ul>
+        <div class="quote__tot">
+          <span class="mono dim">Your 610</span>
+          <span class="quote__v">$<span id="price">0</span></span>
+        </div>
+        <div class="quote__sub">
+          <span class="mono dim">Flat-packed</span><span class="mono" id="weight">0 kg</span>
+        </div>
+        <a class="btn btn--full" href="#made">Order this configuration</a>
+        <p class="mono dim quote__fine">A demonstration configurator. Nothing is ordered and no
+          payment is taken.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ══ TIMBER ═════════════════════════════════════════ -->
+<section class="sec wrap" id="timber">
+  <div class="sec__h">
+    <div>
+      <p class="mono clay rv">Timber</p>
+      <h2 class="dsp h2 rv" data-d="0.05">Four timbers, and no veneer<br>anywhere in the system.</h2>
+    </div>
+    <p class="lede rv" data-d="0.1">Every part is solid, which is why a 610 can be sanded back and
+      re-oiled in twenty years rather than thrown out. It is also why it costs what it costs.</p>
+  </div>
+  <div class="tim" id="timGrid"></div>
+</section>
+
+<!-- ══ IN THE ROOM ════════════════════════════════════ -->
+<section class="sec">
+  <div class="wrap sec__h">
+    <div>
+      <p class="mono clay rv">In the room</p>
+      <h2 class="dsp h2 rv" data-d="0.05">It is meant to be lived with,<br>not looked at.</h2>
+    </div>
+  </div>
+  <div class="wrap rooms">
+    <figure class="rv" style="grid-column:1/8"><img src="assets/img/room-shelf.jpg" alt="A 610 in a living room" loading="lazy" style="aspect-ratio:3/2">
+      <figcaption class="mono dim">Four bays, five rows, oak · Norwood</figcaption></figure>
+    <figure class="rv" data-d="0.08" style="grid-column:8/13"><img src="assets/img/det-shelf.jpg" alt="Shelf detail" loading="lazy" style="aspect-ratio:2/3">
+      <figcaption class="mono dim">Shelf into upright, no fixings</figcaption></figure>
+    <figure class="rv" data-d="0.14" style="grid-column:1/6"><img src="assets/img/room-cab.jpg" alt="Cabinet boxes in use" loading="lazy" style="aspect-ratio:3/2">
+      <figcaption class="mono dim">Two cabinet boxes, walnut · Prospect</figcaption></figure>
+  </div>
+</section>
+
+<!-- ══ HOW IT'S MADE ══════════════════════════════════ -->
+<section class="sec wrap" id="made">
+  <div class="sec__h">
+    <div>
+      <p class="mono clay rv">How it's made</p>
+      <h2 class="dsp h2 rv" data-d="0.05">Cut to your order,<br>not to a warehouse.</h2>
+    </div>
+    <p class="lede rv" data-d="0.1">We hold timber, not finished furniture. Your uprights are docked
+      the week you order, which is why it takes three to five weeks and why the grain matches.</p>
+  </div>
+  <div class="steps">
+    <div class="step rv"><p class="step__n mono clay">Week one</p><p class="step__t">Docked and dressed</p>
+      <p>Boards are selected for your order and machined to size. You get an email with a photograph of the actual stack.</p></div>
+    <div class="step rv" data-d="0.06"><p class="step__n mono clay">Week two</p><p class="step__t">Channels routed</p>
+      <p>Every upright is routed on the same jig, which is what makes a 610 bought in 2016 fit one bought this year.</p></div>
+    <div class="step rv" data-d="0.12"><p class="step__n mono clay">Week three</p><p class="step__t">Oiled and cured</p>
+      <p>Three coats of hard-wax oil, cut back between each. It cures for four days before it can be wrapped.</p></div>
+    <div class="step rv" data-d="0.18"><p class="step__n mono clay">Week four</p><p class="step__t">Flat-packed</p>
+      <p>Wrapped in wool felt and cardboard, no plastic. It arrives as a bundle of parts and an A5 card.</p></div>
+  </div>
+
+  <div class="acc" id="acc" style="margin-top:clamp(2rem,4vw,3.4rem)">
+    <div class="acc__i"><button class="acc__q">Do I need tools?<i></i></button>
+      <div class="acc__a"><p>No. Shelves and boxes drop into the routed channels and lock with a
+        quarter turn by hand. The only thing you might want is a spirit level and somebody to hold
+        the second upright.</p></div></div>
+    <div class="acc__i"><button class="acc__q">Does it have to be fixed to the wall?<i></i></button>
+      <div class="acc__a"><p>Anything over four rows, yes: two brackets at the top, supplied. Under
+        four rows it is free-standing, though we would still fix it if there are children in the
+        house.</p></div></div>
+    <div class="acc__i"><button class="acc__q">Can I add to it later?<i></i></button>
+      <div class="acc__a"><p>That is the entire point. Every part made since 2016 fits every other
+        part. Order a single upright and two shelves in ten years and it will line up with what you
+        have.</p></div></div>
+    <div class="acc__i"><button class="acc__q">What if it doesn't fit my wall?<i></i></button>
+      <div class="acc__a"><p>Send us the dimensions before you order and we will tell you what
+        works. Bays are fixed at 760mm because that is what keeps a solid shelf from sagging under
+        books, and we would rather say no than sell you a shelf that bends.</p></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot wrap">
+  <div class="foot__grid">
+    <div>
+      <p class="nav__mark">Lumen &amp; Larch</p>
+      <p>Modular shelving in solid hardwood,<br>made in Bowden since 2016.</p>
+    </div>
+    <div><p class="mono dim">Workshop</p><p>14 Gibson Street<br>Bowden SA 5007</p><p class="mono">08 8340 2266</p></div>
+    <div><p class="mono dim">Open</p><p>Thu – Sat &nbsp;10:00 – 16:00<br>Or by appointment</p></div>
+    <div><p class="mono dim">Details</p><p class="mono dim">ABN 39 552 108 447<br>Free delivery over $1,500<br>within Australia</p></div>
+  </div>
+  <div class="foot__bar">
+    <span class="mono dim">© 2026 Lumen &amp; Larch</span>
+    <span class="mono dim">A fictional brand, built as a design demonstration.</span>
+    <a class="credit mono" href="https://neurotrocity.com" target="_blank" rel="noopener">Created by <strong>NeuroTrocity</strong></a>
+  </div>
+</footer>
+
+<script src="js/vendor/three.min.js"></script>
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/shelf.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
