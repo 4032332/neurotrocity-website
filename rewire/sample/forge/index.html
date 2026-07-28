@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge Athletic — Coached strength, Islington Newcastle</title>
+<meta name="description" content="Coached strength training in Islington, Newcastle. Groups capped at eight, a coach on the floor every session.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Chivo:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a href="#week" class="skip">Skip to the timetable</a>
+
+<header class="nav" id="nav">
+  <div class="nav__in">
+    <a class="nav__mark" href="#top">Forge<i>/</i>Athletic</a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#week">This week</a>
+      <a href="#coaches">Coaches</a>
+      <a href="#room">The room</a>
+      <a href="#cost">What it costs</a>
+      <a href="#start">Starting</a>
+    </nav>
+    <a class="btn" href="#week" style="padding:.7em 1.1em">Book a session</a>
+    <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ══ HERO ═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero__bg"><img src="assets/img/hero-lift.jpg" alt="A lifter setting up under a barbell"></div>
+  <div class="wrap hero__in">
+    <p class="mono sul rv">Islington, Newcastle</p>
+    <h1 class="dsp hero__t" id="heroT" aria-label="Eight people. One coach. No guessing.">
+      <span class="ln" aria-hidden="true">Eight people.</span>
+      <span class="ln" aria-hidden="true">One coach.</span>
+      <span class="ln ln--sul" aria-hidden="true">No guessing.</span>
+    </h1>
+    <p class="hero__sub rv" data-d="0.1">Every session is capped at eight and coached from the floor.
+      You get a program written for you, and somebody watching you lift who will tell you when it's
+      wrong. That's the whole product.</p>
+    <div class="hero__cta rv" data-d="0.16">
+      <a class="btn" href="#week">See this week</a>
+      <a class="btn btn--ghost" href="#start">Never lifted before?</a>
+    </div>
+    <div class="hero__facts rv" data-d="0.22">
+      <div><span class="mono dim">Cap per session</span><span class="v">8</span></div>
+      <div><span class="mono dim">Coaches on floor</span><span class="v">1:8</span></div>
+      <div><span class="mono dim">Sessions a week</span><span class="v">34</span></div>
+      <div><span class="mono dim">Opens</span><span class="v">5:30am</span></div>
+      <div><span class="mono dim">Members</span><span class="v">190</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE WEEK ═══════════════════════════════════════ -->
+<section class="week wrap" id="week">
+  <div class="week__head">
+    <div>
+      <p class="mono sul">This week</p>
+      <h2 class="dsp h2">Pick your sessions.</h2>
+      <p class="lede" style="margin-top:.8rem">Tap the ones you'd come to. We'll tell you which
+        membership that lands you on and what it costs. Spots shown are real for the week.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter sessions">
+      <button class="filt is-on" data-f="all">All</button>
+      <button class="filt" data-f="Strength">Strength</button>
+      <button class="filt" data-f="Conditioning">Conditioning</button>
+      <button class="filt" data-f="Technique">Technique</button>
+      <button class="filt" data-f="Beginners">Beginners</button>
+    </div>
+  </div>
+
+  <div class="weekgrid">
+    <div class="days" id="days"></div>
+
+    <aside class="yours">
+      <p class="mono dim">Your week</p>
+      <p class="yours__t" id="yoursN">Nothing yet</p>
+      <p class="mono dim" id="yoursSub">Tap a session to start</p>
+      <ul class="yours__list" id="yoursList"></ul>
+      <div class="plan">
+        <p class="mono dim">That puts you on</p>
+        <p class="plan__n" id="planN">—</p>
+        <p class="plan__p" id="planP">—</p>
+        <p class="mono dim" id="planNote">per week, no lock-in</p>
+        <a class="btn btn--full" href="#start" style="margin-top:1rem">Book a free intro</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ══ OVERLOAD (pinned, three.js) ════════════════════ -->
+<section class="load" id="load">
+  <div class="load__stick">
+    <canvas class="load__c" id="barCanvas" aria-hidden="true"></canvas>
+    <div class="load__ui wrap">
+      <div class="load__lead">
+        <p class="mono sul">Progressive overload</p>
+        <h2 class="dsp h2">It goes up.<br>That's the whole idea.</h2>
+      </div>
+
+      <div class="load__read">
+        <p class="load__kg"><span id="loadKg">20</span><i>kg</i></p>
+        <p class="mono dim" id="loadBar">Empty bar</p>
+        <div class="load__wk">
+          <span class="mono dim">Week</span>
+          <span class="load__wkn" id="loadWk">01</span>
+        </div>
+        <p class="load__note" id="loadNote">You start with the bar and nothing on it. Everybody does,
+          including the people who look like they didn't.</p>
+      </div>
+    </div>
+    <p class="load__hint mono dim">Keep scrolling — the bar loads as you go</p>
+  </div>
+  <div class="load__spacer"></div>
+</section>
+
+<!-- ══ MARQUEE ════════════════════════════════════════ -->
+<div class="marq" aria-hidden="true">
+  <div class="marq__t" id="marq">
+    <span>Squat</span><i>/</i><span>Bench</span><i>/</i><span>Deadlift</span><i>/</i><span>Press</span><i>/</i>
+    <span>Row</span><i>/</i><span>Chin</span><i>/</i><span>Carry</span><i>/</i>
+    <span>Squat</span><i>/</i><span>Bench</span><i>/</i><span>Deadlift</span><i>/</i><span>Press</span><i>/</i>
+    <span>Row</span><i>/</i><span>Chin</span><i>/</i><span>Carry</span><i>/</i>
+  </div>
+</div>
+
+<!-- ══ COACHES ════════════════════════════════════════ -->
+<section class="sec wrap" id="coaches">
+  <div class="sec__h">
+    <div>
+      <p class="mono sul rv">Coaches</p>
+      <h2 class="dsp h2 rv" data-d="0.05">Four of them.<br>All on the floor.</h2>
+    </div>
+    <p class="lede rv" data-d="0.1">Nobody at Forge coaches from behind a desk. If you're in a
+      session, one of these four is standing next to you.</p>
+  </div>
+  <div class="coaches">
+    <article class="coach rv">
+      <img src="assets/img/coach-mara.jpg" alt="Mara Ellis coaching" loading="lazy">
+      <div class="coach__b"><p class="coach__n">Mara Ellis</p><p class="coach__r mono">Head coach · 14 yrs</p>
+        <p class="coach__p">Former state-level powerlifter. Writes most of the strength programming and does the intro sessions herself.</p></div>
+    </article>
+    <article class="coach rv" data-d="0.06">
+      <img src="assets/img/coach-tom.jpg" alt="Tom Vasilev coaching" loading="lazy">
+      <div class="coach__b"><p class="coach__n">Tom Vasilev</p><p class="coach__r mono">Strength · 9 yrs</p>
+        <p class="coach__p">Ex-rugby, now mostly rehabs shoulders and backs. The one to ask if something hurts and you don't know why.</p></div>
+    </article>
+    <article class="coach rv" data-d="0.12">
+      <img src="assets/img/coach-priya.jpg" alt="Priya Raman coaching" loading="lazy">
+      <div class="coach__b"><p class="coach__n">Priya Raman</p><p class="coach__r mono">Technique · 6 yrs</p>
+        <p class="coach__p">Olympic lifting background. Runs the Saturday technique sessions and will happily spend an hour on one movement.</p></div>
+    </article>
+    <article class="coach rv" data-d="0.18">
+      <img src="assets/img/coach-jack.jpg" alt="Jack Okafor coaching" loading="lazy">
+      <div class="coach__b"><p class="coach__n">Jack Okafor</p><p class="coach__r mono">Conditioning · 7 yrs</p>
+        <p class="coach__p">Runs everything that leaves you on the floor. Also the one who talks the most, which some people need at 5:30am.</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- ══ THE ROOM ═══════════════════════════════════════ -->
+<section class="sec" id="room">
+  <div class="wrap">
+    <div class="sec__h">
+      <div>
+        <p class="mono sul rv">The room</p>
+        <h2 class="dsp h2 rv" data-d="0.05">A warehouse<br>with good iron in it.</h2>
+      </div>
+      <p class="lede rv" data-d="0.1">Six hundred square metres on Maitland Road. Twelve platforms,
+        two turf lanes, and no mirrors anywhere. There is no juice bar and there never will be.</p>
+    </div>
+    <div class="roomgrid">
+      <figure class="rv" style="grid-column:1/8;margin:0"><img src="assets/img/room-wide.jpg" alt="The main floor" loading="lazy" style="aspect-ratio:16/10"></figure>
+      <figure class="rv" data-d="0.06" style="grid-column:8/13;margin:0"><img src="assets/img/det-barbell.jpg" alt="A loaded barbell" loading="lazy" style="aspect-ratio:4/5"></figure>
+      <figure class="rv" data-d="0.1" style="grid-column:1/5;margin:0"><img src="assets/img/det-dumbs.jpg" alt="Dumbbell rack" loading="lazy" style="aspect-ratio:1/1"></figure>
+      <figure class="rv" data-d="0.14" style="grid-column:5/9;margin:0"><img src="assets/img/room-rack.jpg" alt="Racks and plates" loading="lazy" style="aspect-ratio:1/1"></figure>
+      <figure class="rv" data-d="0.18" style="grid-column:9/13;margin:0"><img src="assets/img/det-stack.jpg" alt="Weight stack" loading="lazy" style="aspect-ratio:1/1"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COST ═══════════════════════════════════════════ -->
+<section class="sec wrap" id="cost">
+  <div class="sec__h">
+    <div>
+      <p class="mono sul rv">What it costs</p>
+      <h2 class="dsp h2 rv" data-d="0.05">Three prices.<br>No contract.</h2>
+    </div>
+    <p class="lede rv" data-d="0.1">Weekly, paid fortnightly, cancel with two weeks' notice. No
+      joining fee, no minimum term, and no twelve-month direct debit you have to ring a call centre
+      to escape.</p>
+  </div>
+  <div class="tiers" id="tiers"></div>
+</section>
+
+<!-- ══ STARTING ═══════════════════════════════════════ -->
+<section class="sec wrap" id="start">
+  <div class="sec__h">
+    <div>
+      <p class="mono sul rv">Starting</p>
+      <h2 class="dsp h2 rv" data-d="0.05">Your first month.</h2>
+    </div>
+    <p class="lede rv" data-d="0.1">Most people who join have either never lifted or haven't in
+      years. Nobody is thrown into a session on day one.</p>
+  </div>
+  <div class="steps">
+    <div class="step rv"><p class="step__w">Week 0</p><p class="step__t">Free intro, 45 minutes</p>
+      <p>One-on-one with Mara. What you want, what hurts, what you've done before. You lift nothing heavier than a broomstick.</p></div>
+    <div class="step rv" data-d="0.06"><p class="step__w">Week 1</p><p class="step__t">Two beginner sessions</p>
+      <p>Capped at four instead of eight. Squat, hinge, press, pull. You will be sore and it will be manageable.</p></div>
+    <div class="step rv" data-d="0.12"><p class="step__w">Week 2</p><p class="step__t">Into normal sessions</p>
+      <p>You join the general timetable with your own numbers on the board. The coach still watches every set.</p></div>
+    <div class="step rv" data-d="0.18"><p class="step__w">Week 4</p><p class="step__t">First re-test</p>
+      <p>We measure the same things we measured in week one and show you the difference, whether or not it flatters us.</p></div>
+  </div>
+
+  <div style="margin-top:clamp(2rem,4vw,3.4rem)">
+    <div class="acc" id="acc">
+      <div class="acc__i"><button class="acc__q">I'm not fit enough to start<i></i></button>
+        <div class="acc__a"><p>That's the most common thing we hear and it's the wrong way round.
+          Coached strength is where you go to <em>get</em> fit, and the beginner sessions are capped
+          at four so nobody is watching you. About a third of our members had never touched a barbell
+          before they walked in.</p></div></div>
+      <div class="acc__i"><button class="acc__q">Do I need to book?<i></i></button>
+        <div class="acc__a"><p>Yes, and that's the point of the cap. Sessions open eight days ahead
+          and the 5:30am and 6:15am slots do fill. If you're on the Unlimited membership you can hold
+          a standing booking for the same sessions each week.</p></div></div>
+      <div class="acc__i"><button class="acc__q">What if I'm injured?<i></i></button>
+        <div class="acc__a"><p>Tell us at the intro and we'll program around it. Tom does most of the
+          shoulder and lower back work and will happily talk to your physio. We won't tell you to push
+          through something that hurts.</p></div></div>
+      <div class="acc__i"><button class="acc__q">Is there a lock-in contract?<i></i></button>
+        <div class="acc__a"><p>No. Two weeks' notice, in writing or in person, and it stops. We'd
+          rather you left and came back than stayed because leaving was difficult.</p></div></div>
+      <div class="acc__i"><button class="acc__q">Can I just use the gym on my own?<i></i></button>
+        <div class="acc__a"><p>Open Gym runs four times a week and is included on the Unlimited
+          membership. Outside those hours the floor is running coached sessions, so there isn't a
+          casual option — the cap doesn't work if people are wandering through.</p></div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot wrap">
+  <div class="foot__grid">
+    <div>
+      <p class="nav__mark" style="font-size:26px">Forge<i class="sul" style="font-style:normal">/</i>Athletic</p>
+      <p style="margin-top:.8rem">Coached strength training<br>in Islington since 2018.</p>
+    </div>
+    <div><p class="mono dim">Where</p><p>2/144 Maitland Road<br>Islington NSW 2296</p><p class="mono">02 4962 7310</p></div>
+    <div><p class="mono dim">Hours</p><p>Mon – Fri &nbsp;5:30 – 19:30<br>Sat &nbsp;7:00 – 12:00<br>Sun &nbsp;closed</p></div>
+    <div><p class="mono dim">Registration</p><p class="mono dim">ABN 22 906 771 340<br>Fitness Australia<br>registered business<br>All coaches ASCA L1+</p></div>
+  </div>
+  <div class="foot__bar">
+    <span class="mono dim">© 2026 Forge Athletic</span>
+    <span class="mono dim">A fictional brand, built as a design demonstration.</span>
+    <a class="credit mono" href="https://neurotrocity.com" target="_blank" rel="noopener">Created by <strong>NeuroTrocity</strong></a>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/vendor/three.min.js"></script>
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/barbell.js"></script>
+</body>
+</html>
