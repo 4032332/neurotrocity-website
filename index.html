@@ -7,7 +7,7 @@
 <link rel="icon" href="/assets/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <title>NeuroTrocity — focused, honest software</title>
-<meta name="description" content="NeuroTrocity builds software that respects the people who use it — no dark patterns, no data harvesting.">
+<meta name="description" content="NeuroTrocity is what happens when a brain fires every idea at once. The few that survive get built properly, and become ventures.">
 <link rel="stylesheet" href="/assets/css/base.css">
 <style>
 :root{--bg:#08080D;--well:#05050a;--panel:#101018;--line:#20202E;--line2:#2b2b3d;
@@ -172,7 +172,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 50px}
 <header class="hero">
   <div class="lft">
     <h1>A brain that wires up <em>honest software</em>.</h1>
-    <p class="lede">NeuroTrocity fires off ideas by the thousand and ships the sharp ones — small, focused apps that respect the people who use them. No dark patterns. Just signal.</p>
+    <p class="lede">NeuroTrocity is what happens when a brain fires every idea at once — thousands of them, all shouting, each one certain it's the billion-dollar one. Most are noise. The few that survive get built properly, and become ventures.</p>
     <div class="cta">
       <a class="btn p" href="#ventures">Meet the ventures <span class="arw">→</span></a>
       <a class="btn g" href="#ethos">How we work</a>
@@ -185,8 +185,8 @@ footer{border-top:1px solid var(--line);padding:56px 0 50px}
 
 <div class="stats">
   <div class="wrap">
-    <div class="stat"><div class="n"><b id="vcount">3</b> ventures</div><div class="l">Shipping &amp; growing</div></div>
-    <div class="stat"><div class="n"><b>0</b> dark patterns</div><div class="l">By design</div></div>
+    <div class="stat"><div class="n">Ventures</div><div class="l">Shipping &amp; growing</div></div>
+    <div class="stat"><div class="n"><b>1</b> rule</div><div class="l">Behave</div></div>
     <div class="stat"><div class="n"><b>∞</b> ideas</div><div class="l">Firing all at once</div></div>
   </div>
 </div>
@@ -194,7 +194,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 50px}
 <section id="ventures">
   <div class="wrap">
     <div class="rule"><span>The ventures</span><i></i></div>
-    <h2 class="reveal-h">Three ventures. One rule: behave.</h2>
+    <h2 class="reveal-h">Every venture, one rule: behave.</h2>
     <p class="sub">Each venture is its own complete product — built to do one thing properly, then get out of your way. More are on the way.</p>
     <div class="man">
       <a class="vrow" href="/dosetrack/landing/" style="--c:var(--dose)"><span class="sl">/dosetrack</span><span class="ds">Medication reminders that actually stick — free for your first five meds, forever.</span><span class="mt">iPhone · Watch</span><span class="go">→</span></a>
@@ -210,7 +210,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 50px}
     <h2 class="reveal-h">Four rules. No exceptions.</h2>
     <div class="runin">
       <div><b>Sharp, not sprawling.</b> One thing, done properly. No feature bloat, no roadmap theatre, no app that grows until it's miserable to use.</div>
-      <div><b>Honest by default.</b> No dark patterns, no manipulative nudges. If a choice is good for us and bad for you, we don't ship it.</div>
+      <div><b>Honest by default.</b> No manipulative nudges, no engineered regret. If a choice is good for us and bad for you, we don't ship it.</div>
       <div><b>Your data stays yours.</b> On your device wherever it can be, synced privately through your own iCloud. Never sold. Ever.</div>
       <div><b>Answered by a person.</b> You email us, a person reads it and replies — no ticket queue, no bot, no runaround.</div>
     </div>
@@ -288,7 +288,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 50px}
 <script>
 (function(){
 var cx=window.__cx=NTCortex(document.getElementById('cortex'),
-  {hubs:10,maxFibers:230,branchLen:0.68,spread:0.95,lineAlpha:0.62,nodeAlpha:1,fire:0.1,spin:0.085,radius:0.4,cx:0.71,cy:0.5,fit:true});
+  {hubs:14,maxFibers:340,branchLen:0.72,spread:0.98,lineAlpha:0.72,nodeAlpha:1,fire:0.16,spin:0.075,radius:0.42,cx:0.71,cy:0.5,fit:true,bloom:1.25,dust:130});
 
 var bar=document.getElementById('bar');
 addEventListener('scroll',function(){bar.style.borderBottomColor=scrollY>10?'var(--line)':'transparent'},{passive:true});
@@ -352,10 +352,6 @@ if(window.gsap){
   gsap.from('.contact .say',{y:18,opacity:0,duration:.8,ease:'power3.out',
     scrollTrigger:{trigger:'.contact',start:'top 82%',once:true}});
 
-  var vn=document.getElementById('vcount');
-  if(vn){var o={v:0};
-    ScrollTrigger.create({trigger:'.stats',start:'top 90%',once:true,onEnter:function(){
-      gsap.to(o,{v:3,duration:1.1,ease:'power2.out',onUpdate:function(){vn.textContent=Math.round(o.v)}})}});}
 }
 })();
 </script>
