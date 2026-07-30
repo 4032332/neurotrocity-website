@@ -290,24 +290,44 @@
     </article>`;
   }).join('');
 
+  /* Eight regions read as eight full screens on a phone — nearly nine
+     viewport-heights of scrolling past things you did not choose. Below the
+     breakpoint the chip bar becomes a real selector and shows one at a time.
+     On desktop the mannequin is held beside the text and scrolling through
+     them is the point, so the behaviour is unchanged there. */
+  const oneAtATime = () => matchMedia('(max-width:1080px)').matches;
+
   let activeRegion = null;
+  function applyRegionView() {
+    const one = oneAtATime();
+    $$('#regionRead .rg').forEach(el => {
+      el.hidden = one && el.id !== 'rg-' + activeRegion;
+    });
+  }
   function markRegion(key) {
     if (key === activeRegion) return;
     activeRegion = key;
     $$('.hs').forEach(h => h.classList.toggle('is-on', h.dataset.region === key));
     $$('.chip').forEach(c => c.classList.toggle('is-on', c.dataset.region === key));
+    applyRegionView();
   }
   const goRegion = key => {
     const el = $('#rg-' + key); if (!el) return;
+    // when only one is shown it has replaced the last in place, so there is
+    // nothing to travel to — jumping would just yank the page
+    if (oneAtATime()) return;
     lenis ? lenis.scrollTo(el, { offset: -140 }) : el.scrollIntoView({ behavior: 'smooth' });
   };
 
   ORDER.forEach(key => {
     ScrollTrigger.create({
       trigger: '#rg-' + key, start: 'top 62%', end: 'bottom 62%',
-      onToggle(self){ if (self.isActive) markRegion(key); }
+      onToggle(self){ if (self.isActive && !oneAtATime()) markRegion(key); }
     });
   });
+
+  markRegion(ORDER[0]);
+  addEventListener('resize', () => { applyRegionView(); }, { passive: true });
 
   $('#hotspots').addEventListener('click', e => {
     const g = e.target.closest('.hs'); if (g) { markRegion(g.dataset.region); goRegion(g.dataset.region); }

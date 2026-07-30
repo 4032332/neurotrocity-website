@@ -112,6 +112,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .filt:hover{ color:var(--chalk); box-shadow:inset 0 0 0 1px var(--chalk-2); }
 .filt.is-on{ background:var(--sulphur); color:var(--iron); box-shadow:none; }
 
+/* mobile-only: above the breakpoint this would take a grid cell and
+   shove the timetable and the sidebar out of the layout */
+.daytabs{ display:none; }
 .weekgrid{ display:grid; grid-template-columns:1fr 300px; gap:clamp(14px,1.6vw,22px); align-items:start; }
 .days{ display:grid; grid-template-columns:repeat(6,1fr); gap:1px; background:var(--line-2); border:1px solid var(--line-2); }
 .day{ background:var(--iron); min-height:120px; }
@@ -234,8 +237,25 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .nav.is-open .nav__links{ transform:none; }
   .nav__links a{ font-size:12px; }
   .nav__burger{ display:block; }
+  /* Six days stacked is forty-two cards and roughly six screens of scrolling
+     on a phone. One day at a time, with a tab bar, is about one. */
   .days{ grid-template-columns:1fr; }
   .day__h{ position:static; }
+  .daytabs{ display:flex; gap:1px; background:var(--line-2); border:1px solid var(--line-2);
+    border-bottom:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .daytabs::-webkit-scrollbar{ display:none; }
+  .daytabs button{
+    flex:1 0 auto; min-width:0; background:var(--iron); border:0; cursor:pointer;
+    padding:10px 12px 11px; display:grid; gap:2px; color:var(--chalk-2);
+    font-family:var(--disp); font-weight:800; font-size:15px; text-transform:uppercase;
+    line-height:1; transition:background .2s, color .2s;
+  }
+  .daytabs button small{ font-family:var(--mono); font-size:8.5px; letter-spacing:.06em;
+    color:var(--muted); font-weight:400; }
+  .daytabs button.is-on{ background:var(--sulphur); color:var(--iron); }
+  .daytabs button.is-on small{ color:rgba(14,15,16,.7); }
+  .day[hidden]{ display:none; }
+  .day__h{ display:none; }            /* the tab already names the day */
   .roomgrid{ grid-template-columns:repeat(6,1fr); }
   /* flex-wrap leaves the last stat hanging past the gutter; a grid wraps cleanly */
   .hero__facts{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem 1.2rem; }
@@ -299,3 +319,17 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .hero__t .ch{ transform:none; }
   .marq__t{ transform:none !important; }
 }
+
+/* Every anchor on this page jumps under a fixed header without this — the
+   heading you asked for ends up hidden behind the bar. */
+html{ scroll-padding-top:62px; }
+@media (min-width:861px){ html{ scroll-padding-top:80px; } }
+
+/* ── mobile: shorten the pinned scrubs ───────────────────────────
+   These lengths are tuned for a desktop wheel. On a phone the same
+   number of viewport-heights is a lot of thumb, and a pinned section
+   that outstays its welcome reads as broken rather than considered. */
+@media (max-width:760px){
+  .load__spacer{ height:200vh; }
+}
+

@@ -276,11 +276,20 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .bk{ border:1px solid var(--line); background:var(--paper); border-radius:2px; margin-top:clamp(1.8rem,4vw,3rem); }
 .bk__prog{ display:flex; list-style:none; margin:0; padding:0; border-bottom:1px solid var(--line-2); }
 .bk__prog li{
-  flex:1; display:flex; align-items:center; gap:.6rem; padding:1.05rem 1.2rem;
+  /* flex items default to min-width:auto, so four non-wrapping uppercase labels
+     set a min-content floor that pushed the whole document to 479px on a phone */
+  flex:1; min-width:0; display:flex; align-items:center; gap:.6rem; padding:1.05rem 1.2rem;
   font-family:var(--mono); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase;
   color:var(--muted); border-right:1px solid var(--line-2); transition:color .35s, background .35s;
 }
 .bk__prog li:last-child{ border-right:0; }
+@media (max-width:620px){
+  /* four across is unreadable at this width; two rows of two is not */
+  .bk__prog{ display:grid; grid-template-columns:1fr 1fr; }
+  .bk__prog li{ padding:.85rem 1rem; border-bottom:1px solid var(--line-2); }
+  .bk__prog li:nth-child(2n){ border-right:0; }
+  .bk__prog li:nth-last-child(-n+2){ border-bottom:0; }
+}
 .bk__prog li span{ color:var(--sand-3); transition:color .35s; }
 .bk__prog li.is-on{ color:var(--ink); background:var(--teal-wash); }
 .bk__prog li.is-on span,.bk__prog li.is-done span{ color:var(--teal); }
@@ -733,4 +742,32 @@ body{ padding-left:var(--rail); }
   .rail__nav{ top:56px; }
   .pill{ left:var(--pad); right:var(--pad); flex-direction:row; align-items:center;
     justify-content:space-between; }
+}
+
+/* Every anchor on this page jumps under a fixed header without this — the
+   heading you asked for ends up hidden behind the bar. */
+html{ scroll-padding-top:62px; }
+@media (min-width:861px){ html{ scroll-padding-top:80px; } }
+
+/* ── mobile: shorten the pinned scrubs ───────────────────────────
+   These lengths are tuned for a desktop wheel. On a phone the same
+   number of viewport-heights is a lot of thumb, and a pinned section
+   that outstays its welcome reads as broken rather than considered. */
+@media (max-width:760px){
+  .hour__spacer{ height:190vh; }
+}
+
+/* ── mobile: the availability strip ──────────────────────────────
+   Three flex children on one row squeezes the slots column to about
+   70px, so the time chips stack inside it and collide with the label.
+   Stack the strip instead and let the chips scroll sideways. */
+@media (max-width:760px){
+  .avail{ flex-direction:column; align-items:stretch; gap:.9rem; }
+  .avail__slots{
+    flex:none; flex-wrap:nowrap; overflow-x:auto; padding-bottom:2px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .avail__slots::-webkit-scrollbar{ display:none; }
+  .slot{ flex:0 0 auto; }
+  .avail__lead,.avail__all{ align-self:flex-start; }
 }

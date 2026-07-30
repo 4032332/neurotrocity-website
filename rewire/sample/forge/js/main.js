@@ -71,11 +71,41 @@
   const picked = new Set();
   let filter = 'all';
 
+  /* On a phone all six days stacked is roughly six screens of table, so only
+     one day is shown at a time and the tab bar does the choosing. The markup
+     is identical either way — the tabs and the hiding are mobile-only. */
+  const narrow = () => matchMedia('(max-width:760px)').matches;
+  let dayView = DAYS[0];
+
+  function renderTabs() {
+    $('#dayTabs').innerHTML = DAYS.map(d => {
+      const open = SESSIONS.filter(s => s.day === d).reduce((a, s) => a + s.left, 0);
+      return `<button role="tab" data-day="${d}" aria-selected="${d === dayView}"
+        class="${d === dayView ? 'is-on' : ''}">${d}<small>${open} free</small></button>`;
+    }).join('');
+  }
+  function applyDayView() {
+    const one = narrow();
+    $$('#days .day').forEach(el => { el.hidden = one && el.dataset.day !== dayView; });
+    $$('#dayTabs button').forEach(b => {
+      const on = b.dataset.day === dayView;
+      b.classList.toggle('is-on', on);
+      b.setAttribute('aria-selected', String(on));
+    });
+  }
+  $('#dayTabs').addEventListener('click', e => {
+    const b = e.target.closest('[data-day]');
+    if (!b) return;
+    dayView = b.dataset.day;
+    applyDayView();
+  });
+  addEventListener('resize', applyDayView, { passive: true });
+
   function renderWeek() {
     $('#days').innerHTML = DAYS.map((d, di) => {
       const rows = SESSIONS.filter(s => s.day === d && (filter === 'all' || s.type === filter));
       const open = SESSIONS.filter(s => s.day === d).reduce((a, s) => a + s.left, 0);
-      return `<div class="day">
+      return `<div class="day" data-day="${d}">
         <div class="day__h"><span class="day__n">${d}</span><span class="day__c mono">${open} free</span></div>
         <div class="day__list">
           ${rows.length ? rows.map(s => {
@@ -91,6 +121,8 @@
         </div>
       </div>`;
     }).join('');
+    renderTabs();
+    applyDayView();
   }
 
   function tierFor(n) {

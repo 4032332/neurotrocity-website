@@ -338,3 +338,17 @@ main{ position:relative; z-index:2; }
 /* ══ the day — type over a full-bleed frame ═══════════════════ */
 .day{ min-height:88svh; display:flex; align-items:center; }
 .beat{ max-width:52ch; }
+
+/* Every anchor on this page jumps under a fixed header without this — the
+   heading you asked for ends up hidden behind the bar. */
+html{ scroll-padding-top:64px; }
+@media (min-width:861px){ html{ scroll-padding-top:82px; } }
+
+/* ── mobile: shorten the pinned scrubs ───────────────────────────
+   These lengths are tuned for a desktop wheel. On a phone the same
+   number of viewport-heights is a lot of thumb, and a pinned section
+   that outstays its welcome reads as broken rather than considered. */
+@media (max-width:760px){
+  .yr__spacer{ height:300vh; }
+}
+

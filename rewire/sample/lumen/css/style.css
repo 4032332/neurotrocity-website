@@ -291,3 +291,17 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .sys__ht .ln{ display:block; overflow:hidden; padding-block:.02em; }
 .sys__ht .ln > i{ display:block; font-style:normal; will-change:transform; }
 .sys__ht em{ color:var(--clay); }
+
+/* Every anchor on this page jumps under a fixed header without this — the
+   heading you asked for ends up hidden behind the bar. */
+html{ scroll-padding-top:62px; }
+@media (min-width:861px){ html{ scroll-padding-top:80px; } }
+
+/* ── mobile: shorten the pinned scrubs ───────────────────────────
+   These lengths are tuned for a desktop wheel. On a phone the same
+   number of viewport-heights is a lot of thumb, and a pinned section
+   that outstays its welcome reads as broken rather than considered. */
+@media (max-width:760px){
+  .sys__spacer{ height:230vh; }
+}
+

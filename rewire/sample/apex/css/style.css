@@ -519,3 +519,17 @@ fieldset{ border:0; margin:0; padding:0; min-width:0; min-inline-size:0; }
   .reveal{ opacity:1; transform:none; }
   .hero__title .line>span{ transform:none; }
 }
+
+/* Every anchor on this page jumps under a fixed header without this — the
+   heading you asked for ends up hidden behind the bar. */
+html{ scroll-padding-top:66px; }
+@media (min-width:861px){ html{ scroll-padding-top:84px; } }
+
+/* ── mobile: shorten the pinned scrubs ───────────────────────────
+   These lengths are tuned for a desktop wheel. On a phone the same
+   number of viewport-heights is a lot of thumb, and a pinned section
+   that outstays its welcome reads as broken rather than considered. */
+@media (max-width:760px){
+  .route__spacer{ height:190vh; }
+}
+
