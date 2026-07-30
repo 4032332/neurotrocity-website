@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en-AU" data-season="vin">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vale &amp; Vine — vineyard weddings, Margaret River</title>
+<meta name="description" content="A single-wedding-a-week vineyard venue at Rosa Brook, Margaret River. See the dates that are actually free, and what your day costs, before you enquire.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter+Tight:wght@300;350;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ══ the stage — one photograph, held behind everything ══════ -->
+<div class="stage" id="stage" aria-hidden="true">
+  <!-- The four seasons are stacked in year order and blended by opacity, so
+       scrolling through the year dissolves one into the next instead of
+       cutting. The two set pieces sit on top and simply take over. -->
+  <div class="stage__img" data-s-layer="bud"></div>
+  <div class="stage__img" data-s-layer="rip"></div>
+  <div class="stage__img" data-s-layer="vin"></div>
+  <div class="stage__img" data-s-layer="pru"></div>
+  <video class="stage__v" data-v-for="pru" muted loop playsinline preload="none"
+         poster="assets/video/venue-pru.jpg"></video>
+  <div class="stage__img" data-stage="ceremony"></div>
+  <div class="stage__img" data-stage="evening"></div>
+  <video class="stage__v" data-v-for="evening" muted loop playsinline preload="none"
+         poster="assets/video/interior.jpg"></video>
+</div>
+<div class="scrim" id="scrim" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="nav__mark" href="#top">Vale &amp; Vine</a>
+  <nav class="nav__links" id="links">
+    <a href="#year">The year</a>
+    <a href="#dates">Dates &amp; cost</a>
+    <a href="#day">The day</a>
+    <a href="#place">The place</a>
+  </nav>
+  <a class="nav__cta mono" href="#dates">Check a date</a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+</header>
+
+<!-- ══ season switch ═══════════════════════════════════════════ -->
+<div class="seasons" id="seasons" role="group" aria-label="Choose a season">
+  <p class="seasons__t mono">Show me</p>
+  <button class="season" data-s="bud">Budburst<small>Sep – Nov</small></button>
+  <button class="season" data-s="rip">Ripening<small>Dec – Feb</small></button>
+  <button class="season is-on" data-s="vin">Vintage<small>Mar – May</small></button>
+  <button class="season" data-s="pru">Pruning<small>Jun – Aug</small></button>
+</div>
+
+<main id="top">
+
+  <!-- ══ hero ══════════════════════════════════════════════════ -->
+  <section class="hero wrap" data-veil="0">
+    <p class="mono brass rv">Rosa Brook &middot; Margaret River, WA &middot; <span id="heroWord">Autumn</span></p>
+    <h1 class="dsp hero__ht rv">One wedding<br>a week. <em>Yours</em>.</h1>
+    <div class="hero__sub">
+      <p class="lede hero__lede rv">Forty hectares of cabernet and marri forest, an open-sided
+        rammed-earth pavilion, and a rule we have never broken: one wedding a week, so the
+        place is yours from the Friday.</p>
+    </div>
+    <p class="mono hero__scroll rv">Scroll, or choose a season</p>
+  </section>
+
+  <!-- ══ the year ══════════════════════════════════════════════
+       The flagship. Scrolling walks the vineyard year from September to
+       August: the photograph dissolves season to season, the daylight
+       curve draws itself, and the facts move continuously rather than
+       snapping between four fixed states. -->
+  <section class="yr" id="year" data-veil=".60">
+    <div class="yr__stick">
+      <div class="yr__ui wrap">
+        <div class="yr__head">
+          <p class="mono kick rv">The year here</p>
+          <h2 class="h2 dsp rv">Four different venues,<br>on <em>one</em> piece of dirt.</h2>
+          <p class="lede" id="yearP">Harvest runs through March and the vineyard smells like
+            fermenting fruit for a fortnight. By late April the cabernet turns and the whole
+            valley goes gold. If you have seen one photograph of this place, it was taken now.</p>
+        </div>
+
+        <div class="yr__now">
+          <p class="mono dim">Now showing</p>
+          <p class="yr__month dsp" id="yrMonth">September</p>
+          <p class="mono" id="yrSeason">Budburst &middot; shoulder rate</p>
+          <div class="yr__stats">
+            <div><span class="mono dim">Sun sets</span><b id="yrSun">6:07 pm</b></div>
+            <div><span class="mono dim">Typically</span><b id="yrTemp">18&deg;</b></div>
+            <div><span class="mono dim">A Saturday</span><b id="yrPrice">$12,380</b></div>
+            <div><span class="mono dim">Vines are</span><b id="yrVines">Waking up</b></div>
+            <div><span class="mono dim">In flower</span><b id="yrFlower">Wattle</b></div>
+            <div><span class="mono dim">Ceremony at</span><b id="yrTime">4:30 pm</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- daylight across the year, drawn as you go -->
+      <figure class="yr__chart" aria-label="Sunset time at Rosa Brook across the year">
+        <figcaption class="mono dim">Sunset, Rosa Brook &middot; 5:16 pm in June, 7:32 pm in January</figcaption>
+        <svg id="yrSvg" viewBox="0 0 1200 190" preserveAspectRatio="none" aria-hidden="true">
+          <path id="yrGrid" class="yr__grid" d=""></path>
+          <path id="yrLine" class="yr__line" d="" vector-effect="non-scaling-stroke"></path>
+          <line id="yrDrop" class="yr__drop" x1="0" y1="0" x2="0" y2="190"
+                vector-effect="non-scaling-stroke"></line>
+          <circle id="yrDot" class="yr__dot" r="5" cx="0" cy="0"></circle>
+        </svg>
+        <div class="yr__track" id="yrTrack">
+          <div class="yr__bands" id="yrBands" aria-hidden="true"></div>
+          <div class="yr__ruler mono" id="yrRuler"></div>
+        </div>
+      </figure>
+    </div>
+    <div class="yr__spacer"></div>
+  </section>
+
+  <!-- ══ dates & cost ══════════════════════════════════════════ -->
+  <section class="sec wrap panel" id="dates" data-veil="1">
+    <div class="sec__head">
+      <p class="mono kick rv">Dates &amp; cost</p>
+      <h2 class="h2 dsp rv">Every free weekend,<br>with the <em>price on it</em>.</h2>
+      <p class="lede rv">One wedding a week, so what is free is a whole weekend, not a day.
+        Pick one, choose whether you marry on the Friday, Saturday or Sunday, tell us how many
+        are coming, and the number below is the number.</p>
+    </div>
+
+    <div class="cal" style="margin-top:clamp(2rem,4vw,3.4rem)">
+      <div>
+        <div class="ctrl">
+          <button id="yPrev" aria-label="Previous year">&minus;</button>
+          <b id="yNow">2027</b>
+          <button id="yNext" aria-label="Next year">+</button>
+          <span class="mono dim" style="margin-left:8px">One weekend a week</span>
+        </div>
+        <div class="cal__grid" id="calGrid" style="margin-top:16px"></div>
+        <p class="mono dim" style="margin-top:14px">Each date is a weekend, Friday noon to
+          Sunday noon. Struck out means booked. Dimmed months sit outside the season you
+          have chosen.</p>
+      </div>
+
+      <aside class="cal__side">
+        <p class="mono dim">Your day</p>
+        <h3 class="dsp" style="font-size:clamp(1.5rem,2.4vw,2rem);margin:.3rem 0 1rem"
+            id="pickT">Pick a weekend</h3>
+
+        <div class="days" id="days" role="group" aria-label="Which day"></div>
+        <p class="mono dim" id="dayNote" style="margin:10px 0 18px">The one everyone asks for.</p>
+
+        <div class="ctrl" style="margin-bottom:18px">
+          <button id="gDown" aria-label="Fewer guests">&minus;</button>
+          <b id="gNow">90</b>
+          <button id="gUp" aria-label="More guests">+</button>
+          <span class="mono dim" style="margin-left:8px">guests</span>
+        </div>
+
+        <div id="lines"></div>
+        <div class="cal__tot">
+          <span class="mono dim">Total</span>
+          <b>$<span id="total">0</span></b>
+        </div>
+        <p class="mono dim" style="margin-top:14px">Includes exclusive use Friday noon to
+          Sunday noon. Catering and drinks are billed by your caterer, not by us.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ══ the day ═══════════════════════════════════════════════
+       Two beats, each handing the stage a different photograph. No
+       thumbnails: the background is already showing the thing, and a
+       plate of the same frame underneath it just reads as a mistake. -->
+  <section class="sec wrap day" id="day" data-veil=".24" data-stage-cue="ceremony">
+    <div class="beat">
+      <p class="mono kick rv">The day &middot; half past three</p>
+      <h2 class="h2 dsp rv">Ceremony<br>on the <em>lawn</em>.</h2>
+      <p class="lede rv" id="dayP">A four o'clock ceremony puts the sun directly behind the
+        arbour, which is either the best or worst thing that can happen to your photographer,
+        depending entirely on your photographer.</p>
+      <p class="mono dim rv" style="margin-top:1.6rem">Seats 140 &middot; wet weather moves
+        under cover, same lawn, ten metres left</p>
+    </div>
+  </section>
+
+  <section class="sec wrap day" id="dinner" data-veil=".18" data-stage-cue="evening">
+    <div class="beat">
+      <p class="mono kick rv">The day &middot; from seven</p>
+      <h2 class="h2 dsp rv">Dinner under<br>the <em>iron</em>.</h2>
+      <p class="lede rv">One table, ninety-six seats, straight down the middle of the pavilion.
+        Past that we run a second table and the room stops feeling like one conversation, which
+        is the only reason we mention the number at all.</p>
+      <p class="mono dim rv" style="margin-top:1.6rem">Festoon lighting to midnight &middot;
+        music off at twelve, per the shire</p>
+    </div>
+  </section>
+
+  <!-- ══ the place ═════════════════════════════════════════════ -->
+  <section class="sec wrap panel" id="place" data-veil="1">
+    <div class="sec__head">
+      <p class="mono kick rv">The place</p>
+      <h2 class="h2 dsp rv">Built out of the paddock<br>it stands in.</h2>
+      <p class="lede rv">The pavilion is rammed earth from the dam cut, jarrah poles from a
+        wool shed in Nannup, and a Colorbond roof that makes rain sound like the best thing
+        that ever happened to a wedding. It has no walls on the long sides, so the vineyard
+        is the decoration and you can stop paying for flowers.</p>
+    </div>
+      <div class="read">
+        <div><span class="mono">Address</span><b style="font-size:1.1rem">Rosa Brook Rd</b></div>
+        <div><span class="mono">From Perth</span><b>3 hr</b></div>
+        <div><span class="mono">From Busselton</span><b>45 min</b></div>
+        <div><span class="mono">Sleeps on site</span><b>18</b></div>
+        <div><span class="mono">Wet weather</span><b style="font-size:1.1rem">Under cover</b></div>
+        <div><span class="mono">Weddings a week</span><b>1</b></div>
+      </div>
+  </section>
+
+  <footer class="foot wrap" data-veil="1">
+    <div class="foot__top">
+      <div>
+        <h3 class="dsp">Come and walk it.</h3>
+        <p class="lede" style="margin-top:.7rem;max-width:34ch">Open days on the first Sunday
+          of the month. Bring your parents, they will ask better questions than you will.</p>
+      </div>
+      <div>
+        <p class="mono dim" style="margin-bottom:12px">Visit</p>
+        <ul>
+          <li><a href="#dates">Check a date</a></li>
+          <li><a href="#">Book an open day</a></li>
+          <li><a href="#">Download the guide</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="mono dim" style="margin-bottom:12px">Vale &amp; Vine</p>
+        <ul>
+          <li>Rosa Brook Road</li>
+          <li>Margaret River WA 6285</li>
+          <li><a href="#">hello@valeandvine.com.au</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bar mono">
+      <span>&copy; 2026 Vale &amp; Vine</span>
+      <span class="dim">Sample build &middot; fictional brand</span>
+      <a class="credit" href="https://neurotrocity.com" target="_blank" rel="noopener">Created by <strong>NeuroTrocity</strong></a>
+    </div>
+  </footer>
+</main>
+
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/seasons.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

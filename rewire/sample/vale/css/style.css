@@ -1,0 +1,340 @@
+/* ═══════════════════════════════════════════════════════════════
+   VALE & VINE — Rosa Brook, Margaret River WA
+   Evening palette: near-black plum ground, warm ivory, aged brass.
+   The photograph is the page. Type sits on it, never beside it.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root{
+  --night:   #14100F;   /* ground */
+  --night-2: #1E1917;   /* raised panel */
+  --night-3: #2A2320;   /* hairline fill */
+  --ivory:   #F2EDE4;
+  --ivory-2: #CFC6B8;
+  --muted:   #8C8175;
+  --brass:   #C08B45;
+  --brass-2: #E0B776;
+  --line:    rgba(242,237,228,.16);
+  --line-2:  rgba(242,237,228,.08);
+
+  --disp: "Cormorant Garamond", Georgia, serif;
+  --sans: "Inter Tight", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --pad: clamp(20px, 5vw, 78px);
+  --rail: 0px;              /* cleared for the fixed season switch on desktop */
+  --stage-dim: .52;          /* how far the photograph drops back under type */
+}
+
+/* each season re-tints the whole page, not just the picture */
+[data-season="bud"]{ --brass:#8FA36B; --brass-2:#B6C994; }
+[data-season="rip"]{ --brass:#C79A4B; --brass-2:#E6C482; }
+[data-season="vin"]{ --brass:#B4652F; --brass-2:#DC9257; }
+[data-season="pru"]{ --brass:#6F8794; --brass-2:#9DB3BE; }
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+body{
+  margin:0; background:var(--night); color:var(--ivory);
+  font-family:var(--sans); font-size:clamp(15px,1.02vw,17px); line-height:1.62;
+  font-weight:350; letter-spacing:.004em;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; }
+h1,h2,h3{ margin:0; font-weight:400; line-height:1.03; letter-spacing:-.018em; }
+p{ margin:0; }
+.dsp{ font-family:var(--disp); font-weight:300; }
+/* Cormorant defaults to old-style figures, where 1 is barely distinguishable
+   from a capital I. Anything numeric gets lining figures. */
+.dsp, .read b, .cal__tot b, .ctrl b, .h2{ font-variant-numeric:lining-nums; }
+.dsp em{ font-style:italic; color:var(--brass-2); }
+.mono{ font-family:var(--mono); font-size:.7rem; letter-spacing:.15em;
+  text-transform:uppercase; font-weight:400; }
+.brass{ color:var(--brass-2); }
+.dim{ color:var(--muted); }
+.wrap{ padding-left:var(--pad); padding-right:calc(var(--pad) + var(--rail)); }
+.lede{ font-size:clamp(1.02rem,1.28vw,1.2rem); color:var(--ivory-2); line-height:1.66; }
+
+/* ══ nav ══════════════════════════════════════════════════════ */
+.nav{
+  position:fixed; inset:0 0 auto; z-index:60; display:flex; align-items:center;
+  gap:26px; padding:16px var(--pad); mix-blend-mode:normal;
+  background:linear-gradient(var(--night) 12%, rgba(20,16,15,0));
+  transition:background .4s;
+}
+.nav__mark{ font-family:var(--disp); font-size:1.32rem; letter-spacing:.01em;
+  text-decoration:none; margin-right:auto; }
+.nav__links{ display:flex; gap:26px; }
+.nav__links a{ text-decoration:none; color:var(--ivory-2); transition:color .25s; }
+.nav__links a:hover{ color:var(--brass-2); }
+.nav__cta{
+  text-decoration:none; border:1px solid var(--line); border-radius:100px;
+  padding:9px 20px; transition:border-color .3s, color .3s;
+}
+.nav__cta:hover{ border-color:var(--brass); color:var(--brass-2); }
+.burger{ display:none; background:none; border:0; color:inherit; padding:6px; cursor:pointer; }
+.burger span{ display:block; width:22px; height:1px; background:var(--ivory); margin:5px 0; }
+
+/* ══ the stage — one photograph, held, crossfading ════════════ */
+.stage{ position:fixed; inset:0; z-index:0; background:var(--night); }
+.stage__img{
+  position:absolute; inset:0; opacity:0; background-size:cover;
+  background-position:center; will-change:opacity;
+}
+/* A moving plate sits in the same stack as a still one. object-fit keeps it
+   behaving like background-size:cover at every aspect ratio. */
+.stage__v{ position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; opacity:0; will-change:opacity; }
+.stage__img.is-on{ opacity:1; }
+.stage::after{                       /* keeps type legible over any frame */
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(100deg, rgba(20,16,15,.90) 0%, rgba(20,16,15,.55) 42%, rgba(20,16,15,.18) 72%),
+    linear-gradient(rgba(20,16,15,.55), rgba(20,16,15,0) 26%, rgba(20,16,15,0) 62%, rgba(20,16,15,.86));
+}
+/* The photograph stays behind the whole page, but only the hero and the
+   day section want it at full strength — everywhere else it drops back far
+   enough for data and long copy to be read comfortably. */
+.scrim{ position:fixed; inset:0; z-index:1; background:var(--night); opacity:0;
+  pointer-events:none; transition:opacity .55s cubic-bezier(.4,0,.2,1); }
+
+/* everything that isn't the stage rides above it */
+main{ position:relative; z-index:2; }
+
+
+/* ══ hero ═════════════════════════════════════════════════════ */
+.hero{ min-height:100svh; display:flex; flex-direction:column; justify-content:flex-end;
+  padding-block:clamp(90px,14vh,150px) clamp(30px,6vh,60px); }
+.hero__ht{ font-size:clamp(3rem,9.4vw,9.4rem); max-width:13ch; margin:.5rem 0 0; }
+.hero__sub{ display:flex; flex-wrap:wrap; gap:10px 34px; align-items:baseline;
+  margin-top:clamp(1.6rem,3vw,2.6rem); }
+.hero__lede{ max-width:46ch; }
+.hero__scroll{ margin-top:clamp(1.8rem,4vh,3rem); color:var(--muted); }
+
+@media (min-width:861px){ :root{ --rail:186px; } }
+
+/* ══ season switch ════════════════════════════════════════════ */
+.seasons{
+  position:fixed; z-index:50; right:var(--pad); top:50%; translate:0 -50%;
+  display:grid; gap:2px; text-align:right;
+  /* the stage is bright on this side, so the switch carries its own shade */
+  padding:16px 18px 18px 26px; margin-right:calc(var(--pad) * -.45);
+  background:linear-gradient(115deg, rgba(20,16,15,0), rgba(20,16,15,.62) 40%);
+  backdrop-filter:blur(2px);
+}
+.seasons__t{ margin-bottom:10px; color:var(--muted); }
+.season{
+  background:none; border:0; color:var(--ivory); cursor:pointer; font:inherit;
+  font-family:var(--disp); font-size:clamp(1rem,1.5vw,1.35rem); padding:5px 0 5px 30px;
+  text-align:right; position:relative; transition:color .3s, opacity .3s; opacity:.62;
+  text-shadow:0 1px 12px rgba(20,16,15,.7);
+}
+.season::after{                       /* rule that draws in beside the active season */
+  content:''; position:absolute; left:4px; top:50%; width:20px; height:1px;
+  background:var(--brass); transform:scaleX(0); transform-origin:right;
+  transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+.season.is-on::after{ transform:scaleX(1); }
+.season:hover{ opacity:.85; }
+.season.is-on{ opacity:1; color:var(--brass-2); }
+.season small{ display:block; font-family:var(--mono); font-size:.6rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ivory-2); opacity:.72; }
+.season.is-on small{ color:var(--brass); }
+
+/* ══ generic section furniture ════════════════════════════════ */
+.sec{ padding-block:clamp(80px,13vh,170px); }
+.sec__head{ max-width:60ch; }
+.h2{ font-family:var(--disp); font-weight:300; font-size:clamp(2rem,4.6vw,4rem);
+  line-height:1.06; letter-spacing:-.02em; margin:.5rem 0 1.2rem; }
+.kick{ color:var(--brass-2); }
+
+/* ══ the year — pinned, scrubbed ══════════════════════════════ */
+.yr{ position:relative; }
+.yr__spacer{ height:460vh; }
+.yr__stick{ position:sticky; top:0; height:100svh; display:flex; flex-direction:column;
+  justify-content:space-between; gap:clamp(18px,3vh,44px);
+  padding-block:clamp(80px,12vh,132px) clamp(18px,4vh,40px); }
+.yr__ui{ display:grid; gap:clamp(24px,4vw,60px); align-items:start; }
+@media (min-width:960px){ .yr__ui{ grid-template-columns:1.1fr .9fr; } }
+.yr__head{ max-width:46ch; }
+/* a section head, not a hero — at full size it wrapped to four lines and ate
+   the panel that the live read-out needs */
+.yr__head .h2{ font-size:clamp(1.75rem,3.1vw,2.9rem); margin:.4rem 0 1rem; }
+
+.yr__now{ min-width:0; }
+.yr__month{ font-size:clamp(2.6rem,6vw,5rem); line-height:1; margin:.2rem 0 .3rem;
+  font-variant-numeric:lining-nums; }
+.yr__now > .mono:last-of-type{ color:var(--brass-2); }
+.yr__stats{ display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--line); margin-top:clamp(1rem,2vw,1.6rem); }
+.yr__stats div{ padding:11px 14px 13px 0; min-width:0; }
+.yr__stats b{ display:block; font-family:var(--disp); font-weight:300;
+  font-size:clamp(1.15rem,1.75vw,1.6rem); margin-top:.2rem; color:var(--brass-2);
+  font-variant-numeric:lining-nums; line-height:1.15; }
+
+/* a rule keeps the caption reading as the chart's, not as a trailing line
+   of the paragraph above it */
+.yr__chart{ margin:0; padding:clamp(12px,2vh,20px) var(--pad) 0;
+  border-top:1px solid var(--line-2); }
+.yr__chart figcaption{ margin-bottom:10px; }
+.yr__chart svg{ width:100%; height:clamp(96px,15vh,164px); display:block; overflow:visible; }
+.yr__grid{ fill:none; stroke:var(--line-2); stroke-width:1; }
+.yr__line{ fill:none; stroke:var(--brass); stroke-width:1.5; stroke-linecap:round;
+  stroke-linejoin:round; }
+.yr__dot{ fill:var(--brass-2); vector-effect:non-scaling-size; }
+/* the tracker — the months, the four season spans, and where you are */
+.yr__track{ margin-top:8px; }
+.yr__bands{ display:grid; grid-template-columns:repeat(4,1fr); gap:2px; height:3px; }
+.yr__bands i{ display:block; background:var(--line); border-radius:2px;
+  transition:background .4s; }
+.yr__bands i.is-on{ background:var(--brass); }
+.yr__ruler{ display:grid; grid-template-columns:repeat(12,1fr); padding-top:9px; }
+.yr__ruler span{ color:var(--muted); font-size:.66rem; text-align:center;
+  letter-spacing:.12em; transition:color .3s, opacity .3s; opacity:.6; }
+.yr__ruler span.is-on{ color:var(--brass-2); opacity:1; }
+.yr__drop{ stroke:var(--brass); stroke-width:1; opacity:.32; }
+@media (max-width:700px){
+  .yr__ruler span:nth-child(even){ visibility:hidden; }
+  .yr__stats{ grid-template-columns:repeat(2,1fr); }
+  .yr__stats div:last-child{ grid-column:span 2; }
+}
+@media (max-width:860px){
+  /* the season bar is fixed to the bottom, so the pinned panel has to stop
+     short of it or the month ruler sits underneath */
+  .yr__stick{ height:calc(100svh - 64px); padding-block:84px 8px; }
+  /* the standfirst is the first thing to go — the live read-out is the point */
+  .yr__head .lede{ display:none; }
+}
+
+/* ══ the season read-out ══════════════════════════════════════ */
+/* six facts, so the columns are fixed rather than auto-fit — auto-fit lands on
+   five and orphans the sixth on a row of its own */
+.read{ display:grid; grid-template-columns:repeat(2,1fr);
+  border-top:1px solid var(--line); margin-top:clamp(2rem,4vw,3.4rem); }
+@media (min-width:700px){ .read{ grid-template-columns:repeat(3,1fr); } }
+.read div{ padding:18px 20px 22px; border-bottom:1px solid var(--line);
+  border-right:1px solid var(--line); min-width:0; }
+.read b{ display:block; font-family:var(--disp); font-weight:300;
+  font-size:clamp(1.5rem,2.5vw,2.1rem); margin-top:.35rem; color:var(--brass-2); }
+.read span{ color:var(--muted); }
+
+/* ══ calendar ═════════════════════════════════════════════════ */
+.cal{ display:grid; gap:clamp(24px,3vw,44px); grid-template-columns:1fr; }
+@media (min-width:900px){ .cal{ grid-template-columns:1.15fr .85fr; align-items:start; } }
+.cal__grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+  background:var(--line-2); border:1px solid var(--line-2); }
+@media (max-width:620px){ .cal__grid{ grid-template-columns:repeat(2,1fr); } }
+.mo{ background:var(--night); padding:14px 14px 16px; min-width:0; }
+.mo__n{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.mo__d{ display:flex; flex-wrap:wrap; gap:4px; margin-top:10px; }
+.d{ width:24px; height:24px; display:grid; place-items:center; border-radius:50%;
+  font-family:var(--mono); font-size:.62rem; border:1px solid transparent;
+  background:none; color:var(--muted); opacity:.42; cursor:default;
+  text-decoration:line-through; text-decoration-thickness:1px; }
+/* free dates are the only ones that carry a ring — a taken date should read as
+   struck out at a glance, not as a slightly different shade of the same chip */
+.d.free{ opacity:1; color:var(--ivory); border-color:var(--line);
+  text-decoration:none; cursor:pointer;
+  transition:background-color .2s, color .2s, border-color .2s; }
+.d.free:hover{ background:var(--brass); border-color:var(--brass); color:var(--night); }
+.d.is-sel{ background:var(--brass-2); border-color:var(--brass-2); color:var(--night); }
+.mo.off{ opacity:.32; }
+.cal__side{ border:1px solid var(--line); padding:clamp(20px,2.4vw,30px); }
+.cal__row{ display:flex; justify-content:space-between; gap:16px;
+  padding:11px 0; border-bottom:1px solid var(--line-2); align-items:baseline; }
+/* the label wraps, the amount never does */
+.cal__row span:first-child{ min-width:0; }
+.cal__row span:last-child{ flex:none; white-space:nowrap; }
+.cal__row:last-of-type{ border-bottom:0; }
+.cal__tot{ display:flex; justify-content:space-between; align-items:baseline;
+  gap:16px; margin-top:14px; padding-top:16px; border-top:1px solid var(--line); }
+.cal__tot b{ font-family:var(--disp); font-weight:300; font-size:clamp(1.8rem,3.2vw,2.6rem);
+  color:var(--brass-2); }
+.ctrl{ display:flex; align-items:center; gap:14px; margin-top:6px; }
+.ctrl button{ width:32px; height:32px; border-radius:50%; border:1px solid var(--line);
+  background:none; color:var(--ivory); cursor:pointer; font:inherit; line-height:1;
+  transition:border-color .25s, color .25s; }
+.ctrl button:hover:not(:disabled){ border-color:var(--brass); color:var(--brass-2); }
+.ctrl button:disabled{ opacity:.28; cursor:default; }
+/* a control value, not a heading — kept a clear step below the panel h3
+   above it and the total below it, so the panel reads in three sizes */
+.ctrl b{ font-family:var(--disp); font-weight:300; font-size:1.22rem; min-width:3.4ch;
+  text-align:center; }
+
+/* ── which day of the weekend ── */
+.days{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line-2);
+  border:1px solid var(--line-2); margin-top:2px; }
+.days button{ background:var(--night); border:0; color:var(--ivory-2); cursor:pointer;
+  font:inherit; font-family:var(--disp); font-size:1.05rem; padding:10px 6px 12px;
+  display:grid; gap:2px; transition:background .2s, color .2s; }
+.days button span{ font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--muted); }
+.days button:hover{ background:var(--night-2); }
+.days button.is-on{ background:var(--brass); color:var(--night); }
+.days button.is-on span{ color:rgba(20,16,15,.72); }
+
+/* ══ plates ═══════════════════════════════════════════════════ */
+.plates{ display:grid; gap:clamp(14px,1.6vw,22px); grid-template-columns:repeat(6,1fr);
+  margin-top:clamp(2rem,4vw,3.4rem); }
+.plate{ position:relative; overflow:hidden; min-width:0; }
+.plate img{ width:100%; height:100%; object-fit:cover; }
+.plate figcaption{ margin-top:9px; color:var(--muted); }
+.plate--wide{ grid-column:span 4; aspect-ratio:16/10; }
+.plate--tall{ grid-column:span 2; aspect-ratio:3/4; }
+.plate--half{ grid-column:span 3; aspect-ratio:4/3; }
+@media (max-width:760px){
+  .plate--wide,.plate--tall,.plate--half{ grid-column:span 6; aspect-ratio:4/3; }
+}
+
+/* ══ reveals ══════════════════════════════════════════════════ */
+.rv{ opacity:0; transform:translate3d(0,26px,0); }
+
+/* ══ footer ═══════════════════════════════════════════════════ */
+.foot{ border-top:1px solid var(--line); padding-block:clamp(50px,7vh,80px) 30px; }
+.foot__top{ display:grid; gap:34px; grid-template-columns:1fr; }
+@media (min-width:820px){ .foot__top{ grid-template-columns:1.4fr 1fr 1fr; } }
+.foot h3{ font-family:var(--disp); font-size:1.9rem; font-weight:300; }
+.foot ul{ list-style:none; margin:0; padding:0; display:grid; gap:9px; }
+.foot a{ text-decoration:none; color:var(--ivory-2); }
+.foot a:hover{ color:var(--brass-2); }
+.foot__bar{ display:flex; flex-wrap:wrap; gap:12px 26px; align-items:center;
+  margin-top:clamp(34px,5vw,58px); padding-top:22px; border-top:1px solid var(--line-2);
+  color:var(--muted); }
+.credit{ margin-left:auto; text-decoration:none; color:var(--muted); }
+.credit strong{ color:var(--ivory-2); font-weight:500; }
+.credit:hover strong{ color:var(--brass-2); }
+
+/* ══ small screens ════════════════════════════════════════════ */
+@media (max-width:860px){
+  .nav__links{
+    position:fixed; inset:0; flex-direction:column; justify-content:center;
+    align-items:center; gap:26px; background:var(--night); font-size:1.5rem;
+    font-family:var(--disp); translate:0 -100%; transition:translate .5s cubic-bezier(.16,1,.3,1);
+  }
+  .nav.is-open .nav__links{ translate:0 0; }
+  .burger{ display:block; order:3; z-index:2; }
+  .nav__cta{ display:none; }
+  .seasons{
+    top:auto; bottom:0; right:0; left:0; translate:0 0; display:flex;
+    justify-content:space-between; gap:0; background:rgba(20,16,15,.92);
+    backdrop-filter:blur(12px); border-top:1px solid var(--line);
+    padding:8px var(--pad) calc(8px + env(safe-area-inset-bottom)); text-align:center;
+    margin-right:0;                      /* the desktop bleed would overhang here */
+  }
+  /* the rule reads as a marker beside a vertical list; in a horizontal bar it
+     just looks like a stray underline through the label */
+  .season::after{ display:none; }
+  .season{ text-shadow:none; }
+  .seasons__t{ display:none; }
+  .season{ padding:4px 2px; text-align:center; font-size:1rem; }
+  body{ padding-bottom:64px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .rv{ opacity:1; transform:none; }
+  .stage__img{ transition:none; }
+}
+
+/* ══ the day — type over a full-bleed frame ═══════════════════ */
+.day{ min-height:88svh; display:flex; align-items:center; }
+.beat{ max-width:52ch; }
