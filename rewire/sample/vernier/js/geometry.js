@@ -61,6 +61,7 @@
 
   V.geometry = {
     build: function (mat) {
+      slotSeq = 0;
       const group = new THREE.Group(), parts = [], train = [];
       function add(name, obj, x, y, z, dist) {
         obj.position.set(x, y, z);
@@ -173,7 +174,6 @@
       add('minuteWheel', gear(30, 0.1, 0.18, mat.brass, { spokes: 4 }), 2.6, 2.75, -2.4, 8);
       add('hourWheel', gear(36, 0.1, 0.16, mat.brass, { spokes: 4, hub: 0.6 }), 0.2, 3.35, -1.0, 8);
       const crown = new THREE.Group();
-      const knurl = new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.35, 1.3, 40), mat.polished);
       const knurlProfile = []; for (let i = 0; i <= 80; i++) { const a = i / 80 * Math.PI * 2; const r = 1.35 + (i % 2 ? 0.07 : -0.07); knurlProfile.push({ x: r * Math.cos(a), y: r * Math.sin(a) }); }
       const knurlMesh = new THREE.Mesh(extrude(shapeFrom(knurlProfile), 1.3, 0.04), mat.polished);
       crown.add(knurlMesh); crown.add(cyl(0.9, 1.6, mat.polished, 24));
