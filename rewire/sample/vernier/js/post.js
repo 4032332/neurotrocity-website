@@ -40,11 +40,11 @@
       return new THREE.ShaderMaterial({ vertexShader: VERT, fragmentShader: frag, uniforms: uniforms, depthTest: false, depthWrite: false, toneMapped: false });
     }
     const mCopy = mat(COPY, { tex: { value: null } });
-    const mBright = mat(BRIGHT, { tex: { value: null }, thr: { value: 0.86 } });
+    const mBright = mat(BRIGHT, { tex: { value: null }, thr: { value: 0.97 } });
     const mBlur = mat(BLUR, { tex: { value: null }, dir: { value: new THREE.Vector2() } });
     const mComp = mat(COMP, {
       tScene: { value: null }, tBloom: { value: null }, tDof: { value: null }, tDepth: { value: null },
-      uBloomOn: { value: 0 }, uBloom: { value: 0.32 }, uVignetteOn: { value: 0 }, uVignette: { value: 0.22 },
+      uBloomOn: { value: 0 }, uBloom: { value: 0.18 }, uVignetteOn: { value: 0 }, uVignette: { value: 0.22 },
       uDofOn: { value: 0 }, uNear: { value: camera.near }, uFar: { value: camera.far }, uFocus: { value: 24 }, uRange: { value: 14 }
     });
     let rtScene, rtHalf, rtA, rtB, rtD, rtD2;
