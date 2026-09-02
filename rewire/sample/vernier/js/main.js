@@ -41,6 +41,7 @@
     document.body.classList.add('no-webgl'); $('#fallback').hidden = false;
   });
   canvas.addEventListener('webglcontextrestored', () => {
+    if (!lost) return;
     lost = false; gsap.ticker.add(tickFn);
     document.body.classList.remove('no-webgl'); $('#fallback').hidden = true;
   });
