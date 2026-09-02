@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://neurotrocity.com/sitemap.xml

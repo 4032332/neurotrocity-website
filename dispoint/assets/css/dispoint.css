@@ -4,21 +4,29 @@
 
 /* ---- Self-hosted fonts (bundled, no CDN) ---- */
 @font-face{font-family:"IBM Plex Mono";font-weight:400;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/IBMPlexMono-Regular.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/IBMPlexMono-Regular.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/IBMPlexMono-Regular.ttf") format("truetype")}
 @font-face{font-family:"IBM Plex Mono";font-weight:500;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/IBMPlexMono-Medium.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/IBMPlexMono-Medium.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/IBMPlexMono-Medium.ttf") format("truetype")}
 @font-face{font-family:"IBM Plex Mono";font-weight:600;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/IBMPlexMono-SemiBold.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/IBMPlexMono-SemiBold.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/IBMPlexMono-SemiBold.ttf") format("truetype")}
 @font-face{font-family:"IBM Plex Mono";font-weight:700;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/IBMPlexMono-Bold.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/IBMPlexMono-Bold.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/IBMPlexMono-Bold.ttf") format("truetype")}
 @font-face{font-family:"Manrope";font-weight:400;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/Manrope-Regular.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/Manrope-Regular.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/Manrope-Regular.ttf") format("truetype")}
 @font-face{font-family:"Manrope";font-weight:500;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/Manrope-Medium.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/Manrope-Medium.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/Manrope-Medium.ttf") format("truetype")}
 @font-face{font-family:"Manrope";font-weight:700;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/Manrope-Bold.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/Manrope-Bold.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/Manrope-Bold.ttf") format("truetype")}
 @font-face{font-family:"Manrope";font-weight:800;font-style:normal;font-display:swap;
-  src:url("/dispoint/assets/fonts/Manrope-ExtraBold.ttf") format("truetype")}
+  src:url("/dispoint/assets/fonts/Manrope-ExtraBold.woff2") format("woff2"),
+       url("/dispoint/assets/fonts/Manrope-ExtraBold.ttf") format("truetype")}
 
 :root{
   /* Runway (default) — landing switcher overrides these live */
@@ -194,3 +202,167 @@
 .dp-merch-card .pr{font-size:12px;color:var(--dp-muted);margin-top:4px}
 
 @media(prefers-reduced-motion:reduce){.dp *{animation:none!important;transition:none!important}}
+
+/* ============================================================
+   v1.1 LAUNCH LAYER — App Store live, paid traffic.
+   Adds: wide wrap, device frames, screenshot showcase, sticky
+   install bar, FAQ, pricing, scroll reveal. Everything below
+   reuses the tokens above so the live theme switcher still
+   drives it.
+   ============================================================ */
+
+:root{ --dp-wide:1080px; }
+.dp .wrap.wide{max-width:var(--dp-wide)}
+
+/* ---- Scroll reveal (opt-in via .r; JS adds .in) ---- */
+.dp.reveal .r{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.dp.reveal .r.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.dp.reveal .r{opacity:1;transform:none}}
+
+/* ---- iPhone device frame ----
+   Screenshots are 1290x2796 (aspect .4614). The frame is pure CSS so it
+   re-colours with the theme instead of baking a bezel into an image. */
+.dp-phone{position:relative;width:100%;max-width:280px;margin:0 auto;aspect-ratio:1290/2796;
+  background:#0a0a12;border-radius:14.2% / 6.6%;padding:2.4%;
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--dp-ink) 22%,transparent),
+             0 40px 80px -40px rgba(0,0,0,.85), 0 8px 24px -12px rgba(0,0,0,.6)}
+.dp-phone img{width:100%;height:100%;object-fit:cover;border-radius:12% / 5.6%;display:block;background:var(--dp-surface)}
+/* Dynamic Island */
+.dp-phone::after{content:"";position:absolute;top:3.6%;left:50%;transform:translateX(-50%);
+  width:29%;height:3.4%;background:#0a0a12;border-radius:999px;z-index:2}
+.dp-phone.sm{max-width:214px}
+
+/* ---- Showcase: alternating copy + phone ---- */
+.dp-show{display:grid;gap:30px;align-items:center;padding:34px 0}
+@media(min-width:820px){
+  .dp-show{grid-template-columns:1fr 1fr;gap:56px;padding:52px 0}
+  .dp-show.flip .dp-show-copy{order:2}
+}
+.dp-show-copy h3{font-family:var(--dp-mono);font-weight:700;font-size:clamp(21px,3.4vw,27px);
+  letter-spacing:-.018em;line-height:1.18;text-wrap:balance;margin-bottom:12px}
+.dp-show-copy p{color:var(--dp-muted);font-size:15.5px;line-height:1.65;max-width:44ch}
+.dp-show-tag{display:inline-block;font-family:var(--dp-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dp-accent);margin-bottom:12px}
+.dp-show-list{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.dp-show-list li{position:relative;padding-left:22px;font-size:14.5px;color:var(--dp-muted)}
+.dp-show-list li::before{content:"";position:absolute;left:0;top:.55em;width:8px;height:2px;background:var(--dp-accent)}
+
+/* ---- Status vocabulary strip ---- */
+.dp-status-strip{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.dp-chip{font-family:var(--dp-mono);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  padding:6px 11px;border-radius:6px;border:1px solid currentColor;opacity:.9}
+.dp-chip.dep{color:var(--dp-muted)}
+.dp-chip.fin{color:var(--dp-urgent)}
+.dp-chip.brd{color:var(--dp-accent)}
+.dp-chip.ont{color:var(--dp-safe)}
+.dp-chip.sch{color:var(--dp-muted)}
+
+/* ---- Gallery rail (horizontal screenshot scroller) ---- */
+.dp-rail{display:flex;gap:18px;overflow-x:auto;padding:26px 22px 30px;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none}
+.dp-rail::-webkit-scrollbar{display:none}
+.dp-rail > *{scroll-snap-align:center;flex:0 0 auto}
+
+/* ---- Sticky install bar (mobile) ---- */
+.dp-sticky{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--dp-bg) 92%,transparent);backdrop-filter:blur(14px);
+  border-top:1px solid var(--dp-border)}
+.dp-sticky .in{display:flex;align-items:center;gap:12px;max-width:520px;margin:0 auto}
+.dp-sticky .lbl{flex:1;min-width:0}
+.dp-sticky .lbl .a{font-family:var(--dp-mono);font-weight:700;font-size:14px;line-height:1.2}
+.dp-sticky .lbl .b{font-size:11.5px;color:var(--dp-muted);margin-top:1px}
+.dp-sticky .dp-badge{min-width:0;padding:8px 13px}
+@media(max-width:820px){.dp-sticky{display:block}.dp-footer{padding-bottom:110px}}
+
+/* ---- Primary button ---- */
+.dp-btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--dp-mono);font-weight:700;font-size:14.5px;
+  background:var(--dp-accent);color:var(--dp-accentOn);text-decoration:none;padding:13px 20px;border-radius:12px;
+  transition:transform .15s ease,box-shadow .15s ease;box-shadow:0 10px 26px -12px color-mix(in srgb,var(--dp-accent) 80%,transparent)}
+.dp-btn:hover{transform:translateY(-2px);box-shadow:0 16px 34px -14px color-mix(in srgb,var(--dp-accent) 90%,transparent)}
+.dp-btn.ghost{background:transparent;color:var(--dp-ink);border:1px solid var(--dp-border);box-shadow:none}
+.dp-btn.ghost:hover{border-color:var(--dp-accent);color:var(--dp-accent)}
+
+/* ---- Meta row under a CTA (free / iOS / no account) ---- */
+.dp-meta{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;font-family:var(--dp-mono);font-size:11.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--dp-muted)}
+.dp-meta span{display:inline-flex;align-items:center;gap:6px}
+.dp-meta span::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--dp-safe)}
+
+/* ---- Pricing ---- */
+.dp-price{display:grid;gap:14px;margin-top:26px}
+@media(min-width:700px){.dp-price{grid-template-columns:1fr 1fr}}
+.dp-plan{background:var(--dp-surface);border:1px solid var(--dp-border);border-radius:18px;padding:24px;position:relative}
+.dp-plan.pro{border-color:color-mix(in srgb,var(--dp-accent) 55%,var(--dp-border));
+  box-shadow:0 24px 60px -34px color-mix(in srgb,var(--dp-accent) 60%,transparent)}
+.dp-plan .nm{font-family:var(--dp-mono);font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--dp-muted)}
+.dp-plan.pro .nm{color:var(--dp-accent)}
+.dp-plan .pr{font-family:var(--dp-mono);font-weight:700;font-size:32px;margin:8px 0 4px;letter-spacing:-.02em}
+.dp-plan .pn{font-size:13px;color:var(--dp-muted)}
+.dp-plan ul{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.dp-plan li{position:relative;padding-left:24px;font-size:14.5px;color:var(--dp-muted)}
+.dp-plan li::before{content:"✓";position:absolute;left:0;top:-1px;font-family:var(--dp-mono);font-weight:700;color:var(--dp-safe)}
+.dp-plan li.no::before{content:"–";color:var(--dp-muted)}
+
+/* ---- FAQ ---- */
+.dp-faq{margin-top:26px;border-top:1px solid var(--dp-border)}
+.dp-faq details{border-bottom:1px solid var(--dp-border)}
+.dp-faq summary{list-style:none;cursor:pointer;padding:18px 34px 18px 0;position:relative;
+  font-family:var(--dp-mono);font-weight:600;font-size:15.5px;letter-spacing:-.01em}
+.dp-faq summary::-webkit-details-marker{display:none}
+.dp-faq summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  font-family:var(--dp-mono);font-size:20px;color:var(--dp-accent);transition:transform .2s ease}
+.dp-faq details[open] summary::after{content:"–"}
+.dp-faq summary:hover{color:var(--dp-accent)}
+.dp-faq .ans{padding:0 0 18px;font-size:14.5px;line-height:1.68;color:var(--dp-muted);max-width:62ch}
+.dp-faq .ans a{color:var(--dp-accent)}
+
+/* ---- Creator accents (mirrors CreatorAccentPalette in-app) ---- */
+.dp-creator-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;
+  background:var(--dp-surface);border:1px solid var(--dp-border);border-left:3px solid var(--ca)}
+.dp-creator-row .h{font-family:var(--dp-mono);font-weight:700;font-size:13px;color:var(--ca)}
+.dp-creator-row .d{font-size:13px;color:var(--dp-muted);margin-top:2px}
+.dp-creator-list{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+
+/* ---- Final CTA panel ---- */
+.dp-final{text-align:center;padding:56px 0 40px}
+.dp-final h2{margin-bottom:14px}
+.dp-final .dp-sub{margin:0 auto}
+.dp-final .dp-badges{justify-content:center;margin-top:26px}
+.dp-final .dp-meta{justify-content:center}
+
+/* ---- Screenshot panels (App Store marketing panels, already framed) ---- */
+.dp-shot{flex:0 0 auto;width:250px;border-radius:20px;overflow:hidden;display:block;
+  border:1px solid var(--dp-border);background:var(--dp-surface);
+  box-shadow:0 30px 70px -34px rgba(0,0,0,.85);transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.dp-shot img{display:block;width:100%;height:auto}
+/* When the <img> IS the .dp-shot (showcase columns), the intrinsic height
+   attribute would otherwise set the rendered height. Keep the attribute for
+   CLS, but let CSS drive the box. */
+img.dp-shot{height:auto}
+.dp-shot:hover{transform:translateY(-6px)}
+@media(min-width:700px){.dp-shot{width:290px}}
+.dp-rail-wrap{position:relative;margin:0 calc(50% - 50vw);width:100vw}
+.dp-rail-hint{text-align:center;font-family:var(--dp-mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dp-muted);margin-top:2px}
+
+/* Specificity fix: `.dp a{color:inherit}` (0,1,1) out-ranks `.dp-badge` /
+   `.dp-btn` (0,1,0), which rendered the App Store badge white-on-white.
+   These selectors restore the intended colours on anchor elements. */
+.dp a.dp-badge{color:var(--dp-bg)}
+.dp a.dp-btn{color:var(--dp-accentOn)}
+.dp a.dp-btn.ghost{color:var(--dp-ink)}
+.dp a.dp-btn.ghost:hover{color:var(--dp-accent)}
+
+/* ---- Header CTA (replaces the theme swatches in the bar) ---- */
+.dp-btn.sm{padding:9px 15px;font-size:13px;border-radius:10px}
+@media(max-width:560px){.dp-bar .dp-btn.sm{display:none}} /* sticky bar covers mobile */
+
+/* ---- Theme switcher, relocated into the Ten Runways section ---- */
+.dp-themes.showcase{display:grid;grid-template-columns:repeat(auto-fit,minmax(86px,1fr));
+  gap:16px 12px;margin-top:26px;max-width:560px}
+.dp-swatch-cell{display:flex;flex-direction:column;align-items:center;gap:8px}
+.dp-themes.showcase .dp-swatch{width:44px;height:44px;border-radius:13px}
+.dp-swatch-name{font-family:var(--dp-mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--dp-muted)}
+.dp-swatch[aria-pressed="true"] + .dp-swatch-name{color:var(--dp-accent)}

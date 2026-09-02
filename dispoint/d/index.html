@@ -1,42 +1,130 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
-<title>DisPoint deal</title>
+<title>A deal shared with you — DisPoint</title>
+<meta name="description" content="Someone shared a deal with you from DisPoint — the private iPhone library for discount codes and bonus-points deals.">
+<meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#12172B">
+<meta name="apple-itunes-app" content="app-id=6791720839">
+<meta property="og:type" content="website">
+<meta property="og:title" content="A deal shared with you — DisPoint">
+<meta property="og:description" content="Open it in DisPoint, or get the app free on the App Store.">
+<meta property="og:image" content="https://neurotrocity.com/dispoint/assets/img/og-dispoint.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/dispoint/assets/css/dispoint.css">
 <style>
-  body{font-family:-apple-system,system-ui,sans-serif;background:#12172B;color:#F4F5F7;
-       margin:0;display:grid;place-items:center;min-height:100vh}
-  .card{background:#1B2142;border:1px solid #2B3260;border-radius:16px;padding:24px;
-        max-width:340px;text-align:center;margin:16px}
-  .retailer{font-size:22px;font-weight:700;margin:0 0 4px}
-  .offer{font-size:28px;font-weight:800;color:#FFB627;margin:8px 0}
-  .cta{display:inline-block;margin-top:16px;background:#FFB627;color:#241A02;
-       text-decoration:none;font-weight:700;padding:12px 20px;border-radius:12px}
-  .muted{color:#8A90B3;font-size:13px}
-</style></head><body>
-<div class="card">
-  <p class="retailer" id="retailer">DisPoint</p>
-  <p class="offer" id="offer"></p>
-  <p class="muted" id="expiry"></p>
-  <a class="cta" href="https://testflight.apple.com/">Get DisPoint</a>
-  <p class="muted">Open this link on a device with DisPoint installed to add the deal.</p>
+  .d-wrap{min-height:100vh;display:grid;place-items:center;padding:28px 20px 60px}
+  .d-inner{width:100%;max-width:420px;text-align:center}
+  .d-mark{font-family:var(--dp-mono);font-weight:700;font-size:24px;letter-spacing:-.02em;
+    text-decoration:none;display:inline-block;margin-bottom:26px}
+  .d-mark .p{color:var(--dp-accent)}
+  .d-eyebrow{font-family:var(--dp-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--dp-muted);margin-bottom:14px}
+  /* boarding-pass stub */
+  .d-pass{background:var(--dp-surface);border:1px solid var(--dp-border);border-radius:18px;
+    overflow:hidden;text-align:left;box-shadow:0 30px 70px -34px rgba(0,0,0,.85)}
+  .d-pass .top{padding:22px 22px 18px}
+  .d-retailer{font-family:var(--dp-mono);font-weight:700;font-size:20px;letter-spacing:-.01em}
+  .d-sub{font-size:13.5px;color:var(--dp-muted);margin-top:4px}
+  .d-offer{font-family:var(--dp-mono);font-weight:700;font-size:40px;color:var(--dp-accent);
+    letter-spacing:-.02em;margin:16px 0 0;line-height:1}
+  .d-perf{height:1px;border-top:2px dashed var(--dp-border);position:relative;margin:18px 0 0}
+  .d-perf::before,.d-perf::after{content:"";position:absolute;top:-11px;width:20px;height:20px;
+    border-radius:50%;background:var(--dp-bg)}
+  .d-perf::before{left:-11px}.d-perf::after{right:-11px}
+  .d-stub{padding:16px 22px 22px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+  .d-stub .k{font-family:var(--dp-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dp-muted)}
+  .d-stub .v{font-family:var(--dp-mono);font-weight:700;font-size:15px;margin-top:3px}
+  .d-status{font-family:var(--dp-mono);font-weight:700;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;padding:6px 11px;border-radius:6px;border:1px solid currentColor}
+  .d-actions{margin-top:26px;display:flex;flex-direction:column;gap:12px;align-items:stretch}
+  .d-note{font-size:13px;color:var(--dp-muted);margin-top:18px;line-height:1.6}
+  .d-badges{display:flex;justify-content:center}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4HW41XNKNR"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-4HW41XNKNR");</script>
+</head>
+<body class="dp">
+<div class="d-wrap">
+  <div class="d-inner">
+    <a class="d-mark" href="/dispoint/landing/">dis<span class="p">point</span></a>
+    <div class="d-eyebrow" id="eyebrow">A deal shared with you</div>
+
+    <div class="d-pass">
+      <div class="top">
+        <div class="d-retailer" id="retailer">DisPoint</div>
+        <div class="d-sub" id="detail">Open this in DisPoint to save it to your stack.</div>
+        <div class="d-offer" id="offer"></div>
+      </div>
+      <div class="d-perf"></div>
+      <div class="d-stub">
+        <div>
+          <div class="k">Expires</div>
+          <div class="v" id="expiry">—</div>
+        </div>
+        <div class="d-status" id="status" style="color:var(--dp-muted)">Scheduled</div>
+      </div>
+    </div>
+
+    <div class="d-actions">
+      <a class="dp-btn" id="openApp" href="dispoint://" style="justify-content:center">Open in DisPoint</a>
+      <div class="d-badges">
+        <a class="dp-badge" href="https://apps.apple.com/au/app/dispoint/id6791720839" aria-label="Download DisPoint on the App Store">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 1.6c.1 1-.3 2-.9 2.8-.7.8-1.7 1.4-2.7 1.3-.1-1 .4-2 .9-2.7.7-.8 1.8-1.4 2.7-1.4zM19.9 17c-.5 1.2-.8 1.7-1.5 2.7-.9 1.4-2.3 3.2-3.9 3.2-1.5 0-1.8-.9-3.8-.9s-2.4.9-3.8.9c-1.7 0-2.9-1.6-3.9-3-2.6-3.9-2.9-8.4-1.3-10.8C3.1 7.3 4.8 6.3 6.4 6.3c1.6 0 2.6 1 3.9 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.9 6.8 1.9 8.6z"/></svg>
+          <span class="txt"><span class="s">Download on the</span><span class="b">App Store</span></span>
+        </a>
+      </div>
+    </div>
+
+    <p class="d-note">Don't have DisPoint? It's free on iPhone — a private library for the codes and
+      points runs you find, sorted by what expires first.</p>
+    <p class="d-note"><a href="/dispoint/landing/" style="color:var(--dp-accent)">What is DisPoint? →</a></p>
+  </div>
 </div>
+
 <script>
+(function(){
   function b64urlDecode(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';
     return decodeURIComponent(escape(atob(s)));}
+  function esc(t){return String(t==null?'':t);}
+  /* Same urgency vocabulary as the app: DEPARTED <0h, FINAL CALL <6h,
+     BOARDING <48h, ON TIME <7d, SCHEDULED 7d+. */
+  function statusFor(ms){
+    var h=ms/36e5;
+    if(h<0)   return ['Departed','var(--dp-muted)'];
+    if(h<6)   return ['Final call','var(--dp-urgent)'];
+    if(h<48)  return ['Boarding','var(--dp-accent)'];
+    if(h<168) return ['On time','var(--dp-safe)'];
+    return ['Scheduled','var(--dp-muted)'];
+  }
   try{
     var p=new URLSearchParams(location.search).get('p');
+    if(!p) return;
     var d=JSON.parse(b64urlDecode(p));
-    document.getElementById('retailer').textContent=d.retailer||'DisPoint';
-    document.getElementById('offer').textContent=
-      (d.kind==='deal'&&d.multiplier)?(d.multiplier+'x points'):(d.discountText||'');
-    if(d.expiry){document.getElementById('expiry').textContent=
-      'Expires '+new Date(d.expiry).toLocaleDateString();}
-  }catch(e){/* leave defaults */}
+    if(d.retailer) document.getElementById('retailer').textContent=esc(d.retailer);
+    var offer=(d.kind==='deal'&&d.multiplier)?(d.multiplier+'x points'):esc(d.discountText||'');
+    document.getElementById('offer').textContent=offer;
+    if(d.productOrBrand) document.getElementById('detail').textContent=esc(d.productOrBrand);
+    if(d.expiry){
+      var when=new Date(d.expiry);
+      if(!isNaN(when)){
+        document.getElementById('expiry').textContent=
+          when.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+        var st=statusFor(when-new Date());
+        var el=document.getElementById('status');
+        el.textContent=st[0]; el.style.color=st[1];
+      }
+    }
+    /* Universal Links open the app directly; this only matters as a fallback. */
+    document.getElementById('openApp').href='dispoint://deal?p='+encodeURIComponent(p);
+  }catch(e){/* fall back to the generic pass */}
+})();
 </script>
-<footer style="margin:56px auto 0;padding:24px 20px 32px;text-align:center;font:500 12.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#8C8CA6">
-  <a href="/" style="color:inherit;text-decoration:none">&larr; neurotrocity.com</a>
-</footer>
-</body></html>
+</body>
+</html>

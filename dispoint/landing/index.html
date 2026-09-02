@@ -6,23 +6,68 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/assets/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+
 <title>DisPoint — Never miss a deal or a points run</title>
-<meta name="description" content="DisPoint is a private iPhone library for Australian discount codes and bonus-points deals — captured from a screenshot, sorted by what's about to expire, with a calculator that turns '20× points' into a real number.">
+<meta name="description" content="A private iPhone library for Australian discount codes and bonus-points deals. Capture from a screenshot, sort by what expires first, and see what '20x points' is actually worth. Free on the App Store.">
+<link rel="canonical" href="https://neurotrocity.com/dispoint/landing/">
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DisPoint">
+<meta property="og:url" content="https://neurotrocity.com/dispoint/landing/">
+<meta property="og:title" content="DisPoint — Never miss a deal or a points run">
+<meta property="og:description" content="Capture any deal from a screenshot. Sorted by what expires first. Free on iPhone.">
+<meta property="og:image" content="https://neurotrocity.com/dispoint/assets/img/og-dispoint.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DisPoint departure board showing deals counting down to expiry">
+<meta property="og:locale" content="en_AU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DisPoint — Never miss a deal or a points run">
+<meta name="twitter:description" content="Capture any deal from a screenshot. Sorted by what expires first. Free on iPhone.">
+<meta name="twitter:image" content="https://neurotrocity.com/dispoint/assets/img/og-dispoint.png">
+<meta name="apple-itunes-app" content="app-id=6791720839">
+<meta name="theme-color" content="#12172B">
+
+<link rel="preconnect" href="https://www.googletagmanager.com">
 <link rel="stylesheet" href="/assets/css/base.css">
 <link rel="stylesheet" href="/dispoint/assets/css/dispoint.css">
+
+<!-- Structured data: rich result for the app -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication",
+"name":"DisPoint","operatingSystem":"iOS 17.0 or later","applicationCategory":"ShoppingApplication",
+"description":"A private iPhone library for discount codes and bonus-points deals, captured from a screenshot and sorted by what expires first.",
+"url":"https://neurotrocity.com/dispoint/landing/",
+"downloadUrl":"https://apps.apple.com/au/app/dispoint/id6791720839",
+"softwareVersion":"1.1","datePublished":"2026-08-30","inLanguage":"en-AU",
+"author":{"@type":"Organization","name":"NeuroTrocity","url":"https://neurotrocity.com"},
+"publisher":{"@type":"Organization","name":"NeuroTrocity","url":"https://neurotrocity.com"},
+"offers":{"@type":"Offer","price":"0","priceCurrency":"AUD"}}
+</script>
+
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4HW41XNKNR"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  gtag('config','G-4HW41XNKNR');
+</script>
 </head>
 <body class="dp">
 
 <div class="dp-bar">
-  <div class="wrap">
+  <div class="wrap wide">
     <a class="dp-wordmark" href="/dispoint/landing/">dis<span class="p">point</span><span class="tick"></span></a>
     <span class="dp-bar-spacer"></span>
     <nav class="dp-nav-links">
-      <a href="#how">How it works</a>
+      <a href="#tour">Tour</a>
       <a href="#calc">Calculator</a>
+      <a href="#pricing">Pricing</a>
       <a href="#trust">Privacy</a>
     </nav>
-    <div class="dp-themes" id="themes" aria-label="Pick a theme"></div>
+    <a class="dp-btn sm js-store" data-loc="nav" href="https://apps.apple.com/au/app/dispoint/id6791720839">Get the app</a>
   </div>
 </div>
 
@@ -40,112 +85,265 @@
 
     <div class="dp-cta">
       <div class="msg">
-        <div class="k">Boarding soon</div>
-        <div class="v">Free on iPhone. Ad-supported, Pro to remove.</div>
-        <span class="dp-softtag">Coming to the App Store</span>
+        <div class="v">Free on iPhone. No account, no sign-up.</div>
       </div>
       <div class="dp-badges">
-        <a class="dp-badge" href="#" aria-label="Download on the App Store (coming soon)">
+        <a class="dp-badge js-store" href="https://apps.apple.com/au/app/dispoint/id6791720839" data-loc="hero" aria-label="Download DisPoint on the App Store">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 1.6c.1 1-.3 2-.9 2.8-.7.8-1.7 1.4-2.7 1.3-.1-1 .4-2 .9-2.7.7-.8 1.8-1.4 2.7-1.4zM19.9 17c-.5 1.2-.8 1.7-1.5 2.7-.9 1.4-2.3 3.2-3.9 3.2-1.5 0-1.8-.9-3.8-.9s-2.4.9-3.8.9c-1.7 0-2.9-1.6-3.9-3-2.6-3.9-2.9-8.4-1.3-10.8C3.1 7.3 4.8 6.3 6.4 6.3c1.6 0 2.6 1 3.9 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.9 6.8 1.9 8.6z"/></svg>
           <span class="txt"><span class="s">Download on the</span><span class="b">App Store</span></span>
         </a>
       </div>
     </div>
+    <div class="dp-meta">
+      <span>Free</span><span>iOS 17+</span><span>No account</span><span>Made in Australia</span>
+    </div>
   </div>
 </header>
 
-<section id="how">
-  <div class="wrap">
-    <div class="dp-kicker">The gap it fills</div>
-    <h2>You find a great code. Then you forget it exists.</h2>
-    <p class="dp-sub">Screenshots pile up in your camera roll; bonus-points offers expire in a tab you closed. DisPoint is the calm, private place they live — captured in a tap and counting down.</p>
-    <div class="dp-grid two">
-      <div class="dp-ticket">
-        <div class="ic">⤢</div>
-        <h3>Capture from a screenshot</h3>
-        <p>Share any screenshot to DisPoint. On-device text recognition reads the store, code, multiplier and expiry — you just confirm. Nothing leaves your phone.</p>
-      </div>
-      <div class="dp-ticket">
-        <div class="ic">◷</div>
-        <h3>Sorted by urgency</h3>
-        <p>A departure-board home screen shows what's boarding next. Countdowns turn amber under a week, coral under a day — you act before it's gone.</p>
-      </div>
+<!-- ============ TOUR: the real screens ============ -->
+<section id="tour" style="padding-bottom:10px">
+  <div class="wrap wide">
+    <div class="dp-kicker r">The whole app</div>
+    <h2 class="r">Seven screens. No mystery.</h2>
+    <p class="dp-sub r">This is the actual app, not a mock-up. Swipe through it.</p>
+  </div>
+  <div class="dp-rail-wrap">
+    <div class="dp-rail" id="rail">
+      <a class="dp-shot js-store" data-loc="rail" href="https://apps.apple.com/au/app/dispoint/id6791720839"><img src="/dispoint/assets/img/screens/1-nothing-expires.jpg" width="1290" height="2796" alt="DisPoint home screen: a departures board listing saved deals ordered by what expires first, with BOARDING and ON TIME statuses." loading="lazy" decoding="async"></a>
+      <a class="dp-shot js-store" data-loc="rail" href="https://apps.apple.com/au/app/dispoint/id6791720839"><img src="/dispoint/assets/img/screens/3-screenshot-it.jpg" width="1290" height="2796" alt="Capture flow: DisPoint reads the retailer, offer, code and expiry from a shared screenshot and shows a form to confirm." loading="lazy" decoding="async"></a>
+      <a class="dp-shot js-store" data-loc="rail" href="https://apps.apple.com/au/app/dispoint/id6791720839"><img src="/dispoint/assets/img/screens/2-your-deals.jpg" width="1290" height="2796" alt="Your stack: the full private library of saved codes and point hacks with countdowns." loading="lazy" decoding="async"></a>
+      <a class="dp-shot js-store" data-loc="rail" href="https://apps.apple.com/au/app/dispoint/id6791720839"><img src="/dispoint/assets/img/screens/5-what-is-it-worth.jpg" width="1290" height="2796" alt="Point Potential calculator converting 3,000 Everyday Rewards points to approximately 1,500 Qantas Frequent Flyer points." loading="lazy" decoding="async"></a>
+      <a class="dp-shot js-store" data-loc="rail" href="https://apps.apple.com/au/app/dispoint/id6791720839"><img src="/dispoint/assets/img/screens/6-whole-trip.jpg" width="1290" height="2796" alt="A Japan 2027 goal broken into milestones: two flight legs and accommodation, ticking off as the balance grows." loading="lazy" decoding="async"></a>
+      <a class="dp-shot js-store" data-loc="rail" href="https://apps.apple.com/au/app/dispoint/id6791720839"><img src="/dispoint/assets/img/screens/4-follow-creators.jpg" width="1290" height="2796" alt="Creator drops appearing on the board, each marked in the creator's own accent colour with their handle." loading="lazy" decoding="async"></a>
+      <a class="dp-shot js-store" data-loc="rail" href="https://apps.apple.com/au/app/dispoint/id6791720839"><img src="/dispoint/assets/img/screens/7-never-miss.jpg" width="1290" height="2796" alt="Expiry calendar for September with urgent, soon and reminder markers, plus FINAL CALL and BOARDING notifications." loading="lazy" decoding="async"></a>
     </div>
+    <div class="dp-rail-hint">← Drag to explore →</div>
   </div>
 </section>
 
-<section id="calc">
-  <div class="wrap">
-    <div class="dp-kicker">The differentiated brain</div>
-    <h2>What's "20× points" actually worth to you?</h2>
-    <p class="dp-sub">The Point Potential calculator turns a headline multiplier into an estimated figure for your planned spend — and, for store-rewards deals, the frequent-flyer points they convert to.</p>
-    <div class="dp-grid two">
-      <div class="dp-ticket">
-        <div class="ic">×</div>
-        <h3>Coles · 20× Flybuys</h3>
-        <p>Spend $200 on gift cards at this week's bonus rate.</p>
-        <div class="dp-calc-out">
-          <span class="lab">Est.</span>
-          <span class="big mono">2,000</span>
-          <span class="lab">Velocity pts</span>
+<!-- ============ CAPTURE ============ -->
+<section id="how">
+  <div class="wrap wide">
+    <div class="dp-show r">
+      <div class="dp-show-copy">
+        <span class="dp-show-tag">Capture</span>
+        <h3>You already screenshot the deal. That's the whole workflow.</h3>
+        <p>Share any screenshot to DisPoint and on-device text recognition reads the retailer, the offer, the code and the expiry. You get a pre-filled form to check — and anything it isn't sure about is left blank rather than guessed, because a wrong pre-fill costs more than an empty field.</p>
+        <ul class="dp-show-list">
+          <li>Works from Photos, Safari, Mail, Messages — anywhere with a share sheet</li>
+          <li>Recognition runs entirely on your device; no server of ours sees it</li>
+          <li>The original screenshot stays attached to the item</li>
+        </ul>
+      </div>
+      <div><img class="dp-shot" style="width:100%;max-width:300px;margin:0 auto" src="/dispoint/assets/img/screens/3-screenshot-it.jpg" width="1290" height="2796" alt="DisPoint reading Kathmandu, 25% off, code SPRING25, expiring in 14 hours from a screenshot." loading="lazy" decoding="async"></div>
+    </div>
+
+    <div class="dp-show flip r">
+      <div class="dp-show-copy">
+        <span class="dp-show-tag">Urgency</span>
+        <h3>A departure board, because expiry is the only thing that matters.</h3>
+        <p>Everything you've saved sits on one board ordered by what goes first. Each row carries a status word borrowed from an airport gate, so you can read the whole list at a glance without doing date maths.</p>
+        <div class="dp-status-strip">
+          <span class="dp-chip fin">Final call &lt;6h</span>
+          <span class="dp-chip brd">Boarding &lt;48h</span>
+          <span class="dp-chip ont">On time &lt;7d</span>
+          <span class="dp-chip sch">Scheduled 7d+</span>
+          <span class="dp-chip dep">Departed</span>
         </div>
       </div>
-      <div class="dp-ticket">
-        <div class="ic">✈</div>
-        <h3>Track a goal</h3>
-        <p>Set a trip — "Bali, 60,000 Velocity" — and every deal you redeem nudges a little plane along the runway toward it.</p>
-      </div>
+      <div><img class="dp-shot" style="width:100%;max-width:300px;margin:0 auto" src="/dispoint/assets/img/screens/1-nothing-expires.jpg" width="1290" height="2796" alt="The DisPoint departures board with stacked, urgent and programs counters." loading="lazy" decoding="async"></div>
     </div>
   </div>
 </section>
 
+<!-- ============ CALCULATOR ============ -->
+<section id="calc">
+  <div class="wrap wide">
+    <div class="dp-show r">
+      <div class="dp-show-copy">
+        <span class="dp-show-tag">Point Potential</span>
+        <h3>What's "20x points" actually worth to you?</h3>
+        <p>Enter what you plan to spend and DisPoint turns the headline multiplier into a real figure — then applies the fixed conversion to the frequent flyer program those points actually land in. Everyday Rewards pairs to Qantas, Flybuys pairs to Velocity, both at 2:1. You never have to pick the pairing; it's derived, not guessed.</p>
+        <ul class="dp-show-list">
+          <li>Store-rewards deals show the frequent-flyer equivalent alongside</li>
+          <li>The assumption is printed on screen, permanently — never buried in a tooltip</li>
+          <li>Mark a deal as acquired and the points post straight to a goal</li>
+        </ul>
+        <p style="margin-top:16px;font-size:13.5px;opacity:.8">Figures are estimates, not a promise of what you'll earn.</p>
+      </div>
+      <div><img class="dp-shot" style="width:100%;max-width:300px;margin:0 auto" src="/dispoint/assets/img/screens/5-what-is-it-worth.jpg" width="1290" height="2796" alt="3,000 Everyday Rewards points shown as approximately 1,500 Qantas Frequent Flyer points." loading="lazy" decoding="async"></div>
+    </div>
+
+    <div class="dp-show flip r">
+      <div class="dp-show-copy">
+        <span class="dp-show-tag">Goals</span>
+        <h3>See the whole trip, not just a number.</h3>
+        <p>Set a goal — "Japan 2027, 200,000 Qantas points" — add the route, and DisPoint breaks it into milestones for each leg, including the flight home, plus accommodation. They tick off as your balance grows, and a little plane travels the runway as you go.</p>
+        <ul class="dp-show-list">
+          <li>Trip, Product, Point Total or Other — goals aren't flights-only</li>
+          <li>Searchable airport directory for building a route</li>
+          <li>A projected completion date, clearly labelled an estimate</li>
+          <li>Every change is an append-only entry, so the history stays honest</li>
+        </ul>
+      </div>
+      <div><img class="dp-shot" style="width:100%;max-width:300px;margin:0 auto" src="/dispoint/assets/img/screens/6-whole-trip.jpg" width="1290" height="2796" alt="Japan 2027 goal with Brisbane to Tokyo legs covered and accommodation still to go." loading="lazy" decoding="async"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CREATORS ============ -->
+<section>
+  <div class="wrap wide">
+    <div class="dp-show r">
+      <div class="dp-show-copy">
+        <span class="dp-show-tag">Follow the creators</span>
+        <h3>Follow the people who find the good ones.</h3>
+        <p>Some people are genuinely better at spotting a points run than you are. Follow them and their drops land straight on your board — always marked in their own colour with their handle, so a tip is never mistaken for something you saved yourself.</p>
+        <div class="dp-creator-list">
+          <div class="dp-creator-row" style="--ca:#FF5A5F">
+            <div><div class="h">@pointhackpete</div><div class="d">Woolworths · 1000 points · TCN Gift Cards</div></div>
+          </div>
+          <div class="dp-creator-row" style="--ca:#38BDF8">
+            <div><div class="h">@milesandmore</div><div class="d">Qantas Wine · 5x points · any 12-bottle case</div></div>
+          </div>
+        </div>
+        <p style="margin-top:16px;font-size:13.5px;opacity:.8">Creator posting is invite-only, and every creator surface carries report and block controls.</p>
+      </div>
+      <div><img class="dp-shot" style="width:100%;max-width:300px;margin:0 auto" src="/dispoint/assets/img/screens/4-follow-creators.jpg" width="1290" height="2796" alt="Creator drops on the board marked in each creator's accent colour." loading="lazy" decoding="async"></div>
+    </div>
+
+    <div class="dp-show flip r">
+      <div class="dp-show-copy">
+        <span class="dp-show-tag">Reminders</span>
+        <h3>Never miss the gate.</h3>
+        <p>DisPoint reminds you seven days out, one day out and the morning of — and you can override the timing on any single high-value deal. A month calendar shows every expiry at a glance, and a home-screen widget keeps whatever closes next in front of you.</p>
+        <ul class="dp-show-list">
+          <li>Calendar view with urgent, soon and reminder markers</li>
+          <li>Small and medium home-screen widgets</li>
+          <li>Every notification opens straight to the item</li>
+        </ul>
+      </div>
+      <div><img class="dp-shot" style="width:100%;max-width:300px;margin:0 auto" src="/dispoint/assets/img/screens/7-never-miss.jpg" width="1290" height="2796" alt="September expiry calendar with FINAL CALL and BOARDING notifications." loading="lazy" decoding="async"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THEMES ============ -->
 <section>
   <div class="wrap">
-    <div class="dp-kicker">Ten runways</div>
-    <h2>Pick a look. The whole app follows.</h2>
-    <p class="dp-sub">Try the swatches up top — that's the real theme system, live. Runway, Midnight, Daylight, Ocean, Sunset, Citrus and more ship in the app.</p>
-    <div class="dp-stats">
-      <div class="dp-stat-tile"><div class="n mono" data-count="128">128</div><div class="l">Codes stacked</div></div>
-      <div class="dp-stat-tile"><div class="n mono" data-count="6">6</div><div class="l">Expiring soon</div></div>
-      <div class="dp-stat-tile"><div class="n mono" data-count="4">4</div><div class="l">Programs added</div></div>
-    </div>
+    <div class="dp-kicker r">Ten runways</div>
+    <h2 class="r">Pick a look. The whole app follows.</h2>
+    <p class="dp-sub r">All ten ship in the app, along with alternate app icons. Tap one — it repaints this page live, exactly as it repaints the app.</p>
+    <div class="dp-themes showcase r" id="themes" aria-label="Preview a theme"></div>
   </div>
 </section>
 
+<!-- ============ TRUST ============ -->
 <section id="trust" class="dp-trust">
   <div class="wrap">
-    <div class="dp-kicker">Private by design</div>
-    <h2>Your deals are yours. Full stop.</h2>
-    <p class="dp-sub">DisPoint never links to your Qantas, Velocity or Flybuys account, never stores a loyalty password, and never scrapes a rewards site. Your library lives on your device and syncs privately across your own devices with iCloud.</p>
+    <div class="dp-kicker r">Private by design</div>
+    <h2 class="r">Your deals are yours. Full stop.</h2>
+    <p class="dp-sub r">DisPoint never links to your Qantas, Velocity, Flybuys or Everyday Rewards account, never stores a loyalty password, and never scrapes a rewards site. Your library lives on your device and syncs privately across your own devices through your personal iCloud.</p>
     <div class="dp-grid two">
-      <div class="dp-ticket">
+      <div class="dp-ticket r">
         <div class="ic">⌂</div>
         <h3>On-device capture</h3>
         <p>Screenshot text recognition runs locally. No server of ours ever sees your codes.</p>
       </div>
-      <div class="dp-ticket">
+      <div class="dp-ticket r">
         <div class="ic">⚿</div>
         <h3>No account linking, ever</h3>
-        <p>A permanent product boundary — not a feature we haven't built yet.</p>
+        <p>A permanent product boundary — not a feature we haven't built yet. You update balances yourself.</p>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="dp-footer">
+<!-- ============ PRICING ============ -->
+<section id="pricing">
+  <div class="wrap wide" style="max-width:900px">
+    <div class="dp-kicker r">Pricing</div>
+    <h2 class="r">Free to use. Pro if you live in it.</h2>
+    <p class="dp-sub r">Capture, sync and the widget are never gated — they're the reason the app works at all.</p>
+    <div class="dp-price">
+      <div class="dp-plan r">
+        <div class="nm">Free</div>
+        <div class="pr">$0</div>
+        <div class="pn">Ad-supported</div>
+        <ul>
+          <li>Unlimited codes and point hacks</li>
+          <li>Screenshot capture and OCR</li>
+          <li>iCloud sync across your devices</li>
+          <li>Home-screen widget</li>
+          <li>Expiry reminders and calendar</li>
+          <li>2 goals</li>
+          <li>3 themes</li>
+        </ul>
+      </div>
+      <div class="dp-plan pro r">
+        <div class="nm">Pro</div>
+        <div class="pr">One-time</div>
+        <div class="pn">A single in-app purchase — no subscription</div>
+        <ul>
+          <li>Everything in Free, with no ads</li>
+          <li>Unlimited goals</li>
+          <li>All ten themes and alternate app icons</li>
+          <li>CSV export of your library</li>
+          <li>Per-item reminder timing</li>
+          <li>Advanced calculator: custom earn rates and deal comparison</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
   <div class="wrap">
+    <div class="dp-kicker r">Questions</div>
+    <h2 class="r">The things people ask first.</h2>
+    <div class="dp-faq r">
+      <details><summary>Do I need an account?</summary><div class="ans">No. There's no sign-up and no login. Your library lives on your device and syncs through your own private iCloud, so it's already on your other devices without you doing anything.</div></details>
+      <details><summary>Does it connect to my Qantas, Velocity, Flybuys or Everyday Rewards account?</summary><div class="ans">No — and it never will. Those programs expose no public way to read a member's balance, and using a member's login on their behalf is against their terms. You update balances yourself. This is a permanent product boundary, not a feature we haven't got to yet.</div></details>
+      <details><summary>Is DisPoint a deal feed like Cashrewards or ShopBack?</summary><div class="ans">Not quite. It's primarily a private library of the codes and runs <em>you</em> found. You can also follow invite-only creators whose drops land on your board, but nothing is shared from your library to anyone else.</div></details>
+      <details><summary>How accurate is the points calculator?</summary><div class="ans">It's an estimate and says so on screen. It multiplies your planned spend by the deal's rate and your program's earn rate, then applies the fixed 2:1 conversions (Everyday Rewards to Qantas, Flybuys to Velocity). Programs change their rules, so always confirm with the retailer or program before relying on a figure.</div></details>
+      <details><summary>What does Pro cost?</summary><div class="ans">Pro is a one-time in-app purchase, not a subscription. The current price shows in the app and on the App Store listing for your region.</div></details>
+      <details><summary>Which countries is it for?</summary><div class="ans">DisPoint is built for Australia — the retailers, loyalty programs and conversion rules all assume an Australian user. It'll run anywhere, but the program pairings won't mean much outside AU.</div></details>
+      <details><summary>What does it need?</summary><div class="ans">An iPhone running iOS 17 or later.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="dp-final">
+  <div class="wrap">
+    <div class="dp-kicker r">Boarding now</div>
+    <h2 class="r">Stop losing deals in your camera roll.</h2>
+    <p class="dp-sub r">Free on the App Store. No account, no sign-up, nothing leaves your phone.</p>
+    <div class="dp-badges r">
+      <a class="dp-badge js-store" href="https://apps.apple.com/au/app/dispoint/id6791720839" data-loc="footer" aria-label="Download DisPoint on the App Store">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 1.6c.1 1-.3 2-.9 2.8-.7.8-1.7 1.4-2.7 1.3-.1-1 .4-2 .9-2.7.7-.8 1.8-1.4 2.7-1.4zM19.9 17c-.5 1.2-.8 1.7-1.5 2.7-.9 1.4-2.3 3.2-3.9 3.2-1.5 0-1.8-.9-3.8-.9s-2.4.9-3.8.9c-1.7 0-2.9-1.6-3.9-3-2.6-3.9-2.9-8.4-1.3-10.8C3.1 7.3 4.8 6.3 6.4 6.3c1.6 0 2.6 1 3.9 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.9 6.8 1.9 8.6z"/></svg>
+        <span class="txt"><span class="s">Download on the</span><span class="b">App Store</span></span>
+      </a>
+    </div>
+    <div class="dp-meta"><span>Free</span><span>iOS 17+</span><span>No account</span></div>
+  </div>
+</section>
+
+<footer class="dp-footer">
+  <div class="wrap wide">
     <div class="dp-foot-tear"></div>
     <div class="dp-foot-grid">
       <div class="dp-foot-links">
         <span class="h">DisPoint</span>
         <a href="/dispoint/landing/">Home</a>
+        <a href="https://apps.apple.com/au/app/dispoint/id6791720839" class="js-store" data-loc="footer-link">App Store</a>
         <a href="/dispoint/support/">Support</a>
-        <a href="/dispoint/merch/">Merch</a>
         <a href="/dispoint/contact/">Contact</a>
       </div>
       <div class="dp-foot-links">
         <span class="h">Legal</span>
-        <a href="/dispoint/policies/privacy-policy.html">Privacy Policy</a>
+        <a href="/dispoint/privacy/">Privacy Policy</a>
         <a href="/dispoint/policies/terms.html">Terms of Use</a>
         <a href="/dispoint/policies/eula.html">EULA</a>
       </div>
@@ -159,6 +357,20 @@
   </div>
 </footer>
 
+<!-- Sticky install bar (mobile) -->
+<div class="dp-sticky">
+  <div class="in">
+    <div class="lbl">
+      <div class="a">DisPoint</div>
+      <div class="b">Free · iOS 17+ · No account</div>
+    </div>
+    <a class="dp-badge js-store" href="https://apps.apple.com/au/app/dispoint/id6791720839" data-loc="sticky" aria-label="Download DisPoint on the App Store">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 1.6c.1 1-.3 2-.9 2.8-.7.8-1.7 1.4-2.7 1.3-.1-1 .4-2 .9-2.7.7-.8 1.8-1.4 2.7-1.4zM19.9 17c-.5 1.2-.8 1.7-1.5 2.7-.9 1.4-2.3 3.2-3.9 3.2-1.5 0-1.8-.9-3.8-.9s-2.4.9-3.8.9c-1.7 0-2.9-1.6-3.9-3-2.6-3.9-2.9-8.4-1.3-10.8C3.1 7.3 4.8 6.3 6.4 6.3c1.6 0 2.6 1 3.9 1 1.3 0 2-1 3.9-1 1.4 0 2.9.8 3.9 2.1-3.4 1.9-2.9 6.8 1.9 8.6z"/></svg>
+      <span class="txt"><span class="s">Get it on the</span><span class="b">App Store</span></span>
+    </a>
+  </div>
+</div>
+
 <script>
 (function(){
   var THEMES={
@@ -166,6 +378,10 @@
     Midnight:{bg:'#0B0A1F',surface:'#171533',border:'#332F5E',ink:'#F1EFFF',muted:'#8B86B8',accent:'#4CF2E0',accentOn:'#022A26',safe:'#B98CFF',urgent:'#FF5C8A',flap:'#080615'},
     Daylight:{bg:'#F5F6FA',surface:'#FFFFFF',border:'#E1E4F0',ink:'#1B2142',muted:'#686D91',accent:'#E8960F',accentOn:'#2A1B00',safe:'#12A38A',urgent:'#E14B50',flap:'#EEF1FB'},
     Ocean:{bg:'#08201F',surface:'#0F332F',border:'#1F5C52',ink:'#EAFBF6',muted:'#7FB3A8',accent:'#FF7A5C',accentOn:'#3A0D02',safe:'#4CF2C4',urgent:'#FF5C6C',flap:'#05130F'},
+    Sky:{bg:'#EEF1FB',surface:'#FFFFFF',border:'#D9DEF3',ink:'#333A5C',muted:'#656B8B',accent:'#FF7A7F',accentOn:'#3A0B0D',safe:'#3FB6A8',urgent:'#E8555C',flap:'#E3E8F7'},
+    Blush:{bg:'#FBEEF0',surface:'#FFFFFF',border:'#F0D6DC',ink:'#4A3038',muted:'#81656B',accent:'#2FB6A3',accentOn:'#04211D',safe:'#4BC7A8',urgent:'#E8747A',flap:'#F5E1E6'},
+    Mint:{bg:'#EAFBF3',surface:'#FFFFFF',border:'#C7EEDD',ink:'#123B2E',muted:'#497968',accent:'#FF4FA3',accentOn:'#3A0A22',safe:'#2BB673',urgent:'#E8555C',flap:'#D8F4E8'},
+    Lavender:{bg:'#F3EEFC',surface:'#FFFFFF',border:'#DCCCF2',ink:'#3A2A5C',muted:'#71648E',accent:'#E8A93B',accentOn:'#3A2600',safe:'#7B6FD1',urgent:'#E0607A',flap:'#E8DDF7'},
     Sunset:{bg:'#FFEEE3',surface:'#FFFFFF',border:'#FFC9A8',ink:'#5C2E12',muted:'#936144',accent:'#0F8B8D',accentOn:'#DFFAF8',safe:'#2FB6A3',urgent:'#E85D3A',flap:'#FDE3D2'},
     Citrus:{bg:'#FFF9E3',surface:'#FFFFFF',border:'#FFE699',ink:'#4A3B00',muted:'#816F2C',accent:'#FF3D7F',accentOn:'#3A0018',safe:'#2FB673',urgent:'#E8555C',flap:'#FBF1C4'}
   };
@@ -174,6 +390,7 @@
     var t=THEMES[name]; if(!t) return;
     var m={bg:'--dp-bg',surface:'--dp-surface',border:'--dp-border',ink:'--dp-ink',muted:'--dp-muted',accent:'--dp-accent',accentOn:'--dp-accentOn',safe:'--dp-safe',urgent:'--dp-urgent',flap:'--dp-flap'};
     for(var k in m){root.setProperty(m[k],t[k]);}
+    var mt=document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute('content',t.bg);
     [].forEach.call(document.querySelectorAll('.dp-swatch'),function(s){s.setAttribute('aria-pressed',s.dataset.name===name);});
   }
   var host=document.getElementById('themes');
@@ -181,10 +398,21 @@
     var t=THEMES[name];
     var b=document.createElement('button');
     b.className='dp-swatch';b.dataset.name=name;b.title=name;
-    b.style.background=t.surface;b.style.setProperty('--sw-accent',t.accent);
+    /* two-tone: the theme's ground and its surface, so the seven light
+       themes don't all read as the same white square */
+    b.style.background='linear-gradient(135deg,'+t.bg+' 0 50%,'+t.surface+' 50% 100%)';
+    b.style.setProperty('--sw-accent',t.accent);
     b.setAttribute('aria-label','Theme: '+name);
     b.onclick=function(){applyTheme(name);};
-    host.appendChild(b);
+    if(host.classList.contains('showcase')){
+      var cell=document.createElement('span');
+      cell.className='dp-swatch-cell';
+      var lab=document.createElement('span');
+      lab.className='dp-swatch-name';lab.textContent=name;
+      cell.appendChild(b);cell.appendChild(lab);host.appendChild(cell);
+    }else{
+      host.appendChild(b);
+    }
   });
   applyTheme('Runway');
 
@@ -203,11 +431,11 @@
     f.style.setProperty('--ccolor','var('+col+')');
   }
   var DEALS=[
-    {store:'Coles',detail:'20× Flybuys · gift cards',stat:'20x',count:'2D 04H',kind:'accent'},
-    {store:'Kathmandu',detail:'Outdoor sale code',stat:'25%',count:'19H',kind:'urgent'},
-    {store:'Everyday Rewards',detail:'2000 pts · $50 spend',stat:'2000',count:'5D',kind:'accent'},
-    {store:'The Good Guys',detail:'$30 off $150 voucher',stat:'$30',count:'11D',kind:'safe'},
-    {store:'Velocity',detail:'15× on transfers',stat:'15x',count:'6D',kind:'accent'}
+    {store:'Coles',detail:'20x Flybuys · Apple gift cards',stat:'20x',count:'1D',kind:'urgent'},
+    {store:'Kathmandu',detail:'25% off · online',stat:'25%',count:'14H',kind:'urgent'},
+    {store:'Woolworths',detail:'1000 pts · TCN gift cards',stat:'1000',count:'3D',kind:'accent'},
+    {store:'The Iconic',detail:'30% off · online',stat:'30%',count:'4D',kind:'accent'},
+    {store:'Officeworks',detail:'5% off storewide',stat:'5%',count:'8D',kind:'safe'}
   ];
   var rowsEl=document.getElementById('rows');
   DEALS.forEach(function(d){
@@ -240,12 +468,48 @@
     },1500);
     var all=document.querySelectorAll('.dp-flap .cell');
     [].forEach.call(all,function(c,idx){setTimeout(function(){flipCell(c);},120+idx*45);});
-    [].forEach.call(document.querySelectorAll('.dp-stat-tile .n'),function(el){
-      var end=parseInt(el.dataset.count,10),cur=0,step=Math.max(1,Math.round(end/24));
-      el.textContent='0';
-      var iv=setInterval(function(){cur+=step;if(cur>=end){cur=end;clearInterval(iv);}el.textContent=cur;},34);
-    });
   }
+
+  /* Scroll reveal.
+     Deliberately NOT IntersectionObserver-only: IO is suspended in hidden or
+     throttled tabs, which would leave whole sections at opacity 0 for bots,
+     prerenderers and background tabs. This page takes paid traffic, so a blank
+     section is never an acceptable failure mode. Elements start visible and are
+     only hidden once this script is running (body.reveal), and anything still
+     hidden is force-revealed if the visitor never scrolls. */
+  var rs=[].slice.call(document.querySelectorAll('.r'));
+  if(!reduce&&rs.length){
+    document.body.classList.add('reveal');
+    var ticking=false, scrolled=false;
+    function check(){
+      ticking=false;
+      var vh=window.innerHeight||document.documentElement.clientHeight;
+      for(var i=rs.length-1;i>=0;i--){
+        var r=rs[i].getBoundingClientRect();
+        if(r.top<vh*0.92&&r.bottom>0){rs[i].classList.add('in');rs.splice(i,1);}
+      }
+    }
+    function onScroll(){scrolled=true;if(!ticking){ticking=true;requestAnimationFrame(check);}}
+    window.addEventListener('scroll',onScroll,{passive:true});
+    window.addEventListener('resize',onScroll,{passive:true});
+    window.addEventListener('load',check);
+    check();
+    /* rAF is throttled in hidden tabs, so also poll briefly on a plain timer. */
+    var polls=0,poll=setInterval(function(){check();if(++polls>12||!rs.length)clearInterval(poll);},400);
+    /* Unconditional fail-safe: whatever is still hidden after 5s is revealed.
+       Losing the animation for a slow reader is a far cheaper failure than
+       serving a blank section. */
+    setTimeout(function(){for(var k=0;k<rs.length;k++){rs[k].classList.add('in');}rs.length=0;},5000);
+  }
+
+  /* Conversion tracking: every App Store click, tagged by page location */
+  [].forEach.call(document.querySelectorAll('.js-store'),function(a){
+    a.addEventListener('click',function(){
+      if(typeof gtag==='function'){
+        gtag('event','app_store_click',{location:a.dataset.loc||'unknown'});
+      }
+    });
+  });
 })();
 </script>
 </body>
