@@ -75,6 +75,11 @@ Mono (measurement readouts only). Neither is on the reflex-reject list; neither 
 used by the other five demos. The mono is earned: the page carries real tolerances,
 frequencies and jewel counts.
 
+Both load from Google Fonts via `<link>`, matching the other five demos, with the
+stylesheet URL carrying a content-hash query. Self-hosting would be marginally
+faster but would mean committing font binaries; consistency with the existing
+demos wins here.
+
 ## 4. Scroll spine
 
 | # | Section | What happens |
@@ -132,7 +137,10 @@ measurement was taken during page load contention.
 
 - **All text lives in the DOM**, never only in the canvas — readable and indexable
   with WebGL disabled.
-- **No WebGL** → statically lit fallback image, full scroll story in 2D.
+- **No WebGL** → statically lit fallback image, full scroll story in 2D. The
+  fallback is captured from the high-tier render during the build (canvas →
+  `toDataURL` → committed PNG), so it is the real scene rather than a stand-in and
+  cannot drift from it silently.
 - **`prefers-reduced-motion`** → escapement stops, auto-rotation stops, scroll
   scrub becomes stepped section transitions. Checked in **JS as well as CSS**,
   because a CSS media query does not stop GSAP or a WebGL render loop.
@@ -148,7 +156,7 @@ measurement was taken during page load contention.
 |---|---|
 | three.min.js | ~600KB |
 | GSAP + ScrollTrigger + Lenis | ~120KB |
-| Fonts (2 families, woff2 subset) | ~100KB |
+| Fonts (2 families, Google Fonts, woff2) | ~100KB |
 | Geometry, textures | 0 — generated at runtime |
 | Fallback image | ~80KB |
 | **Total** | **< 1MB** |
