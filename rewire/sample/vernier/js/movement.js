@@ -105,10 +105,12 @@
     }
     function resize() {
       const r = canvas.getBoundingClientRect(); if (!r.width || !r.height) return;
-      renderer.setSize(r.width, r.height, false);
-      camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
-      if (post) post.resize(renderer.domElement.width, renderer.domElement.height);
       const portrait = r.height > r.width;           // phones: object higher, text sits below it
+      renderer.setSize(r.width, r.height, false);
+      camera.aspect = r.width / r.height;
+      camera.fov = portrait ? 56 : 30;               // vertical FOV; portrait needs more of it to keep the plate in frame
+      camera.updateProjectionMatrix();
+      if (post) post.resize(renderer.domElement.width, renderer.domElement.height);
       M.group.position.set(portrait ? 0 : 3, portrait ? 5 : 0, 0);
     }
     function setView(name) {
