@@ -39,12 +39,14 @@
     const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p.x, 0, p.y)));
     return new THREE.Mesh(new THREE.TubeGeometry(curve, Math.min(600, pts.length), radius, 6, false), mat);
   }
+  let slotSeq = 0;
   function screw(headR, headH, shankR, len, headMat, slotMat) {
     const g = new THREE.Group();
     const pts = P.screwProfile(headR, headH, shankR, len).map(p => new THREE.Vector2(p.r, p.y));
     g.add(new THREE.Mesh(new THREE.LatheGeometry(pts, 24), headMat));
     const slot = new THREE.Mesh(new THREE.BoxGeometry(headR * 1.5, 0.06, 0.14), slotMat);
-    slot.position.y = headH * 0.97; slot.rotation.y = Math.random() * Math.PI; g.add(slot);
+    slot.userData.cosmetic = true;
+    slot.position.y = headH * 0.97; slot.rotation.y = (slotSeq++ * 0.73) % Math.PI; g.add(slot);
     return g;
   }
   function jewel(r, mat) {
@@ -60,13 +62,12 @@
   V.geometry = {
     build: function (mat) {
       const group = new THREE.Group(), parts = [], train = [];
-      let count = 0;
       function add(name, obj, x, y, z, dist) {
         obj.position.set(x, y, z);
         obj.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
         group.add(obj);
         parts.push({ name, obj, base: new THREE.Vector3(x, y, z), dist });
-        count++; return obj;
+        return obj;
       }
 
       /* mainplate: a 26mm disc with a rim step */
@@ -91,9 +92,9 @@
       const spring = { rebuild: function (tension) {
         if (springMesh) { barrel.remove(springMesh); springMesh.geometry.dispose(); }
         springMesh = tube(P.springPath(9, 1.05, 4.9, 700, tension), 0.085, mat.spring);
-        springMesh.position.y = 0.1; springMesh.castShadow = true; barrel.add(springMesh);
+        springMesh.position.y = 0.1; springMesh.castShadow = true; springMesh.receiveShadow = true; barrel.add(springMesh);
       } };
-      spring.rebuild(0); count++;
+      spring.rebuild(0);
 
       /* ratchet + crown wheel + click */
       const ratchet = add('ratchetWheel', gear(60, 0.13, 0.28, mat.steel, { spokes: 5, hub: 0.9 }), -5.6, 3.35, 1.4, 12);
@@ -106,7 +107,7 @@
         const g = new THREE.Group(); g.add(w);
         const pin = gear(8, module * 1.6, 0.9, mat.polished, { samples: 8, hub: 0.15 }); pin.position.y = 0.5; g.add(pin);
         const staff = cyl(0.14, 2.6, mat.polished, 12); staff.position.y = 0.6; g.add(staff);
-        add(name, g, x, 1.35, z, 6); count += 2;
+        add(name, g, x, 1.35, z, 6);
         train.push({ obj: g, rpm: rpm }); return g;
       }
       wheel('centreWheel', 64, 0.11, 0.2, -1.0, 5, 1 / 60);
@@ -115,23 +116,23 @@
       const escape = new THREE.Group();
       const ew = gear(20, 0.17, 0.16, mat.steel, { samples: 12, hub: 0.3 }); escape.add(ew);
       const es = cyl(0.12, 2.4, mat.polished, 12); es.position.y = 0.4; escape.add(es);
-      add('escapeWheel', escape, 5.6, 1.35, 5.4, 6); count++;
+      add('escapeWheel', escape, 5.6, 1.35, 5.4, 6);
 
       /* pallet fork: a Y with two ruby stones */
       const fork = new THREE.Group();
       fork.add(new THREE.Mesh(extrude(shapeFrom([{x:-0.2,y:-0.3},{x:0.2,y:-0.3},{x:0.25,y:1.4},{x:1.3,y:2.3},{x:1.05,y:2.55},{x:0,y:1.75},{x:-1.05,y:2.55},{x:-1.3,y:2.3},{x:-0.25,y:1.4}]), 0.22, 0.02), mat.polished));
-      [[-1.15, 2.4], [1.15, 2.4]].forEach(([x, z]) => { const s = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.16, 0.18), mat.ruby); s.position.set(x, 0.05, z); s.rotation.y = 0.5; fork.add(s); count++; });
+      [[-1.15, 2.4], [1.15, 2.4]].forEach(([x, z]) => { const s = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.16, 0.18), mat.ruby); s.position.set(x, 0.05, z); s.rotation.y = 0.5; fork.add(s); });
       add('palletFork', fork, 3.3, 1.75, 7.0, 7);
       add('palletBridge', bridge([{x:-1.2,y:-1.3},{x:1.4,y:-1.5},{x:2.0,y:0.4},{x:1.1,y:1.8},{x:-1.3,y:1.6}], mat.bridge, 0.7), 3.3, 2.55, 7.0, 13);
 
       /* balance: rim, four arms, hub, eight timing weights, staff, hairspring */
       const balance = new THREE.Group();
       const rim = new THREE.Mesh(new THREE.TorusGeometry(3.2, 0.22, 10, 64), mat.polished); rim.rotation.x = Math.PI / 2; balance.add(rim);
-      for (let i = 0; i < 4; i++) { const a = new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.16, 0.26), mat.polished); a.rotation.y = i * Math.PI / 4; balance.add(a); count++; }
+      for (let i = 0; i < 4; i++) { const a = new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.16, 0.26), mat.polished); a.rotation.y = i * Math.PI / 4; balance.add(a); }
       balance.add(cyl(0.5, 0.5, mat.polished, 24));
-      for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, w = cyl(0.17, 0.34, mat.brass, 12); w.position.set(3.2 * Math.cos(a), 0, 3.2 * Math.sin(a)); balance.add(w); count++; }
+      for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, w = cyl(0.17, 0.34, mat.brass, 12); w.position.set(3.2 * Math.cos(a), 0, 3.2 * Math.sin(a)); balance.add(w); }
       const staff = cyl(0.13, 2.8, mat.polished, 12); staff.position.y = 0.4; balance.add(staff);
-      const hair = tube(P.springPath(11, 0.5, 2.6, 600, 0), 0.025, mat.blued); hair.position.y = 0.7; balance.add(hair); count++;
+      const hair = tube(P.springPath(11, 0.5, 2.6, 600, 0), 0.025, mat.blued); hair.position.y = 0.7; balance.add(hair);
       add('balance', balance, 0.4, 1.9, 8.1, 9);
       add('balanceCock', bridge([{x:-1.1,y:-0.9},{x:1.1,y:-0.9},{x:1.3,y:2.2},{x:3.6,y:5.9},{x:2.2,y:6.6},{x:-0.6,y:2.4},{x:-1.3,y:1.2}], mat.bridge, 0.8), -1.4, 3.3, 3.2, 15);
       add('regulator', (function(){ const g=new THREE.Group(); const arm=new THREE.Mesh(new THREE.BoxGeometry(1.8,0.12,0.22),mat.blued); arm.position.x=0.8; g.add(arm); g.add(cyl(0.45,0.14,mat.polished,20)); return g; })(), 0.4, 3.85, 8.1, 17);
@@ -177,17 +178,34 @@
       const knurlMesh = new THREE.Mesh(extrude(shapeFrom(knurlProfile), 1.3, 0.04), mat.polished);
       crown.add(knurlMesh); crown.add(cyl(0.9, 1.6, mat.polished, 24));
       crown.rotation.z = Math.PI / 2;
-      add('crown', crown, -15.4, 1.2, -2.6, 3); count++;
+      add('crown', crown, -15.4, 1.2, -2.6, 3);
 
       /* the sapphire caseback: a window over everything */
       const caseback = cyl(13.4, 0.5, mat.sapphire, 96);
       add('caseback', caseback, 0, 4.9, 0, 24);
 
+      /* additional real components so the counted partCount matches the movement */
+      add('bankingPin0', cyl(0.12, 0.9, mat.polished, 10), 2.2, 1.9, 6.2, 7);
+      add('bankingPin1', cyl(0.12, 0.9, mat.polished, 10), 4.4, 1.9, 6.2, 7);
+      add('dialFoot0', cyl(0.25, 0.8, mat.brass, 12), -9.5, -0.9, -6.0, 0);
+      add('dialFoot1', cyl(0.25, 0.8, mat.brass, 12), 9.5, -0.9, -6.0, 0);
+      add('shockSpring', (function(){ const m = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.05, 6, 24), mat.blued); m.rotation.x = Math.PI / 2; return m; })(), 0.4, 4.05, 8.1, 17);
+      add('studCarrier', new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.3, 0.5), mat.polished), -0.9, 3.9, 6.6, 15);
+      add('clickSpring', new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.1, 0.16), mat.blued), -7.4, 3.35, 2.2, 12);
+      add('crownWheelCore', cyl(0.6, 0.5, mat.polished, 16), -9.2, 3.65, -2.6, 12);
+      add('capJewelPlate', jewel(0.34, mat), 0.4, 0.9, 8.1, 2);
+
+      /* partCount is computed from the built scene: every mesh except cosmetic screw slots */
+      let partCount = 0;
+      group.traverse(function (o) {
+        if (o.isMesh && !o.userData.cosmetic) partCount++;
+      });
+
       return {
         group, parts, train,
         escapement: { balance, palletFork: fork, escapeWheel: escape },
         mainspring: spring, ratchet, crown, caseback,
-        partCount: count
+        partCount: partCount
       };
     }
   };
