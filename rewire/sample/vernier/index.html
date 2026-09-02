@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vernier — Calibre 01</title>
+<meta name="description" content="Calibre 01: a hand-finished manual movement, rendered live in your browser. Wind it, take it apart, watch the escapement run.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700&family=Fragment+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <a class="mark" href="#hero">Vernier</a>
+  <nav class="topnav" aria-label="Sections">
+    <a href="#wind">Wind</a>
+    <a href="#exploded">Parts</a>
+    <a href="#escapement">Escapement</a>
+    <a href="#materials">Materials</a>
+    <a href="#spec">Specification</a>
+  </nav>
+  <a class="btn btn--ink" href="#spec">Enquire</a>
+</header>
+
+<!-- The 3D stage. Fixed, full viewport, behind the content column. -->
+<div class="stage" aria-hidden="true">
+  <canvas id="stage"></canvas>
+  <img id="fallback" class="fallback" src="assets/vernier-fallback.jpg" alt="" hidden>
+  <div class="scrim"></div>
+</div>
+
+<main id="main">
+
+  <section class="sec sec--hero" id="hero" data-view="hero">
+    <div class="col">
+      <p class="pre">Manual calibre · 26 mm · 21 jewels</p>
+      <h1>Calibre<br>01.</h1>
+      <p class="lede">A hand-finished manual movement. One hundred and forty parts, built to be looked at, running live in your browser right now.</p>
+      <div class="ctas">
+        <a class="btn btn--blued" href="#wind">Wind it</a>
+        <a class="btn" href="#exploded">See every part</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="wind" data-view="wind">
+    <div class="col">
+      <h2>Wind it yourself.</h2>
+      <p>Drag the crown. The mainspring takes up the tension, the ratchet wheel turns, and the power reserve fills. Fifty-two hours from full.</p>
+      <div class="crownctl">
+        <div id="crown" class="crown" role="slider" tabindex="0"
+             aria-label="Wind the movement" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="crown__grip"></div>
+        </div>
+        <p class="hint">Drag sideways, or use the arrow keys.</p>
+      </div>
+      <dl class="read">
+        <div><dt>Power reserve</dt><dd><span id="reserveH">0</span> h</dd></div>
+        <div><dt>Mainspring tension</dt><dd><span id="tensionPct">0</span>%</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--tall" id="exploded" data-view="exploded">
+    <div class="col">
+      <h2>Every part, in its place.</h2>
+      <p>Keep scrolling and the movement comes apart along its true axes. Nothing here is decorative. Every piece is doing a job.</p>
+      <ul class="parts">
+        <li><b>Mainplate</b><span>26.0 mm · brass, rhodium plated</span></li>
+        <li><b>Barrel bridge</b><span>Holds the mainspring barrel and the winding train</span></li>
+        <li><b>Train bridge</b><span>Centre, third and fourth wheels</span></li>
+        <li><b>Balance cock</b><span>Carries the balance, the hairspring and the regulator</span></li>
+        <li><b>Jewels</b><span>21 synthetic rubies in polished settings</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec sec--tall" id="escapement" data-view="escapement">
+    <div class="col">
+      <h2>Four beats a second.</h2>
+      <p>The balance swings through 270 degrees, twenty-eight thousand eight hundred times an hour. This one is running in real time, against your clock.</p>
+      <dl class="read">
+        <div><dt>Frequency</dt><dd>4 Hz · 28,800 vph</dd></div>
+        <div><dt>Amplitude</dt><dd>270°</dd></div>
+        <div><dt>Beats since you arrived</dt><dd id="beats">0</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec sec--tall" id="materials" data-view="sapphire">
+    <div class="col">
+      <h2>Three materials, up close.</h2>
+      <div class="mat" data-view="sapphire">
+        <h3>Sapphire</h3>
+        <p>Refractive index 1.77, hardness 9. The caseback is a window, not a lid.</p>
+      </div>
+      <div class="mat" data-view="screw">
+        <h3>Blued steel</h3>
+        <p>Heated to 290 °C until the oxide layer turns. That colour is not paint.</p>
+      </div>
+      <div class="mat" data-view="striping">
+        <h3>Côtes de Genève</h3>
+        <p>Cut by hand across the bridges. Only ever seen through the back.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="tolerances" data-view="spec">
+    <div class="col col--wide">
+      <h2>Measured, not described.</h2>
+      <ul class="figs">
+        <li><b data-count="140">0</b><span>parts</span></li>
+        <li><b data-count="21">0</b><span>jewels</span></li>
+        <li><b data-count="52">0</b><span>hours reserve</span></li>
+        <li><b data-count="28800" data-sep="1">0</b><span>vibrations per hour</span></li>
+        <li><b>±2</b><span>seconds a day</span></li>
+        <li><b>3.6</b><span>mm thick</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="spec" data-view="spec">
+    <div class="col col--wide">
+      <h2>Specification.</h2>
+      <table class="spec">
+        <tr><th>Calibre</th><td>01, manual wind</td></tr>
+        <tr><th>Diameter</th><td>26.0 mm</td></tr>
+        <tr><th>Height</th><td>3.6 mm</td></tr>
+        <tr><th>Frequency</th><td>4 Hz, 28,800 vph</td></tr>
+        <tr><th>Power reserve</th><td>52 hours</td></tr>
+        <tr><th>Jewels</th><td>21</td></tr>
+        <tr><th>Balance</th><td>Free sprung, four-arm, adjustable mass</td></tr>
+        <tr><th>Finishing</th><td>Côtes de Genève, anglage, perlage, blued screws</td></tr>
+      </table>
+      <div class="enq">
+        <p>Calibre 01 is a demonstration. The people who built this page are not.</p>
+        <a class="btn btn--blued" href="/rewire/contact/">Talk to Rewire</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span>Demo model · De-identified · Built by Rewire</span>
+  <nav aria-label="Rewire">
+    <a href="/rewire/sample/">Demo models</a>
+    <a href="/rewire/landing/">Rewire</a>
+    <a href="/">neurotrocity.com</a>
+  </nav>
+</footer>
+
+<script src="js/vendor/three.min.js"></script>
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/vendor/lenis.min.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/tier.js"></script>
+<script src="js/materials.js"></script>
+<script src="js/geometry.js"></script>
+<script src="js/post.js"></script>
+<script src="js/movement.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
