@@ -103,7 +103,7 @@
     const exTop = topOf('#exploded'), esTop = topOf('#escapement');
     // explode over the first part of #exploded, hold for the rest of it, reassemble as the escapement camera dives in
     master.to(M.state, { explode: 1, duration: Math.max(0.0005, f(exTop + 0.2 * VH) - f(exTop - 0.4 * VH)) }, f(exTop - 0.4 * VH));
-    master.to(M.state, { explode: 0, duration: Math.max(0.0005, f(esTop - 0.4 * VH) - f(esTop - 1.0 * VH)) }, f(esTop - 1.0 * VH));
+    master.to(M.state, { explode: 0, duration: Math.max(0.0005, f(esTop - 0.3 * VH) - f(esTop - 0.7 * VH)) }, f(esTop - 0.7 * VH));
     ScrollTrigger.refresh();
   }
   if (!reduced) {
