@@ -63,9 +63,12 @@
         onEnter: () => { M.setView(name); focusFor(name); }, onLeaveBack: () => { M.setView(prev); focusFor(prev); } });
       return;
     }
-    gsap.to(M.cam, { px: v.p[0], py: v.p[1], pz: v.p[2], tx: v.t[0], ty: v.t[1], tz: v.t[2], ease: 'none',
-      scrollTrigger: { trigger: trig[name], start: 'top 90%', end: 'top 30%', scrub: 0.6,
-        onEnter: () => focusFor(name), onLeaveBack: () => focusFor(prev) } });
+    const pv = V.movement.VIEWS[prev];
+    gsap.fromTo(M.cam,
+      { px: pv.p[0], py: pv.p[1], pz: pv.p[2], tx: pv.t[0], ty: pv.t[1], tz: pv.t[2] },
+      { px: v.p[0],  py: v.p[1],  pz: v.p[2],  tx: v.t[0],  ty: v.t[1],  tz: v.t[2], ease: 'none', immediateRender: false,
+        scrollTrigger: { trigger: trig[name], start: 'top 90%', end: 'top 30%', scrub: 0.6,
+          onEnter: () => focusFor(name), onLeaveBack: () => focusFor(prev) } });
   });
   ScrollTrigger.create({ trigger: '#wind', start: 'top 85%',
     onEnter: () => { M.state.autoRotate = false; }, onLeaveBack: () => { M.state.autoRotate = !reduced; } });
