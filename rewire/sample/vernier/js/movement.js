@@ -20,6 +20,10 @@
   function roomScene() {
     const s = new THREE.Scene();
     s.add(new THREE.Mesh(new THREE.SphereGeometry(30, 32, 16), new THREE.MeshBasicMaterial({ color: 0xdedfe3, side: THREE.BackSide })));
+    /* a dark floor under the object: without it every metal reflects a
+       uniformly bright room and reads as flat white */
+    const floor = new THREE.Mesh(new THREE.CircleGeometry(40, 32), new THREE.MeshBasicMaterial({ color: 0x1c1e22 }));
+    floor.rotation.x = -Math.PI / 2; floor.position.y = -6; s.add(floor);
     function panel(w, h, x, y, z, ry, rx, color, k) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: color }));
       m.material.color.multiplyScalar(k); m.position.set(x, y, z); m.rotation.set(rx || 0, ry || 0, 0); s.add(m);
@@ -47,7 +51,7 @@
     } catch (e) { return null; }
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
+    renderer.toneMappingExposure = 0.8;
     renderer.physicallyCorrectLights = true;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -60,7 +64,7 @@
     scene.environment = pmrem.fromScene(roomScene(), 0.04).texture;
     pmrem.dispose();
 
-    const key = new THREE.DirectionalLight(0xffffff, 2.4);
+    const key = new THREE.DirectionalLight(0xffffff, 2.0);
     key.position.set(12, 26, 14); key.castShadow = true;
     key.shadow.camera.left = key.shadow.camera.bottom = -20;
     key.shadow.camera.right = key.shadow.camera.top = 20;
