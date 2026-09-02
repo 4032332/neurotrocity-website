@@ -158,10 +158,20 @@ measurement was taken during page load contention.
 | GSAP + ScrollTrigger + Lenis | ~120KB |
 | Fonts (2 families, Google Fonts, woff2) | ~100KB |
 | Geometry, textures | 0 — generated at runtime |
-| Fallback image | ~80KB |
+| Fallback image | ~160KB |
 | **Total** | **< 1MB** |
 
 Staying under 1MB is a deliberate competitive claim, not just hygiene.
+
+## 11. Deviations recorded at review
+
+- Leader-line annotations in the exploded view were not built — the section uses
+  a static parts list instead. Deferred to a follow-up.
+- Parts explode along +Y (a layered lift) rather than each part's own axis.
+- The fallback image carries `alt=""` inside an `aria-hidden` stage, because
+  every word of content already lives in the DOM. §7's "alt text on the
+  fallback image" is satisfied by that emptiness being deliberate, not an
+  oversight.
 
 ## 9. Out of scope
 

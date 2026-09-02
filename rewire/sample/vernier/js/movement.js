@@ -7,7 +7,7 @@
   const T = V.tier;
 
   const VIEWS = {
-    hero:       { p: [ 7,   19,   30  ], t: [ 0,   1.2,  0   ] },
+    hero:       { p: [ 8,   21,   34  ], t: [ 0,   1.2,  0   ] },
     wind:       { p: [-16,  13,   9   ], t: [-7,   1.6,  0   ] },
     exploded:   { p: [ 3,   30,   36  ], t: [ 0,   9,    0   ] },
     escapement: { p: [ 7.5, 7.5,  13.5], t: [ 3.6, 2.2,  7.2 ] },
@@ -88,15 +88,16 @@
     const cam = { px: VIEWS.hero.p[0], py: VIEWS.hero.p[1], pz: VIEWS.hero.p[2], tx: VIEWS.hero.t[0], ty: VIEWS.hero.t[1], tz: VIEWS.hero.t[2] };
     const state = { explode: 0, spin: 0, autoRotate: !reduced, running: !reduced, wind: 0 };
     let post = null, tier = 'medium', beats = 0, sampling = null;
+    let lastW = 0, lastH = 0;
     const t0 = performance.now();
 
     function setTier(name) {
       tier = name; const s = T.TIERS[name];
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, s.pixelRatio));
       renderer.shadowMap.enabled = s.shadowMap > 0; key.castShadow = s.shadowMap > 0;
+      if (key.shadow.map) { key.shadow.map.dispose(); key.shadow.map = null; }
       if (s.shadowMap > 0) {
         key.shadow.mapSize.set(s.shadowMap, s.shadowMap);
-        if (key.shadow.map) { key.shadow.map.dispose(); key.shadow.map = null; }
       }
       renderer.shadowMap.type = s.softShadows ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
       M.caseback.material = s.transmission ? matsHi.sapphire : matsLo.sapphire;
@@ -105,13 +106,15 @@
     }
     function resize() {
       const r = canvas.getBoundingClientRect(); if (!r.width || !r.height) return;
+      if (r.width === lastW && r.height === lastH) return; lastW = r.width; lastH = r.height;
       const portrait = r.height > r.width;           // phones: object higher, text sits below it
       renderer.setSize(r.width, r.height, false);
       camera.aspect = r.width / r.height;
       camera.fov = portrait ? 56 : 30;               // vertical FOV; portrait needs more of it to keep the plate in frame
+      const W = Math.round(r.width), H = Math.round(r.height);
+      camera.setViewOffset(W, H, portrait ? 0 : -Math.round(W * 0.06), portrait ? Math.round(H * 0.10) : 0, W, H);
       camera.updateProjectionMatrix();
       if (post) post.resize(renderer.domElement.width, renderer.domElement.height);
-      M.group.position.set(portrait ? 0 : 3, portrait ? 5 : 0, 0);
     }
     function setView(name) {
       const v = VIEWS[name]; if (!v) return;
@@ -148,7 +151,10 @@
       }
     }
     function sampleFrameTimes(n) {
-      return new Promise(function (resolve) { sampling = { n: n, arr: [], skip: 5, last: performance.now(), resolve: resolve }; });
+      return new Promise(function (resolve) {
+        sampling = { n: n, arr: [], skip: 5, last: performance.now(), resolve: resolve };
+        setTimeout(function () { if (sampling && sampling.resolve === resolve) { sampling = null; resolve([]); } }, 4000);
+      });
     }
     function attachPost(p) { post = p; post.setEnabled(T.TIERS[tier].post); resize(); }
     function captureFrame(w, h) {
@@ -157,8 +163,8 @@
       camera.aspect = w / h; camera.updateProjectionMatrix();
       if (post) post.resize(w, h);
       tick(performance.now());
-      const url = canvas.toDataURL('image/jpeg', 0.92);
-      renderer.setPixelRatio(pr); renderer.setSize(prev.x, prev.y, false); resize();
+      const url = canvas.toDataURL('image/jpeg', 0.85);
+      renderer.setPixelRatio(pr); renderer.setSize(prev.x, prev.y, false); lastW = lastH = 0; resize();
       return url;
     }
 

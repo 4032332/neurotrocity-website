@@ -48,6 +48,7 @@
       uDofOn: { value: 0 }, uNear: { value: camera.near }, uFar: { value: camera.far }, uFocus: { value: 24 }, uRange: { value: 14 }
     });
     let rtScene, rtHalf, rtA, rtB, rtD, rtD2;
+    let curW = 0, curH = 0;
     const flags = { bloom: false, vignette: false, dof: false };
     const api = { enabled: false, flags: flags, resize: resize, render: render, setEnabled: setEnabled, setFocus: setFocus };
 
@@ -55,7 +56,7 @@
       return new THREE.WebGLRenderTarget(Math.max(2, w), Math.max(2, h), { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: true, stencilBuffer: false });
     }
     function resize(W, H) {
-      const w = W | 0, h = H | 0;
+      const w = W | 0, h = H | 0; if (w === curW && h === curH) return; curW = w; curH = h;
       [rtScene, rtHalf, rtA, rtB, rtD, rtD2].forEach(function (r) { if (r) r.dispose(); });
       rtScene = make(w, h); rtScene.texture.encoding = THREE.sRGBEncoding;
       if (isGL2) { rtScene.depthTexture = new THREE.DepthTexture(w, h); rtScene.depthTexture.type = THREE.UnsignedIntType; }

@@ -90,9 +90,12 @@
 
       /* mainspring: rebuilt on demand so winding is visible */
       let springMesh = null;
+      let lastTension = -1;
       const spring = { rebuild: function (tension) {
+        if (springMesh && Math.abs(tension - lastTension) < 0.02) return;
+        lastTension = tension;
         if (springMesh) { barrel.remove(springMesh); springMesh.geometry.dispose(); }
-        springMesh = tube(P.springPath(9, 1.05, 4.9, 700, tension), 0.085, mat.spring);
+        springMesh = tube(P.springPath(9, 1.05, 4.9, 360, tension), 0.085, mat.spring);
         springMesh.position.y = 0.1; springMesh.castShadow = true; springMesh.receiveShadow = true; barrel.add(springMesh);
       } };
       spring.rebuild(0);
@@ -183,6 +186,7 @@
       /* the sapphire caseback: a window over everything */
       const caseback = cyl(13.4, 0.5, mat.sapphire, 96);
       add('caseback', caseback, 0, 4.9, 0, 24);
+      caseback.castShadow = false; caseback.receiveShadow = false;   // glass: shadow casting ignores transmission and would shade the whole movement
 
       /* additional real components so the counted partCount matches the movement */
       add('bankingPin0', cyl(0.12, 0.9, mat.polished, 10), 2.2, 1.9, 6.2, 7);

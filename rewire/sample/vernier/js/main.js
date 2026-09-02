@@ -34,7 +34,11 @@
   }
   const post = V.post.create(M.renderer, M.scene, M.camera);
   M.attachPost(post);
-  gsap.ticker.add(() => M.tick(performance.now()));
+  const tickFn = () => M.tick(performance.now()); gsap.ticker.add(tickFn);
+  canvas.addEventListener('webglcontextlost', e => {          // backgrounded mobile tabs lose the context routinely
+    e.preventDefault(); gsap.ticker.remove(tickFn);
+    document.body.classList.add('no-webgl'); $('#fallback').hidden = false;
+  });
 
   /* adaptive tier: measure once, re-check once, only ever step down */
   M.sampleFrameTimes(60).then(ft => M.setTier(T.chooseTier(ft)));
@@ -57,31 +61,55 @@
   M.setView('hero'); focusFor('hero');
   order.forEach((name, i) => {
     if (i === 0) return;
-    const v = V.movement.VIEWS[name], prev = order[i - 1];
+    const prev = order[i - 1];
+    ScrollTrigger.create({ trigger: trig[name], start: 'top 90%',
+      onEnter: () => focusFor(name), onLeaveBack: () => focusFor(prev) });
     if (reduced) {
       ScrollTrigger.create({ trigger: trig[name], start: 'top 60%',
-        onEnter: () => { M.setView(name); focusFor(name); }, onLeaveBack: () => { M.setView(prev); focusFor(prev); } });
-      return;
+        onEnter: () => { M.setView(name); }, onLeaveBack: () => { M.setView(prev); } });
     }
-    const pv = V.movement.VIEWS[prev];
-    gsap.fromTo(M.cam,
-      { px: pv.p[0], py: pv.p[1], pz: pv.p[2], tx: pv.t[0], ty: pv.t[1], tz: pv.t[2] },
-      { px: v.p[0],  py: v.p[1],  pz: v.p[2],  tx: v.t[0],  ty: v.t[1],  tz: v.t[2], ease: 'none', immediateRender: false,
-        scrollTrigger: { trigger: trig[name], start: 'top 90%', end: 'top 30%', scrub: 0.6,
-          onEnter: () => focusFor(name), onLeaveBack: () => focusFor(prev) } });
   });
-  ScrollTrigger.create({ trigger: '#wind', start: 'top 85%',
-    onEnter: () => { M.state.autoRotate = false; }, onLeaveBack: () => { M.state.autoRotate = !reduced; } });
 
   /* ── exploded view ─────────────────────────────────── */
   if (reduced) {
-    ScrollTrigger.create({ trigger: '#exploded', start: 'top 50%', end: 'bottom 60%',
-      onEnter: () => M.explode(1), onEnterBack: () => M.explode(1), onLeave: () => M.explode(0), onLeaveBack: () => M.explode(0) });
-  } else {
-    gsap.timeline({ scrollTrigger: { trigger: '#exploded', start: 'top 40%', end: 'bottom 100%', scrub: 0.8 } })
-      .to(M.state, { explode: 1, ease: 'none', duration: 1.2 })
-      .to(M.state, { explode: 1, ease: 'none', duration: 0.5 })     // hold fully exploded
-      .to(M.state, { explode: 0, ease: 'none', duration: 1.0 });
+    ScrollTrigger.create({ trigger: '#exploded', start: 'top 50%', onEnter: () => M.explode(1), onLeaveBack: () => M.explode(0) });
+    ScrollTrigger.create({ trigger: '#escapement', start: 'top 50%', onEnter: () => M.explode(0), onLeaveBack: () => M.explode(1) });
+  }
+
+  ScrollTrigger.create({ trigger: '#wind', start: 'top 85%',
+    onEnter: () => { M.state.autoRotate = false;             // settle on a whole turn so every later view is framed as authored
+      if (!reduced) gsap.to(M.state, { spin: Math.round(M.state.spin / (Math.PI * 2)) * Math.PI * 2, duration: 0.8, ease: 'power2.out' }); else M.state.spin = 0; },
+    onLeaveBack: () => { M.state.autoRotate = !reduced; } });
+
+  /* One master timeline. Camera and explode are pure functions of scroll
+     position, so a reload or resize mid-page always lands on the right frame —
+     independent per-section tweens on a shared object did not survive
+     ScrollTrigger.refresh(). Positions are fractions of the total scroll. */
+  let master = null;
+  function topOf(sel) { return $(sel).getBoundingClientRect().top + window.scrollY; }
+  function buildMaster() {
+    if (master) { if (master.scrollTrigger) master.scrollTrigger.kill(); master.kill(); }
+    const VH = innerHeight, total = Math.max(1, document.documentElement.scrollHeight - VH);
+    const f = y => Math.max(0, Math.min(1, y / total));
+    master = gsap.timeline({ defaults: { ease: 'none' },
+      scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+    master.to({}, { duration: 1 }, 0);                      // span the whole range so positions are fractions of 1
+    order.forEach((name, i) => {                            // camera: each view begins when its section top hits 90%, ends at 30%
+      if (i === 0) return;
+      const v = V.movement.VIEWS[name], top = topOf(trig[name]);
+      const a = f(top - 0.9 * VH), b = f(top - 0.3 * VH);
+      master.to(M.cam, { px: v.p[0], py: v.p[1], pz: v.p[2], tx: v.t[0], ty: v.t[1], tz: v.t[2], duration: Math.max(0.0005, b - a) }, a);
+    });
+    const exTop = topOf('#exploded'), esTop = topOf('#escapement');
+    // explode over the first part of #exploded, hold for the rest of it, reassemble as the escapement camera dives in
+    master.to(M.state, { explode: 1, duration: Math.max(0.0005, f(exTop + 0.2 * VH) - f(exTop - 0.4 * VH)) }, f(exTop - 0.4 * VH));
+    master.to(M.state, { explode: 0, duration: Math.max(0.0005, f(esTop - 0.4 * VH) - f(esTop - 1.0 * VH)) }, f(esTop - 1.0 * VH));
+    ScrollTrigger.refresh();
+  }
+  if (!reduced) {
+    buildMaster();
+    let rt = null;
+    addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(buildMaster, 250); });
   }
 
   /* ── crown: drag or arrow keys ─────────────────────── */
@@ -91,21 +119,28 @@
     windV = Math.max(0, Math.min(1, v)); M.wind(windV);
     grip.style.transform = 'translateX(' + (windV * (crown.clientWidth - grip.clientWidth - 12)) + 'px)';
     crown.setAttribute('aria-valuenow', Math.round(windV * 100));
+    crown.setAttribute('aria-valuetext', Math.round(windV * 100) + ' percent wound, ' + Math.round(52 * windV) + ' hours reserve');
     reserveH.textContent = Math.round(52 * windV); tensionPct.textContent = Math.round(100 * windV);
   }
   crown.addEventListener('pointerdown', e => { dragX = e.clientX; crown.setPointerCapture(e.pointerId); });
   crown.addEventListener('pointermove', e => { if (dragX === null) return; setWind(windV + (e.clientX - dragX) / 520); dragX = e.clientX; });
   crown.addEventListener('pointerup', () => { dragX = null; });
   crown.addEventListener('pointercancel', () => { dragX = null; });
+  crown.addEventListener('lostpointercapture', () => { dragX = null; });
   crown.addEventListener('keydown', e => {
     if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { setWind(windV + 0.04); e.preventDefault(); }
     if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { setWind(windV - 0.04); e.preventDefault(); }
+    if (e.key === 'Home') { setWind(0); e.preventDefault(); }
+    if (e.key === 'End') { setWind(1); e.preventDefault(); }
+    if (e.key === 'PageUp') { setWind(windV + 0.2); e.preventDefault(); }
+    if (e.key === 'PageDown') { setWind(windV - 0.2); e.preventDefault(); }
   });
   setWind(0);
 
   /* ── readouts ──────────────────────────────────────── */
   const beats = $('#beats');
-  setInterval(() => { beats.textContent = M.beats.toLocaleString(); }, 250);
+  if (!reduced) setInterval(() => { beats.textContent = M.beats.toLocaleString(); }, 250);
+  const partsEl = $('[data-count="140"]'); if (partsEl) partsEl.dataset.count = String(M.movement.partCount);
   $$('[data-count]').forEach(el => {
     const target = +el.dataset.count, sep = el.dataset.sep === '1';
     if (reduced) { el.textContent = fmtCount(target, sep); return; }

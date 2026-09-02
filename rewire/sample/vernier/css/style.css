@@ -66,6 +66,7 @@ img{ display:block; max-width:100%; }
 /* ── sections ──────────────────────────────────────── */
 main{ position:relative; z-index:var(--z-main); }
 .sec{ min-height:100vh; display:flex; align-items:center; padding:120px var(--pad); }
+/* #exploded height sets where the explode/reassemble beats land; main.js buildMaster() positions them from this section's top and #escapement's top. Change one, re-check the other. */
 .sec--tall{ min-height:180vh; align-items:flex-start; padding-top:22vh; }
 .sec--hero{ min-height:100vh; }
 .col{ max-width:var(--col); }
