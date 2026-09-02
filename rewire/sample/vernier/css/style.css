@@ -106,7 +106,7 @@ h3{ font-size:1.25rem; font-weight:700; letter-spacing:-.01em; margin-bottom:6px
 .parts span{ font-family:var(--mono); font-size:.72rem; color:var(--muted); }
 
 /* materials */
-.mat{ padding:22px 0; border-top:1px solid var(--line); }
+.mat{ padding:22px 0; min-height:40vh; border-top:1px solid var(--line); }
 .mat:first-of-type{ margin-top:14px; }
 
 /* figures */

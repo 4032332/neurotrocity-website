@@ -102,6 +102,7 @@
       renderer.shadowMap.type = s.softShadows ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
       M.caseback.material = s.transmission ? matsHi.sapphire : matsLo.sapphire;
       if (post) post.setEnabled(s.post);
+      lastW = lastH = 0;
       resize();
     }
     function resize() {
@@ -160,7 +161,7 @@
     function captureFrame(w, h) {
       const prev = new THREE.Vector2(); renderer.getSize(prev); const pr = renderer.getPixelRatio();
       renderer.setPixelRatio(1); renderer.setSize(w, h, false);
-      camera.aspect = w / h; camera.updateProjectionMatrix();
+      camera.aspect = w / h; camera.clearViewOffset(); camera.updateProjectionMatrix();
       if (post) post.resize(w, h);
       tick(performance.now());
       const url = canvas.toDataURL('image/jpeg', 0.85);

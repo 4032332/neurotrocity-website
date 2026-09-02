@@ -35,15 +35,20 @@
   const post = V.post.create(M.renderer, M.scene, M.camera);
   M.attachPost(post);
   const tickFn = () => M.tick(performance.now()); gsap.ticker.add(tickFn);
+  let lost = false;
   canvas.addEventListener('webglcontextlost', e => {          // backgrounded mobile tabs lose the context routinely
-    e.preventDefault(); gsap.ticker.remove(tickFn);
+    e.preventDefault(); lost = true; gsap.ticker.remove(tickFn);
     document.body.classList.add('no-webgl'); $('#fallback').hidden = false;
+  });
+  canvas.addEventListener('webglcontextrestored', () => {
+    lost = false; gsap.ticker.add(tickFn);
+    document.body.classList.remove('no-webgl'); $('#fallback').hidden = true;
   });
 
   /* adaptive tier: measure once, re-check once, only ever step down */
-  M.sampleFrameTimes(60).then(ft => M.setTier(T.chooseTier(ft)));
+  M.sampleFrameTimes(60).then(ft => { if (lost) return; M.setTier(T.chooseTier(ft)); });
   ScrollTrigger.create({ trigger: '#exploded', start: 'top 80%', once: true, onEnter: () => {
-    M.sampleFrameTimes(60).then(ft => { if (T.rank(T.chooseTier(ft)) < T.rank(M.tier)) M.setTier(T.stepDown(M.tier)); });
+    M.sampleFrameTimes(60).then(ft => { if (lost) return; if (T.rank(T.chooseTier(ft)) < T.rank(M.tier)) M.setTier(T.stepDown(M.tier)); });
   } });
 
   /* ── camera story ──────────────────────────────────── */
@@ -76,10 +81,11 @@
     ScrollTrigger.create({ trigger: '#escapement', start: 'top 50%', onEnter: () => M.explode(0), onLeaveBack: () => M.explode(1) });
   }
 
+  let spinTween = null;
   ScrollTrigger.create({ trigger: '#wind', start: 'top 85%',
     onEnter: () => { M.state.autoRotate = false;             // settle on a whole turn so every later view is framed as authored
-      if (!reduced) gsap.to(M.state, { spin: Math.round(M.state.spin / (Math.PI * 2)) * Math.PI * 2, duration: 0.8, ease: 'power2.out' }); else M.state.spin = 0; },
-    onLeaveBack: () => { M.state.autoRotate = !reduced; } });
+      if (!reduced) spinTween = gsap.to(M.state, { spin: Math.round(M.state.spin / (Math.PI * 2)) * Math.PI * 2, duration: 0.8, ease: 'power2.out' }); else M.state.spin = 0; },
+    onLeaveBack: () => { if (spinTween) { spinTween.kill(); spinTween = null; } M.state.autoRotate = !reduced; } });
 
   /* One master timeline. Camera and explode are pure functions of scroll
      position, so a reload or resize mid-page always lands on the right frame —
@@ -94,10 +100,14 @@
     master = gsap.timeline({ defaults: { ease: 'none' },
       scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
     master.to({}, { duration: 1 }, 0);                      // span the whole range so positions are fractions of 1
-    order.forEach((name, i) => {                            // camera: each view begins when its section top hits 90%, ends at 30%
+    const tops = order.map(n => (n === 'hero' ? 0 : topOf(trig[n])));
+    order.forEach((name, i) => {                            // each view begins when its trigger hits 90%; ends at 30%, or where the next one begins
       if (i === 0) return;
-      const v = V.movement.VIEWS[name], top = topOf(trig[name]);
-      const a = f(top - 0.9 * VH), b = f(top - 0.3 * VH);
+      const v = V.movement.VIEWS[name];
+      const startY = tops[i] - 0.9 * VH;
+      const nextStartY = i + 1 < order.length ? tops[i + 1] - 0.9 * VH : Infinity;
+      const endY = Math.min(tops[i] - 0.3 * VH, nextStartY - 1);
+      const a = f(startY), b = f(Math.max(startY + 1, endY));
       master.to(M.cam, { px: v.p[0], py: v.p[1], pz: v.p[2], tx: v.t[0], ty: v.t[1], tz: v.t[2], duration: Math.max(0.0005, b - a) }, a);
     });
     const exTop = topOf('#exploded'), esTop = topOf('#escapement');
@@ -110,6 +120,8 @@
     buildMaster();
     let rt = null;
     addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(buildMaster, 250); });
+    addEventListener('load', buildMaster);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildMaster);
   }
 
   /* ── crown: drag or arrow keys ─────────────────────── */
