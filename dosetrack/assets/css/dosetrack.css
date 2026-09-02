@@ -428,3 +428,127 @@
   font-weight: 600;
   color: var(--dt-ink-soft);
 }
+
+/* ============================================================
+   v1.1.1 LAUNCH LAYER — app is live; page now shows the product.
+   The base shell is a 480px mobile-first column, which looks like a
+   stretched phone page on a desktop monitor. These sections opt into a
+   wider shell while the hero stays intimate.
+   ============================================================ */
+
+.dt-wide{max-width:1060px;margin:0 auto;padding:0 20px}
+.dt-narrow{max-width:620px;margin:0 auto;padding:0 20px}
+
+/* ---- Scroll reveal (JS-gated: .dt-reveal is only added by script, so a
+   JS failure can never leave a section invisible) ---- */
+.dt-reveal .r{opacity:0;transform:translateY(16px);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+.dt-reveal .r.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.dt-reveal .r{opacity:1;transform:none}}
+
+/* ---- iPhone frame (these are raw device screenshots, so they need one) ---- */
+.dt-phone{position:relative;width:100%;max-width:250px;margin:0 auto;aspect-ratio:1287/2796;
+  background:#11142b;border-radius:14% / 6.5%;padding:2.5%;
+  box-shadow:0 0 0 1px rgba(0,0,0,.10), var(--dt-shadow)}
+.dt-phone img{width:100%;height:auto;display:block;border-radius:11.5% / 5.5%;background:var(--dt-paper)}
+.dt-phone::after{content:"";position:absolute;top:3.4%;left:50%;transform:translateX(-50%);
+  width:30%;height:3.2%;background:#11142b;border-radius:999px}
+
+/* ---- Alternating showcase ---- */
+.dt-show{display:grid;gap:26px;align-items:center;padding:34px 0}
+@media(min-width:840px){
+  .dt-show{grid-template-columns:1fr 1fr;gap:56px;padding:48px 0}
+  .dt-show.flip .dt-show-copy{order:2}
+}
+.dt-show-tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dt-blue-2);margin-bottom:10px}
+.dt-show-copy h3{font-size:clamp(21px,3.2vw,27px);line-height:1.2;margin:0 0 10px;color:var(--dt-ink);
+  letter-spacing:-.02em}
+.dt-show-copy p{color:var(--dt-ink-soft);font-size:16px;line-height:1.6;margin:0}
+.dt-list{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.dt-list li{position:relative;padding-left:26px;color:var(--dt-ink-soft);font-size:15px}
+.dt-list li::before{content:"";position:absolute;left:0;top:.34em;width:16px;height:16px;border-radius:50%;
+  background:var(--dt-green)}
+.dt-list li::after{content:"";position:absolute;left:4.5px;top:.62em;width:7px;height:4px;
+  border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+
+/* ---- Section headings ---- */
+.dt-sec{padding:38px 0}
+.dt-sec-h{font-size:clamp(23px,4vw,31px);line-height:1.18;letter-spacing:-.02em;margin:0 0 10px;
+  color:var(--dt-ink);text-wrap:balance}
+.dt-sec-p{color:var(--dt-ink-soft);font-size:16px;line-height:1.6;margin:0}
+.dt-center{text-align:center}
+.dt-center .dt-sec-p{max-width:52ch;margin-inline:auto}
+
+/* ---- Pricing ---- */
+.dt-price{display:grid;gap:16px;margin-top:26px}
+@media(min-width:720px){.dt-price{grid-template-columns:1fr 1fr}}
+.dt-plan{background:var(--dt-card);border:1px solid var(--dt-line);border-radius:22px;padding:24px;
+  box-shadow:var(--dt-shadow)}
+.dt-plan.plus{border-color:var(--dt-blue-1);border-width:2px}
+.dt-plan .nm{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--dt-ink-soft)}
+.dt-plan.plus .nm{color:var(--dt-blue-2)}
+.dt-plan .pr{font-size:30px;font-weight:800;color:var(--dt-ink);margin:6px 0 2px;letter-spacing:-.02em}
+.dt-plan .pn{font-size:14px;color:var(--dt-ink-soft)}
+.dt-plan ul{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.dt-plan li{position:relative;padding-left:26px;color:var(--dt-ink-soft);font-size:15px}
+.dt-plan li::before{content:"";position:absolute;left:0;top:.34em;width:16px;height:16px;border-radius:50%;
+  background:var(--dt-green)}
+.dt-plan li::after{content:"";position:absolute;left:4.5px;top:.62em;width:7px;height:4px;
+  border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+.dt-trial{display:inline-block;margin-top:14px;background:var(--dt-blue-2);color:#fff;font-weight:800;
+  font-size:12.5px;letter-spacing:.04em;padding:7px 13px;border-radius:999px}
+
+/* ---- FAQ ---- */
+.dt-faq{margin-top:22px;border-top:1px solid var(--dt-line)}
+.dt-faq details{border-bottom:1px solid var(--dt-line)}
+.dt-faq summary{list-style:none;cursor:pointer;padding:17px 34px 17px 0;position:relative;
+  font-weight:700;font-size:16px;color:var(--dt-ink)}
+.dt-faq summary::-webkit-details-marker{display:none}
+.dt-faq summary::after{content:"+";position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  font-size:21px;font-weight:700;color:var(--dt-blue-2)}
+.dt-faq details[open] summary::after{content:"–"}
+.dt-faq summary:hover{color:var(--dt-blue-2)}
+.dt-faq .ans{padding:0 0 17px;color:var(--dt-ink-soft);font-size:15px;line-height:1.65;max-width:62ch}
+.dt-faq .ans a{color:var(--dt-blue-2)}
+
+/* ---- Sticky install bar ---- */
+.dt-sticky{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--dt-paper) 93%,transparent);backdrop-filter:blur(14px);
+  border-top:1px solid var(--dt-line)}
+.dt-sticky .in{display:flex;align-items:center;gap:12px;max-width:520px;margin:0 auto}
+.dt-sticky .lbl{flex:1;min-width:0}
+.dt-sticky .lbl .a{font-weight:800;font-size:14.5px;color:var(--dt-ink);line-height:1.2}
+.dt-sticky .lbl .b{font-size:12px;color:var(--dt-ink-soft);margin-top:1px}
+.dt-sticky .dt-store-badge{margin:0;min-width:0}
+@media(max-width:840px){.dt-sticky{display:block}.dt-page{padding-bottom:120px}}
+
+/* ---- Medical disclaimer strip ---- */
+.dt-medical{background:var(--dt-warn-bg);border:1px solid var(--dt-warn-border);color:var(--dt-warn-text);
+  border-radius:16px;padding:16px 18px;font-size:14.5px;line-height:1.6;margin-top:26px}
+.dt-medical strong{color:var(--dt-warn-text)}
+.dt-medical a{color:inherit;font-weight:700}
+
+/* ---- Secondary CTA row ---- */
+.dt-cta-row{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:26px}
+.dt-meta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;font-size:13px;color:var(--dt-ink-soft)}
+.dt-meta span{display:inline-flex;align-items:center;gap:6px}
+.dt-meta span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--dt-green)}
+
+/* ---- Full-bleed hero on wider screens ----
+   The base shell is a 480px column, which left the blue hero as a narrow
+   strip on desktop. Break it out to the viewport while keeping its contents
+   centred at reading width. overflow-x is clamped because the 50vw trick
+   otherwise overshoots by the scrollbar width. */
+.dt{overflow-x:hidden}
+@media(min-width:520px){
+  .dt-page > .dt-hero{
+    margin-left:calc(-50vw + 50%);
+    margin-right:calc(-50vw + 50%);
+    padding-left:24px;padding-right:24px;
+    border-radius:0 0 40px 40px;
+  }
+  .dt-page > .dt-hero > *:not(.dt-confetti){max-width:560px;margin-inline:auto}
+  .dt-page > .dt-hero h1{font-size:clamp(38px,5.4vw,58px)}
+}
