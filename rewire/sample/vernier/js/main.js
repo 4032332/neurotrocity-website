@@ -75,7 +75,7 @@
     ScrollTrigger.create({ trigger: '#exploded', start: 'top 50%', end: 'bottom 60%',
       onEnter: () => M.explode(1), onEnterBack: () => M.explode(1), onLeave: () => M.explode(0), onLeaveBack: () => M.explode(0) });
   } else {
-    gsap.timeline({ scrollTrigger: { trigger: '#exploded', start: 'top 40%', end: 'bottom 70%', scrub: 0.8 } })
+    gsap.timeline({ scrollTrigger: { trigger: '#exploded', start: 'top 40%', end: 'bottom 100%', scrub: 0.8 } })
       .to(M.state, { explode: 1, ease: 'none', duration: 1.2 })
       .to(M.state, { explode: 1, ease: 'none', duration: 0.5 })     // hold fully exploded
       .to(M.state, { explode: 0, ease: 'none', duration: 1.0 });
