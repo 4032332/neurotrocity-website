@@ -1,0 +1,35 @@
+---
+interface Props { accent?: 'volt' | 'jade' }
+const { accent = 'volt' } = Astro.props;
+---
+<canvas id="field" aria-hidden="true" data-accent={accent}></canvas>
+<script>
+  import { mountCortex } from '../motion/cortex';
+  import { detectTier } from '../motion/tier';
+  import type { Accent } from '../motion/cortex/palette';
+
+  const canvas = document.getElementById('field') as HTMLCanvasElement;
+  // Probe capability on a scratch canvas: a context created on #field here
+  // would pin its attributes, and three.js's preserveDrawingBuffer would be
+  // silently ignored.
+  const gl = document.createElement('canvas').getContext('webgl2');
+  const tier = detectTier({
+    hasWebgl2: !!gl,
+    deviceMemory: (navigator as any).deviceMemory,
+    hardwareConcurrency: navigator.hardwareConcurrency,
+    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+    maxTextureSize: gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 0,
+  });
+  gl?.getExtension('WEBGL_lose_context')?.loseContext();
+  if (tier === 'none') canvas.classList.add('static-fallback');
+  else mountCortex(canvas, { tier, accent: canvas.dataset.accent as Accent });
+</script>
+<style>
+  #field {
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    z-index: 0; display: block; pointer-events: none;
+  }
+  #field.static-fallback {
+    background: radial-gradient(72% 88% at 66% 30%, #1C1740, #07060E 72%);
+  }
+</style>

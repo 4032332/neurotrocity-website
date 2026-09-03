@@ -26,6 +26,9 @@ body > header{ position:relative; z-index:10 }
 main{ display:block }
 footer{ display:block }
 
+/* With the cortex field (z 0) and spine (z 1) fixed behind, content sits above. */
+body.layered > main, body.layered > footer{ position:relative; z-index:2 }
+
 /* Skip link */
 .skip{
   position:absolute; left:-9999px; top:0; z-index:100;

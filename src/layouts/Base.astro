@@ -1,14 +1,21 @@
 ---
 import '../styles/tokens.css';
 import '../styles/base.css';
+import CortexField from '../components/CortexField.astro';
+import Spine from '../components/Spine.astro';
 
 interface Props {
   title: string;
   description: string;
   accent?: 'volt' | 'jade';
+  /** Persistent fullscreen WebGL cortex behind the whole document. */
+  field?: boolean;
+  /** Dendrite spine navigation in the left gutter. */
+  spine?: boolean;
 }
 
-const { title, description, accent = 'volt' } = Astro.props;
+const { title, description, accent = 'volt', field = false, spine = false } = Astro.props;
+const layered = field || spine;
 ---
 
 <!doctype html>
@@ -75,7 +82,9 @@ const { title, description, accent = 'volt' } = Astro.props;
   </style>
   <slot name="head" />
 </head>
-<body>
+<body class:list={[{ layered }]}>
+  {field && <CortexField accent={accent} />}
+  {spine && <Spine />}
   <a class="skip" href="#main">Skip to content</a>
   <header>
     <slot name="nav" />
