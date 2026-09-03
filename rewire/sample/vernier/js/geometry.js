@@ -14,14 +14,14 @@
   /* Extrude along Z then stand it up so thickness runs along Y, centred. */
   function extrude(shape, depth, bevel) {
     const g = new THREE.ExtrudeGeometry(shape, {
-      depth: depth, bevelEnabled: bevel > 0, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 2, curveSegments: 6
+      depth: depth, bevelEnabled: bevel > 0, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 4, curveSegments: 16
     });
     g.rotateX(-Math.PI / 2); g.translate(0, -depth / 2, 0);
     return g;
   }
   function gear(teeth, module, thick, mat, opts) {
     opts = opts || {};
-    const shape = shapeFrom(P.gearProfile(teeth, module, { samplesPerTooth: opts.samples || 10 }));
+    const shape = shapeFrom(P.gearProfile(teeth, module, { samplesPerTooth: opts.samples || 16 }));
     const root = P.gearRadii(teeth, module).root;
     const hub = opts.hub || Math.max(0.35, root * 0.22);
     if (opts.spokes) {                       // drilled openings read as spokes
@@ -34,16 +34,16 @@
     }
     return new THREE.Mesh(extrude(shape, thick, Math.min(0.03, thick * 0.2)), mat);
   }
-  function cyl(r, h, mat, seg) { return new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 32), mat); }
+  function cyl(r, h, mat, seg) { return new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg || 64), mat); }
   function tube(pts, radius, mat) {
     const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p.x, 0, p.y)));
-    return new THREE.Mesh(new THREE.TubeGeometry(curve, Math.min(600, pts.length), radius, 6, false), mat);
+    return new THREE.Mesh(new THREE.TubeGeometry(curve, Math.min(600, pts.length), radius, 10, false), mat);
   }
   let slotSeq = 0;
   function screw(headR, headH, shankR, len, headMat, slotMat) {
     const g = new THREE.Group();
     const pts = P.screwProfile(headR, headH, shankR, len).map(p => new THREE.Vector2(p.r, p.y));
-    g.add(new THREE.Mesh(new THREE.LatheGeometry(pts, 24), headMat));
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(pts, 48), headMat));
     const slot = new THREE.Mesh(new THREE.BoxGeometry(headR * 1.5, 0.06, 0.14), slotMat);
     slot.userData.cosmetic = true;
     slot.position.y = headH * 0.97; slot.rotation.y = (slotSeq++ * 0.73) % Math.PI; g.add(slot);
@@ -52,7 +52,7 @@
   function jewel(r, mat) {
     const g = new THREE.Group();
     g.add(cyl(r, 0.32, mat.ruby, 24));
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(r + 0.12, 0.085, 8, 28), mat.polished);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(r + 0.12, 0.085, 12, 40), mat.polished);
     ring.rotation.x = Math.PI / 2; ring.position.y = 0.1; g.add(ring);
     return g;
   }
@@ -72,7 +72,7 @@
       }
 
       /* mainplate: a 26mm disc with a rim step */
-      add('mainplate', cyl(13, 1.2, mat.plate, 96), 0, 0, 0, 0);
+      add('mainplate', cyl(13, 1.2, mat.plate, 128), 0, 0, 0, 0);
       add('rim', (function(){ const m = new THREE.Mesh(new THREE.TorusGeometry(12.7, 0.25, 8, 96), mat.polished); m.rotation.x = Math.PI/2; return m; })(), 0, 0.6, 0, 0);
       for (let i = 0; i < 6; i++) {                                   // pillars
         const a = i / 6 * Math.PI * 2 + 0.3;
@@ -131,7 +131,7 @@
 
       /* balance: rim, four arms, hub, eight timing weights, staff, hairspring */
       const balance = new THREE.Group();
-      const rim = new THREE.Mesh(new THREE.TorusGeometry(3.2, 0.22, 10, 64), mat.polished); rim.rotation.x = Math.PI / 2; balance.add(rim);
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(3.2, 0.22, 16, 96), mat.polished); rim.rotation.x = Math.PI / 2; balance.add(rim);
       for (let i = 0; i < 4; i++) { const a = new THREE.Mesh(new THREE.BoxGeometry(6.2, 0.16, 0.26), mat.polished); a.rotation.y = i * Math.PI / 4; balance.add(a); }
       balance.add(cyl(0.5, 0.5, mat.polished, 24));
       for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2, w = cyl(0.17, 0.34, mat.brass, 12); w.position.set(3.2 * Math.cos(a), 0, 3.2 * Math.sin(a)); balance.add(w); }
@@ -186,7 +186,8 @@
       /* the sapphire caseback: a window over everything */
       const caseback = cyl(13.4, 0.5, mat.sapphire, 96);
       add('caseback', caseback, 0, 4.9, 0, 24);
-      caseback.castShadow = false; caseback.receiveShadow = false;   // glass: shadow casting ignores transmission and would shade the whole movement
+      caseback.castShadow = false; caseback.receiveShadow = false;
+      caseback.visible = false;   // glass: shadow casting ignores transmission and would shade the whole movement
 
       /* additional real components so the counted partCount matches the movement */
       add('bankingPin0', cyl(0.12, 0.9, mat.polished, 10), 2.2, 1.9, 6.2, 7);
