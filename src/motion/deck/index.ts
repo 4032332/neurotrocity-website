@@ -19,6 +19,10 @@ const WHEEL_SLOT = 0.45;
 const TAP_PX = 6;
 
 const mod = (i: number, n: number) => ((i % n) + n) % n;
+const isOnScreen = (el: Element) => {
+  const r = el.getBoundingClientRect();
+  return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
+};
 const href = (card: HTMLElement) => card.dataset.href ?? '';
 
 /* ── frontmost card + the single live iframe ─────────────────────────────── */
@@ -35,7 +39,10 @@ interface Live {
 
 function liveController(el: HTMLElement, cards: HTMLElement[]): Live {
   const frames = cards.map((c) => c.querySelector('iframe') as HTMLIFrameElement);
-  let inView = false, timer = 0, armed = -1;
+  // Seed synchronously from the current layout: under load the observer's first
+  // entry can arrive seconds late (the cortex shaders compile on the same thread),
+  // and apply() would otherwise unload the front demo it was about to mount.
+  let inView = isOnScreen(el), timer = 0, armed = -1;
 
   const onLoad = (e: Event) => {
     const f = e.currentTarget as HTMLIFrameElement;
@@ -51,7 +58,11 @@ function liveController(el: HTMLElement, cards: HTMLElement[]): Live {
   }
   function schedule(): void { clearTimeout(timer); timer = window.setTimeout(apply, SETTLE_MS); }
 
-  const io = new IntersectionObserver(([en]) => { inView = en.isIntersecting; schedule(); }, { threshold: 0.2 });
+  // Several entries can queue up before the first delivery; the last one is current.
+  const io = new IntersectionObserver((entries) => {
+    inView = entries[entries.length - 1].isIntersecting;
+    schedule();
+  }, { threshold: 0.2 });
   io.observe(el);
 
   function disarm(): void {

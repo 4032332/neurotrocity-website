@@ -25,4 +25,4 @@ const image = new URL(ogImage, 'https://neurotrocity.com').href;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={image} />
 
-{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+{jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}

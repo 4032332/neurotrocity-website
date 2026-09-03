@@ -38,11 +38,12 @@ for (const p of PAGES) {
     const res = await request.get(imgPath);
     expect(res.status()).toBe(200);
     expect(res.headers()['content-type']).toMatch(/image\/(png|jpeg)/);
-    const { width, height } = await page.evaluate((u: string) => new Promise<any>(r => {
-      const i = new Image();
-      i.onload = () => r({ width: i.naturalWidth, height: i.naturalHeight });
-      i.src = u;
-    }), imgPath);
+    // Read the dimensions from the PNG header of the bytes we already have —
+    // no in-page <img> load that could hang to the test timeout.
+    const buf = Buffer.from(await res.body());
+    expect(buf.subarray(0, 8)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+    const width = buf.readUInt32BE(16);
+    const height = buf.readUInt32BE(20);
     expect([width, height]).toEqual([1200, 630]);
   });
 

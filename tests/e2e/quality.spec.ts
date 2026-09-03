@@ -14,14 +14,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const INK = [0xef, 0xee, 0xf7];
 const MUTED = [0x91, 0x8d, 0xb0];
 
-function luminance([r, g, b]: number[]) {
-  const [R, G, B] = [r, g, b].map((v) => {
-    const s = v / 255;
-    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * R + 0.7152 * G + 0.0722 * B;
-}
-
 async function samplePixelRatio(page: Page, selector: string, fg: number[]): Promise<number> {
   return page.evaluate(
     ({ sel, fg }) => {
@@ -134,19 +126,15 @@ for (const [pagePath, cases] of [
   });
 }
 
-test('contrast table is fully populated (sanity check on the two contrast tests above)', () => {
-  // This test exists to fail loudly (rather than silently pass with an
-  // empty table) if the ordering of Playwright's test execution ever
-  // separates from the loop above. It runs last within this file's worker.
-  expect(CONTRAST_TABLE.length).toBeGreaterThanOrEqual(0);
-});
-
 // ── Reduced motion: still frame ─────────────────────────────────────────────
 for (const pagePath of ['/', '/rewire/landing/']) {
   test(`${pagePath} holds a still frame under prefers-reduced-motion`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(pagePath);
     await page.evaluate(() => document.fonts.ready);
+    // The static-fallback class lands from an idle callback; wait for it so it
+    // cannot arrive between the two captures.
+    await page.locator('#field.static-fallback').waitFor({ timeout: 10000 });
     await page.waitForTimeout(600);
     const a = await page.screenshot();
     await page.waitForTimeout(1200);
@@ -198,12 +186,4 @@ test('no horizontal overflow at 360px on /rewire/landing/', async ({ page }) => 
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth
   );
   expect(overflow).toBeLessThanOrEqual(0);
-});
-
-// Print the contrast table at the end of the run for the report.
-test.afterAll(() => {
-  if (CONTRAST_TABLE.length) {
-    // eslint-disable-next-line no-console
-    console.log('\nCONTRAST TABLE\n' + JSON.stringify(CONTRAST_TABLE, null, 2));
-  }
 });

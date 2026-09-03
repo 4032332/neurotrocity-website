@@ -1,8 +1,10 @@
 {
-  "name": "reimagine",
+  "name": "neurotrocity-website",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "neurotrocity.com — the NeuroTrocity studio site (Astro, static, GitHub Pages).",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
   "directories": {
     "doc": "docs",
     "test": "tests"
@@ -11,22 +13,17 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "node scripts/preview-server.mjs 4321",
-    "test": "vitest run --passWithNoTests",
+    "test": "astro check && vitest run --passWithNoTests",
     "test:e2e": "playwright test",
-    "perf": "lighthouse http://localhost:4321/ --preset=desktop --only-categories=performance --quiet --chrome-flags='--headless' --output=json --output-path=./.superpowers/sdd/lh-home-desktop.json"
+    "perf": "lighthouse http://localhost:4321/ --preset=desktop --only-categories=performance --quiet --chrome-flags='--headless' --output=json --output-path=./.superpowers/sdd/lh-home-desktop.json",
+    "check": "astro check"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
   "dependencies": {
     "astro": "^5.18.2",
     "three": "0.185.1"
   },
   "devDependencies": {
-    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
-    "@fontsource/ibm-plex-mono": "^5.3.0",
-    "@fontsource/manrope": "^5.3.0",
+    "@astrojs/check": "^0.9.10",
     "@playwright/test": "^1.62.1",
     "@resvg/resvg-js": "2.6.2",
     "@types/three": "0.185.4",

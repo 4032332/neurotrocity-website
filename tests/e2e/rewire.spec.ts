@@ -17,15 +17,17 @@ test('at most one demo iframe is live at a time', async ({ page }) => {
 test('exactly one demo iframe is live, matching the front card', async ({ page }) => {
   await page.goto('/rewire/landing/');
   const deck = page.locator('.deck');
+  await deck.scrollIntoViewIfNeeded();
+  // Precondition: the initial front demo has mounted (the deck settles its
+  // iframe SETTLE_MS after coming into view, later still under load).
+  await expect(page.locator('.deck-card.is-front iframe')).toHaveAttribute('src', /\/rewire\/sample\//, { timeout: 15000 });
   await deck.focus();
   await page.keyboard.press('ArrowRight');
-  await page.waitForTimeout(600);
-  const liveFrames = page.locator('.deck-card iframe[src]:not([src=""])');
-  await expect(liveFrames).toHaveCount(1);
-  const frontHref = await page.locator('.deck-card.is-front').getAttribute('data-href');
-  const frameSrc = await liveFrames.first().getAttribute('src');
-  expect(frontHref).toBeTruthy();
-  expect(frameSrc).toContain(frontHref!);
+  const front = page.locator('.deck-card.is-front');
+  const href = await front.getAttribute('data-href');
+  expect(href).toBeTruthy();
+  await expect(front.locator('iframe')).toHaveAttribute('src', href!, { timeout: 15000 });
+  await expect(page.locator('.deck-card iframe[src]:not([src=""])')).toHaveCount(1);
 });
 
 test('the deck is keyboard operable', async ({ page }) => {

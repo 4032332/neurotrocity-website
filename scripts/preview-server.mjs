@@ -106,6 +106,12 @@ function sendBody(req, res, body, contentType) {
   }
 }
 
+// Node closes idle keep-alive sockets after 5s by default; a client reusing the
+// socket at that instant sees ECONNRESET (seen under `--workers 6`). Keep sockets
+// open well past the client's own idle window so the server never wins that race.
+server.keepAliveTimeout = 65_000;
+server.headersTimeout = 66_000;
+
 server.listen(port, () => {
   console.log(`preview server listening on http://localhost:${port}`);
 });
