@@ -7,7 +7,7 @@ const MUST_RESOLVE = [
   '/rewire/sample/northbay/', '/rewire/sample/vale/',
   '/dispoint/', '/dosetrack/',
   '/robots.txt', '/sitemap.xml', '/app-ads.txt', '/favicon.ico',
-  '/contact/', '/rewire/contact/thanks.html',
+  '/contact/rob/', '/contact/jaimi/', '/rewire/contact/thanks.html',
 ];
 
 for (const path of MUST_RESOLVE) {
