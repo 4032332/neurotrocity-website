@@ -24,7 +24,7 @@ Verified 2026-09-03 by response headers and DNS:
 These apply to **every** task. A task is not done if it violates one.
 
 - **No invented facts.** No testimonials, no client names, no metrics, no statistics, no awards, no team claims. Every factual assertion must exist in `src/content/facts.ts` and be traceable to the current live site or to Rob's explicit confirmation. Fresh presentation copy (headlines, CTAs, section framing) is allowed and must assert no new fact.
-- **URL preservation.** These paths must resolve identically after migration: `/`, `/rewire/landing/`, `/rewire/contact/`, `/rewire/contact/thanks.html`, `/rewire/sample/` and all six demo subtrees, `/dispoint/**`, `/dosetrack/**`, `/contact/`, `/favicon.ico`, `/app-ads.txt`, `/robots.txt`, `/sitemap.xml`.
+- **URL preservation.** These paths must resolve identically after migration: `/`, `/rewire/landing/`, `/rewire/contact/`, `/rewire/contact/thanks.html`, `/rewire/sample/` and all six demo subtrees, `/dispoint/**`, `/dosetrack/**`, `/contact/rob/`, `/contact/jaimi/`, `/favicon.ico`, `/app-ads.txt`, `/robots.txt`, `/sitemap.xml`.
 - **`.well-known/apple-app-site-association` must keep resolving at `/.well-known/apple-app-site-association` with no redirect.** It routes `/dispoint/d/*` to app ID `9VY7RCG6Y4.com.robbrown.dispoint` — every DisPoint share-a-deal link in the wild depends on it. Because the host is not changing, the only real risk is a build tool silently dropping the dot-directory; Task 1 asserts it byte-for-byte.
 - **SEO parity or better on every page.** Canonical URL, Open Graph + Twitter card with a real image, and JSON-LD are required on both pages. No page may regress an existing `<title>` or `<meta name="description">`.
 - **Palette (Brand, locked):** `--ground:#07060E` `--ground-2:#0C0A16` `--line:#221D3A` `--line-2:#332C55` `--ink:#EFEEF7` `--muted:#918DB0` `--dim:#615C82` `--volt:#7C6BFF` `--cyan:#38E1D6` `--ember:#FF8A4C` `--jade:#22C489` (Rewire only).
@@ -1487,7 +1487,7 @@ test('Rewire declares a Service, not an Organization', async ({ page }) => {
 test('sitemap is generated from facts and covers every indexable URL', async ({ request }) => {
   const xml = await (await request.get('/sitemap.xml')).text();
   const required = [
-    '/', '/rewire/landing/', '/rewire/contact/', '/contact/',
+    '/', '/rewire/landing/', '/rewire/contact/', '/contact/rob/', '/contact/jaimi/',
     ...PRODUCTS.map(p => p.path),
     ...DEMOS.map(d => d.href),
   ];
