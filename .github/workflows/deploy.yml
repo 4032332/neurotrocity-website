@@ -14,6 +14,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
       - name: Fail if the AASA file did not survive the build
         run: test -s dist/.well-known/apple-app-site-association
       - uses: actions/upload-pages-artifact@v3
