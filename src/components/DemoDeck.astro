@@ -1,0 +1,127 @@
+---
+/**
+ * Six demo models as a ring of cards. With JS off this is a plain list of six
+ * working links (poster, provenance, name, description). With JS on,
+ * src/motion/deck mounts the CSS-3D ring (≥720px) or the scroll-snap row and
+ * loads the frontmost demo — only ever one — into its iframe.
+ */
+import { DEMOS } from '../content/facts';
+import { REWIRE_PAGE, provenanceLabel } from '../content/copy';
+
+const { deck } = REWIRE_PAGE.demos;
+---
+<div class="deck-stage">
+  <div class="deck" role="listbox" tabindex="0" aria-label={deck.ariaLabel} data-index="0">
+    {DEMOS.map((d, i) => (
+      <article class="deck-card" id={`deck-card-${i}`} data-href={d.href} role="option" aria-selected={i === 0 ? 'true' : 'false'} draggable="false">
+        <span class="frame">
+          <img src={`/rewire/sample/assets/${d.slug}-tile.jpg`} alt={`${d.name} demo model`} loading="lazy" decoding="async" width="1200" height="750" draggable="false" />
+          <iframe title={`${d.name} demo`} loading="lazy" src="" tabindex="-1"></iframe>
+          <span class="live-hint" aria-hidden="true">{deck.hint}</span>
+        </span>
+        <span class="body">
+          <span class="provenance">{provenanceLabel(d.provenance)}</span>
+          <span class="name">{d.name}</span>
+          <span class="desc">{d.description}</span>
+          <a class="open" href={d.href} aria-label={`${d.name} — open the demo`}>{deck.open} <span class="arw" aria-hidden="true">→</span></a>
+        </span>
+      </article>
+    ))}
+  </div>
+</div>
+
+<script>
+  import { mountDeck } from '../motion/deck';
+
+  const el = document.querySelector<HTMLElement>('.deck');
+  if (el) {
+    const n = el.querySelectorAll('.deck-card').length;
+    let handle = mountDeck(el, n);
+    // Crossing the breakpoint swaps ring ⇄ row; both tear down cleanly.
+    matchMedia('(max-width: 719px)').addEventListener('change', () => { handle.destroy(); handle = mountDeck(el, n); });
+  }
+</script>
+
+<style>
+  .deck-stage{
+    --card-w: clamp(280px, 29vw, 420px);
+    --deck-h: calc(var(--card-w) * 0.625 + 236px);
+    position:relative; width:100%; overflow:hidden;
+  }
+
+  /* ≥720px: the ring. Cards are absolutely centred; JS writes transform/opacity/z-index. */
+  .deck{
+    position:relative; height:var(--deck-h);
+    perspective:1600px; perspective-origin:50% 42%; transform-style:preserve-3d;
+    touch-action:pan-y; user-select:none; -webkit-user-select:none;
+    cursor:grab; outline:none;
+  }
+  .deck.is-dragging{ cursor:grabbing }
+  .deck-card{
+    position:absolute; left:50%; top:50%; translate:-50% -50%;
+    width:var(--card-w); display:flex; flex-direction:column;
+    background:var(--ground-2); border:1px solid var(--line-2); border-radius:10px; overflow:hidden;
+    color:inherit; will-change:transform; backface-visibility:hidden;
+    box-shadow:0 40px 70px -34px rgba(0,0,0,.9);
+    transition:border-color .25s;
+  }
+  /* Depth fade: a ground-coloured tint over an opaque card (JS sets --fade from layout opacity). */
+  .deck-card::after{
+    content:""; position:absolute; inset:0; background:var(--ground); opacity:var(--fade, 0);
+    pointer-events:none; z-index:2; border-radius:inherit;
+  }
+  .deck-card.is-front{ border-color:color-mix(in srgb, var(--jade) 60%, var(--line-2)) }
+  /* Focus lives on the listbox; the ring shows on whichever card is frontmost. */
+  .deck:focus-visible .deck-card.is-front{ outline:2px solid var(--jade); outline-offset:3px }
+  .deck-card.is-armed{ outline:2px solid var(--jade); outline-offset:3px }
+  .open:focus-visible{ outline:2px solid var(--jade); outline-offset:3px }
+
+  .frame{ position:relative; display:block; aspect-ratio:16/10; background:var(--ground); overflow:hidden }
+  .frame img{ width:100%; height:100%; object-fit:cover; pointer-events:none; transition:opacity .6s }
+  .frame iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0;
+    opacity:0; pointer-events:none; transition:opacity .6s;
+  }
+  .deck-card.is-loaded .frame iframe{ opacity:1 }
+  .deck-card.is-loaded .frame img{ opacity:0 }          /* poster under a running demo */
+  .deck-card.is-live .frame iframe{ pointer-events:auto }
+  .live-hint{
+    display:none; position:absolute; left:50%; bottom:12px; translate:-50% 0;
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink); padding:7px 11px; border-radius:999px;
+    background:color-mix(in srgb, var(--ground) 78%, transparent); border:1px solid var(--line-2);
+    white-space:nowrap;
+  }
+  .deck-card.is-loaded:not(.is-live) .live-hint{ display:inline-block }
+
+  .body{ display:flex; flex-direction:column; gap:7px; padding:16px 18px 18px; flex:1 }
+  .provenance{ font-family:var(--mono); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--jade) }
+  .name{ font-family:var(--display); font-weight:700; font-size:20px; letter-spacing:-.024em; color:var(--ink) }
+  .desc{ color:var(--muted); font-size:14px; line-height:1.55; text-wrap:pretty }
+  .open{ margin-top:auto; padding-top:10px; font-size:13.5px; font-weight:800; color:var(--jade); text-decoration:none; display:inline-block }
+  .open .arw{ display:inline-block; transition:transform .25s }
+  .deck-card:hover .open .arw, .open:focus-visible .arw{ transform:translateX(4px) }
+
+  /* <720px: a scroll-snap row. No 3D, no rAF. */
+  @media (max-width:719px){
+    .deck-stage{ overflow:visible }
+    .deck{
+      height:auto; perspective:none; transform-style:flat; cursor:auto; touch-action:auto; user-select:auto;
+      display:flex; gap:14px; overflow-x:auto; overflow-y:hidden;
+      scroll-snap-type:x mandatory; scroll-padding-inline:var(--pad);
+      padding:4px var(--pad) 22px; scrollbar-width:none; -webkit-overflow-scrolling:touch;
+    }
+    .deck::-webkit-scrollbar{ display:none }
+    .deck:focus-visible{ outline:2px solid var(--jade); outline-offset:-2px }
+    .deck-card{
+      position:relative; left:auto; top:auto; translate:none;
+      flex:0 0 min(78vw, 360px); width:auto; scroll-snap-align:center;
+      box-shadow:0 24px 40px -28px rgba(0,0,0,.9);
+    }
+    .deck-card::after{ display:none }
+    .live-hint{ font-size:10px }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .deck-card, .frame img, .frame iframe, .open .arw{ transition:none }
+  }
+</style>

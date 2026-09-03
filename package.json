@@ -1,0 +1,35 @@
+{
+  "name": "neurotrocity-website",
+  "version": "1.0.0",
+  "description": "neurotrocity.com — the NeuroTrocity studio site (Astro, static, GitHub Pages).",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "node scripts/preview-server.mjs 4321",
+    "test": "astro check && vitest run --passWithNoTests",
+    "test:e2e": "playwright test",
+    "perf": "lighthouse http://localhost:4321/ --preset=desktop --only-categories=performance --quiet --chrome-flags='--headless' --output=json --output-path=./.superpowers/sdd/lh-home-desktop.json",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^5.18.2",
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@playwright/test": "^1.62.1",
+    "@resvg/resvg-js": "2.6.2",
+    "@types/three": "0.185.4",
+    "lighthouse": "^13.4.1",
+    "satori": "0.33.4",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

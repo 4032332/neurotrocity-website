@@ -1,0 +1,18 @@
+:root{
+  --ground:#07060E; --ground-2:#0C0A16;
+  --line:#221D3A;   --line-2:#332C55;
+  --ink:#EFEEF7;    --muted:#918DB0;  --dim:#615C82;
+  --volt:#7C6BFF;   --cyan:#38E1D6;   --ember:#FF8A4C; --jade:#22C489;
+
+  --display:"Bricolage Grotesque",-apple-system,system-ui,sans-serif;
+  --body:"Manrope",-apple-system,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+
+  --step--1:clamp(13px,.85vw + 11px,14.5px);
+  --step-0: clamp(15.5px,.4vw + 15px,16.5px);
+  --step-1: clamp(19px,.9vw + 17px,22px);
+  --step-2: clamp(27px,3.7vw,44px);
+  --step-3: clamp(36px,5.6vw,74px);
+
+  --maxw:1180px; --pad:clamp(20px,4vw,56px); --gutter:96px;
+}
