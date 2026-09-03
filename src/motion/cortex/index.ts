@@ -5,7 +5,10 @@
  */
 import * as THREE from 'three';
 import { TIER_BUDGET, type Tier } from '../tier';
-import { pointAt } from './geometry';
+import { pointAtInto, type Vec3 } from './geometry';
+
+// Scratch for the per-pulse walk — the hot loop must not allocate.
+const _pt: Vec3 = { x: 0, y: 0, z: 0 };
 import { createState, spawn, advance } from './pulses';
 import { collectQuietRects } from './attenuation';
 import { PALETTES, type Accent } from './palette';
@@ -62,7 +65,7 @@ export function mountCortex(canvas: HTMLCanvasElement, opts: CortexOptions): Cor
     let n = 0;
     for (const p of pulses.pulses) {
       const f = sc.fibres[p.f];
-      const pt = pointAt(f, p.t);
+      const pt = pointAtInto(f, p.t, _pt);
       const o = n * 3, c = f.cluster * 3;
       pos[o] = pt.x; pos[o + 1] = pt.y; pos[o + 2] = pt.z;
       // White-hot mid-fibre, cooling to the cluster hue at either end.
@@ -96,12 +99,12 @@ export function mountCortex(canvas: HTMLCanvasElement, opts: CortexOptions): Cor
     const coh = heroP;
 
     // Sustained traffic plus periodic cluster bursts.
-    const want = Math.floor(coh * budget.maxPulses * 0.5);
+    const want = Math.floor((0.4 + 0.6 * coh) * budget.maxPulses * 0.5);
     let tries = 0;
     while (pulses.pulses.length < want && tries++ < 10) {
       spawn(pulses, Math.floor(Math.random() * sc.fibres.length), Math.random() < 0.62);
     }
-    if (coh > 0.42 && t - burstAt > BURST_EVERY) {
+    if (coh > 0.12 && t - burstAt > BURST_EVERY) {
       burstAt = t;
       burstIdx = (burstIdx + 1) % sc.clusters.length;
       for (let i = 0; i < sc.fibres.length; i++) {
@@ -121,14 +124,14 @@ export function mountCortex(canvas: HTMLCanvasElement, opts: CortexOptions): Cor
     sc.somata.forEach((s, i) => {
       s.flare *= 0.93;
       s.sprite.scale.setScalar((1.15 + coh * 0.7) + s.flare * 1.5 + Math.sin(t * 1.7 + i) * 0.06);
-      s.spriteMat.opacity = (0.30 + coh * 0.5) + s.flare * 0.45;
+      s.spriteMat.opacity = (0.55 + coh * 0.35) + s.flare * 0.45;
       s.core.scale.setScalar(0.85 + s.flare * 0.9);
     });
 
-    const appear = Math.pow(coh, 1.25);
+    const appear = 0.55 + 0.45 * Math.pow(coh, 1.25);
     sc.fibreHot.opacity = 0.06 + appear * 0.50;
     sc.fibreDim.opacity = 0.03 + appear * 0.17;
-    sc.group.scale.setScalar(0.80 + appear * 0.20);
+    sc.group.scale.setScalar(0.94 + appear * 0.06);
     sc.group.rotation.y = t * 0.075 + px * 0.42;
     sc.group.rotation.x = -py * 0.26;
 
