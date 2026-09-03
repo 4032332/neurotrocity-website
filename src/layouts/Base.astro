@@ -1,0 +1,88 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+interface Props {
+  title: string;
+  description: string;
+  accent?: 'volt' | 'jade';
+}
+
+const { title, description, accent = 'volt' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-accent={accent}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/img/icon-192.png" type="image/png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <style>
+    @font-face{
+      font-family:"Bricolage Grotesque";
+      src:url("/assets/fonts/BricolageGrotesque-Variable.woff2") format("woff2-variations"),
+          url("/assets/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+      font-weight:200 900;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"Manrope";
+      src:url("/assets/fonts/Manrope-Regular.woff2") format("woff2");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"Manrope";
+      src:url("/assets/fonts/Manrope-Medium.woff2") format("woff2");
+      font-weight:500;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"Manrope";
+      src:url("/assets/fonts/Manrope-Bold.woff2") format("woff2");
+      font-weight:700;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"Manrope";
+      src:url("/assets/fonts/Manrope-ExtraBold.woff2") format("woff2");
+      font-weight:800;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"IBM Plex Mono";
+      src:url("/assets/fonts/IBMPlexMono-Regular.woff2") format("woff2");
+      font-weight:400;
+      font-style:normal;
+      font-display:swap;
+    }
+    @font-face{
+      font-family:"IBM Plex Mono";
+      src:url("/assets/fonts/IBMPlexMono-Medium.woff2") format("woff2");
+      font-weight:500;
+      font-style:normal;
+      font-display:swap;
+    }
+  </style>
+  <slot name="head" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header>
+    <slot name="nav" />
+  </header>
+  <main id="main" tabindex="-1">
+    <slot />
+  </main>
+  <slot name="footer" />
+</body>
+</html>
