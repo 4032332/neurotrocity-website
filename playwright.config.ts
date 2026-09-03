@@ -9,5 +9,13 @@ export default defineConfig({
   },
   use: {
     baseURL: 'http://localhost:4321',
+    launchOptions: {
+      args: [
+        '--use-gl=angle',
+        '--use-angle=swiftshader',
+        '--enable-unsafe-swiftshader',
+        '--ignore-gpu-blocklist',
+      ],
+    },
   },
 });

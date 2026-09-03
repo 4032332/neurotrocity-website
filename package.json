@@ -12,7 +12,8 @@
     "build": "astro build",
     "preview": "node scripts/preview-server.mjs 4321",
     "test": "vitest run --passWithNoTests",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "perf": "lighthouse http://localhost:4321/ --preset=desktop --only-categories=performance --quiet --chrome-flags='--headless' --output=json --output-path=./.superpowers/sdd/lh-home-desktop.json"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "@fontsource/manrope": "^5.3.0",
     "@playwright/test": "^1.62.1",
     "@types/three": "0.185.4",
+    "lighthouse": "^13.4.1",
     "typescript": "^5.9.3",
     "vitest": "^4.1.11"
   }
