@@ -57,6 +57,9 @@ const { deck } = REWIRE_PAGE.demos;
     cursor:grab; outline:none;
   }
   .deck.is-dragging{ cursor:grabbing }
+  /* The front card is the link; back cards are "bring me forward". */
+  .deck-card.is-front{ cursor:pointer }
+  .deck.is-dragging .deck-card{ cursor:grabbing }
   .deck-card{
     position:absolute; left:50%; top:50%; translate:-50% -50%;
     width:var(--card-w); display:flex; flex-direction:column;

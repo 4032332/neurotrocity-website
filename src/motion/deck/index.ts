@@ -124,10 +124,31 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
   let width = el.clientWidth || 1;
   let dragging = false, wheelActive = false, suppressClick = false;
   let dragX0 = 0, dragOff0 = 0, lastX = 0, lastMoveT = 0, moved = 0;
+  // Pointer capture retargets the eventual `click` to the capturing element,
+  // so the card under the pointer must be remembered at pointerdown — and
+  // capture must not start until the gesture has actually become a drag.
+  let downCard: HTMLElement | null = null, captured = false;
   let lastInteract = -1e9, lastFrame = performance.now();
   let wheelTimer = 0, raf = 0, idleTimer = 0;
 
   const index = () => mod(Math.round(target), n);
+
+  // Chrome does not hit-test 3D-transformed cards sitting behind the
+  // perspective plane — elementFromPoint returns the container for every
+  // side card — so resolve the card geometrically from its projected box,
+  // topmost (highest z-index) wins. Bounding rects ARE projected correctly.
+  function cardAtPoint(x: number, y: number): HTMLElement | null {
+    let best: HTMLElement | null = null, bestZ = -Infinity;
+    for (const c of cards) {
+      const b = c.getBoundingClientRect();
+      if (x < b.left || x > b.right || y < b.top || y > b.bottom) continue;
+      const z = Number(c.style.zIndex) || 0;
+      if (z > bestZ) { bestZ = z; best = c; }
+    }
+    return best;
+  }
+  const cardFromEvent = (e: { target: EventTarget | null; clientX: number; clientY: number }) =>
+    (e.target as Element).closest<HTMLElement>('.deck-card') ?? cardAtPoint(e.clientX, e.clientY);
 
   function ensureLoop(): void {
     if (raf) return;
@@ -189,9 +210,9 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
   /* pointer drag with velocity + inertia */
   const onDown = (e: PointerEvent) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    dragging = true; moved = 0; vel = 0;
+    dragging = true; moved = 0; vel = 0; captured = false;
+    downCard = cardFromEvent(e);
     dragX0 = lastX = e.clientX; dragOff0 = offset; lastMoveT = e.timeStamp;
-    el.setPointerCapture(e.pointerId);
     el.classList.add('is-dragging');
     touch();
   };
@@ -199,6 +220,11 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
     if (!dragging) return;
     const dx = e.clientX - dragX0;
     moved = Math.max(moved, Math.abs(dx));
+    if (!captured && moved > TAP_PX) {
+      // Now it's a drag: take the pointer so the fling survives leaving the deck.
+      el.setPointerCapture(e.pointerId);
+      captured = true;
+    }
     offset = target = dragOff0 - dx / (width * DRAG_SLOT);
     const dt = (e.timeStamp - lastMoveT) / 1000;
     if (dt > 0) vel = vel * 0.5 + (-(e.clientX - lastX) / (width * DRAG_SLOT) / dt) * 0.5;
@@ -209,7 +235,8 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
     if (!dragging) return;
     dragging = false;
     el.classList.remove('is-dragging');
-    if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+    if (captured && el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId);
+    captured = false;
     if (moved > TAP_PX) suppressClick = true;
     // Project the fling, but never further than the neighbour of the neighbour.
     const proj = reduced ? offset : offset + Math.max(-1.5, Math.min(1.5, vel * 0.16));
@@ -228,18 +255,25 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
     touch();
   };
 
-  /* click: suppress after a drag; bring a back card forward; arm the front demo */
+  /* click: suppress after a drag; bring a back card forward; on the front
+     card, try the demo in place (frame) or open it (anywhere else) */
   const onClick = (e: MouseEvent) => {
-    const card = (e.target as Element).closest<HTMLElement>('.deck-card');
+    const card = cardFromEvent(e) ?? downCard;
+    downCard = null;
     if (!card) return;
     if (suppressClick) { suppressClick = false; e.preventDefault(); return; }
     const i = cards.indexOf(card);
     if (i !== index()) { e.preventDefault(); goTo(i); return; }
+    if ((e.target as Element).closest('a.open')) return;   // the explicit link navigates itself
     const onFrame = !!(e.target as Element).closest('.frame');
     if (onFrame && card.classList.contains('is-loaded') && !card.classList.contains('is-live')) {
       e.preventDefault(); live.arm(i);          // first click on a running demo hands it the pointer
+      return;
     }
-    // otherwise: the card is a real link — let it navigate
+    if (onFrame && card.classList.contains('is-live')) return;   // the demo owns the pointer now
+    // Front card, not on a running frame: the whole card acts as the link.
+    e.preventDefault();
+    const h = href(card); if (h) location.assign(h);
   };
 
   /* keyboard on the listbox (and bubbling up from a focused card) */
@@ -369,8 +403,12 @@ function mountRow(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
     if (!card) return;
     const i = cards.indexOf(card);
     if (i !== live.front) { e.preventDefault(); scrollTo(i); return; }
+    if ((e.target as Element).closest('a.open')) return;
     const onFrame = !!(e.target as Element).closest('.frame');
-    if (onFrame && card.classList.contains('is-loaded') && !card.classList.contains('is-live')) { e.preventDefault(); live.arm(i); }
+    if (onFrame && card.classList.contains('is-loaded') && !card.classList.contains('is-live')) { e.preventDefault(); live.arm(i); return; }
+    if (onFrame && card.classList.contains('is-live')) return;
+    e.preventDefault();
+    const h = href(card); if (h) location.assign(h);
   };
 
   el.addEventListener('keydown', onKey);
