@@ -7,7 +7,7 @@
  * and asserts no new fact — no numbers, no clients, no outcomes, no guarantees
  * beyond the four RULES.
  */
-import { PRODUCTS, RULES, CONTACT, DEMOS } from './facts';
+import { PRODUCTS, RULES, CONTACT, DEMOS, REWIRE, type Provenance } from './facts';
 
 const rewire = PRODUCTS.find((p) => p.slug === 'rewire')!;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
@@ -127,5 +127,93 @@ export const HOME = {
     ventures: PRODUCTS.map((p) => ({ label: p.slug, href: p.path })),
     email: CONTACT.general,
     legal: `© ${new Date().getFullYear()} NeuroTrocity · Made in ${CONTACT.madeIn}`,
+  },
+} as const;
+
+/** How a demo's provenance reads on a card. 'fictional' is the only legal value. */
+export const provenanceLabel = (p: Provenance): string =>
+  ({ fictional: 'Demo model · Fictional brand' } as const)[p];
+
+/**
+ * Presentation strings for /rewire/landing/. Same rule as HOME: every fact is
+ * interpolated from `facts.ts` (REWIRE, DEMOS, CONTACT, PRODUCTS); headings,
+ * kickers, ledes and CTAs marked "live" are verbatim from the current page;
+ * the stance is Rob's own words, verbatim. Nothing here asserts a new fact.
+ */
+export const REWIRE_PAGE = {
+  meta: {
+    // Unchanged from the current live page — SEO parity constraint.
+    title: 'Rewire — website design for businesses that deserve better traffic',
+    description:
+      'Rewire takes underperforming small and medium business websites and rebuilds them to actually work — clearer message, faster load, more customers.',
+    canonical: 'https://neurotrocity.com/rewire/landing/',
+    image: `https://neurotrocity.com/rewire/sample/assets/${DEMOS[0].slug}-tile.jpg`,
+  },
+
+  nav: {
+    // Live back-link, verbatim. The short CTA label is REWIRE.steps[0].title.
+    back: { label: '← NeuroTrocity', href: '/' },
+    cta: { label: REWIRE.steps[0].title, href: REWIRE.contact.form },
+  },
+
+  hero: {
+    kicker: 'Rewire · Website design for real businesses',                    // live, verbatim
+    headline: { lead: "Your website isn't broken. It's just ", em: 'wired wrong.' }, // live, verbatim
+    lede:
+      'We take small and medium business websites that used to work — or never quite did — and rebuild them properly: clearer message, faster load, an actual path to becoming a customer.', // live, verbatim
+    primary: { label: 'Get a free site review', href: REWIRE.contact.form },  // live, verbatim
+    ghost: { label: 'Try a demo model', href: '#demos' },
+  },
+
+  fits: {
+    eyebrow: 'Who this is for',                                                // live, verbatim
+    heading: "You already have a website. It's just not doing its job.",       // live, verbatim
+    sub: "Rewire isn't for brand-new startups building a site from scratch — it's for businesses that already have one, and know something's off.", // live, verbatim
+    items: REWIRE.fits,
+  },
+
+  how: {
+    eyebrow: 'How it works',                                                   // live, verbatim
+    heading: 'Four steps. No jargon, no lock-in contracts.',                    // live, verbatim (count asserted in facts.test.ts)
+    sub: "We tell you exactly what's underperforming before you commit to anything.", // live, verbatim
+    // 01–04 is legitimate here: the steps are a sequence.
+    steps: REWIRE.steps.map((s, i) => ({ n: String(i + 1).padStart(2, '0'), ...s })),
+  },
+
+  demos: {
+    eyebrow: 'Demo models',                                                    // live, verbatim
+    heading: 'Test drive a demo model.',                                       // live, verbatim
+    // Rob's own words, verbatim; split only to colour the em span.
+    stance: {
+      lead: 'We choose not to use our clients and their websites to advertise ourselves. We believe the right approach is to showcase our capability through ',
+      em: 'demo websites you can test-drive',
+      tail: ", without leaning on our client's brands.",
+    },
+    note: 'Open one, click everything, try to break it.',                     // live, verbatim
+    deck: {
+      ariaLabel: 'Demo models',
+      hint: 'Tap or click to try it here',
+      open: 'Open the demo',                                                   // live, verbatim ("Open the demo →")
+      keys: 'Drag, scroll sideways, or use the arrow keys. Enter opens the front card.',
+    },
+    all: { label: 'See all demo models', href: '/rewire/sample/' },            // live, verbatim
+  },
+
+  review: {
+    eyebrow: 'Get in touch',                                                   // live, verbatim
+    heading: "Want to know what's actually wrong with your site?",             // live, verbatim
+    sub: 'Free review, no obligation, a person replies.',                      // live, verbatim
+    cta: { label: 'Start your free review', href: REWIRE.contact.form },       // live, verbatim
+  },
+
+  footer: {
+    tagline: rewire.description,                                               // PRODUCTS.rewire, verbatim
+    links: [
+      { label: 'Demo models', href: '/rewire/sample/' },
+      { label: 'Contact', href: REWIRE.contact.form },
+      { label: 'NeuroTrocity', href: '/' },
+    ],
+    email: REWIRE.contact.email,
+    legal: `© ${new Date().getFullYear()} NeuroTrocity · Rewire · Made in ${CONTACT.madeIn}`,
   },
 } as const;

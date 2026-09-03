@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCTS, DEMOS, RULES, CONTACT } from '../../src/content/facts';
+import { PRODUCTS, DEMOS, RULES, CONTACT, REWIRE } from '../../src/content/facts';
 
 describe('facts', () => {
   it('has exactly the three real products', () => {
@@ -26,5 +26,15 @@ describe('facts', () => {
     for (const banned of ['testimonial', 'quote', 'rating', 'clients', 'increase', 'uplift']) {
       expect(serialized.toLowerCase()).not.toContain(banned);
     }
+  });
+
+  it('carries the four Rewire fits and the four steps verbatim', () => {
+    expect(REWIRE.fits).toHaveLength(4);
+    expect(REWIRE.steps).toHaveLength(4);
+    expect(REWIRE.steps.map(s => s.title)).toEqual([
+      'Free review', 'A plan, priced upfront', 'Rebuild', 'Handover, not lock-in',
+    ]);
+    expect(REWIRE.contact.form).toBe('/rewire/contact/');
+    expect(REWIRE.contact.email).toBe(CONTACT.rewire);
   });
 });

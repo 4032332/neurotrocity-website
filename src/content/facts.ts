@@ -56,3 +56,33 @@ export const CONTACT = {
   rewire: 'rewire@neurotrocity.com',
   madeIn: 'Australia',
 } as const;
+
+/** The Rewire process claims, verbatim from the live /rewire/landing/ page
+ *  ("Who this is for" and "How it works"). Presentation copy may frame these
+ *  but must not add steps, promises or numbers beyond them. */
+export interface Fit  { title: string; body: string; }
+export interface Step { title: string; body: string; }
+
+export const REWIRE = {
+  fits: [
+    { title: 'It looks dated',
+      body: 'Built years ago, never touched since. Customers notice before they even read a word.' },
+    { title: "It's slow or broken on mobile",
+      body: "Most of your visitors are on a phone. If it's clunky there, they leave before they see what you offer." },
+    { title: 'People land on it and leave',
+      body: "Traffic shows up, nobody calls, books, or buys. The message isn't landing." },
+    { title: "You don't know what to fix",
+      body: "You know something's wrong. You just don't know what — that's what the free review is for." },
+  ] as Fit[],
+  steps: [
+    { title: 'Free review',
+      body: "We look at your current site and tell you, in plain language, what's actually costing you customers." },
+    { title: 'A plan, priced upfront',
+      body: 'You get a clear scope and a fixed quote before any work starts — no surprises, no hourly guessing games.' },
+    { title: 'Rebuild',
+      body: 'We design and build the new site — faster, clearer, and built around what your customers actually need to see.' },
+    { title: 'Handover, not lock-in',
+      body: "The site is yours. You're never stuck paying us just to keep it online." },
+  ] as Step[],
+  contact: { form: '/rewire/contact/', email: CONTACT.rewire },
+} as const;
