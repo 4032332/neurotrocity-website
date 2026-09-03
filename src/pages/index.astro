@@ -1,15 +1,28 @@
 ---
 import Base from '../layouts/Base.astro';
 import VentureRow from '../components/VentureRow.astro';
-import { PRODUCTS, RULES } from '../content/facts';
+import { PRODUCTS, RULES, CONTACT } from '../content/facts';
 import { HOME } from '../content/copy';
 
 const { meta, nav, hero, build, proof, rules, contact, footer } = HOME;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'NeuroTrocity',
+  url: 'https://neurotrocity.com/',
+  email: CONTACT.general,
+  description: 'Software studio building websites and iOS apps.',
+  address: { '@type': 'PostalAddress', addressCountry: 'AU' },
+  makesOffer: PRODUCTS.map((p) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'SoftwareApplication', name: p.slug, url: `https://neurotrocity.com${p.path}` },
+  })),
+};
 ---
-<Base title={meta.title} description={meta.description} accent="volt" field spine>
+<Base title={meta.title} description={meta.description} path="/" ogImage="/og/home.png" jsonLd={jsonLd} accent="volt" field spine>
 
 <Fragment slot="head">
-<link rel="canonical" href="https://neurotrocity.com/" />
 <style is:global>
 /* ── frame ─────────────────────────────────────────────────────────────── */
 a{ text-decoration:none }

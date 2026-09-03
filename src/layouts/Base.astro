@@ -3,10 +3,14 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import CortexField from '../components/CortexField.astro';
 import Spine from '../components/Spine.astro';
+import Seo from '../components/Seo.astro';
 
 interface Props {
   title: string;
   description: string;
+  path: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>;
   accent?: 'volt' | 'jade';
   /** Persistent fullscreen WebGL cortex behind the whole document. */
   field?: boolean;
@@ -14,7 +18,7 @@ interface Props {
   spine?: boolean;
 }
 
-const { title, description, accent = 'volt', field = false, spine = false } = Astro.props;
+const { title, description, path, ogImage, jsonLd, accent = 'volt', field = false, spine = false } = Astro.props;
 const layered = field || spine;
 ---
 
@@ -26,8 +30,7 @@ const layered = field || spine;
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <link rel="icon" href="/assets/img/icon-192.png" type="image/png" sizes="192x192" />
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png" />
-  <title>{title}</title>
-  <meta name="description" content={description} />
+  <Seo title={title} description={description} path={path} ogImage={ogImage} jsonLd={jsonLd} />
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/BricolageGrotesque-Variable.woff2" crossorigin />
   <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/Manrope-Regular.woff2" crossorigin />
   <style>

@@ -4,20 +4,20 @@ import DemoDeck from '../../components/DemoDeck.astro';
 import { REWIRE_PAGE } from '../../content/copy';
 
 const { meta, nav, hero, fits, how, demos, review, footer } = REWIRE_PAGE;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Rewire',
+  serviceType: 'Website design and rebuild',
+  provider: { '@type': 'Organization', name: 'NeuroTrocity', url: 'https://neurotrocity.com/' },
+  areaServed: { '@type': 'Country', name: 'Australia' },
+  url: 'https://neurotrocity.com/rewire/landing/',
+};
 ---
-<Base title={meta.title} description={meta.description} accent="jade" field spine>
+<Base title={meta.title} description={meta.description} path="/rewire/landing/" ogImage="/og/rewire.png" jsonLd={jsonLd} accent="jade" field spine>
 
 <Fragment slot="head">
-<link rel="canonical" href={meta.canonical} />
-<meta property="og:type" content="website" />
-<meta property="og:title" content={meta.title} />
-<meta property="og:description" content={meta.description} />
-<meta property="og:url" content={meta.canonical} />
-<meta property="og:image" content={meta.image} />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={meta.title} />
-<meta name="twitter:description" content={meta.description} />
-<meta name="twitter:image" content={meta.image} />
 <style is:global>
 /* ── frame ─────────────────────────────────────────────────────────────── */
 a{ text-decoration:none }
