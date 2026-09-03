@@ -99,17 +99,23 @@ for (const [pagePath, cases] of [
   ['/rewire/landing/', REWIRE_CASES],
 ] as const) {
   test(`${pagePath} keeps every text element above its WCAG floor against the live field`, async ({ page }) => {
+    // Deliberately slow by design: 6 elements × 5 samples × 300 ms of waits,
+    // plus SwiftShader shader compilation and readPixels on a 2-core CI
+    // runner. Playwright's default 30 s budget is not enough there; the
+    // assertions below are unchanged.
+    test.setTimeout(120_000);
     await page.goto(pagePath);
     // The cortex module (and three.js) now loads via a dynamic import fired
     // from an idle callback, so the WebGL2 context on #field can land later
     // than a fixed timeout would reliably cover — poll for it instead of
-    // guessing a duration.
+    // guessing a duration. Shader compilation on CI SwiftShader can take
+    // well over 10 s.
     await page.waitForFunction(
       () => {
         const canvas = document.getElementById('field') as HTMLCanvasElement | null;
         return !!canvas && !!canvas.getContext('webgl2');
       },
-      { timeout: 10000 }
+      { timeout: 30000 }
     );
     await assertWebGL2Available(page);
     // Keep the mouse away from sampled elements so pointer parallax cannot
