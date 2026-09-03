@@ -4,13 +4,12 @@ const { accent = 'volt' } = Astro.props;
 ---
 <canvas id="field" aria-hidden="true" data-accent={accent}></canvas>
 <script>
-  import { mountCortex } from '../motion/cortex';
   import { detectTier } from '../motion/tier';
   import type { Accent } from '../motion/cortex/palette';
 
   const canvas = document.getElementById('field') as HTMLCanvasElement;
 
-  function boot() {
+  async function boot() {
     // Probe capability on a scratch canvas: a context created on #field here
     // would pin its attributes, and three.js's preserveDrawingBuffer would be
     // silently ignored.
@@ -23,8 +22,14 @@ const { accent = 'volt' } = Astro.props;
       maxTextureSize: gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 0,
     });
     gl?.getExtension('WEBGL_lose_context')?.loseContext();
-    if (tier === 'none') canvas.classList.add('static-fallback');
-    else mountCortex(canvas, { tier, accent: canvas.dataset.accent as Accent });
+    if (tier === 'none') {
+      canvas.classList.add('static-fallback');
+      return;
+    }
+    // Dynamic import: three.js (and the rest of the cortex module graph)
+    // must not compete with fonts/CSS for bandwidth during the LCP window.
+    const { mountCortex } = await import('../motion/cortex');
+    mountCortex(canvas, { tier, accent: canvas.dataset.accent as Accent });
   }
 
   // Mount after the page has painted its LCP content, so the field's own

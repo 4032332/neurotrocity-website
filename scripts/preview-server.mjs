@@ -17,7 +17,17 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
+
+const COMPRESSIBLE = new Set([
+  'text/html; charset=utf-8',
+  'text/css; charset=utf-8',
+  'text/javascript; charset=utf-8',
+  'image/svg+xml',
+  'application/json; charset=utf-8',
+  'text/plain; charset=utf-8',
+]);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, '..', 'dist');
@@ -61,9 +71,10 @@ const server = http.createServer((req, res) => {
   const file = resolveFile(req.url);
   if (file) {
     const ext = path.extname(file).toLowerCase();
+    const contentType = MIME[ext] ?? 'application/octet-stream';
     res.statusCode = 200;
-    res.setHeader('Content-Type', MIME[ext] ?? 'application/octet-stream');
-    res.end(fs.readFileSync(file));
+    res.setHeader('Content-Type', contentType);
+    sendBody(req, res, fs.readFileSync(file), contentType);
     return;
   }
 
@@ -71,11 +82,29 @@ const server = http.createServer((req, res) => {
   res.statusCode = 404;
   if (fs.existsSync(notFoundPage)) {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.end(fs.readFileSync(notFoundPage));
+    sendBody(req, res, fs.readFileSync(notFoundPage), 'text/html; charset=utf-8');
   } else {
     res.end('Not Found');
   }
 });
+
+function sendBody(req, res, body, contentType) {
+  if (!COMPRESSIBLE.has(contentType)) {
+    res.end(body);
+    return;
+  }
+  const acceptEncoding = req.headers['accept-encoding'] ?? '';
+  res.setHeader('Vary', 'Accept-Encoding');
+  if (acceptEncoding.includes('br')) {
+    res.setHeader('Content-Encoding', 'br');
+    res.end(zlib.brotliCompressSync(body));
+  } else if (acceptEncoding.includes('gzip')) {
+    res.setHeader('Content-Encoding', 'gzip');
+    res.end(zlib.gzipSync(body));
+  } else {
+    res.end(body);
+  }
+}
 
 server.listen(port, () => {
   console.log(`preview server listening on http://localhost:${port}`);

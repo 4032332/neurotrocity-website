@@ -108,7 +108,17 @@ for (const [pagePath, cases] of [
 ] as const) {
   test(`${pagePath} keeps every text element above its WCAG floor against the live field`, async ({ page }) => {
     await page.goto(pagePath);
-    await page.waitForTimeout(1000);
+    // The cortex module (and three.js) now loads via a dynamic import fired
+    // from an idle callback, so the WebGL2 context on #field can land later
+    // than a fixed timeout would reliably cover — poll for it instead of
+    // guessing a duration.
+    await page.waitForFunction(
+      () => {
+        const canvas = document.getElementById('field') as HTMLCanvasElement | null;
+        return !!canvas && !!canvas.getContext('webgl2');
+      },
+      { timeout: 10000 }
+    );
     await assertWebGL2Available(page);
     // Keep the mouse away from sampled elements so pointer parallax cannot
     // move the field under the pixel we're reading.
