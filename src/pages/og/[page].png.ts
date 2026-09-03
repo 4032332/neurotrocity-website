@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
+import { HOME, REWIRE_PAGE } from '../../content/copy';
 
 const FONT_DIR = path.join(process.cwd(), 'public/assets/fonts');
 const titleFont = fs.readFileSync(path.join(FONT_DIR, 'Manrope-ExtraBold.ttf'));
@@ -12,13 +13,13 @@ type Card = { title: string; eyebrow: string; accent: string };
 
 const CARDS: Record<string, Card> = {
   home: {
-    title: 'Software studio building websites and iOS apps that work.',
-    eyebrow: 'SOFTWARE STUDIO · AUSTRALIA',
+    title: HOME.meta.title,
+    eyebrow: HOME.hero.kicker.toUpperCase(),
     accent: '#7C6BFF',
   },
   rewire: {
-    title: 'Rewire — website design for businesses that deserve better traffic',
-    eyebrow: 'REWIRE · WEBSITE DESIGN FOR REAL BUSINESSES',
+    title: REWIRE_PAGE.meta.title,
+    eyebrow: REWIRE_PAGE.hero.kicker.toUpperCase(),
     accent: '#22C489',
   },
 };
