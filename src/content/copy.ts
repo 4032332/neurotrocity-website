@@ -194,7 +194,7 @@ export const REWIRE_PAGE = {
       ariaLabel: 'Demo models',
       hint: 'Tap or click to try it here',
       open: 'Open the demo',                                                   // live, verbatim ("Open the demo →")
-      keys: 'Drag, scroll sideways, or use the arrow keys. Enter opens the front card.',
+      keys: 'Drag, scroll sideways, or use the arrow keys. Enter tries the demo here, Enter again opens it full-page.',
     },
     all: { label: 'See all demo models', href: '/rewire/sample/' },            // live, verbatim
   },

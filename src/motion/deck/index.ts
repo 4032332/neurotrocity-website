@@ -19,20 +19,23 @@ const WHEEL_SLOT = 0.45;
 const TAP_PX = 6;
 
 const mod = (i: number, n: number) => ((i % n) + n) % n;
-
-export function mountDeck(el: HTMLElement, count: number): DeckHandle {
-  const cards = Array.from(el.querySelectorAll<HTMLElement>('.deck-card')).slice(0, count);
-  if (cards.length === 0) return { destroy() {} };
-  return matchMedia(MOBILE).matches ? mountRow(el, cards) : mountRing(el, cards);
-}
+const href = (card: HTMLElement) => card.dataset.href ?? '';
 
 /* ── frontmost card + the single live iframe ─────────────────────────────── */
 
-interface Live { front: number; setFront(i: number): void; arm(i: number): void; destroy(): void }
+interface Live {
+  front: number;
+  isInView(): boolean;
+  isArmed(): boolean;
+  setFront(i: number): void;
+  arm(i: number): void;
+  disarm(): void;
+  destroy(): void;
+}
 
 function liveController(el: HTMLElement, cards: HTMLElement[]): Live {
   const frames = cards.map((c) => c.querySelector('iframe') as HTMLIFrameElement);
-  let inView = false, timer = 0;
+  let inView = false, timer = 0, armed = -1;
 
   const onLoad = (e: Event) => {
     const f = e.currentTarget as HTMLIFrameElement;
@@ -42,7 +45,7 @@ function liveController(el: HTMLElement, cards: HTMLElement[]): Live {
 
   function apply(): void {
     frames.forEach((f, j) => {
-      const want = inView && j === live.front ? cards[j].getAttribute('href') ?? '' : '';
+      const want = inView && j === live.front ? href(cards[j]) : '';
       if ((f.getAttribute('src') ?? '') !== want) f.setAttribute('src', want);
     });
   }
@@ -51,10 +54,19 @@ function liveController(el: HTMLElement, cards: HTMLElement[]): Live {
   const io = new IntersectionObserver(([en]) => { inView = en.isIntersecting; schedule(); }, { threshold: 0.2 });
   io.observe(el);
 
+  function disarm(): void {
+    if (armed < 0) return;
+    cards[armed].classList.remove('is-live', 'is-armed');
+    armed = -1;
+  }
+
   const live: Live = {
     front: -1,
+    isInView: () => inView,
+    isArmed: () => armed >= 0,
     setFront(i) {
       if (i === live.front) return;
+      disarm();
       live.front = i;
       cards.forEach((c, j) => {
         const isFront = j === i;
@@ -66,18 +78,28 @@ function liveController(el: HTMLElement, cards: HTMLElement[]): Live {
         }
       });
       el.dataset.index = String(i);
-      if (cards[i].id) el.setAttribute('aria-activedescendant', cards[i].id);
       schedule();
     },
-    arm(i) { if (i === live.front) cards[i].classList.add('is-live'); },
+    arm(i) {
+      if (i !== live.front || armed === i) return;
+      armed = i;
+      cards[i].classList.add('is-live', 'is-armed');
+    },
+    disarm,
     destroy() {
       clearTimeout(timer);
       io.disconnect();
       frames.forEach((f) => { f.removeEventListener('load', onLoad); if (f.getAttribute('src')) f.setAttribute('src', ''); });
-      cards.forEach((c) => c.classList.remove('is-live', 'is-loaded'));
+      cards.forEach((c) => c.classList.remove('is-live', 'is-loaded', 'is-armed'));
     },
   };
   return live;
+}
+
+export function mountDeck(el: HTMLElement, count: number): DeckHandle {
+  const cards = Array.from(el.querySelectorAll<HTMLElement>('.deck-card')).slice(0, count);
+  if (cards.length === 0) return { destroy() {} };
+  return matchMedia(MOBILE).matches ? mountRow(el, cards) : mountRing(el, cards);
 }
 
 /* ── ≥720px: the CSS-3D ring ─────────────────────────────────────────────── */
@@ -92,11 +114,24 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
   let dragging = false, wheelActive = false, suppressClick = false;
   let dragX0 = 0, dragOff0 = 0, lastX = 0, lastMoveT = 0, moved = 0;
   let lastInteract = -1e9, lastFrame = performance.now();
-  let wheelTimer = 0, raf = 0;
+  let wheelTimer = 0, raf = 0, idleTimer = 0;
 
   const index = () => mod(Math.round(target), n);
+
+  function ensureLoop(): void {
+    if (raf) return;
+    lastFrame = performance.now();
+    raf = requestAnimationFrame(frame);
+  }
+
   // Every input settles the frontmost synchronously; the rAF loop only animates toward it.
-  const touch = () => { lastInteract = performance.now(); live.setFront(index()); };
+  const touch = () => {
+    lastInteract = performance.now();
+    live.setFront(index());
+    ensureLoop();
+    clearTimeout(idleTimer);
+    if (!reduced) idleTimer = window.setTimeout(ensureLoop, IDLE_AFTER_MS);
+  };
 
   function goTo(i: number): void {
     let d = mod(i - index(), n);
@@ -118,7 +153,6 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
   }
 
   function frame(now: number): void {
-    raf = requestAnimationFrame(frame);
     const dt = Math.min(0.05, (now - lastFrame) / 1000);
     lastFrame = now;
 
@@ -135,6 +169,10 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
     if (Math.abs(drift) < 0.0005 && !idle) drift = 0;
 
     render(offset + drift);
+
+    const active = live.isInView() && (dragging || wheelActive || offset !== target || Math.abs(drift) > 0.0005);
+    if (active) raf = requestAnimationFrame(frame);
+    else raf = 0;
   }
 
   /* pointer drag with velocity + inertia */
@@ -201,7 +239,22 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
       case 'Home': target = Math.round(target) - index(); break;
       case 'End':  target = Math.round(target) + (n - 1 - index()); break;
       case 'Enter': case ' ':
-        if (e.target === el) { e.preventDefault(); const href = cards[index()].getAttribute('href'); if (href) location.assign(href); }
+        if (e.target === el) {
+          e.preventDefault();
+          const i = index();
+          const card = cards[i];
+          if (live.isArmed()) { const h = href(card); if (h) location.assign(h); return; }
+          if (card.classList.contains('is-loaded')) {
+            live.arm(i);
+            const frame = card.querySelector<HTMLIFrameElement>('iframe');
+            frame?.focus();
+          } else {
+            const h = href(card); if (h) location.assign(h);
+          }
+        }
+        return;
+      case 'Escape':
+        if (live.isArmed()) { e.preventDefault(); live.disarm(); el.focus(); }
         return;
       default: return;
     }
@@ -227,12 +280,13 @@ function mountRing(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
 
   render(0);
   live.setFront(0);
-  raf = requestAnimationFrame(frame);
+  ensureLoop();
 
   return {
     destroy() {
       cancelAnimationFrame(raf);
       clearTimeout(wheelTimer);
+      clearTimeout(idleTimer);
       el.removeEventListener('pointerdown', onDown);
       el.removeEventListener('pointermove', onMove);
       el.removeEventListener('pointerup', onUp);
@@ -260,7 +314,14 @@ function mountRow(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
     el.scrollTo({ left: c.offsetLeft - (el.clientWidth - c.offsetWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
   };
   const io = new IntersectionObserver((entries) => {
-    for (const en of entries) if (en.isIntersecting) live.setFront(cards.indexOf(en.target as HTMLElement));
+    // Two cards can cross the threshold in one callback while snapping; the
+    // one with the largest visible fraction is the true front.
+    let best: IntersectionObserverEntry | null = null;
+    for (const en of entries) {
+      if (!en.isIntersecting) continue;
+      if (!best || en.intersectionRatio > best.intersectionRatio) best = en;
+    }
+    if (best) live.setFront(cards.indexOf(best.target as HTMLElement));
   }, { root: el, threshold: 0.6 });
   cards.forEach((c) => io.observe(c));
 
@@ -272,7 +333,21 @@ function mountRow(el: HTMLElement, cards: HTMLElement[]): DeckHandle {
       case 'Home': scrollTo(0); break;
       case 'End':  scrollTo(cards.length - 1); break;
       case 'Enter': case ' ':
-        if (e.target === el) { e.preventDefault(); const href = cards[i].getAttribute('href'); if (href) location.assign(href); }
+        if (e.target === el) {
+          e.preventDefault();
+          const card = cards[i];
+          if (live.isArmed()) { const h = href(card); if (h) location.assign(h); return; }
+          if (card.classList.contains('is-loaded')) {
+            live.arm(i);
+            const frame = card.querySelector<HTMLIFrameElement>('iframe');
+            frame?.focus();
+          } else {
+            const h = href(card); if (h) location.assign(h);
+          }
+        }
+        return;
+      case 'Escape':
+        if (live.isArmed()) { e.preventDefault(); live.disarm(); el.focus(); }
         return;
       default: return;
     }

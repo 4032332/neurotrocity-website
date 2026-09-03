@@ -14,6 +14,20 @@ test('at most one demo iframe is live at a time', async ({ page }) => {
   expect(await page.locator('.deck-card iframe[src]:not([src=""])').count()).toBeLessThanOrEqual(1);
 });
 
+test('exactly one demo iframe is live, matching the front card', async ({ page }) => {
+  await page.goto('/rewire/landing/');
+  const deck = page.locator('.deck');
+  await deck.focus();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(600);
+  const liveFrames = page.locator('.deck-card iframe[src]:not([src=""])');
+  await expect(liveFrames).toHaveCount(1);
+  const frontHref = await page.locator('.deck-card.is-front').getAttribute('data-href');
+  const frameSrc = await liveFrames.first().getAttribute('src');
+  expect(frontHref).toBeTruthy();
+  expect(frameSrc).toContain(frontHref!);
+});
+
 test('the deck is keyboard operable', async ({ page }) => {
   await page.goto('/rewire/landing/');
   const deck = page.locator('.deck');

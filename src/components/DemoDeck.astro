@@ -11,21 +11,21 @@ import { REWIRE_PAGE, provenanceLabel } from '../content/copy';
 const { deck } = REWIRE_PAGE.demos;
 ---
 <div class="deck-stage">
-  <div class="deck" role="listbox" tabindex="0" aria-label={deck.ariaLabel} data-index="0" aria-activedescendant="deck-card-0">
+  <div class="deck" role="listbox" tabindex="0" aria-label={deck.ariaLabel} data-index="0">
     {DEMOS.map((d, i) => (
-      <a class="deck-card" id={`deck-card-${i}`} href={d.href} role="option" aria-selected={i === 0 ? 'true' : 'false'} draggable="false">
+      <article class="deck-card" id={`deck-card-${i}`} data-href={d.href} role="option" aria-selected={i === 0 ? 'true' : 'false'} draggable="false">
         <span class="frame">
           <img src={`/rewire/sample/assets/${d.slug}-tile.jpg`} alt={`${d.name} demo model`} loading="lazy" draggable="false" />
-          <iframe title={`${d.name} demo`} loading="lazy" src="" sandbox="allow-scripts allow-same-origin" tabindex="-1"></iframe>
+          <iframe title={`${d.name} demo`} loading="lazy" src="" tabindex="-1"></iframe>
           <span class="live-hint" aria-hidden="true">{deck.hint}</span>
         </span>
         <span class="body">
           <span class="provenance">{provenanceLabel(d.provenance)}</span>
           <span class="name">{d.name}</span>
           <span class="desc">{d.description}</span>
-          <span class="go">{deck.open} <span class="arw" aria-hidden="true">→</span></span>
+          <a class="open" href={d.href} aria-label={`${d.name} — open the demo`}>{deck.open} <span class="arw" aria-hidden="true">→</span></a>
         </span>
-      </a>
+      </article>
     ))}
   </div>
 </div>
@@ -61,7 +61,7 @@ const { deck } = REWIRE_PAGE.demos;
     position:absolute; left:50%; top:50%; translate:-50% -50%;
     width:var(--card-w); display:flex; flex-direction:column;
     background:var(--ground-2); border:1px solid var(--line-2); border-radius:10px; overflow:hidden;
-    color:inherit; text-decoration:none; will-change:transform; backface-visibility:hidden;
+    color:inherit; will-change:transform; backface-visibility:hidden;
     box-shadow:0 40px 70px -34px rgba(0,0,0,.9);
     transition:border-color .25s;
   }
@@ -73,7 +73,8 @@ const { deck } = REWIRE_PAGE.demos;
   .deck-card.is-front{ border-color:color-mix(in srgb, var(--jade) 60%, var(--line-2)) }
   /* Focus lives on the listbox; the ring shows on whichever card is frontmost. */
   .deck:focus-visible .deck-card.is-front{ outline:2px solid var(--jade); outline-offset:3px }
-  .deck-card:focus-visible{ outline:2px solid var(--jade); outline-offset:3px }
+  .deck-card.is-armed{ outline:2px solid var(--jade); outline-offset:3px }
+  .open:focus-visible{ outline:2px solid var(--jade); outline-offset:3px }
 
   .frame{ position:relative; display:block; aspect-ratio:16/10; background:var(--ground); overflow:hidden }
   .frame img{ width:100%; height:100%; object-fit:cover; pointer-events:none; transition:opacity .6s }
@@ -97,9 +98,9 @@ const { deck } = REWIRE_PAGE.demos;
   .provenance{ font-family:var(--mono); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--jade) }
   .name{ font-family:var(--display); font-weight:700; font-size:20px; letter-spacing:-.024em; color:var(--ink) }
   .desc{ color:var(--muted); font-size:14px; line-height:1.55; text-wrap:pretty }
-  .go{ margin-top:auto; padding-top:10px; font-size:13.5px; font-weight:800; color:var(--jade) }
-  .go .arw{ display:inline-block; transition:transform .25s }
-  .deck-card:hover .go .arw, .deck-card:focus-visible .go .arw{ transform:translateX(4px) }
+  .open{ margin-top:auto; padding-top:10px; font-size:13.5px; font-weight:800; color:var(--jade); text-decoration:none; display:inline-block }
+  .open .arw{ display:inline-block; transition:transform .25s }
+  .deck-card:hover .open .arw, .open:focus-visible .arw{ transform:translateX(4px) }
 
   /* <720px: a scroll-snap row. No 3D, no rAF. */
   @media (max-width:719px){
@@ -121,6 +122,6 @@ const { deck } = REWIRE_PAGE.demos;
     .live-hint{ font-size:10px }
   }
   @media (prefers-reduced-motion:reduce){
-    .deck-card, .frame img, .frame iframe, .go .arw{ transition:none }
+    .deck-card, .frame img, .frame iframe, .open .arw{ transition:none }
   }
 </style>
