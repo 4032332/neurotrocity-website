@@ -12,11 +12,12 @@ const jsonLd = {
   name: 'NeuroTrocity',
   url: 'https://neurotrocity.com/',
   email: CONTACT.general,
-  description: 'Software studio building websites and iOS apps.',
+  description: meta.jsonLdDescription,
   address: { '@type': 'PostalAddress', addressCountry: 'AU' },
   makesOffer: PRODUCTS.map((p) => ({
     '@type': 'Offer',
-    itemOffered: { '@type': 'SoftwareApplication', name: p.slug, url: `https://neurotrocity.com${p.path}` },
+    // Rewire is a service; the two apps are software.
+    itemOffered: { '@type': p.slug === 'rewire' ? 'Service' : 'SoftwareApplication', name: p.name, url: `https://neurotrocity.com${p.path}` },
   })),
 };
 ---

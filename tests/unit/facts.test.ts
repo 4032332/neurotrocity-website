@@ -6,6 +6,12 @@ describe('facts', () => {
     expect(PRODUCTS.map(p => p.slug).sort()).toEqual(['dispoint', 'dosetrack', 'rewire']);
   });
 
+  it('names every product with its live-site display name', () => {
+    expect(PRODUCTS.map(p => [p.slug, p.name])).toEqual([
+      ['dosetrack', 'DoseTrack'], ['dispoint', 'DisPoint'], ['rewire', 'Rewire'],
+    ]);
+  });
+
   it('has exactly the six real demo models', () => {
     expect(DEMOS).toHaveLength(6);
   });

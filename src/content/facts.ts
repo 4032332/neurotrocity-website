@@ -4,6 +4,7 @@ export type Provenance = 'fictional';
 
 export interface Product {
   slug: 'dosetrack' | 'dispoint' | 'rewire';
+  name: string;          // display name, verbatim from the live site's footer / venture rows
   path: string;
   description: string;   // verbatim from the current live site
   platforms: string;
@@ -21,11 +22,11 @@ export interface DemoModel {
 export interface Rule { title: string; body: string; }
 
 export const PRODUCTS: Product[] = [
-  { slug: 'dosetrack', path: '/dosetrack/landing/', accent: 'volt', platforms: 'iPhone · Watch',
+  { slug: 'dosetrack', name: 'DoseTrack', path: '/dosetrack/landing/', accent: 'volt', platforms: 'iPhone · Watch',
     description: 'Medication reminders that actually stick — free for your first five meds, forever.' },
-  { slug: 'dispoint', path: '/dispoint/landing/', accent: 'ember', platforms: 'iPhone · AU',
+  { slug: 'dispoint', name: 'DisPoint', path: '/dispoint/landing/', accent: 'ember', platforms: 'iPhone · AU',
     description: "Deals and bonus-points offers, sorted by what's about to expire." },
-  { slug: 'rewire', path: '/rewire/landing/', accent: 'cyan', platforms: 'Web · AU',
+  { slug: 'rewire', name: 'Rewire', path: '/rewire/landing/', accent: 'cyan', platforms: 'Web · AU',
     description: 'Underperforming business websites, rebuilt so they actually work.' },
 ];
 

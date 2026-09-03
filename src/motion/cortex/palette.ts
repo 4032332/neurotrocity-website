@@ -3,7 +3,8 @@ export type Accent = 'volt' | 'jade';
 export interface Palette {
   /** Hex colours for the three clusters, in ORIGINS order. */
   clusters: readonly [number, number, number];
-  /** Field shader endpoints (linear RGB 0..1). */
+  /** Field shader endpoints: sRGB hex / 255, written straight to gl_FragColor
+   *  (the ShaderMaterial does no colourspace conversion), so NOT linear RGB. */
   c1: readonly [number, number, number];
   c2: readonly [number, number, number];
   dust: number;

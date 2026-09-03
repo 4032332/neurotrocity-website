@@ -78,7 +78,7 @@ export function mountCortex(canvas: HTMLCanvasElement, opts: CortexOptions): Cor
   }
 
   function frame(): void {
-    raf = requestAnimationFrame(frame);
+    raf = 0;
     const t = (performance.now() - t0) / 1000;
     const dt = Math.min(0.05, t - lastT);
     lastT = t;
@@ -150,6 +150,9 @@ export function mountCortex(canvas: HTMLCanvasElement, opts: CortexOptions): Cor
     renderer.clear();
     renderer.render(sc.bgScene, sc.bgCamera);
     renderer.render(sc.world, camera);
+
+    // Scheduled last: an exception above ends the loop instead of re-throwing every frame.
+    raf = requestAnimationFrame(frame);
   }
 
   function syncLoop(): void {

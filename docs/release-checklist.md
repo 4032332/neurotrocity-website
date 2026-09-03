@@ -38,9 +38,15 @@ support/contact/privacy/terms/policy pages. 25 is the correct current count — 
 not a regression.)
 
 ```
+$ npm run check
+```
+`astro check` (strict TypeScript across `src/` and `tests/`) must report 0 errors and 0 warnings.
+Hints inside `public/` (the vendored legacy demo JS) are expected and not release-blocking.
+
+```
 $ npm run test
 ```
-Output: `Test Files 8 passed (8)`, `Tests 40 passed (40)`.
+Runs `astro check` then the unit tests. Output: `Test Files 8 passed (8)`, `Tests 41 passed (41)`.
 
 ```
 $ npm run test:e2e
@@ -53,8 +59,55 @@ This is a known timing flake in the full suite, not a regression — re-run the 
 more before merging and confirm it goes green; if it doesn't, treat it as a real bug, not a retry
 target.
 
-**Verdict: build, AASA, `.nojekyll`, `CNAME`, sitemap, and unit tests are all clean. Re-run
-`npm run test:e2e` once more and confirm 65/65 before proceeding to step 2.**
+**Update 2026-09-03 (final fix wave):** the deck flake above was a real bug — the deck's
+IntersectionObserver delivered its first entry late while the cortex shaders compiled, and the
+deck unloaded the demo it was about to mount. Fixed in `src/motion/deck/index.ts` (in-view state
+is now seeded synchronously at mount). The e2e gates are now load-tested with
+`npx playwright test --repeat-each 3 --workers 6` and must show 0 failures; there is no
+retries config, so a failure is a bug, not a retry target.
+
+`.gitignore` now covers `node_modules/`, `dist/`, `.astro/` and `test-results/` — done; no
+further action needed.
+
+**Verdict: build, AASA, `.nojekyll`, `CNAME`, sitemap, `astro check` and unit tests are all
+clean, and the e2e suite is green under load. Proceed to step 1a, then step 2.**
+
+### What the contrast gate does and does not prove
+
+`tests/e2e/quality.spec.ts` reads back **one pixel — the centre of each sampled element — from
+the WebGL canvas, rendered by SwiftShader** (a software renderer), five times over ~1.2 s, and
+checks the worst case against the WCAG floor. It is a regression tripwire: if the field's
+attenuation breaks, it will trip. It is **not** proof that every glyph edge of every line of
+text sits above 4.5:1 on a real GPU — the field animates, glyphs cover more than one pixel, and
+SwiftShader's output is not pixel-identical to Metal or ANGLE. Treat a green run as "nothing
+regressed", and rely on the real-GPU pass below for the visual judgement.
+
+Note on `lighthouse` in `devDependencies`: it is perf tooling only (`npm run perf`), never part
+of the build or the shipped bundle.
+
+## 1a. Real-GPU visual pass — before announcing
+
+Every visual check during the build ran on SwiftShader (headless Chromium, software GL). Before
+announcing the site, open it on an **M-series Mac** in both **Safari** and **Chrome** and look at:
+
+- the **hero** on `/` and `/rewire/landing/` — the field runs at full strength, text stays
+  legible, no banding or seams in the field, the somata flare on pulses;
+- **`#rules`** on `/` — the content-aware attenuation keeps the four rules readable over the
+  field while scrolling, with no visible "dimming box";
+- the **demo deck** on `/rewire/landing/` — the ring drags with inertia, the front card's demo
+  loads (and only that one), keyboard arrows move it, reduced-motion holds still.
+
+Also confirm 60 fps while scrolling (Safari Web Inspector → Timelines, or Chrome DevTools →
+Performance) — the performance floor is a real-hardware number, not a SwiftShader one.
+
+### Safari baseline
+
+- **≥ 16.2 — full fidelity.** `color-mix()` (16.2), `:has()` (15.4) and the individual
+  `translate:` property (14.1) are all present; the site renders as designed.
+- **≥ 15.4 — supported.** `:has()` and `translate:` are present; `color-mix()` is not, so the
+  colours that use it fall back to their declared solid values. Layout and motion are intact.
+- **14.1 — hard floor.** `translate:` is present but `:has()` is not; styling that keys off
+  `:has()` degrades to its non-matching state. Anything older is unsupported.
 
 ## 2. Switch GitHub Pages source to Actions — before the merge
 

@@ -31,6 +31,8 @@ export const HOME = {
     title: 'NeuroTrocity — focused, honest software',
     description:
       'NeuroTrocity is what happens when a brain fires every idea at once. The few that survive get built properly, and become ventures.',
+    // Presentation: the Organization description in the home page's JSON-LD. Asserts no new fact.
+    jsonLdDescription: 'Software studio building websites and iOS apps.',
   },
 
   nav: {

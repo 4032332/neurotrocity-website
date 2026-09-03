@@ -22,12 +22,22 @@
   import { mountSpine } from '../motion/spine';
 
   const svg = document.getElementById('spine') as unknown as SVGSVGElement;
-  mountSpine(svg, Array.from(document.querySelectorAll<HTMLElement>('[data-soma]')));
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-soma]'));
+  // Below 1000px the SVG is display:none (see <style>): no rAF should run there.
+  const wide = matchMedia('(min-width: 1000px)');
+  let handle: ReturnType<typeof mountSpine> | null = null;
+  const sync = () => {
+    if (wide.matches && !handle) handle = mountSpine(svg, sections);
+    else if (!wide.matches && handle) { handle.destroy(); handle = null; }
+  };
+  wide.addEventListener('change', sync);
+  sync();
 </script>
 <style>
   #spine {
     position: fixed; top: 0; left: 0; height: 100vh; width: var(--gutter);
     z-index: 1; pointer-events: none; overflow: visible;
   }
-  @media (max-width: 1000px) { #spine { display: none; } }
+  /* complement of the (min-width: 1000px) gate in the script above */
+  @media (max-width: 999.98px) { #spine { display: none; } }
 </style>
