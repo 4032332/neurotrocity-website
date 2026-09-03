@@ -19,13 +19,14 @@
     '  for (int i = 1; i < 5; i++){ vec2 o = dir * float(i); s += texture2D(tex, vUv + o) * w[i]; s += texture2D(tex, vUv - o) * w[i]; }',
     '  gl_FragColor = s; }'].join('\n');
   const COMP = [
+    '#include <packing>',
     'uniform sampler2D tScene, tBloom, tDof, tDepth;',
     'uniform float uBloomOn, uBloom, uVignetteOn, uVignette, uDofOn, uNear, uFar, uFocus, uRange;',
     'varying vec2 vUv;',
     'float lin(float d){ float z = d * 2.0 - 1.0; return (2.0 * uNear * uFar) / (uFar + uNear - z * (uFar - uNear)); }',
     'void main(){',
     '  vec4 c = texture2D(tScene, vUv);',
-    '  if (uDofOn > 0.5){ float z = lin(texture2D(tDepth, vUv).x); float coc = clamp(abs(z - uFocus) / uRange, 0.0, 1.0);',
+    '  if (uDofOn > 0.5){ float z = lin(unpackRGBAToDepth(texture2D(tDepth, vUv))); float coc = clamp(abs(z - uFocus) / uRange, 0.0, 1.0);',
     '    c = mix(c, texture2D(tDof, vUv), coc * 0.85); }',
     '  if (uBloomOn > 0.5){ c.rgb += texture2D(tBloom, vUv).rgb * uBloom; }',
     '  if (uVignetteOn > 0.5){ float v = smoothstep(1.3, 0.5, distance(vUv, vec2(0.5))); c.rgb = mix(c.rgb, c.rgb * v, uVignette); }',
@@ -47,19 +48,22 @@
       uBloomOn: { value: 0 }, uBloom: { value: 0.18 }, uVignetteOn: { value: 0 }, uVignette: { value: 0.22 },
       uDofOn: { value: 0 }, uNear: { value: camera.near }, uFar: { value: camera.far }, uFocus: { value: 24 }, uRange: { value: 14 }
     });
-    let rtScene, rtHalf, rtA, rtB, rtD, rtD2;
+    const depthMat = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking });
+    let rtScene, rtHalf, rtA, rtB, rtD, rtD2, rtDepth;
     let curW = 0, curH = 0;
     const flags = { bloom: false, vignette: false, dof: false };
     const api = { enabled: false, flags: flags, resize: resize, render: render, setEnabled: setEnabled, setFocus: setFocus };
 
-    function make(w, h) {
-      return new THREE.WebGLRenderTarget(Math.max(2, w), Math.max(2, h), { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: true, stencilBuffer: false });
+    function make(w, h, ms) {
+      const o = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: true, stencilBuffer: false };
+      if (ms && isGL2) { const t = new THREE.WebGLMultisampleRenderTarget(Math.max(2, w), Math.max(2, h), o); t.samples = 4; return t; }
+      return new THREE.WebGLRenderTarget(Math.max(2, w), Math.max(2, h), o);
     }
     function resize(W, H) {
       const w = W | 0, h = H | 0; if (w === curW && h === curH) return; curW = w; curH = h;
-      [rtScene, rtHalf, rtA, rtB, rtD, rtD2].forEach(function (r) { if (r) r.dispose(); });
-      rtScene = make(w, h); rtScene.texture.encoding = THREE.sRGBEncoding;
-      if (isGL2) { rtScene.depthTexture = new THREE.DepthTexture(w, h); rtScene.depthTexture.type = THREE.UnsignedIntType; }
+      [rtScene, rtHalf, rtA, rtB, rtD, rtD2, rtDepth].forEach(function (r) { if (r) r.dispose(); });
+      rtScene = make(w, h, true); rtScene.texture.encoding = THREE.sRGBEncoding;
+      rtDepth = make(w >> 1, h >> 1, false);
       rtHalf = make(w >> 1, h >> 1); rtA = make(w >> 2, h >> 2); rtB = make(w >> 2, h >> 2); rtD = make(w >> 1, h >> 1); rtD2 = make(w >> 1, h >> 1);
     }
     function setEnabled(f) {
@@ -75,11 +79,16 @@
     }
     function render(cam) {
       renderer.setRenderTarget(rtScene); renderer.render(scene, cam);
+      if (flags.dof) {
+        scene.overrideMaterial = depthMat;
+        renderer.setRenderTarget(rtDepth); renderer.render(scene, cam);
+        scene.overrideMaterial = null;
+      }
       let bloomTex = null, dofTex = null;
       if (flags.bloom) { mBright.uniforms.tex.value = rtScene.texture; pass(mBright, rtA); bloomTex = blur(rtA, rtB, rtA, 1.6).texture; }
       if (flags.dof) { mCopy.uniforms.tex.value = rtScene.texture; pass(mCopy, rtHalf); dofTex = blur(rtHalf, rtD, rtD2, 1.4).texture; }
       const u = mComp.uniforms;
-      u.tScene.value = rtScene.texture; u.tBloom.value = bloomTex; u.tDof.value = dofTex; u.tDepth.value = rtScene.depthTexture || null;
+      u.tScene.value = rtScene.texture; u.tBloom.value = bloomTex; u.tDof.value = dofTex; u.tDepth.value = flags.dof ? rtDepth.texture : null;
       u.uBloomOn.value = flags.bloom ? 1 : 0; u.uVignetteOn.value = flags.vignette ? 1 : 0; u.uDofOn.value = (flags.dof && dofTex) ? 1 : 0;
       u.uNear.value = cam.near; u.uFar.value = cam.far;
       pass(mComp, null);

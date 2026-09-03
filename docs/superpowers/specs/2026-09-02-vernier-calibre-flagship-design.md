@@ -189,3 +189,30 @@ Staying under 1MB is a deliberate competitive claim, not just hygiene.
 - Total transferred weight under 1MB
 - Linked from `/rewire/sample/` and the Rewire landing page demo grid
 - Footer links back to neurotrocity.com, consistent with every other page
+
+## 12. Revision: dark stage and finishing pass (2026-09-03)
+
+After review of the shipped page, two problems were identified and one decision changed.
+
+**Dark stage.** The white void is replaced by a charcoal ground: the stage renders on
+`0x1B1D21` and the page tokens invert. The metals stay as authored (they read
+correctly against a dark ground) and sit on a soft light pool rather than a
+shadow-catcher. Tokens: `--void #1B1D21`, `--void-2 #24272C`, `--ink #F3F4F6`,
+`--ink-2 #B9BDC6`, `--muted #8F949E`, `--blued #7FA3E8` (text/links),
+`--blued-cta #3D63B3` (button fill; white on it is 5.78:1). Lowest text pairing
+is 4.92:1.
+
+**Rendering fidelity.** The post pass renders the scene into a multisampled target
+(4× MSAA on WebGL2) so edges are anti-aliased with post on; depth for DOF comes
+from a separate half-resolution depth pass. Tessellation roughly doubles
+(16 samples per tooth, 16 curve segments, 4–5 bevel segments, 64-segment
+cylinders, 48-segment lathes). The sapphire caseback is invisible in every view
+except the sapphire macro, where it fades in and out with scroll.
+
+**Finishing detail.** Bridges gain polished anglage: extrusion side walls and
+bevels take a polished material via geometry groups. Côtes de Genève and perlage
+become visible colour and bump detail, not roughness only. Pillars are turned
+with a collar, screw heads are chamfered with sunk slots, jewels sit in polished
+countersinks.
+
+Out of scope for this revision: reshaping the bridge outlines.

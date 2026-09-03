@@ -34,10 +34,10 @@
     panel(30,  6,   0,  4, -26, 0,            0,          0xffffff, 0.5);  // back strip
     return s;
   }
-  function aoTexture() {
+  function poolTexture() {
     const c = document.createElement('canvas'); c.width = c.height = 512;
-    const g = c.getContext('2d'), gr = g.createRadialGradient(256, 256, 20, 256, 256, 250);
-    gr.addColorStop(0, 'rgba(16,17,20,0.28)'); gr.addColorStop(0.45, 'rgba(16,17,20,0.10)'); gr.addColorStop(1, 'rgba(16,17,20,0)');
+    const g = c.getContext('2d'), gr = g.createRadialGradient(256, 256, 40, 256, 256, 256);
+    gr.addColorStop(0, 'rgba(120,124,132,0.55)'); gr.addColorStop(0.55, 'rgba(120,124,132,0.18)'); gr.addColorStop(1, 'rgba(120,124,132,0)');
     g.fillStyle = gr; g.fillRect(0, 0, 512, 512);
     return new THREE.CanvasTexture(c);
   }
@@ -51,20 +51,20 @@
     } catch (e) { return null; }
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.8;
+    renderer.toneMappingExposure = 0.95;
     renderer.physicallyCorrectLights = true;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf7f7f8);
+    scene.background = new THREE.Color(0x1b1d21);
     const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 200);
 
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(roomScene(), 0.04).texture;
     pmrem.dispose();
 
-    const key = new THREE.DirectionalLight(0xffffff, 2.0);
+    const key = new THREE.DirectionalLight(0xffffff, 2.4);
     key.position.set(12, 26, 14); key.castShadow = true;
     key.shadow.camera.left = key.shadow.camera.bottom = -20;
     key.shadow.camera.right = key.shadow.camera.top = 20;
@@ -74,11 +74,12 @@
     const fill = new THREE.DirectionalLight(0xe8f0ff, 0.7); fill.position.set(-16, 10, -8); scene.add(fill);
     const rim  = new THREE.DirectionalLight(0xffffff, 0.9); rim.position.set(-6, 8, 22); scene.add(rim);
 
-    /* a shadow catcher plus a soft AO disc: together they sell the white void */
-    const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.ShadowMaterial({ opacity: 0.16 }));
+    /* a soft light pool under the object: on a dark ground the movement needs
+       something to sit on, and shadows need something lighter to fall onto */
+    const pool = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshBasicMaterial({ map: poolTexture(), transparent: true, depthWrite: false }));
+    pool.rotation.x = -Math.PI / 2; pool.position.y = -0.63; scene.add(pool);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.ShadowMaterial({ opacity: 0.42 }));
     ground.rotation.x = -Math.PI / 2; ground.position.y = -0.62; ground.receiveShadow = true; scene.add(ground);
-    const ao = new THREE.Mesh(new THREE.PlaneGeometry(42, 42), new THREE.MeshBasicMaterial({ map: aoTexture(), transparent: true, depthWrite: false }));
-    ao.rotation.x = -Math.PI / 2; ao.position.y = -0.61; scene.add(ao);
 
     const matsHi = V.materials.create({ transmission: true });
     const matsLo = V.materials.create({ transmission: false });

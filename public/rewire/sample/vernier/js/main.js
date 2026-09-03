@@ -80,6 +80,11 @@
   if (reduced) {
     ScrollTrigger.create({ trigger: '#exploded', start: 'top 50%', onEnter: () => M.explode(1), onLeaveBack: () => M.explode(0) });
     ScrollTrigger.create({ trigger: '#escapement', start: 'top 50%', onEnter: () => M.explode(0), onLeaveBack: () => M.explode(1) });
+    const cb = M.movement.caseback;
+    cb.material.transparent = true;
+    ScrollTrigger.create({ trigger: trig.sapphire, start: 'top 60%',
+      onEnter: () => { cb.visible = true; cb.material.opacity = 1; }, onEnterBack: () => { cb.visible = true; cb.material.opacity = 1; },
+      onLeave: () => { cb.visible = false; }, onLeaveBack: () => { cb.visible = false; } });
   }
 
   let spinTween = null;
@@ -115,6 +120,13 @@
     // explode over the first part of #exploded, hold for the rest of it, reassemble as the escapement camera dives in
     master.to(M.state, { explode: 1, duration: Math.max(0.0005, f(exTop + 0.2 * VH) - f(exTop - 0.4 * VH)) }, f(exTop - 0.4 * VH));
     master.to(M.state, { explode: 0, duration: Math.max(0.0005, f(esTop - 0.3 * VH) - f(esTop - 0.7 * VH)) }, f(esTop - 0.7 * VH));
+
+    const cb = M.movement.caseback, sT = topOf(trig.sapphire), scT = topOf(trig.screw);
+    cb.material.transparent = true;
+    master.to({}, { duration: 0.0005, onStart: () => { cb.visible = true; }, onReverseComplete: () => { cb.visible = false; } }, f(sT - 0.9 * VH));
+    master.fromTo(cb.material, { opacity: 0 }, { opacity: 1, duration: Math.max(0.0005, f(sT - 0.5 * VH) - f(sT - 0.9 * VH)) }, f(sT - 0.9 * VH));
+    master.to(cb.material, { opacity: 0, duration: Math.max(0.0005, f(scT - 0.3 * VH) - f(scT - 0.5 * VH)), onComplete: () => { cb.visible = false; }, onReverseComplete: () => { cb.visible = true; } }, f(scT - 0.5 * VH));
+
     ScrollTrigger.refresh();
   }
   if (!reduced) {
