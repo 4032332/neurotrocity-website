@@ -124,8 +124,8 @@
     const cb = M.movement.caseback, sT = topOf(trig.sapphire), scT = topOf(trig.screw);
     cb.material.transparent = true;
     master.to({}, { duration: 0.0005, onStart: () => { cb.visible = true; }, onReverseComplete: () => { cb.visible = false; } }, f(sT - 0.9 * VH));
-    master.fromTo(cb.material, { opacity: 0 }, { opacity: 1, duration: Math.max(0.0005, f(sT - 0.3 * VH) - f(sT - 0.9 * VH)) }, f(sT - 0.9 * VH));
-    master.to(cb.material, { opacity: 0, duration: Math.max(0.0005, f(scT - 0.3 * VH) - f(scT - 0.9 * VH)), onComplete: () => { cb.visible = false; }, onReverseComplete: () => { cb.visible = true; } }, f(scT - 0.9 * VH));
+    master.fromTo(cb.material, { opacity: 0 }, { opacity: 1, duration: Math.max(0.0005, f(sT - 0.5 * VH) - f(sT - 0.9 * VH)) }, f(sT - 0.9 * VH));
+    master.to(cb.material, { opacity: 0, duration: Math.max(0.0005, f(scT - 0.3 * VH) - f(scT - 0.5 * VH)), onComplete: () => { cb.visible = false; }, onReverseComplete: () => { cb.visible = true; } }, f(scT - 0.5 * VH));
 
     ScrollTrigger.refresh();
   }

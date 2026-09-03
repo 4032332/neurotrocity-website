@@ -40,14 +40,15 @@
     return new THREE.Mesh(new THREE.TubeGeometry(curve, Math.min(600, pts.length), radius, 10, false), mat);
   }
   let slotSeq = 0;
-  function screw(headR, headH, shankR, len, headMat, slotMat) {
+  function screw(headR, headH, shankR, len, headMat, slotMat, rimMat) {
     const g = new THREE.Group();
     const pts = P.screwProfile(headR, headH, shankR, len).map(p => new THREE.Vector2(p.r, p.y));
     g.add(new THREE.Mesh(new THREE.LatheGeometry(pts, 48), headMat));
     const slot = new THREE.Mesh(new THREE.BoxGeometry(headR * 1.5, 0.06, 0.14), slotMat);
     slot.userData.cosmetic = true;
     slot.position.y = headH * 0.82; slot.rotation.y = (slotSeq++ * 0.73) % Math.PI; g.add(slot);
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(headR * 0.92, 0.03, 8, 48), headMat);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(headR * 0.92, 0.03, 8, 48), rimMat || headMat);
+    rim.userData.cosmetic = true;
     rim.rotation.x = Math.PI / 2; rim.position.y = headH * 0.96; g.add(rim);
     return g;
   }
@@ -57,6 +58,7 @@
     const ring = new THREE.Mesh(new THREE.TorusGeometry(r + 0.12, 0.085, 12, 40), mat.polished);
     ring.rotation.x = Math.PI / 2; ring.position.y = 0.1; g.add(ring);
     const sink = new THREE.Mesh(new THREE.LatheGeometry([new THREE.Vector2(r + 0.05, -0.05), new THREE.Vector2(r + 0.32, 0.16), new THREE.Vector2(r + 0.32, 0.18)], 48), mat.polished);
+    sink.userData.cosmetic = true;
     g.add(sink);
     return g;
   }
@@ -172,10 +174,10 @@
         [-0.2, 4.0, 1], [2.4, 8.4, 1], [1.4, 0.4, 0], [3.0, -3.0, 0], [-7.8, 0.4, 0], [-4.2, 2.8, 0], [7.2, -1.6, 0], [-8.6, 3.8, 0]
       ];
       screwSpots.forEach(([x, z, isBridge], i) => {
-        const s = screw(0.42, 0.22, 0.14, 0.9, isBridge ? mat.blued : mat.polished, mat.dark);
+        const s = screw(0.42, 0.22, 0.14, 0.9, isBridge ? mat.blued : mat.polished, mat.dark, mat.polished);
         add('screw' + i, s, x, isBridge ? 3.0 : 4.1, z, isBridge ? 19 : 21);
       });
-      for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + 0.3; add('pillarScrew' + i, screw(0.36, 0.2, 0.12, 0.8, mat.polished, mat.dark), 11.6 * Math.cos(a), 2.7, 11.6 * Math.sin(a), 19); }
+      for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2 + 0.3; add('pillarScrew' + i, screw(0.36, 0.2, 0.12, 0.8, mat.polished, mat.dark, mat.polished), 11.6 * Math.cos(a), 2.7, 11.6 * Math.sin(a), 19); }
 
       /* keyless works and crown */
       add('stem', (function(){ const s = cyl(0.28, 6.4, mat.polished, 14); s.rotation.z = Math.PI/2; return s; })(), -12.2, 1.2, -2.6, 3);
