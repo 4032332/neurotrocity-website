@@ -9,20 +9,33 @@ const { accent = 'volt' } = Astro.props;
   import type { Accent } from '../motion/cortex/palette';
 
   const canvas = document.getElementById('field') as HTMLCanvasElement;
-  // Probe capability on a scratch canvas: a context created on #field here
-  // would pin its attributes, and three.js's preserveDrawingBuffer would be
-  // silently ignored.
-  const gl = document.createElement('canvas').getContext('webgl2');
-  const tier = detectTier({
-    hasWebgl2: !!gl,
-    deviceMemory: (navigator as any).deviceMemory,
-    hardwareConcurrency: navigator.hardwareConcurrency,
-    reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
-    maxTextureSize: gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 0,
-  });
-  gl?.getExtension('WEBGL_lose_context')?.loseContext();
-  if (tier === 'none') canvas.classList.add('static-fallback');
-  else mountCortex(canvas, { tier, accent: canvas.dataset.accent as Accent });
+
+  function boot() {
+    // Probe capability on a scratch canvas: a context created on #field here
+    // would pin its attributes, and three.js's preserveDrawingBuffer would be
+    // silently ignored.
+    const gl = document.createElement('canvas').getContext('webgl2');
+    const tier = detectTier({
+      hasWebgl2: !!gl,
+      deviceMemory: (navigator as any).deviceMemory,
+      hardwareConcurrency: navigator.hardwareConcurrency,
+      reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+      maxTextureSize: gl ? gl.getParameter(gl.MAX_TEXTURE_SIZE) : 0,
+    });
+    gl?.getExtension('WEBGL_lose_context')?.loseContext();
+    if (tier === 'none') canvas.classList.add('static-fallback');
+    else mountCortex(canvas, { tier, accent: canvas.dataset.accent as Accent });
+  }
+
+  // Mount after the page has painted its LCP content, so the field's own
+  // bundle (three.js) never competes with it. A brief static ground colour
+  // shows first; the field itself is unchanged once mounted.
+  function schedule() {
+    if ('requestIdleCallback' in window) (window as any).requestIdleCallback(boot, { timeout: 500 });
+    else setTimeout(boot, 1);
+  }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule, { once: true });
 </script>
 <style>
   #field {

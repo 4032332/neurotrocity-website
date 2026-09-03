@@ -15,7 +15,7 @@ const { deck } = REWIRE_PAGE.demos;
     {DEMOS.map((d, i) => (
       <article class="deck-card" id={`deck-card-${i}`} data-href={d.href} role="option" aria-selected={i === 0 ? 'true' : 'false'} draggable="false">
         <span class="frame">
-          <img src={`/rewire/sample/assets/${d.slug}-tile.jpg`} alt={`${d.name} demo model`} loading="lazy" draggable="false" />
+          <img src={`/rewire/sample/assets/${d.slug}-tile.jpg`} alt={`${d.name} demo model`} loading="lazy" decoding="async" width="1200" height="750" draggable="false" />
           <iframe title={`${d.name} demo`} loading="lazy" src="" tabindex="-1"></iframe>
           <span class="live-hint" aria-hidden="true">{deck.hint}</span>
         </span>
