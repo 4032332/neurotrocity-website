@@ -52,6 +52,8 @@ export function mountCortex(canvas: HTMLCanvasElement, opts: CortexOptions): Cor
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     sc.uniforms.uAspect.value = w / h;
+    // gl_FragCoord is in drawing-buffer pixels (DPR-scaled), not CSS pixels.
+    renderer.getDrawingBufferSize(sc.uniforms.uResolution.value);
   }
 
   function writePulses(): void {

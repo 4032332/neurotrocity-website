@@ -12,7 +12,6 @@ const { meta, nav, hero, build, proof, rules, contact, footer } = HOME;
 <link rel="canonical" href="https://neurotrocity.com/" />
 <style is:global>
 /* ── frame ─────────────────────────────────────────────────────────────── */
-html{ scroll-behavior:smooth }
 a{ text-decoration:none }
 .wrap{ max-width:var(--maxw); margin:0 auto; padding-inline:var(--pad) }
 @media (min-width:1001px){ .wrap{ padding-left:calc(var(--gutter) + 16px) } }
@@ -50,6 +49,7 @@ body > header:has(.bar){
 
 /* ── hero — the one full-volume moment ─────────────────────────────────── */
 .hero{ min-height:min(88vh,760px); display:flex; align-items:center; padding-block:70px }
+.hero .copy{ width:fit-content; max-width:100% }
 .hero .kick{ color:var(--cyan); margin-bottom:20px }
 .hero h1{ font-weight:800; font-size:var(--step-3); line-height:.99; letter-spacing:-.036em; max-width:15ch; text-wrap:balance }
 .hero h1 em{ font-style:normal; color:var(--volt) }
@@ -91,21 +91,12 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── #proof: ventures as evidence, then the stance ─────────────────────── */
 .man{ margin-top:40px }
-/* Content-shaped backing: the field is attenuated behind running text only —
-   never globally. Soft-edged so it reads as depth, not a panel. */
-.quiet-ground{
-  background:color-mix(in srgb, var(--ground) 72%, transparent);
-  box-shadow:0 0 0 12px color-mix(in srgb, var(--ground) 72%, transparent),
-             0 0 64px 40px color-mix(in srgb, var(--ground) 55%, transparent);
-  border-radius:4px;
-}
 .stance{
   margin-top:52px; padding:clamp(26px,4vw,44px); border:1px solid var(--line-2); border-radius:4px;
   background:
     linear-gradient(150deg,
       color-mix(in srgb, var(--volt) 10%, transparent),
-      color-mix(in srgb, var(--cyan) 3%, transparent) 55%, transparent),
-    color-mix(in srgb, var(--ground-2) 86%, transparent);
+      color-mix(in srgb, var(--cyan) 3%, transparent) 55%, transparent);
 }
 .stance p{ font-family:var(--display); font-weight:700; font-size:clamp(19px,2.5vw,29px); line-height:1.22; letter-spacing:-.028em; max-width:26ch; text-wrap:balance }
 .stance p em{ font-style:normal; color:var(--cyan) }
@@ -118,6 +109,7 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── #contact ──────────────────────────────────────────────────────────── */
 .contact{ text-align:center }
+.contact .copy{ max-width:56ch; margin-inline:auto }
 .contact h2, .contact .sub{ margin-inline:auto }
 .say{
   display:inline-block; margin-top:28px; font-family:var(--display); font-size:clamp(21px,3.3vw,33px);
@@ -154,13 +146,15 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
 
 <!-- hero -->
 <div class="hero" id="s-hero" data-hero data-soma="Hero">
-  <div class="wrap" data-quiet>
+  <div class="wrap">
+    <div class="copy" data-quiet>
     <p class="mono kick">{hero.kicker}</p>
     <h1>{hero.headline.lead}<em>{hero.headline.em}</em>{hero.headline.tail}</h1>
     <p class="lede">{hero.lede.a}<strong>{hero.lede.strong}</strong>{hero.lede.b}</p>
     <div class="cta">
       <a class="btn p" href={hero.primary.href}>{hero.primary.label} <span class="arw" aria-hidden="true">→</span></a>
       <a class="btn g" href={hero.ghost.href}>{hero.ghost.label}</a>
+    </div>
     </div>
   </div>
 </div>
@@ -175,7 +169,7 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
     </div>
     <div class="svc">
       {build.services.map((s) => (
-        <div data-quiet style={`--c:var(--${s.accent})`}>
+        <div style={`--c:var(--${s.accent})`}>
           <p class="mono n">{s.n}</p>
           <h3>{s.href ? <a href={s.href}>{s.title}</a> : s.title}</h3>
           <p>{s.blurb}</p>
@@ -193,34 +187,40 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
       <h2>{proof.heading}</h2>
       <p class="sub">{proof.sub.a}<strong>{proof.sub.strong}</strong>{proof.sub.b}</p>
     </div>
-    <div class="man quiet-ground" data-quiet>
+    <div class="man">
       {PRODUCTS.map((p) => <VentureRow product={p} />)}
     </div>
-    <div class="stance" data-quiet>
-      <p>{proof.stance.lead}<em>{proof.stance.em}</em></p>
-      <p class="note">{proof.stance.note}</p>
+    <div class="stance">
+      <div data-quiet>
+        <p>{proof.stance.lead}<em>{proof.stance.em}</em></p>
+        <p class="note">{proof.stance.note}</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- how we work -->
 <section class="sec" id="rules" data-soma="How we work">
-  <div class="wrap" data-quiet>
-    <p class="mono eyebrow">{rules.eyebrow}</p>
-    <h2>{rules.heading}</h2>
-    <ul class="rules quiet-ground">
-      {RULES.map((r) => <li class="rule"><b>{r.title}</b> {r.body}</li>)}
+  <div class="wrap">
+    <div data-quiet>
+      <p class="mono eyebrow">{rules.eyebrow}</p>
+      <h2>{rules.heading}</h2>
+    </div>
+    <ul class="rules">
+      {RULES.map((r) => <li class="rule" data-quiet><b>{r.title}</b> {r.body}</li>)}
     </ul>
   </div>
 </section>
 
 <!-- contact -->
 <section class="sec contact" id="contact" data-soma="Contact">
-  <div class="wrap" data-quiet>
-    <p class="mono eyebrow">{contact.eyebrow}</p>
-    <h2>{contact.heading}</h2>
-    <p class="sub">{contact.sub}</p>
-    <a class="say" href={`mailto:${contact.email}`}>{contact.email}</a>
+  <div class="wrap">
+    <div class="copy" data-quiet>
+      <p class="mono eyebrow">{contact.eyebrow}</p>
+      <h2>{contact.heading}</h2>
+      <p class="sub">{contact.sub}</p>
+      <a class="say" href={`mailto:${contact.email}`}>{contact.email}</a>
+    </div>
   </div>
 </section>
 

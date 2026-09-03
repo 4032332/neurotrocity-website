@@ -8,7 +8,7 @@ import type { Product } from '../content/facts';
 interface Props { product: Product }
 const { product } = Astro.props;
 ---
-<a class="vrow" href={product.path} style={`--c:var(--${product.accent})`}>
+<a class="vrow" href={product.path} style={`--c:var(--${product.accent})`} data-quiet>
   <span class="sl">/{product.slug}</span>
   <span class="ds">{product.description}</span>
   <span class="mt">{product.platforms}</span>

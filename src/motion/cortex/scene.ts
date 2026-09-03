@@ -19,6 +19,10 @@ export interface FieldUniforms extends Record<string, THREE.IUniform> {
   uC1: { value: THREE.Vector3 };
   uC2: { value: THREE.Vector3 };
   uQuiet: { value: Float32Array };
+  /** Drawing-buffer size (DPR-scaled) — the scene materials map gl_FragCoord through it. */
+  uResolution: { value: THREE.Vector2 };
+  /** How much light a fibre/soma/pulse keeps under a quiet rect. */
+  uQuietFloor: { value: number };
 }
 
 export interface Soma {
@@ -67,6 +71,49 @@ function glowTexture(): THREE.CanvasTexture {
   return new THREE.CanvasTexture(c);
 }
 
+// Injected into every scene material so fibres, somata, dust and pulses part
+// around text the same way the nebula does. quietness() must stay identical to
+// the copy in field.glsl.ts (it reads the same uQuiet uniform).
+const QUIET_GLSL = [
+  `uniform vec4 uQuiet[${MAX_RECTS}]; uniform vec2 uResolution; uniform float uQuietFloor;`,
+  'float quietness(vec2 p){',
+  '  float q = 1.0;',
+  `  for(int i = 0; i < ${MAX_RECTS}; i++){`,
+  '    if(uQuiet[i].z <= 0.0) continue;',
+  '    vec2 d = abs(p - uQuiet[i].xy) - uQuiet[i].zw;',
+  '    float sd = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);',
+  '    q = min(q, smoothstep(-0.02, 0.10, sd));',
+  '  }',
+  '  return q;',
+  '}',
+].join('\n');
+
+// In three r185 meshbasic (which LineBasicMaterial also uses), points and
+// sprite all close with `#include <opaque_fragment>` then
+// `#include <colorspace_fragment>`; hooking the latter lands after the final
+// gl_FragColor write and before the colour-space conversion.
+const QUIET_HOOK = '#include <colorspace_fragment>';
+const QUIET_APPLY = [
+  'float qk = mix(uQuietFloor, 1.0, quietness(gl_FragCoord.xy / uResolution * 2.0 - 1.0));',
+  'gl_FragColor.rgb *= qk; gl_FragColor.a *= qk;',
+  QUIET_HOOK,
+].join('\n');
+
+/** Every material in the world scene goes through this; none is left unhooked. */
+function honourQuiet<T extends THREE.Material>(mat: T, u: FieldUniforms): T {
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms.uQuiet = u.uQuiet;
+    shader.uniforms.uResolution = u.uResolution;
+    shader.uniforms.uQuietFloor = u.uQuietFloor;
+    if (!shader.fragmentShader.includes(QUIET_HOOK)) {
+      throw new Error(`cortex: ${mat.type} fragment shader lacks ${QUIET_HOOK}`);
+    }
+    shader.fragmentShader = QUIET_GLSL + '\n' +
+      shader.fragmentShader.replace(QUIET_HOOK, QUIET_APPLY);
+  };
+  return mat;
+}
+
 function fibreGeometry(clusters: Cluster[], rgb: Float32Array): THREE.BufferGeometry {
   const lp: number[] = [], lc: number[] = [];
   clusters.forEach((cl, ci) => {
@@ -107,6 +154,8 @@ export function createScene(budget: Budget, palette: Palette, rng: () => number)
     uC1: { value: new THREE.Vector3(...palette.c1) },
     uC2: { value: new THREE.Vector3(...palette.c2) },
     uQuiet: { value: new Float32Array(MAX_RECTS * 4) },
+    uResolution: { value: new THREE.Vector2(1, 1) },
+    uQuietFloor: { value: 0.08 },
   };
   const bgScene = new THREE.Scene();
   const bgCamera = new THREE.Camera();
@@ -125,26 +174,30 @@ export function createScene(budget: Budget, palette: Palette, rng: () => number)
 
   // Fibres: two passes over one geometry — a wide dim halo and a thin bright core.
   const lineGeo = track(fibreGeometry(clusters, clusterRgb));
-  const fibreDim = track(new THREE.LineBasicMaterial({
+  const fibreDim = track(honourQuiet(new THREE.LineBasicMaterial({
     vertexColors: true, transparent: true, opacity: 0.16,
     blending: THREE.AdditiveBlending, depthWrite: false,
-  }));
-  const fibreHot = track(new THREE.LineBasicMaterial({
+  }), uniforms));
+  const fibreHot = track(honourQuiet(new THREE.LineBasicMaterial({
     vertexColors: true, transparent: true, opacity: 0.52,
     blending: THREE.AdditiveBlending, depthWrite: false,
-  }));
+  }), uniforms));
   const dimLines = new THREE.LineSegments(lineGeo, fibreDim);
   dimLines.scale.setScalar(1.012);
   group.add(dimLines, new THREE.LineSegments(lineGeo, fibreHot));
 
   // Somata: additive glow sprite plus a small white core.
   const coreGeo = track(new THREE.SphereGeometry(0.055, 18, 18));
-  const coreMat = track(new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  // transparent so the quiet alpha actually fades the core under text — an
+  // opaque mesh would ignore gl_FragColor.a and land as a grey disc.
+  const coreMat = track(honourQuiet(new THREE.MeshBasicMaterial({
+    color: 0xffffff, transparent: true, depthWrite: false,
+  }), uniforms));
   const somata: Soma[] = clusters.map((cl, i) => {
-    const spriteMat = track(new THREE.SpriteMaterial({
+    const spriteMat = track(honourQuiet(new THREE.SpriteMaterial({
       map: glow, color: palette.clusters[i], transparent: true, opacity: 0.85,
       blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false,
-    }));
+    }), uniforms));
     const sprite = new THREE.Sprite(spriteMat);
     sprite.position.set(cl.origin.x, cl.origin.y, cl.origin.z);
     sprite.scale.setScalar(1.5);
@@ -161,10 +214,10 @@ export function createScene(budget: Budget, palette: Palette, rng: () => number)
   }
   const dustGeo = track(new THREE.BufferGeometry());
   dustGeo.setAttribute('position', new THREE.BufferAttribute(dp, 3));
-  group.add(new THREE.Points(dustGeo, track(new THREE.PointsMaterial({
+  group.add(new THREE.Points(dustGeo, track(honourQuiet(new THREE.PointsMaterial({
     color: palette.dust, size: 0.026, transparent: true, opacity: 0.5,
     blending: THREE.AdditiveBlending, depthWrite: false,
-  }))));
+  }), uniforms))));
 
   // Pulses: preallocated to the tier's ceiling; drawRange is set per frame.
   const pos = new Float32Array(budget.maxPulses * 3);
@@ -173,10 +226,10 @@ export function createScene(budget: Budget, palette: Palette, rng: () => number)
   pulseGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   pulseGeo.setAttribute('color', new THREE.BufferAttribute(col, 3));
   pulseGeo.setDrawRange(0, 0);
-  const pulseMat = track(new THREE.PointsMaterial({
+  const pulseMat = track(honourQuiet(new THREE.PointsMaterial({
     map: glow, size: 0.13, vertexColors: true, transparent: true, opacity: 0.95,
     blending: THREE.AdditiveBlending, depthWrite: false,
-  }));
+  }), uniforms));
   const pulsePoints = new THREE.Points(pulseGeo, pulseMat);
   pulsePoints.frustumCulled = false;
   group.add(pulsePoints);
