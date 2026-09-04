@@ -46,5 +46,6 @@ test('the mobile tier never renders through an off-screen target', () => {
   assert.equal(m.post.dof, false);
   assert.equal(m.post.vignette, false);
   assert.equal(m.transmission, false);
-  assert.ok(m.pixelRatio >= 2, 'phones are high-DPR; keep it sharp');
+  assert.equal(m.shadowMap, 0, 'the shadow pass is an off-screen target too');
+  assert.ok(m.pixelRatio >= 1.5 && m.pixelRatio <= 2, 'sharp enough, but bounded');
 });

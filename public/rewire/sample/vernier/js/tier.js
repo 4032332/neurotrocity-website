@@ -9,12 +9,12 @@
     high:   { pixelRatio: 2,   shadowMap: 2048, softShadows: true,  post: { bloom: true,  vignette: true,  dof: true  }, transmission: true  },
     medium: { pixelRatio: 1.5, shadowMap: 1024, softShadows: true,  post: { bloom: true,  vignette: true,  dof: false }, transmission: true  },
     low:    { pixelRatio: 1,   shadowMap: 0,    softShadows: false, post: { bloom: false, vignette: false, dof: false }, transmission: false },
-    /* Phones and tablets. Sharp (DPR up to 2) but nothing that renders through
-       an off-screen target: no post chain, no MSAA render target, no depth pass,
-       no transmission. Those are what flicker on mobile GPUs; the default
-       framebuffer's own antialiasing is what they do well. Hard shadows keep
-       the light pool. Never re-sampled, never stepped up. */
-    mobile: { pixelRatio: 2,   shadowMap: 1024, softShadows: false, post: { bloom: false, vignette: false, dof: false }, transmission: false }
+    /* Phones and tablets. Nothing renders through an off-screen target and
+       nothing multisamples: no post chain, no MSAA target, no depth pass, no
+       shadow map, no transmission, and the renderer is created without
+       default-framebuffer antialiasing (movement.js). Those are the mobile-GPU
+       flicker sources. DPR capped at 1.5. Never re-sampled, never stepped up. */
+    mobile: { pixelRatio: 1.5, shadowMap: 0,    softShadows: false, post: { bloom: false, vignette: false, dof: false }, transmission: false }
   };
   const ORDER = ['low', 'medium', 'high'];
 

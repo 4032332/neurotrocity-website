@@ -29,8 +29,17 @@
      (MSAA target, depth pass, bloom) is what flickers on mobile GPUs, and a
      frame-time probe cannot tell us that — a fast phone happily runs it at
      60fps while it blinks. Coarse pointer is the honest signal. */
-  const mobile = matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints || 0) > 1;
-  const M = V.movement.create(canvas, { reduced: reduced, mobile: mobile });
+  const q = new URLSearchParams(location.search);
+  const mobile = q.has('mobile') ? q.get('mobile') !== '0'
+    : (matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints || 0) > 1);
+  /* Field-diagnosis overrides — a phone is the only instrument that can see a
+     mobile-GPU flicker, so let it bisect: ?tier=low|mobile|medium|high
+     ?aa=0|1  ?dpr=1|1.5|2  ?shadows=0|1  ?diag=1 (readout pill). */
+  const createOpts = { reduced: reduced, mobile: mobile };
+  if (q.has('aa')) createOpts.antialias = q.get('aa') !== '0';
+  if (q.has('dpr')) createOpts.maxDpr = parseFloat(q.get('dpr')) || 1;
+  if (q.has('shadows')) createOpts.shadows = q.get('shadows') !== '0';
+  const M = V.movement.create(canvas, createOpts);
   if (!M) {
     document.body.classList.add('no-webgl');
     $('#fallback').hidden = false;
@@ -54,8 +63,36 @@
     document.body.classList.remove('no-webgl'); $('#fallback').hidden = true;
   });
 
+  if (q.has('tier') && T.TIERS[q.get('tier')]) M.setTier(q.get('tier'));
+
+  /* ?diag=1 — live readout so a phone can report what it is actually running */
+  if (q.get('diag') === '1') {
+    const pill = document.createElement('pre'); pill.className = 'diag'; document.body.appendChild(pill);
+    let frames = 0, lastT = performance.now(), fps = 0, losses = 0;
+    canvas.addEventListener('webglcontextlost', () => { losses++; });
+    gsap.ticker.add(() => {
+      frames++; const now = performance.now();
+      if (now - lastT >= 1000) { fps = Math.round(frames * 1000 / (now - lastT)); frames = 0; lastT = now; }
+    });
+    const gl = M.renderer.getContext();
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const gpu = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+    setInterval(() => {
+      const a = M.renderer.getContextAttributes ? M.renderer.getContextAttributes() : gl.getContextAttributes();
+      pill.textContent = [
+        'tier ' + M.tier + (mobile ? ' (mobile)' : ''),
+        'dpr ' + M.renderer.getPixelRatio() + ' / ' + (window.devicePixelRatio || 1),
+        'buffer ' + canvas.width + 'x' + canvas.height,
+        'aa ' + (a && a.antialias ? 'on' : 'off') + '  shadows ' + (M.renderer.shadowMap.enabled ? 'on' : 'off'),
+        'post ' + (post.enabled ? 'on' : 'off'),
+        'fps ' + fps + '  ctx lost ' + losses,
+        String(gpu).slice(0, 40)
+      ].join('\n');
+    }, 500);
+  }
+
   /* adaptive tier (desktop only): measure once, re-check once, only ever step down */
-  if (!mobile) {
+  if (!mobile && !q.has('tier')) {
     M.sampleFrameTimes(60).then(ft => { if (lost) return; M.setTier(T.chooseTier(ft)); });
     ScrollTrigger.create({ trigger: '#exploded', start: 'top 80%', once: true, onEnter: () => {
       M.sampleFrameTimes(60).then(ft => { if (lost) return; if (T.rank(T.chooseTier(ft)) < T.rank(M.tier)) M.setTier(T.stepDown(M.tier)); });
