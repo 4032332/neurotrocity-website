@@ -31,11 +31,20 @@ test('stepDown and rank', () => {
 });
 
 test('every tier declares the settings the renderer reads', () => {
-  for (const k of ['high', 'medium', 'low']) {
+  for (const k of ['high', 'medium', 'low', 'mobile']) {
     const t = T.TIERS[k];
     for (const key of ['pixelRatio', 'shadowMap', 'softShadows', 'post', 'transmission']) assert.ok(key in t, k + '.' + key);
     for (const key of ['bloom', 'vignette', 'dof']) assert.equal(typeof t.post[key], 'boolean');
   }
   assert.equal(T.TIERS.low.shadowMap, 0);
   assert.equal(T.TIERS.low.transmission, false);
+});
+
+test('the mobile tier never renders through an off-screen target', () => {
+  const m = T.TIERS.mobile;
+  assert.equal(m.post.bloom, false);
+  assert.equal(m.post.dof, false);
+  assert.equal(m.post.vignette, false);
+  assert.equal(m.transmission, false);
+  assert.ok(m.pixelRatio >= 2, 'phones are high-DPR; keep it sharp');
 });

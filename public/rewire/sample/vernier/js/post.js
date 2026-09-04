@@ -32,8 +32,12 @@
     '  if (uVignetteOn > 0.5){ float v = smoothstep(1.3, 0.5, distance(vUv, vec2(0.5))); c.rgb = mix(c.rgb, c.rgb * v, uVignette); }',
     '  gl_FragColor = c; }'].join('\n');
 
-  function create(renderer, scene, camera) {
+  function create(renderer, scene, camera, opts) {
+    opts = opts || {};
     const isGL2 = renderer.capabilities.isWebGL2;
+    /* Multisampled render targets flicker on mobile GPUs (the per-frame resolve
+       through an sRGB target is the usual culprit); the caller decides. */
+    const msaa = opts.msaa !== false;
     const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2));
     const quadScene = new THREE.Scene(); quadScene.add(quad);
@@ -56,7 +60,7 @@
 
     function make(w, h, ms) {
       const o = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: true, stencilBuffer: false };
-      if (ms && isGL2) { const t = new THREE.WebGLMultisampleRenderTarget(Math.max(2, w), Math.max(2, h), o); t.samples = 4; return t; }
+      if (ms && isGL2 && msaa) { const t = new THREE.WebGLMultisampleRenderTarget(Math.max(2, w), Math.max(2, h), o); t.samples = 4; return t; }
       return new THREE.WebGLRenderTarget(Math.max(2, w), Math.max(2, h), o);
     }
     function resize(W, H) {

@@ -25,14 +25,19 @@
 
   /* ── stage, or the static fallback ─────────────────── */
   const canvas = $('#stage');
-  const M = V.movement.create(canvas, { reduced: reduced });
+  /* Phones and tablets get the fixed `mobile` tier: the off-screen post chain
+     (MSAA target, depth pass, bloom) is what flickers on mobile GPUs, and a
+     frame-time probe cannot tell us that — a fast phone happily runs it at
+     60fps while it blinks. Coarse pointer is the honest signal. */
+  const mobile = matchMedia('(pointer: coarse)').matches || (navigator.maxTouchPoints || 0) > 1;
+  const M = V.movement.create(canvas, { reduced: reduced, mobile: mobile });
   if (!M) {
     document.body.classList.add('no-webgl');
     $('#fallback').hidden = false;
     $$('[data-count]').forEach(el => { el.textContent = fmtCount(+el.dataset.count, el.dataset.sep === '1'); });
     return;
   }
-  const post = V.post.create(M.renderer, M.scene, M.camera);
+  const post = V.post.create(M.renderer, M.scene, M.camera, { msaa: !mobile });
   M.attachPost(post);
   const tickFn = () => M.tick(performance.now()); gsap.ticker.add(tickFn);
   let lost = false;
@@ -43,14 +48,19 @@
   canvas.addEventListener('webglcontextrestored', () => {
     if (!lost) return;
     lost = false; gsap.ticker.add(tickFn);
+    /* A lost context is the GPU telling us it ran out of room. Come back
+       lighter, so a memory-pressure loss cannot become a blink loop. */
+    M.setTier(mobile ? 'mobile' : 'low');
     document.body.classList.remove('no-webgl'); $('#fallback').hidden = true;
   });
 
-  /* adaptive tier: measure once, re-check once, only ever step down */
-  M.sampleFrameTimes(60).then(ft => { if (lost) return; M.setTier(T.chooseTier(ft)); });
-  ScrollTrigger.create({ trigger: '#exploded', start: 'top 80%', once: true, onEnter: () => {
-    M.sampleFrameTimes(60).then(ft => { if (lost) return; if (T.rank(T.chooseTier(ft)) < T.rank(M.tier)) M.setTier(T.stepDown(M.tier)); });
-  } });
+  /* adaptive tier (desktop only): measure once, re-check once, only ever step down */
+  if (!mobile) {
+    M.sampleFrameTimes(60).then(ft => { if (lost) return; M.setTier(T.chooseTier(ft)); });
+    ScrollTrigger.create({ trigger: '#exploded', start: 'top 80%', once: true, onEnter: () => {
+      M.sampleFrameTimes(60).then(ft => { if (lost) return; if (T.rank(T.chooseTier(ft)) < T.rank(M.tier)) M.setTier(T.stepDown(M.tier)); });
+    } });
+  }
 
   /* ── camera story ──────────────────────────────────── */
   function focusFor(name) {
