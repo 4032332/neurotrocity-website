@@ -39,6 +39,7 @@
   if (q.has('aa')) createOpts.antialias = q.get('aa') !== '0';
   if (q.has('dpr')) createOpts.maxDpr = parseFloat(q.get('dpr')) || 1;
   if (q.has('shadows')) createOpts.shadows = q.get('shadows') !== '0';
+  if (q.has('pdb')) createOpts.preserve = q.get('pdb') !== '0';        // preserveDrawingBuffer
   const M = V.movement.create(canvas, createOpts);
   if (!M) {
     document.body.classList.add('no-webgl');
@@ -83,7 +84,7 @@
         'tier ' + M.tier + (mobile ? ' (mobile)' : ''),
         'dpr ' + M.renderer.getPixelRatio() + ' / ' + (window.devicePixelRatio || 1),
         'buffer ' + canvas.width + 'x' + canvas.height,
-        'aa ' + (a && a.antialias ? 'on' : 'off') + '  shadows ' + (M.renderer.shadowMap.enabled ? 'on' : 'off'),
+        'aa ' + (a && a.antialias ? 'on' : 'off') + '  shadows ' + (M.renderer.shadowMap.enabled ? 'on' : 'off') + '  pdb ' + (a && a.preserveDrawingBuffer ? 'on' : 'off'),
         'post ' + (post.enabled ? 'on' : 'off'),
         'fps ' + fps + '  ctx lost ' + losses,
         String(gpu).slice(0, 40)

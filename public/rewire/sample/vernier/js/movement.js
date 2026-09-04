@@ -49,9 +49,15 @@
     try {
       /* Mobile: no default-framebuffer MSAA (a known iOS WebKit flicker source at
          large buffer sizes) and no high-performance hint. Both overridable. */
+      /* preserveDrawingBuffer on phones: iOS clears the buffer as soon as a frame
+         is handed to the compositor, and when the compositor samples between
+         rAF frames (smooth scroll, other tickers, DOM updates) it shows that
+         cleared buffer — a black blink independent of every quality setting.
+         Keeping the last frame until it is overwritten removes that entirely. */
       renderer = new THREE.WebGLRenderer({
         canvas: canvas, antialias: opts.antialias !== undefined ? !!opts.antialias : !opts.mobile,
-        alpha: false, powerPreference: opts.mobile ? 'default' : 'high-performance'
+        alpha: false, powerPreference: opts.mobile ? 'default' : 'high-performance',
+        preserveDrawingBuffer: opts.preserve !== undefined ? !!opts.preserve : !!opts.mobile
       });
     } catch (e) { return null; }
     renderer.outputEncoding = THREE.sRGBEncoding;
