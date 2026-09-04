@@ -171,7 +171,7 @@
     }
 
     new ResizeObserver(resize).observe(canvas.parentElement);
-    resize(); setTier('medium');
+    resize(); setTier(opts.mobile ? 'mobile' : 'medium');
 
     return {
       renderer: renderer, scene: scene, camera: camera, movement: M, cam: cam, state: state, VIEWS: VIEWS,
