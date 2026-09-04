@@ -47,7 +47,12 @@
     const reduced = !!opts.reduced;
     let renderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+      /* Mobile: no default-framebuffer MSAA (a known iOS WebKit flicker source at
+         large buffer sizes) and no high-performance hint. Both overridable. */
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvas, antialias: opts.antialias !== undefined ? !!opts.antialias : !opts.mobile,
+        alpha: false, powerPreference: opts.mobile ? 'default' : 'high-performance'
+      });
     } catch (e) { return null; }
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -94,11 +99,12 @@
 
     function setTier(name) {
       tier = name; const s = T.TIERS[name];
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, s.pixelRatio));
-      renderer.shadowMap.enabled = s.shadowMap > 0; key.castShadow = s.shadowMap > 0;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, s.pixelRatio, opts.maxDpr || Infinity));
+      const shadowSize = opts.shadows === false ? 0 : s.shadowMap;
+      renderer.shadowMap.enabled = shadowSize > 0; key.castShadow = shadowSize > 0;
       if (key.shadow.map) { key.shadow.map.dispose(); key.shadow.map = null; }
-      if (s.shadowMap > 0) {
-        key.shadow.mapSize.set(s.shadowMap, s.shadowMap);
+      if (shadowSize > 0) {
+        key.shadow.mapSize.set(shadowSize, shadowSize);
       }
       renderer.shadowMap.type = s.softShadows ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
       M.caseback.material = s.transmission ? matsHi.sapphire : matsLo.sapphire;

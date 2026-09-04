@@ -41,6 +41,8 @@ img{ display:block; max-width:100%; }
 .stage canvas{ display:block; width:100%; height:100%; }
 .fallback{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
 .no-webgl .fallback{ display:block; }
+.diag{ position:fixed; left:8px; bottom:8px; z-index:var(--z-top); margin:0; padding:8px 10px; border-radius:8px;
+  font:11px/1.45 var(--mono); color:#fff; background:rgba(0,0,0,.72); pointer-events:none; white-space:pre; }
 .no-webgl #stage{ display:none; }
 /* on phones the object sits in the upper half; this keeps the text legible over it */
 .scrim{ position:absolute; inset:0; z-index:var(--z-scrim); pointer-events:none;
