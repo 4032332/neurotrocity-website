@@ -42,10 +42,14 @@ img{ display:block; max-width:100%; }
    scrolling content above it. */
 .stage canvas{ display:block; width:100%; height:100%; will-change:transform; transform:translateZ(0); }
 .fallback{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-/* phone video mode: no WebGL context is ever created */
-.stage-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 24%; background:var(--void); }
+/* phone mode: a scroll-scrubbed frame sequence; no WebGL context is ever created */
+.stage-frames{ position:absolute; inset:0; width:100%; height:100%; display:none; background:var(--void); }
 .is-video #stage{ display:none; }
-.is-video .stage-video{ display:block; }
+.is-video .stage-frames{ display:block; filter:brightness(.86) contrast(1.04); }
+/* Portrait close-ups fill the screen with bright metal: a taller, denser scrim
+   under the copy, and a gradient under the fixed header so it never sits on plate. */
+.is-video .scrim{ background:linear-gradient(180deg, rgba(27,29,33,0) 16%, rgba(27,29,33,.5) 36%, rgba(27,29,33,.94) 52%, var(--void) 100%); }
+.is-video .top{ background:linear-gradient(180deg, rgba(27,29,33,.9), rgba(27,29,33,0)); }
 .only-video{ display:none; }
 .is-video .only-live{ display:none; }
 .is-video .only-video{ display:inline; }
