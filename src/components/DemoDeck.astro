@@ -20,7 +20,7 @@ const { deck } = REWIRE_PAGE.demos;
           <span class="live-hint" aria-hidden="true">{deck.hint}</span>
         </span>
         <span class="body">
-          <span class="provenance">{provenanceLabel(d.provenance)}</span>
+          <span class="provenance">{provenanceLabel(d.provenance)}{d.desktopOnly && <span class="desktop-only"> · Desktop demo</span>}</span>
           <span class="name">{d.name}</span>
           <span class="desc">{d.description}</span>
           <a class="open" href={d.href} aria-label={`${d.name} — open the demo`}>{deck.open} <span class="arw" aria-hidden="true">→</span></a>
@@ -99,6 +99,9 @@ const { deck } = REWIRE_PAGE.demos;
 
   .body{ display:flex; flex-direction:column; gap:7px; padding:16px 18px 18px; flex:1 }
   .provenance{ font-family:var(--mono); font-size:10.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--jade) }
+  /* On desktop the demo runs live right here; the note is for phones. */
+  .desktop-only{ display:none; color:var(--muted) }
+  @media (max-width:719px){ .desktop-only{ display:inline } }
   .name{ font-family:var(--display); font-weight:700; font-size:20px; letter-spacing:-.024em; color:var(--ink) }
   .desc{ color:var(--muted); font-size:14px; line-height:1.55; text-wrap:pretty }
   .open{ margin-top:auto; padding-top:10px; font-size:13.5px; font-weight:800; color:var(--jade); text-decoration:none; display:inline-block }

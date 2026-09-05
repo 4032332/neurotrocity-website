@@ -42,19 +42,17 @@ img{ display:block; max-width:100%; }
    scrolling content above it. */
 .stage canvas{ display:block; width:100%; height:100%; will-change:transform; transform:translateZ(0); }
 .fallback{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-/* phone mode: a scroll-scrubbed frame sequence; no WebGL context is ever created */
-.stage-frames{ position:absolute; inset:0; width:100%; height:100%; display:none; background:var(--void); }
-.is-video #stage{ display:none; }
-.is-video .stage-frames{ display:block; filter:brightness(.86) contrast(1.04); }
-/* Portrait close-ups fill the screen with bright metal: a taller, denser scrim
-   under the copy, and a gradient under the fixed header so it never sits on plate. */
-.is-video .scrim{ background:linear-gradient(180deg, rgba(27,29,33,0) 16%, rgba(27,29,33,.5) 36%, rgba(27,29,33,.94) 52%, var(--void) 100%); }
-.is-video .top{ background:linear-gradient(180deg, rgba(27,29,33,.9), rgba(27,29,33,0)); }
+/* phone mode: one still of the movement; no WebGL context is ever created */
+.stage-still{ position:absolute; inset:0; width:100%; height:100%; display:none; object-fit:cover; object-position:50% 30%; background:var(--void); }
+.is-still #stage{ display:none; }
+.is-still .stage-still{ display:block; }
+.is-still .scrim{ background:linear-gradient(180deg, rgba(27,29,33,0) 22%, rgba(27,29,33,.5) 40%, rgba(27,29,33,.94) 54%, var(--void) 100%); }
+.is-still .top{ background:linear-gradient(180deg, rgba(27,29,33,.9), rgba(27,29,33,0)); }
 .only-video{ display:none; }
-.is-video .only-live{ display:none; }
-.is-video .only-video{ display:inline; }
-.is-video .crownctl{ display:none; }
-.is-video .crown-note{ display:block; }
+.is-still .only-live{ display:none; }
+.is-still .only-video{ display:inline; }
+.is-still .crownctl{ display:none; }
+.is-still .crown-note{ display:block; }
 .crown-note{ display:none; font-family:var(--mono); font-size:.7rem; color:var(--muted); margin-top:10px; }
 .no-webgl .fallback{ display:block; }
 .diag{ position:fixed; left:8px; bottom:8px; z-index:var(--z-top); margin:0; padding:8px 10px; border-radius:8px;

@@ -17,6 +17,8 @@ export interface DemoModel {
   description: string;
   provenance: Provenance;
   href: string;
+  /** The live piece needs a desktop GPU; phones get a still of it and say so. */
+  desktopOnly?: boolean;
 }
 
 export interface Rule { title: string; body: string; }
@@ -31,7 +33,7 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const DEMOS: DemoModel[] = [
-  { slug: 'vernier',  name: 'Vernier',          provenance: 'fictional'    , href: '/rewire/sample/vernier/',
+  { slug: 'vernier',  name: 'Vernier',          provenance: 'fictional'    , href: '/rewire/sample/vernier/', desktopOnly: true,
     description: 'A mechanical movement rendered live in your browser. Wind it, scroll it apart into a hundred and forty pieces, and watch the escapement run in real time.' },
   { slug: 'apex',     name: 'Apex Motor Club',  provenance: 'fictional'    , href: '/rewire/sample/apex/',
     description: 'Supercar driving tours on the Great Ocean Road. Scroll-driven route map, an eight-car fleet browser, and a booking builder that prices a trip live.' },
