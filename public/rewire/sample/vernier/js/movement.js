@@ -71,9 +71,17 @@
     scene.background = new THREE.Color(0x1b1d21);
     const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 200);
 
+    /* Environment: the synthetic room is instant and stands in until the
+       real studio HDRI (CC0, Poly Haven "Studio Small 09") has loaded and been
+       prefiltered; then every metal reflects real lights with real falloff. */
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(roomScene(), 0.04).texture;
     pmrem.dispose();
+    const ENV_URL = opts.envUrl !== undefined ? opts.envUrl : 'assets/env/studio_small_09_1k.hdr';
+    const envReady = (ENV_URL && V.hdr) ? V.hdr.loadEnvironment(ENV_URL, renderer).then(env => {
+      const old = scene.environment; scene.environment = env; if (old) old.dispose();
+      return env;
+    }).catch(() => null) : Promise.resolve(null);
 
     const key = new THREE.DirectionalLight(0xffffff, 2.4);
     key.position.set(12, 26, 14); key.castShadow = true;
@@ -203,7 +211,7 @@
     return {
       renderer: renderer, scene: scene, camera: camera, movement: M, cam: cam, state: state, VIEWS: VIEWS,
       setTier: setTier, setView: setView, explode: explode, wind: wind, tick: tick,
-      beginCapture: beginCapture, captureAt: captureAt, endCapture: endCapture,
+      beginCapture: beginCapture, captureAt: captureAt, endCapture: endCapture, envReady: envReady,
       sampleFrameTimes: sampleFrameTimes, attachPost: attachPost, captureFrame: captureFrame, resize: resize,
       get tier() { return tier; }, get beats() { return beats; }
     };

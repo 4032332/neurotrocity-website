@@ -56,6 +56,7 @@
   if (q.has('dpr')) createOpts.maxDpr = parseFloat(q.get('dpr')) || 1;
   if (q.has('shadows')) createOpts.shadows = q.get('shadows') !== '0';
   if (q.has('pdb')) createOpts.preserve = q.get('pdb') !== '0';        // preserveDrawingBuffer
+  if (q.get('env') === 'none') createOpts.envUrl = '';                  // synthetic room only (before/after checks)
   const M = V.movement.create(canvas, createOpts);
   if (!M) {
     document.body.classList.add('no-webgl');
