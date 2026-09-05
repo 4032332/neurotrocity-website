@@ -43,19 +43,84 @@
      Three loops rendered offline from this same scene, swapped per section.
      ?webgl=1 forces the live path for testing. */
   if (mobile && !capture && !q.has('webgl')) {
+    /* One continuous sequence, scrubbed by scroll — the desktop camera story
+       (hero → wind → exploded → escapement → materials → spec) rendered
+       offline from this same scene, drawn to a 2D canvas. No cuts, and no
+       WebGL context for iOS to blink. */
     document.body.classList.add('is-video');
-    const video = $('#stageVideo'); video.hidden = false;
-    const clips = { hero: 'assets/video/hero.mp4', exploded: 'assets/video/exploded.mp4', escapement: 'assets/video/escapement.mp4' };
-    let cur = null;
-    function play(name) {
-      if (cur === name) return; cur = name;
-      video.src = clips[name]; video.load();
-      const p = video.play(); if (p && p.catch) p.catch(() => {});
-    }
-    play('hero');
-    ScrollTrigger.create({ trigger: '#exploded',   start: 'top 60%', onEnter: () => play('exploded'),   onLeaveBack: () => play('hero') });
-    ScrollTrigger.create({ trigger: '#escapement', start: 'top 60%', onEnter: () => play('escapement'), onLeaveBack: () => play('exploded') });
-    ScrollTrigger.create({ trigger: '#materials',  start: 'top 60%', onEnter: () => play('hero'),       onLeaveBack: () => play('escapement') });
+    const cv = $('#stageFrames'); cv.hidden = false;
+    const ctx = cv.getContext('2d');
+    fetch('assets/seq/manifest.json').then(r => r.json()).then(man => {
+      const N = man.n, frames = new Array(N);
+      const ready = i => { const im = frames[i]; return !!(im && im.complete && im.naturalWidth); };
+      /* Load in order, three at a time; scrubbing ahead of the load draws
+         the nearest frame already in. */
+      let next = 0, inflight = 0;
+      function pump() {
+        while (next < N && inflight < 3) {
+          const i = next++, im = new Image(); im.decoding = 'async'; inflight++;
+          im.onload = im.onerror = () => { inflight--; if (i === 0) { lastDrawn = -1; } pump(); };
+          im.src = 'assets/seq/f' + String(i).padStart(3, '0') + '.' + man.ext; frames[i] = im;
+        }
+      }
+      pump();
+
+      /* Page-scroll fraction → sequence position, anchored so each view's
+         frames arrive exactly when its section does (mirrors buildMaster). */
+      const ANCHORS = [
+        ['#hero', 0], ['#wind', 0.24], ['#exploded', 0.44], ['#escapement', 0.66],
+        ['#materials .mat[data-view=sapphire]', 0.81], ['#materials .mat[data-view=screw]', 0.88],
+        ['#materials .mat[data-view=striping]', 0.94], ['#spec', 1]
+      ];
+      let map = [];
+      function buildMap() {
+        const VH = innerHeight, max = Math.max(1, document.documentElement.scrollHeight - VH);
+        map = ANCHORS.map(([sel, u], i) => {
+          const el = $(sel); const top = el ? el.getBoundingClientRect().top + scrollY : 0;
+          return { f: i === 0 ? 0 : Math.max(0, Math.min(1, (top - 0.6 * VH) / max)), u: u };
+        }).sort((a, b) => a.f - b.f);
+        if (map[map.length - 1].f < 1) map.push({ f: 1, u: 1 });
+      }
+      function uAt(f) {
+        for (let i = 1; i < map.length; i++) {
+          if (f <= map[i].f) { const a = map[i - 1], b = map[i], s = (f - a.f) / Math.max(1e-6, b.f - a.f); return a.u + (b.u - a.u) * s; }
+        }
+        return 1;
+      }
+
+      let lastDrawn = -1, cur = 0, dpr = 1;
+      function resize() {
+        dpr = Math.min(2, window.devicePixelRatio || 1);
+        cv.width = Math.round(cv.clientWidth * dpr); cv.height = Math.round(cv.clientHeight * dpr);
+        lastDrawn = -1; buildMap();
+      }
+      function draw(i) {
+        let j = Math.max(0, Math.min(N - 1, i));
+        while (j > 0 && !ready(j)) j--;
+        if (!ready(j) || j === lastDrawn) return;
+        lastDrawn = j;
+        const im = frames[j], cw = cv.width, ch = cv.height;
+        const s = Math.max(cw / im.naturalWidth, ch / im.naturalHeight);           // cover
+        const dw = im.naturalWidth * s, dh = im.naturalHeight * s;
+        // The movement lives in the top third on a phone; copy reads on the
+        // scrimmed lower half. Lift the frame and fill what it leaves with void.
+        ctx.fillStyle = '#1b1d21'; ctx.fillRect(0, 0, cw, ch);
+        ctx.drawImage(im, (cw - dw) / 2, (ch - dh) * 0.5 - ch * 0.17, dw, dh);
+      }
+      function loop() {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const f = max > 0 ? Math.max(0, Math.min(1, scrollY / max)) : 0;
+        const target = uAt(f) * (N - 1);
+        cur = reduced ? target : cur + (target - cur) * 0.2;
+        if (Math.abs(target - cur) < 0.02) cur = target;
+        draw(Math.round(cur));
+        requestAnimationFrame(loop);
+      }
+      addEventListener('resize', resize);
+      addEventListener('load', buildMap);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(buildMap);
+      resize(); requestAnimationFrame(loop);
+    });
     /* beats: the movement runs at 4Hz, eight escape-wheel steps a second */
     const beats = $('#beats'), started = performance.now();
     if (!reduced) setInterval(() => { beats.textContent = Math.floor((performance.now() - started) / 125).toLocaleString(); }, 250);

@@ -181,9 +181,9 @@
       camera.aspect = w / h; camera.clearViewOffset(); camera.updateProjectionMatrix();
       if (post) post.resize(w, h);
     }
-    function captureAt(tSeconds, quality) {
+    function captureAt(tSeconds, quality, mime) {
       tick(t0 + tSeconds * 1000);
-      return canvas.toDataURL('image/jpeg', quality || 0.9);
+      return canvas.toDataURL(mime || 'image/jpeg', quality || 0.9);
     }
     function endCapture() {
       if (!capPrev) return;
