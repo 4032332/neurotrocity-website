@@ -51,16 +51,47 @@
     const cv = $('#stageFrames'); cv.hidden = false;
     const ctx = cv.getContext('2d');
     fetch('assets/seq/manifest.json').then(r => r.json()).then(man => {
-      const N = man.n, frames = new Array(N);
-      const ready = i => { const im = frames[i]; return !!(im && im.complete && im.naturalWidth); };
-      /* Load in order, three at a time; scrubbing ahead of the load draws
-         the nearest frame already in. */
+      const N = man.n;
+      const blobs = new Array(N);       // every compressed frame, kept (≈2 MB)
+      const bitmaps = new Array(N);     // decoded pixels: a bounded window only
+      const decoding = new Array(N);
+      let contiguous = 0;               // frames 0..contiguous-1 have arrived
+      const url = i => 'assets/seq/f' + String(i).padStart(3, '0') + '.' + man.ext;
+
+      /* Decode ahead into bitmaps, never at draw time — a lazy decode on a
+         phone CPU is the skip. The window is bounded so memory stays flat. */
+      const AHEAD = 18, BEHIND = 6, KEEP = 40;
+      function decode(i) {
+        if (i < 0 || i >= N || bitmaps[i] || decoding[i] || !blobs[i]) return;
+        decoding[i] = true;
+        const done = bm => { bitmaps[i] = bm; decoding[i] = false; if (Math.round(cur) === i || lastDrawn < 0) lastDrawn = -1; };
+        if (window.createImageBitmap) createImageBitmap(blobs[i]).then(done, () => { decoding[i] = false; });
+        else {
+          const im = new Image(), src = URL.createObjectURL(blobs[i]);
+          im.onload = () => (im.decode ? im.decode() : Promise.resolve()).then(() => done(im), () => done(im));
+          im.onerror = () => { decoding[i] = false; };
+          im.src = src;
+        }
+      }
+      function ensureWindow(center, dir) {
+        const ahead = dir >= 0 ? AHEAD : BEHIND, behind = dir >= 0 ? BEHIND : AHEAD;
+        for (let i = center; i <= Math.min(N - 1, center + ahead); i++) decode(i);
+        for (let i = center - 1; i >= Math.max(0, center - behind); i--) decode(i);
+        for (let i = 0; i < N; i++) {
+          if (bitmaps[i] && (i < center - KEEP || i > center + KEEP)) { if (bitmaps[i].close) bitmaps[i].close(); bitmaps[i] = null; }
+        }
+      }
+      /* Fetch every frame in order, four at a time; the hero frame decodes first. */
       let next = 0, inflight = 0;
       function pump() {
-        while (next < N && inflight < 3) {
-          const i = next++, im = new Image(); im.decoding = 'async'; inflight++;
-          im.onload = im.onerror = () => { inflight--; if (i === 0) { lastDrawn = -1; } pump(); };
-          im.src = 'assets/seq/f' + String(i).padStart(3, '0') + '.' + man.ext; frames[i] = im;
+        while (next < N && inflight < 4) {
+          const i = next++; inflight++;
+          fetch(url(i)).then(r => r.blob()).then(b => { blobs[i] = b; }).catch(() => {}).then(() => {
+            inflight--;
+            while (contiguous < N && blobs[contiguous]) contiguous++;
+            if (i < 2) decode(i);
+            pump();
+          });
         }
       }
       pump();
@@ -95,24 +126,31 @@
         lastDrawn = -1; buildMap();
       }
       function draw(i) {
+        /* Only ever draw a decoded frame, preferring the nearest one behind
+           the target — a fast flick runs through frames, never over them. */
         let j = Math.max(0, Math.min(N - 1, i));
-        while (j > 0 && !ready(j)) j--;
-        if (!ready(j) || j === lastDrawn) return;
+        if (!bitmaps[j]) { let k = j; while (k > 0 && !bitmaps[k]) k--; if (!bitmaps[k]) return; j = k; }
+        if (j === lastDrawn) return;
         lastDrawn = j;
-        const im = frames[j], cw = cv.width, ch = cv.height;
-        const s = Math.max(cw / im.naturalWidth, ch / im.naturalHeight);           // cover
-        const dw = im.naturalWidth * s, dh = im.naturalHeight * s;
+        const im = bitmaps[j], iw = im.width || im.naturalWidth, ih = im.height || im.naturalHeight;
+        const cw = cv.width, ch = cv.height;
+        const s = Math.max(cw / iw, ch / ih), dw = iw * s, dh = ih * s;   // cover
         // The movement lives in the top third on a phone; copy reads on the
         // scrimmed lower half. Lift the frame and fill what it leaves with void.
         ctx.fillStyle = '#1b1d21'; ctx.fillRect(0, 0, cw, ch);
         ctx.drawImage(im, (cw - dw) / 2, (ch - dh) * 0.5 - ch * 0.17, dw, dh);
       }
+      let lastDir = 1;
       function loop() {
         const max = document.documentElement.scrollHeight - innerHeight;
         const f = max > 0 ? Math.max(0, Math.min(1, scrollY / max)) : 0;
-        const target = uAt(f) * (N - 1);
-        cur = reduced ? target : cur + (target - cur) * 0.2;
+        let target = uAt(f) * (N - 1);
+        // Hold at the edge of what has arrived rather than leaping to a far frame.
+        target = Math.min(target, Math.max(0, contiguous - 1));
+        if (Math.abs(target - cur) > 0.5) lastDir = target > cur ? 1 : -1;
+        cur = reduced ? target : cur + (target - cur) * 0.25;
         if (Math.abs(target - cur) < 0.02) cur = target;
+        ensureWindow(Math.round(cur + (target - cur) * 0.5), lastDir);
         draw(Math.round(cur));
         requestAnimationFrame(loop);
       }
