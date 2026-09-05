@@ -35,6 +35,34 @@
   /* Field-diagnosis overrides — a phone is the only instrument that can see a
      mobile-GPU flicker, so let it bisect: ?tier=low|mobile|medium|high
      ?aa=0|1  ?dpr=1|1.5|2  ?shadows=0|1  ?diag=1 (readout pill). */
+  const capture = q.get('capture') === '1';                       // build-time frame capture (render-videos script)
+
+  /* ── phones: a recording of the movement, never a live context ──────────
+     iOS composites a fixed WebGL canvas with a visible blink on every render
+     setting we tried (post chain, MSAA, DPR, shadows, preserveDrawingBuffer).
+     Three loops rendered offline from this same scene, swapped per section.
+     ?webgl=1 forces the live path for testing. */
+  if (mobile && !capture && !q.has('webgl')) {
+    document.body.classList.add('is-video');
+    const video = $('#stageVideo'); video.hidden = false;
+    const clips = { hero: 'assets/video/hero.mp4', exploded: 'assets/video/exploded.mp4', escapement: 'assets/video/escapement.mp4' };
+    let cur = null;
+    function play(name) {
+      if (cur === name) return; cur = name;
+      video.src = clips[name]; video.load();
+      const p = video.play(); if (p && p.catch) p.catch(() => {});
+    }
+    play('hero');
+    ScrollTrigger.create({ trigger: '#exploded',   start: 'top 60%', onEnter: () => play('exploded'),   onLeaveBack: () => play('hero') });
+    ScrollTrigger.create({ trigger: '#escapement', start: 'top 60%', onEnter: () => play('escapement'), onLeaveBack: () => play('exploded') });
+    ScrollTrigger.create({ trigger: '#materials',  start: 'top 60%', onEnter: () => play('hero'),       onLeaveBack: () => play('escapement') });
+    /* beats: the movement runs at 4Hz, eight escape-wheel steps a second */
+    const beats = $('#beats'), started = performance.now();
+    if (!reduced) setInterval(() => { beats.textContent = Math.floor((performance.now() - started) / 125).toLocaleString(); }, 250);
+    wireCounters();
+    return;
+  }
+
   const createOpts = { reduced: reduced, mobile: mobile };
   if (q.has('aa')) createOpts.antialias = q.get('aa') !== '0';
   if (q.has('dpr')) createOpts.maxDpr = parseFloat(q.get('dpr')) || 1;
@@ -49,7 +77,9 @@
   }
   const post = V.post.create(M.renderer, M.scene, M.camera, { msaa: !mobile });
   M.attachPost(post);
-  const tickFn = () => M.tick(performance.now()); gsap.ticker.add(tickFn);
+  const tickFn = () => M.tick(performance.now());
+  if (capture) { window.__vernier = M; window.__post = post; }          // the render script drives frames itself
+  else gsap.ticker.add(tickFn);
   let lost = false;
   canvas.addEventListener('webglcontextlost', e => {          // backgrounded mobile tabs lose the context routinely
     e.preventDefault(); lost = true; gsap.ticker.remove(tickFn);
@@ -214,14 +244,18 @@
   const beats = $('#beats');
   if (!reduced) setInterval(() => { beats.textContent = M.beats.toLocaleString(); }, 250);
   const partsEl = $('[data-count="140"]'); if (partsEl) partsEl.dataset.count = String(M.movement.partCount);
-  $$('[data-count]').forEach(el => {
-    const target = +el.dataset.count, sep = el.dataset.sep === '1';
-    if (reduced) { el.textContent = fmtCount(target, sep); return; }
-    ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: () => {
-      const o = { v: 0 };
-      gsap.to(o, { v: target, duration: 1.4, ease: 'power2.out', onUpdate: () => { el.textContent = fmtCount(o.v, sep); } });
-    } });
-  });
+  wireCounters();
+
+  function wireCounters() {
+    $$('[data-count]').forEach(el => {
+      const target = +el.dataset.count, sep = el.dataset.sep === '1';
+      if (reduced) { el.textContent = fmtCount(target, sep); return; }
+      ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: () => {
+        const o = { v: 0 };
+        gsap.to(o, { v: target, duration: 1.4, ease: 'power2.out', onUpdate: () => { el.textContent = fmtCount(o.v, sep); } });
+      } });
+    });
+  }
 
   /* build-time hook for the fallback image */
   window.__captureFallback = function (w, h) {
