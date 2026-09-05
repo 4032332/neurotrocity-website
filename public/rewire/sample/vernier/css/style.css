@@ -42,6 +42,16 @@ img{ display:block; max-width:100%; }
    scrolling content above it. */
 .stage canvas{ display:block; width:100%; height:100%; will-change:transform; transform:translateZ(0); }
 .fallback{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+/* phone video mode: no WebGL context is ever created */
+.stage-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 24%; background:var(--void); }
+.is-video #stage{ display:none; }
+.is-video .stage-video{ display:block; }
+.only-video{ display:none; }
+.is-video .only-live{ display:none; }
+.is-video .only-video{ display:inline; }
+.is-video .crownctl{ display:none; }
+.is-video .crown-note{ display:block; }
+.crown-note{ display:none; font-family:var(--mono); font-size:.7rem; color:var(--muted); margin-top:10px; }
 .no-webgl .fallback{ display:block; }
 .diag{ position:fixed; left:8px; bottom:8px; z-index:var(--z-top); margin:0; padding:8px 10px; border-radius:8px;
   font:11px/1.45 var(--mono); color:#fff; background:rgba(0,0,0,.72); pointer-events:none; white-space:pre; }

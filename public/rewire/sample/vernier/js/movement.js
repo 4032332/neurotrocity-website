@@ -171,14 +171,29 @@
       });
     }
     function attachPost(p) { post = p; post.setEnabled(T.TIERS[tier].post); resize(); }
-    function captureFrame(w, h) {
-      const prev = new THREE.Vector2(); renderer.getSize(prev); const pr = renderer.getPixelRatio();
+    /* Deterministic offline capture (build-time only): size once, then render
+       any number of frames at explicit times, then restore. Used for the
+       fallback still and for the phone videos. */
+    let capPrev = null;
+    function beginCapture(w, h) {
+      capPrev = { size: new THREE.Vector2(), pr: renderer.getPixelRatio() }; renderer.getSize(capPrev.size);
       renderer.setPixelRatio(1); renderer.setSize(w, h, false);
       camera.aspect = w / h; camera.clearViewOffset(); camera.updateProjectionMatrix();
       if (post) post.resize(w, h);
-      tick(performance.now());
-      const url = canvas.toDataURL('image/jpeg', 0.85);
-      renderer.setPixelRatio(pr); renderer.setSize(prev.x, prev.y, false); lastW = lastH = 0; resize();
+    }
+    function captureAt(tSeconds, quality) {
+      tick(t0 + tSeconds * 1000);
+      return canvas.toDataURL('image/jpeg', quality || 0.9);
+    }
+    function endCapture() {
+      if (!capPrev) return;
+      renderer.setPixelRatio(capPrev.pr); renderer.setSize(capPrev.size.x, capPrev.size.y, false);
+      capPrev = null; lastW = lastH = 0; resize();
+    }
+    function captureFrame(w, h) {
+      beginCapture(w, h);
+      const url = captureAt((performance.now() - t0) / 1000, 0.85);
+      endCapture();
       return url;
     }
 
@@ -188,6 +203,7 @@
     return {
       renderer: renderer, scene: scene, camera: camera, movement: M, cam: cam, state: state, VIEWS: VIEWS,
       setTier: setTier, setView: setView, explode: explode, wind: wind, tick: tick,
+      beginCapture: beginCapture, captureAt: captureAt, endCapture: endCapture,
       sampleFrameTimes: sampleFrameTimes, attachPost: attachPost, captureFrame: captureFrame, resize: resize,
       get tier() { return tier; }, get beats() { return beats; }
     };

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700&family=Fragment+Mono&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=d2629336">
+<link rel="stylesheet" href="css/style.css?v=afa8f0a9">
 </head>
 <body>
 
@@ -30,6 +30,9 @@
 <!-- The 3D stage. Fixed, full viewport, behind the content column. -->
 <div class="stage" aria-hidden="true">
   <canvas id="stage"></canvas>
+  <!-- Phones: a recording of the same movement instead of a live context.
+       iOS composites a fixed WebGL canvas with a visible blink on every setting we tried. -->
+  <video id="stageVideo" class="stage-video" muted playsinline loop preload="metadata" poster="assets/video/hero-poster.jpg" hidden></video>
   <img id="fallback" class="fallback" src="assets/vernier-fallback.jpg" alt="" hidden>
   <div class="scrim"></div>
 </div>
@@ -40,7 +43,7 @@
     <div class="col">
       <p class="pre">Manual calibre · 26 mm · 23 jewels</p>
       <h1>Calibre<br>01.</h1>
-      <p class="lede">A hand-finished manual movement. Over a hundred and forty parts, built to be looked at, running live in your browser right now.</p>
+      <p class="lede">A hand-finished manual movement. Over a hundred and forty parts, built to be looked at, <span class="only-live">running live in your browser right now.</span><span class="only-video">rendered live on desktop — on a phone you're watching a recording of it.</span></p>
       <div class="ctas">
         <a class="btn btn--blued" href="#wind">Wind it</a>
         <a class="btn" href="#exploded">See every part</a>
@@ -59,6 +62,7 @@
         </div>
         <p class="hint">Drag sideways, or use the arrow keys.</p>
       </div>
+      <p class="crown-note">Winding is a desktop interaction — open this page on a computer to drag the crown yourself.</p>
       <dl class="read">
         <div><dt>Power reserve</dt><dd><span id="reserveH">0</span> h</dd></div>
         <div><dt>Mainspring tension</dt><dd><span id="tensionPct">0</span>%</dd></div>
@@ -83,7 +87,7 @@
   <section class="sec sec--tall" id="escapement" data-view="escapement">
     <div class="col">
       <h2>Four beats a second.</h2>
-      <p>The balance swings through 270 degrees, twenty-eight thousand eight hundred times an hour. This one is running in real time, against your clock.</p>
+      <p>The balance swings through 270 degrees, twenty-eight thousand eight hundred times an hour. <span class="only-live">This one is running in real time, against your clock.</span><span class="only-video">On a desktop this runs in real time, against your clock; here it's a recording at the same rate.</span></p>
       <dl class="read">
         <div><dt>Frequency</dt><dd>4 Hz · 28,800 vph</dd></div>
         <div><dt>Amplitude</dt><dd>270°</dd></div>
@@ -164,7 +168,7 @@
 <script src="js/materials.js?v=8831ef87"></script>
 <script src="js/geometry.js?v=9a259825"></script>
 <script src="js/post.js?v=a6e6b65d"></script>
-<script src="js/movement.js?v=eb96c908"></script>
-<script src="js/main.js?v=b4df9472"></script>
+<script src="js/movement.js?v=5f6cc072"></script>
+<script src="js/main.js?v=7fd57445"></script>
 </body>
 </html>
