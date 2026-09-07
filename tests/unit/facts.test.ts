@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCTS, DEMOS, RULES, CONTACT, REWIRE } from '../../src/content/facts';
+import { PRODUCTS, DEMOS, RULES, CONTACT, REWIRE, SKILL_PACK } from '../../src/content/facts';
 
 describe('facts', () => {
   it('has exactly the three real products', () => {
@@ -42,5 +42,40 @@ describe('facts', () => {
     ]);
     expect(REWIRE.contact.form).toBe('/rewire/contact/');
     expect(REWIRE.contact.email).toBe(CONTACT.rewire);
+  });
+});
+
+describe('skill pack', () => {
+  it('states a price with a currency and no fabricated anchor', () => {
+    expect(SKILL_PACK.price.amount).toBeGreaterThan(0);
+    expect(SKILL_PACK.price.currency).toBe('AUD');
+    // An inflated "was" price is the engineered regret RULES[1] rules out.
+    const s = JSON.stringify(SKILL_PACK).toLowerCase();
+    for (const banned of ['was', 'rrp', 'discount', 'normally', 'save']) {
+      expect(s).not.toMatch(new RegExp(`\\b${banned}\\b`));
+    }
+  });
+
+  it('makes no outcome, earnings or testimonial claim anywhere', () => {
+    const s = JSON.stringify(SKILL_PACK).toLowerCase();
+    // Whole words only — substring matching gives false hits ("earn" in "learning").
+    for (const banned of ['testimonial', 'guarantee', 'earn', 'earnings', 'income',
+                          'revenue', 'results', 'proven', 'guaranteed']) {
+      expect(s).not.toMatch(new RegExp(`\\b${banned}\\b`));
+    }
+    expect(s).not.toContain('$5k');
+  });
+
+  it('states prerequisites and who it is not for, so buyers can self-select out', () => {
+    expect(SKILL_PACK.prerequisites.length).toBeGreaterThanOrEqual(3);
+    expect(SKILL_PACK.notFor.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('lists contents that each correspond to something that ships', () => {
+    expect(SKILL_PACK.contents.length).toBeGreaterThanOrEqual(6);
+    for (const c of SKILL_PACK.contents) {
+      expect(c.title.length).toBeGreaterThan(0);
+      expect(c.body.length).toBeGreaterThan(30);
+    }
   });
 });
