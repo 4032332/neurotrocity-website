@@ -1,10 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
    VALE & VINE — page logic
-   Scroll is the only input. It gives a day of the vineyard year (js/year.js),
-   the day gives the real sun at Rosa Brook (js/sun.js), the sun gives the sky
-   the stage draws (js/stage.js), and the same day drives the chart, the
-   read-outs, the season and what the calendar costs. There is exactly one
-   answer on the page to "where in the year are we".
+   The photograph is fixed behind everything and swaps as you scroll;
+   the season switch changes which photographs, which facts, and what
+   the calendar costs. One state object drives all of it.
    ═══════════════════════════════════════════════════════════════ */
 (function () {
   'use strict';
@@ -30,33 +28,75 @@
   $$('a[href^="#"]').forEach(a =>
     a.addEventListener('click', () => nav.classList.remove('is-open')));
 
-  /* ── the one moving plate ──────────────────────────────────────
-     The season photographs are gone — the stage computes them. What a
-     render cannot do is show you the actual room, so the dinner section
-     still hands the stage a moving plate of it. It has no src and no
-     poster in the markup: a video the browser has never been told about
-     costs nothing, and both only appear once you have scrolled to the
-     section that wants them. Under reduced motion it never loads at all. */
-  const evening = $('.stage__v[data-v-for="evening"]');
-  if (evening) evening.style.transition = reduced ? 'none' : 'opacity .5s cubic-bezier(.4,0,.2,1)';
-  const EVENING_SRC = 'assets/video/interior.mp4';
+  /* ── the stage ─────────────────────────────────────────────────
+     Three layers: the season hero, the ceremony lawn and the evening
+     interior. Scroll decides which is on; the season decides what the
+     hero layer is showing. Crossfade only — no transforms on a
+     background-size:cover layer, it shimmers.                       */
+  const seasonLayers = VV.ORDER.map(id => {
+    const el = $('[data-s-layer="' + id + '"]');
+    el.style.backgroundImage = 'url(' + VV.SEASONS[id].stage + ')';
+    return el;
+  });
+  const layers = {
+    ceremony: $('[data-stage="ceremony"]'),
+    evening:  $('[data-stage="evening"]')
+  };
+  layers.ceremony.style.backgroundImage = 'url(assets/img/ceremony.jpg)';
+  layers.evening.style.backgroundImage  = 'url(assets/img/interior.jpg)';
+  Object.values(layers).forEach(l => {
+    l.style.transition = reduced ? 'none' : 'opacity .9s cubic-bezier(.4,0,.2,1)';
+  });
 
-  function vidSync(on) {
-    if (!evening || reduced) return;
-    if (on > .02 && !evening.getAttribute('src')) {
-      evening.setAttribute('poster', 'assets/video/interior.jpg');
-      evening.setAttribute('src', EVENING_SRC);
-    }
-    evening.style.opacity = on;
-    if (on > .05) { if (evening.paused) { const p = evening.play(); if (p) p.catch(() => {}); } }
-    else if (!evening.paused) evening.pause();
+  /* Blend the four season layers by a continuous position 0–3. They are
+     stacked in year order, so each later layer simply paints over the one
+     before it as its opacity comes up — no muddy triple-exposure. */
+  seasonLayers.forEach(el => {
+    el.style.transition = reduced ? 'none' : 'opacity .5s cubic-bezier(.4,0,.2,1)';
+  });
+  let blend = 0;
+  function setBlend(t) {
+    blend = t;
+    seasonLayers.forEach((el, i) => {
+      el.style.opacity = i === 0 ? 1 : Math.max(0, Math.min(1, t - (i - 1)));
+    });
+    syncSeasonVideo();
+  }
+  function syncSeasonVideo() {
+    if (shown !== 'hero') return;
+    const i = VV.ORDER.indexOf('pru');
+    vidSync('pru', Math.max(0, Math.min(1, blend - (i - 1))));
+  }
+
+  /* ── moving plates ─────────────────────────────────────────────
+     Two of the stage layers have a video twin. It mirrors the opacity of
+     the still underneath it and only plays while it is actually visible —
+     a paused, never-fetched video costs nothing, and a decoding one that
+     nobody can see costs a lot. Under reduced motion they never load. */
+  const vids = {};
+  $$('.stage__v').forEach(v => {
+    vids[v.dataset.vFor] = v;
+    v.style.transition = reduced ? 'none' : 'opacity .5s cubic-bezier(.4,0,.2,1)';
+  });
+  const VIDEO_SRC = { pru: (VV.SEASONS.pru.video || ''), evening: 'assets/video/interior.mp4' };
+
+  function vidSync(key, on) {
+    const v = vids[key];
+    if (!v || reduced) return;
+    if (on > .02 && !v.getAttribute('src')) v.setAttribute('src', VIDEO_SRC[key]);
+    v.style.opacity = on;
+    if (on > .05) { if (v.paused) { const p = v.play(); if (p) p.catch(() => {}); } }
+    else if (!v.paused) v.pause();
   }
 
   let shown = 'hero';
   function show(which) {
     if (which === shown) return;
     shown = which;
-    vidSync(which === 'evening' ? 1 : 0);
+    Object.keys(layers).forEach(k => layers[k].classList.toggle('is-on', k === which));
+    vidSync('evening', which === 'evening' ? 1 : 0);
+    // the season plates are covered while a set piece is up, so stop paying for them
+    if (which !== 'hero') vidSync('pru', 0); else syncSeasonVideo();
   }
 
   /* ── season ────────────────────────────────────────────────── */
@@ -65,6 +105,8 @@
     const s = VV.SEASONS[id];
     state.season = id;
     document.documentElement.dataset.season = id;
+
+    setBlend(VV.ORDER.indexOf(id));
 
     const set = () => {
       $('#heroWord').textContent = s.word;
@@ -248,7 +290,6 @@
     } });
   }
 
-  let yearPainted = false;
   function paintYear(f) {
     const y = VV.atYear(f);
     const x = px(f * 11);
@@ -267,8 +308,7 @@
     rulerTicks.forEach((t, i) => t.classList.toggle('is-on', i === Math.round(f * 11)));
     bandEls.forEach((b, i) => b.classList.toggle('is-on', VV.ORDER[i] === y.season));
 
-    if (y.season !== state.season || !yearPainted) {
-      yearPainted = true;
+    if (y.season !== state.season) {
       state.season = y.season;
       document.documentElement.dataset.season = y.season;
       $$('.season').forEach(b => b.classList.toggle('is-on', b.dataset.s === y.season));
@@ -281,72 +321,8 @@
       swap($('#yrTime'), s.time);
       drawCalendar(); quote();
     }
-  }
-
-
-  /* ── go ────────────────────────────────────────────────────────
-     The walk below owns the season from here on; this is only the state
-     the page is built in before the first scroll frame lands. */
-  paintSeason('bud', false);   // the vineyard year opens at budburst
-  step();
-  $('#gNow').textContent = state.guests;
-
-  /* ── the computed stage ───────────────────────────────────────
-     One WebGL surface behind the document, drawing the real light at Rosa
-     Brook for the day you have scrolled to. The stage pins the time of day
-     to the ceremony hour of whatever season that date belongs to, so the
-     sky is the light your ceremony would actually have — not a mood. */
-  const glCanvas = $('#stageGL');
-  let stage = null;
-
-  /* three.js is 118 KB and nothing above the fold needs it, so it is not in
-     the document at all: it is fetched once the browser is idle and the
-     stage mounts when it lands. The hero reveals itself in CSS, so the
-     largest paint on the page no longer waits behind a WebGL library. */
-  function mountStage() {
-    try { stage = VV.stage.mount(glCanvas, { day: VV.year.seasonDay('bud') }); }
-    catch (err) { document.documentElement.classList.add('no-gl'); console.warn('stage:', err); return; }
-    window.VV.__stage = stage;                       // filmstrip / test handle
-    stage.setQuietRects($$('[data-quiet]'));
-    walk(scrollFraction());
-  }
-
-  function loadStage() {
-    if (window.THREE) { mountStage(); return; }
-    const s = document.createElement('script');
-    s.src = 'js/vendor/three.min.js';
-    s.onload = mountStage;
-    s.onerror = () => { document.documentElement.classList.add('no-gl'); };
-    document.head.appendChild(s);
-  }
-  (window.requestIdleCallback || (fn => setTimeout(fn, 1)))(loadStage, { timeout: 1500 });
-
-  /* ── the walk ──────────────────────────────────────────────────
-     The document is one pass through the vineyard year. Scroll position is
-     the only input: it gives a day, the day gives the sun, the sun gives
-     the sky, and the same day feeds the read-outs and the chart. There is
-     no second source of truth for "where in the year are we", so the sky
-     and the sunset time printed beside it cannot drift apart. */
-  const scrollMax = () =>
-    Math.max(1, document.documentElement.scrollHeight - innerHeight);
-  const scrollFraction = () => Math.max(0, Math.min(1, scrollY / scrollMax()));
-
-  /* The nominal anchor fractions in year.js are guesses about layout; these
-     are the real ones. Measured after layout, and again on resize, because
-     the pinned year section changes height with the viewport. */
-  function measureAnchors() {
-    const max = scrollMax();
-    const map = {};
-    VV.year.anchors().forEach(a => {
-      const el = $(a.selector);
-      if (el) map[a.selector] = (el.getBoundingClientRect().top + scrollY) / max;
-    });
-    VV.year.setAnchorFractions(map);
-  }
-
-  function walk(f) {
-    paintYear(VV.year.yearFractionAt(f));
-    if (stage) stage.setDay(VV.year.dayAt(f));
+    // the photograph moves with the year, not with the season boundary
+    setBlend(f * 11 / 3);
   }
 
   /* ── scroll ────────────────────────────────────────────────── */
@@ -354,11 +330,13 @@
 
   if (reduced) {
     $$('.rv').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
-    // No scroll handlers run, so the page holds one frame: budburst, the
-    // season it opens on, at that season's ceremony hour.
-    measureAnchors();
-    walk(VV.year.fractionFor('bud'));
+    setBlend(VV.ORDER.indexOf('vin'));
+    paintYear(VV.seasonAt('vin'));
+    // no scroll triggers run, so hold the photograph back far enough to read over
+    $('#scrim').style.opacity = .84;
   } else {
+    gsap.to('.hero .rv', { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+                           stagger: .1, delay: .2 });
     $$('.rv').filter(el => !el.closest('.hero')).forEach(el =>
       gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: 'power3.out',
                     scrollTrigger: { trigger: el, start: 'top 90%' } }));
@@ -366,43 +344,57 @@
     /* ── what is behind you ──────────────────────────────────────
        Derived from scroll position each frame rather than from per-trigger
        enter/leave callbacks. An instant jump toggles several sections in one
-       tick and the order is not guaranteed, which used to leave the set
-       piece up over the wrong section one way and not the other. Asking
-       which section owns the middle of the screen right now cannot race. */
-    const cueSecs = $$('[data-stage-cue]');
+       tick and the order is not guaranteed, which left the scrim opaque over
+       the hero one way and transparent over the data the other. Asking which
+       section owns the middle of the screen right now cannot race. */
+    const scrim = $('#scrim');
+    const veilSecs = $$('[data-veil]');
+    const cueSecs  = $$('[data-stage-cue]');
     let ticking = false;
 
     function syncStage() {
       ticking = false;
       const mid = innerHeight * .5;
-      let cue = 'hero';
+      let v = 0, cue = 'hero';
+      for (const sec of veilSecs) {
+        const r = sec.getBoundingClientRect();
+        if (r.top <= mid && r.bottom >= mid) { v = sec.dataset.veil; break; }
+      }
       for (const sec of cueSecs) {
         const r = sec.getBoundingClientRect();
         if (r.top <= mid && r.bottom >= mid) { cue = sec.dataset.stageCue; break; }
       }
+      scrim.style.opacity = v;
       show(cue);
-      walk(scrollFraction());
     }
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(syncStage); } };
     addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', () => {
-      measureAnchors();
-      if (stage) stage.setQuietRects($$('[data-quiet]'));
-      onScroll();
-    });
-    measureAnchors();
+    addEventListener('resize', onScroll);
     syncStage();
-    // ScrollTrigger settles its pins and spacers after fonts land, and the
-    // document gets taller when it does; the walk has to remeasure with it.
-    ScrollTrigger.addEventListener('refresh', () => { measureAnchors(); onScroll(); });
 
-    /* The rail is a jump control: a chip scrolls the document to the point in
-       the walk where that season's midpoint sits, so the sky, the chart and
-       the read-outs arrive together instead of being set behind their backs. */
+    // the year itself
+    const yrST = ScrollTrigger.create({
+      trigger: '#year', start: 'top top', end: 'bottom bottom', scrub: .45,
+      // Only paint while the section actually holds the screen. Otherwise the
+      // initial refresh fires at progress 0 and drags the hero back to
+      // September, losing the frame the page should open on.
+      onUpdate(self) { if (self.isActive) paintYear(self.progress); },
+      onLeaveBack()  { paintSeason('vin', false); }
+    });
+
+    // the rail becomes a jump control while the year is on screen
     $$('.season').forEach(b => b.addEventListener('click', e => {
+      const r = document.querySelector('#year').getBoundingClientRect();
+      const inYear = r.top <= 0 && r.bottom >= innerHeight;
+      if (!inYear) return;
       e.stopImmediatePropagation();
-      scrollTo({ top: VV.year.fractionFor(b.dataset.s) * scrollMax(),
+      scrollTo({ top: yrST.start + (yrST.end - yrST.start) * VV.seasonAt(b.dataset.s),
                  behavior: 'smooth' });
     }, true));
   }
+
+  /* ── go ────────────────────────────────────────────────────── */
+  paintSeason('vin', false);   // the page opens on the frame that sells it
+  step();
+  $('#gNow').textContent = state.guests;
 })();

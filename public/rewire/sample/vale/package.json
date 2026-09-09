@@ -1,6 +1,0 @@
-{
-  "name": "vale-demo",
-  "private": true,
-  "type": "commonjs",
-  "description": "Scopes the Vale & Vine demo's UMD modules and node:test files to CommonJS; the site root is an ES-module Astro project."
-}
