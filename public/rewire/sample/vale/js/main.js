@@ -325,15 +325,67 @@
     setBlend(f * 11 / 3);
   }
 
+
+  /* ── go ────────────────────────────────────────────────────────
+     The walk below owns the season from here on; this is only the state
+     the page is built in before the first scroll frame lands. */
+  paintSeason('bud', false);   // the vineyard year opens at budburst
+  step();
+  $('#gNow').textContent = state.guests;
+
+  /* ── the computed stage ───────────────────────────────────────
+     One WebGL surface behind the document, drawing the real light at Rosa
+     Brook for the day you have scrolled to. The stage pins the time of day
+     to the ceremony hour of whatever season that date belongs to, so the
+     sky is the light your ceremony would actually have — not a mood. */
+  const glCanvas = $('#stageGL');
+  let stage = null;
+  try { stage = VV.stage.mount(glCanvas, { day: VV.year.seasonDay('bud') }); }
+  catch (err) { document.documentElement.classList.add('no-gl'); console.warn('stage:', err); }
+
+  if (stage) {
+    window.VV.__stage = stage;                       // filmstrip / test handle
+    stage.setQuietRects($$('[data-quiet]'));
+  }
+
+  /* ── the walk ──────────────────────────────────────────────────
+     The document is one pass through the vineyard year. Scroll position is
+     the only input: it gives a day, the day gives the sun, the sun gives
+     the sky, and the same day feeds the read-outs and the chart. There is
+     no second source of truth for "where in the year are we", so the sky
+     and the sunset time printed beside it cannot drift apart. */
+  const scrollMax = () =>
+    Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  const scrollFraction = () => Math.max(0, Math.min(1, scrollY / scrollMax()));
+
+  /* The nominal anchor fractions in year.js are guesses about layout; these
+     are the real ones. Measured after layout, and again on resize, because
+     the pinned year section changes height with the viewport. */
+  function measureAnchors() {
+    const max = scrollMax();
+    const map = {};
+    VV.year.anchors().forEach(a => {
+      const el = $(a.selector);
+      if (el) map[a.selector] = (el.getBoundingClientRect().top + scrollY) / max;
+    });
+    VV.year.setAnchorFractions(map);
+  }
+
+  function walk(f) {
+    paintYear(VV.year.yearFractionAt(f));
+    if (stage) stage.setDay(VV.year.dayAt(f));
+  }
+
   /* ── scroll ────────────────────────────────────────────────── */
   gsap.registerPlugin(ScrollTrigger);
 
   if (reduced) {
     $$('.rv').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+    // No scroll handlers run, so the page holds one frame: the season it
+    // opens on, at that season's ceremony hour.
+    measureAnchors();
+    walk(VV.year.fractionFor('vin'));
     setBlend(VV.ORDER.indexOf('vin'));
-    paintYear(VV.seasonAt('vin'));
-    // no scroll triggers run, so hold the photograph back far enough to read over
-    $('#scrim').style.opacity = .84;
   } else {
     gsap.to('.hero .rv', { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
                            stagger: .1, delay: .2 });
@@ -364,70 +416,30 @@
         const r = sec.getBoundingClientRect();
         if (r.top <= mid && r.bottom >= mid) { cue = sec.dataset.stageCue; break; }
       }
-      scrim.style.opacity = v;
+      if (scrim) scrim.style.opacity = v;
       show(cue);
+      walk(scrollFraction());
     }
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(syncStage); } };
     addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', onScroll);
-    syncStage();
-
-    // the year itself
-    const yrST = ScrollTrigger.create({
-      trigger: '#year', start: 'top top', end: 'bottom bottom', scrub: .45,
-      // Only paint while the section actually holds the screen. Otherwise the
-      // initial refresh fires at progress 0 and drags the hero back to
-      // September, losing the frame the page should open on.
-      onUpdate(self) { if (self.isActive) paintYear(self.progress); },
-      onLeaveBack()  { paintSeason('vin', false); }
+    addEventListener('resize', () => {
+      measureAnchors();
+      if (stage) stage.setQuietRects($$('[data-quiet]'));
+      onScroll();
     });
+    measureAnchors();
+    syncStage();
+    // ScrollTrigger settles its pins and spacers after fonts land, and the
+    // document gets taller when it does; the walk has to remeasure with it.
+    ScrollTrigger.addEventListener('refresh', () => { measureAnchors(); onScroll(); });
 
-    // the rail becomes a jump control while the year is on screen
+    /* The rail is a jump control: a chip scrolls the document to the point in
+       the walk where that season's midpoint sits, so the sky, the chart and
+       the read-outs arrive together instead of being set behind their backs. */
     $$('.season').forEach(b => b.addEventListener('click', e => {
-      const r = document.querySelector('#year').getBoundingClientRect();
-      const inYear = r.top <= 0 && r.bottom >= innerHeight;
-      if (!inYear) return;
       e.stopImmediatePropagation();
-      scrollTo({ top: yrST.start + (yrST.end - yrST.start) * VV.seasonAt(b.dataset.s),
+      scrollTo({ top: VV.year.fractionFor(b.dataset.s) * scrollMax(),
                  behavior: 'smooth' });
     }, true));
   }
-
-  /* ── the computed stage ───────────────────────────────────────
-     One WebGL surface behind the document, drawing the real light at Rosa
-     Brook for the day you have scrolled to. It mounts above the photographic
-     layers rather than replacing them, so the two can be compared by toggling
-     html.no-gl; Task 5 deletes the photographs.
-
-     The scroll → day mapping below is deliberately the simplest thing that
-     works: the page is one vineyard year, September to August. Task 4
-     replaces it with the anchored table that lines each section up with its
-     own season. */
-  const glCanvas = $('#stageGL');
-  let stage = null;
-  try { stage = VV.stage.mount(glCanvas, { day: 60 }); }
-  catch (err) { document.documentElement.classList.add('no-gl'); console.warn('stage:', err); }
-
-  if (stage) {
-    window.VV.__stage = stage;                       // filmstrip / test handle
-    stage.setQuietRects($$('[data-quiet]'));
-    // the shader attenuates behind the text itself, so the scrim no longer
-    // has to carry legibility on its own
-    if (reduced) $('#scrim').style.opacity = .30;
-
-    const YEAR_START = 244;                          // 1 September
-    const dayFromScroll = () => {
-      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-      const f = Math.max(0, Math.min(1, scrollY / max));
-      stage.setDay(((YEAR_START - 1 + f * 364) % 365) + 1);
-    };
-    addEventListener('scroll', dayFromScroll, { passive: true });
-    addEventListener('resize', () => { stage.setQuietRects($$('[data-quiet]')); dayFromScroll(); });
-    dayFromScroll();
-  }
-
-  /* ── go ────────────────────────────────────────────────────── */
-  paintSeason('vin', false);   // the page opens on the frame that sells it
-  step();
-  $('#gNow').textContent = state.guests;
 })();
