@@ -242,6 +242,21 @@ test('vale holds a still frame under prefers-reduced-motion', async ({ page }) =
   expect(Buffer.compare(a, b), 'the page is still moving under reduced motion').toBe(0);
 });
 
+test('vale opens on Budburst copy, not Vintage leftovers, at scroll 0', async ({ page }) => {
+  await page.goto(VALE);
+  await page.waitForTimeout(500);
+  const { lede, day, yearP, dayP, heroWord } = await page.evaluate(() => ({
+    lede: (window as any).VV.SEASONS.bud.lede,
+    day: (window as any).VV.SEASONS.bud.day,
+    yearP: document.getElementById('yearP')?.textContent,
+    dayP: document.getElementById('dayP')?.textContent,
+    heroWord: document.getElementById('heroWord')?.textContent,
+  }));
+  expect(heroWord?.trim()).toBe('Spring');
+  expect(yearP?.trim()).toBe(lede);
+  expect(dayP?.trim()).toBe(day);
+});
+
 test('vale has no horizontal overflow at 360px', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto(VALE);

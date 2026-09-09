@@ -248,6 +248,7 @@
     } });
   }
 
+  let yearPainted = false;
   function paintYear(f) {
     const y = VV.atYear(f);
     const x = px(f * 11);
@@ -266,7 +267,8 @@
     rulerTicks.forEach((t, i) => t.classList.toggle('is-on', i === Math.round(f * 11)));
     bandEls.forEach((b, i) => b.classList.toggle('is-on', VV.ORDER[i] === y.season));
 
-    if (y.season !== state.season) {
+    if (y.season !== state.season || !yearPainted) {
+      yearPainted = true;
       state.season = y.season;
       document.documentElement.dataset.season = y.season;
       $$('.season').forEach(b => b.classList.toggle('is-on', b.dataset.s === y.season));
@@ -352,10 +354,10 @@
 
   if (reduced) {
     $$('.rv').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
-    // No scroll handlers run, so the page holds one frame: the season it
-    // opens on, at that season's ceremony hour.
+    // No scroll handlers run, so the page holds one frame: budburst, the
+    // season it opens on, at that season's ceremony hour.
     measureAnchors();
-    walk(VV.year.fractionFor('vin'));
+    walk(VV.year.fractionFor('bud'));
   } else {
     $$('.rv').filter(el => !el.closest('.hero')).forEach(el =>
       gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: 'power3.out',
