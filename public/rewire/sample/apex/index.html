@@ -6,9 +6,10 @@
 <title>Apex Motor Club — Great Ocean Road Driving Tours</title>
 <meta name="description" content="Curated multi-day supercar drives on the Great Ocean Road. Torquay, Victoria.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:wght@300;400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/BricolageGrotesque-600-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/PublicSans-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/SplineSansMono-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css?v=a7f2a83b">
 </head>
 <body>
@@ -37,7 +38,10 @@
   <div class="hero__media">
     <video class="hero__video" id="heroVideo" autoplay muted loop playsinline
            poster="assets/img/hero-poster.jpg">
-      <source src="assets/video/hero.mp4" type="video/mp4">
+      <!-- Armed by main.js once the page has painted. The poster is the designed
+           first frame and shows until the footage is ready either way, so the only
+           thing that changes is that five megabytes stop racing the headline. -->
+      <source data-src="assets/video/hero.mp4" type="video/mp4">
     </video>
     <div class="hero__scrim"></div>
   </div>
@@ -86,7 +90,7 @@
 
 <!-- ══ SHOWCASE BAND ════════════════════════════════════ -->
 <section class="band">
-  <div class="band__media"><img id="bandImg" src="assets/img/car-gt3.jpg" alt="A 911 GT3 on the coast road" loading="lazy"></div>
+  <div class="band__media"><img id="bandImg" width="1500" height="1000" src="assets/img/car-gt3.jpg" alt="A 911 GT3 on the coast road" loading="lazy" decoding="async"></div>
   <div class="band__scrim"></div>
   <div class="wrap band__inner">
     <p class="band__q">Eight cars in the garage at Torquay.<br><em>Six go out on any given departure.</em></p>
@@ -131,15 +135,15 @@
 
   <div class="premise__plates">
     <figure class="plate reveal">
-      <span class="plate__f"><img src="assets/img/det-headlight.jpg" alt="Headlight and front wing of a Huracán" loading="lazy"></span>
+      <span class="plate__f"><img width="1200" height="1800" src="assets/img/det-headlight.jpg" alt="Headlight and front wing of a Huracán" loading="lazy" decoding="async"></span>
       <figcaption><span class="mono">Huracán STO</span><span class="mono dim">handover</span></figcaption>
     </figure>
     <figure class="plate reveal" data-d="0.1">
-      <span class="plate__f"><img src="assets/img/apostles-tall.jpg" alt="Limestone stacks off the Port Campbell coast" loading="lazy"></span>
+      <span class="plate__f"><img width="1400" height="2100" src="assets/img/apostles-tall.jpg" alt="Limestone stacks off the Port Campbell coast" loading="lazy" decoding="async"></span>
       <figcaption><span class="mono">Twelve Apostles</span><span class="mono dim">km 243</span></figcaption>
     </figure>
     <figure class="plate reveal" data-d="0.2">
-      <span class="plate__f"><img src="assets/img/det-engine.jpg" alt="Naturally aspirated V12 engine bay" loading="lazy"></span>
+      <span class="plate__f"><img width="1200" height="1500" src="assets/img/det-engine.jpg" alt="Naturally aspirated V12 engine bay" loading="lazy" decoding="async"></span>
       <figcaption><span class="mono">V12, before first light</span><span class="mono dim">06:40</span></figcaption>
     </figure>
   </div>
@@ -149,12 +153,12 @@
 <section class="route" id="route">
   <div class="route__sticky">
     <div class="route__bg">
-      <img class="route__img is-on" data-plate="0" src="assets/img/road-water.jpg" alt="" loading="lazy">
-      <img class="route__img" data-plate="1" src="assets/img/road-aerial.jpg" alt="" loading="lazy">
-      <img class="route__img" data-plate="2" src="assets/img/apostles-overcast.jpg" alt="" loading="lazy">
-      <img class="route__img" data-plate="3" src="assets/img/road-headland.jpg" alt="" loading="lazy">
-      <img class="route__img" data-plate="4" src="assets/img/apostles-grey.jpg" alt="" loading="lazy">
-      <img class="route__img" data-plate="5" src="assets/img/apostles-dusk.jpg" alt="" loading="lazy">
+      <img class="route__img is-on" data-plate="0" width="1800" height="1200" data-src="assets/img/road-water.jpg" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="1" width="2000" height="1500" data-src="assets/img/road-aerial.jpg" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="2" width="2000" height="1500" data-src="assets/img/apostles-overcast.jpg" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="3" width="2000" height="1126" data-src="assets/img/road-headland.jpg" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="4" width="2000" height="1334" data-src="assets/img/apostles-grey.jpg" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="5" width="2000" height="1334" data-src="assets/img/apostles-dusk.jpg" alt="" loading="lazy" decoding="async">
       <div class="route__scrim"></div>
     </div>
 
@@ -292,7 +296,7 @@
   <div class="panel__scrim" data-close></div>
   <aside class="panel__body" role="dialog" aria-modal="true" aria-labelledby="panelName">
     <button class="panel__close" data-close aria-label="Close">✕</button>
-    <div class="panel__img"><img id="panelImg" src="assets/img/car-sto.jpg" alt=""></div>
+    <div class="panel__img"><img id="panelImg" width="1500" height="2000" src="assets/img/car-sto.jpg" alt="" loading="lazy" decoding="async"></div>
     <div class="panel__content">
       <p class="mono dim" id="panelMarque"></p>
       <h3 class="panel__name" id="panelName"></h3>
@@ -387,7 +391,7 @@
       <p class="kicker reveal">Practicalities</p>
       <h2 class="h2 reveal" data-d="0.1">The dull<br>but <em>important</em><br>part.</h2>
       <figure class="plate reveal" data-d="0.2">
-      <span class="plate__f"><img src="assets/img/det-wheel.jpg" alt="Front wheel and brake detail" loading="lazy"></span>
+      <span class="plate__f"><img width="1200" height="1800" src="assets/img/det-wheel.jpg" alt="Front wheel and brake detail" loading="lazy" decoding="async"></span>
       </figure>
     </div>
 
@@ -438,7 +442,7 @@
 
 <!-- ══ ENQUIRE ══════════════════════════════════════════ -->
 <section class="enq section" id="enquire">
-  <div class="enq__bg"><img src="assets/img/apostles-dusk.jpg" alt="" loading="lazy"><div class="enq__scrim"></div></div>
+  <div class="enq__bg"><img data-defer width="2000" height="1334" data-src="assets/img/apostles-dusk.jpg" alt="" loading="lazy" decoding="async"><div class="enq__scrim"></div></div>
   <div class="wrap enq__inner">
     <p class="kicker reveal">Enquire</p>
     <h2 class="h2 reveal" data-d="0.1">Tell us when you're<br>thinking of, and<br>we'll tell you <em>what's left</em>.</h2>
@@ -486,9 +490,9 @@
   </div>
 </footer>
 
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/vendor/lenis.min.js"></script>
-<script src="js/main.js"></script>
+<script defer src="js/vendor/gsap.min.js"></script>
+<script defer src="js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="js/vendor/lenis.min.js"></script>
+<script defer src="js/main.js"></script>
 </body>
 </html>

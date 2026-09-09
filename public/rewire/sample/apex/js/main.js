@@ -442,11 +442,44 @@
     });
   });
 
+  /* ── Deferred plates ───────────────────────────────────
+     Chrome's own lazy threshold is measured in screens, and on a slow link it
+     is generous enough to drag three megabytes of below-the-fold photography
+     into the first paint. These are armed two viewports out instead: still
+     well ahead of the scroll that reveals them, no longer ahead of the hero. */
+  const deferred = $$('img[data-src]');
+  if (deferred.length) {
+    const armImg = img => {
+      if (!img.dataset.src) return;
+      img.src = img.dataset.src;
+      delete img.dataset.src;
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries, obs) => {
+        entries.forEach(e => { if (e.isIntersecting) { armImg(e.target); obs.unobserve(e.target); } });
+      }, { rootMargin: '200% 0px' });
+      deferred.forEach(img => io.observe(img));
+    } else {
+      deferred.forEach(armImg);
+    }
+  }
+
   /* ── Hero video fallback ───────────────────────────── */
   const hv = $('#heroVideo');
   if (hv) {
     if (reduced) { hv.pause(); hv.removeAttribute('autoplay'); }
     hv.addEventListener('error', () => { hv.style.display = 'none'; }, true);
+
+    // The footage is held back until the rest of the hero has painted, then
+    // armed. Under reduced motion it is never fetched at all.
+    const armHero = () => {
+      const src = hv.querySelector('source[data-src]');
+      if (!src || reduced) return;
+      src.src = src.dataset.src;
+      hv.load();
+    };
+    if (document.readyState === 'complete') armHero();
+    else addEventListener('load', armHero, { once: true });
   }
 
   ScrollTrigger.refresh();
