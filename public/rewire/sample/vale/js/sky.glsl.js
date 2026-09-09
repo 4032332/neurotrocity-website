@@ -89,6 +89,7 @@
     'const float H_M      = 1200.0;',
     'const float G_M      = 0.758;',
     'const float SUN_I    = 22.0;',
+    'const float MS_R     = 0.25;',   // isotropic multiple-scatter, vs phR max 0.119
     '',
     // Content-aware attenuation: the signed-distance-to-rect field the
     // NeuroTrocity cortex uses. Nearest rect wins; the smoothstep is the feather.
@@ -168,8 +169,12 @@
     // Soft planet shadow on the light ray. Closest approach of the sun ray to
     // the planet centre, feathered across a band a little thicker than the
     // atmosphere: this is the terminator, and this term alone is all of dusk.
+    // When the sun is above the sample's own horizon (bs >= 0) the light ray
+    // recedes from the planet and the sample is fully lit — it must NOT be
+    // handed its own radius, which sat inside the feather and dimmed the whole
+    // daytime atmosphere to about a quarter, midday hardest of all.
     '    float bs = dot(sp, sd);',
-    '    float dmin = bs >= 0.0 ? length(sp) : sqrt(max(dot(sp, sp) - bs * bs, 0.0));',
+    '    float dmin = bs >= 0.0 ? R_ATMOS * 4.0 : sqrt(max(dot(sp, sp) - bs * bs, 0.0));',
     '    float shade = smoothstep(R_PLANET * 0.9975, R_PLANET * 1.0085, dmin);',
     '',
     '    float odRL = 0.0, odML = 0.0;',
@@ -192,7 +197,14 @@
     '    t += seg;',
     '  }',
     '',
-    '  vec3 col = SUN_I * (sumR * BETA_R * phR + sumM * BETA_M * uTurbidity * phM);',
+    // Single scattering alone is a Mie model in disguise: the aerosol lobe is
+    // sharply forward, so a frame that does not contain the sun collapses to
+    // the weak Rayleigh single-scatter term and a high sun renders DARKER than
+    // a low one. Real daytime sky brightness away from the sun is mostly light
+    // that has bounced more than once. One isotropic Rayleigh re-emission
+    // approximates it: it costs nothing, it is largest exactly when the air
+    // column is well lit, and it dies with the terminator like everything else.
+    '  vec3 col = SUN_I * (sumR * BETA_R * (phR + MS_R) + sumM * BETA_M * uTurbidity * phM);',
     '',
     // Sun disc, ~0.27 degrees with a soft limb, extinguished by the very optical
     // depth the march just measured. It reddens, swells into the Mie halo and
@@ -236,12 +248,15 @@
     // the ground is a diffuse surface: direct sun by Lambert on a flat plane,
     // plus the whole sky dome as ambient. The haze value is the sky pinned to
     // the horizon, which is the best single sample of that dome we already have.
-    '    vec3 direct = sunTint(sinEl) * sinEl * SUN_I * 0.070;',
+    '    vec3 direct = sunTint(sinEl) * sinEl * SUN_I * 0.32;',
     '    vec3 ambient = haze * 0.21 + nightFloor(vec3(0.0, 1.0, 0.0)) * 7.0;',
     '    vec3 gcol = alb * (direct + ambient);',
     // it falls into its own shadow toward the viewer — the near ground is
-    // under the rows, and this is what keeps the lower third readable
-    '    gcol *= mix(1.0, 0.20, smoothstep(0.0, 0.40, dn));',
+    // under the rows, and this is what keeps the lower third readable. That is
+    // a low-sun effect: a raking sun leaves the near ground in the block's own
+    // shadow, an overhead one does not, so the term lifts with the sun.
+    '    float selfShadow = mix(0.20, 0.90, smoothstep(0.0, 0.38, sinEl));',
+    '    gcol *= mix(1.0, selfShadow, smoothstep(0.0, 0.40, dn));',
     '    float mist = exp(-dn * 7.5);',
     '    col = mix(gcol, haze, mist);',
     '  }',

@@ -22,8 +22,8 @@
    hour of whichever season the day falls in.
 
    Southern hemisphere. Compass azimuth 0 = north, clockwise. World axes:
-   +X east, −Z north, +Y up. The camera looks due west, because that is the
-   quarter every Rosa Brook sunset happens in, all year.
+   +X east, −Z north, +Y up. The camera looks north-west: the sunset arc and
+   the northern midday sky are both in that quarter.
    ═══════════════════════════════════════════════════════════════ */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory(root);
@@ -34,7 +34,17 @@
   const LAT = -33.95, LON = 115.07, TZ = 8;
   const RAD = Math.PI / 180;
   const YEAR = 2027;                  // any non-leap year; only the shape matters
-  const BEARING = 270;                // the camera looks west
+  /* The camera looks west-north-west. Due west was chosen for the sunsets
+     alone and it cost the rest of the day: the ceremony-hour sun runs from
+     az 259.6° (midsummer, 5 pm) to az 320.8° (winter, 3 pm), a 61° spread
+     against a 76° horizontal field, so at 270° the winter sun sat on the
+     frame edge and the whole northern half of the day was behind the camera.
+     292.5° centres that arc — every ceremony hour of the year now has its sun
+     in shot — and swings the frame 22.5° toward the northern sky the sun
+     crosses at midday. The midday sun itself (az ≈ 10°, 79° up in midsummer)
+     is out of any landscape frame; what the re-aim buys there is the bright
+     half of the sky rather than the dim anti-solar half. */
+  const BEARING = 292.5;
   /* The camera looks ACROSS the rows, not down a lane. Down a lane you see two
      featureless walls compressed to nothing and no season at all; across them,
      from a little above the fruiting wire, every row in the block is legible
@@ -46,12 +56,22 @@
      camera stays at eye level: the near rows read fully, trunk to crown, and
      everything past fifteen metres closes into one dark band along the
      horizon. Backlit at the ceremony hour, that band is the picture. */
-  const ROW_DIR = 0.61;
+  /* Rotated with BEARING (was 0.61 when the camera looked due west) so the
+     block keeps exactly the same relationship to the frame: 35° across the
+     rows, and the rows receding 55° off the view axis so they cross the frame
+     as walls. Leaving it alone while the camera swung north turned the
+     vineyard into a grid seen straight down its own lanes. */
+  const ROW_DIR = 0.61 - (BEARING - 270) * Math.PI / 180;
   const CAM_H = 6.30;                  // the head of the slope, over the canopy
   const CAM_PITCH = 0.046;            // 2.6° up: horizon at 55%, block below it
   const ROW_LEN = 240, ROW_H = 2.4, ROW_GAP = 3.3, VINE_GAP = 1.9;
   const ROW_NEAR = 5;                 // metres to the first row
   const MAX_RECTS = 8;
+  // Exposure curve, fitted against the shader's own measured radiance so that
+  // midsummer noon renders about 6× brighter than twenty minutes after sunset.
+  const EXP_K = 0.178, EXP_P = 0.545;
+  // the camera's own forward direction on the compass, in world axes
+  const LOOK = { x: Math.sin(BEARING * Math.PI / 180), z: -Math.cos(BEARING * Math.PI / 180) };
 
   /* ── tiering ──────────────────────────────────────────────────
      Same shape as vernier/js/tier.js: one table, chosen once, never
@@ -175,6 +195,7 @@
     'uniform float uGold;',
     'uniform float uUnits;',
     'uniform float uFace;',
+    'uniform float uSunUp;',
     'float h11(float x){ return fract(sin(x * 127.1) * 43758.5453); }',
     'float n11(float x){',
     '  float i = floor(x), f = fract(x);',
@@ -262,11 +283,17 @@
     // the two differently is the cue that turns corduroy back into plants.
     '  float lit = uFace;',
     '  shade *= mix(0.42, 1.05, clamp(lit * 0.5 + 0.5, 0.0, 1.0));',
+    // uFace is only the HORIZONTAL side the sun is on, so with the sun
+    // overhead every row was still drawn as a dusk silhouette and the block
+    // went black at noon. A high sun lights the canopy from above: lift the
+    // multiply toward daylight in proportion to the sun's height.
+    '  float up = clamp(uSunUp, 0.0, 1.0);',
+    '  shade = mix(shade, mix(shade, vec3(0.78, 0.80, 0.66), 0.70), up);',
     // The crown: the top hand-width of the canopy, which is the only part of a
     // row the sky can see. Lighting it and leaving the body dark is what makes
     // a hundred rows read as rows and not as corrugated iron.
     '  float crown = canopy * smoothstep(top - 0.030, top - 0.004, y);',
-    '  shade += crown * (0.15 + 0.50 * clamp(lit, 0.0, 1.0)) *',
+    '  shade += crown * (0.15 + 0.50 * clamp(lit, 0.0, 1.0) + 0.55 * up) *',
     '           mix(vec3(0.88, 0.94, 1.0), vec3(1.30, 0.86, 0.42), uGold);',
     // autumn: a thin leaf at the top of the canopy transmits red and gold
     // rather than blocking, so the darkening lifts in exactly those channels
@@ -358,6 +385,7 @@
         uGold: { value: 0 },
         uUnits: { value: Math.round(ROW_LEN / VINE_GAP) },
         uFace: { value: 0 },
+        uSunUp: { value: 0 },
         uRowU: { value: new THREE.Vector3(-Math.cos(ROW_DIR), 0, Math.sin(ROW_DIR)) },
         uRowLen: { value: ROW_LEN },
         uRowH: { value: ROW_H }
@@ -496,20 +524,33 @@
       // height over the whole document. Any more and the horizon swims.
       const par = still ? 0 : scrollT;
       const cy = CAM_H + par * 0.55, cz = -1.0 + par * 3.2;
-      camera.position.set(0, cy, cz);
-      // due west, pitched up 4°: the horizon lands at 58% and the block fills
-      // the bottom of the frame. Scroll walks the viewer sideways along the
-      // headland, which is enough parallax to feel and not enough to swim.
-      camera.lookAt(-60, cy + 60 * Math.tan(CAM_PITCH), cz);
+      const cx0 = 0;
+      camera.position.set(cx0, cy, cz);
+      // north-west (BEARING), pitched up: the horizon lands at 58% and the
+      // block fills the bottom of the frame. Scroll walks the viewer sideways
+      // along the headland — enough parallax to feel, not enough to swim.
+      camera.lookAt(cx0 + LOOK.x * 60, cy + 60 * Math.tan(CAM_PITCH), cz + LOOK.z * 60);
       camera.updateMatrixWorld();
 
       const su = skyMat.uniforms;
       su.uSeason.value = stNow.season;
       su.uTurbidity.value = stNow.turbidity;
-      // the eye opens as the light goes. Blended on the sun's own height, so
-      // it is one continuous adaptation and not a night mode.
-      const ad = Math.max(0, Math.min(1, (sunNow.y + 0.25) / 0.31));
-      su.uExposure.value = 18.0 + (0.72 - 18.0) * (ad * ad * (3 - 2 * ad));
+      // The eye opens as the light goes, but it must never close the year down
+      // to one stop. Driven from the sun's elevation in DEGREES — sin(elev)
+      // saturates, so anything above about 4° used to get the identical
+      // exposure and midsummer noon rendered exactly like dusk.
+      //   lift  a gentle rise in scene light as the sun climbs
+      //   dusk  the terminator, a logistic centred just above the horizon:
+      //         this is the cliff, and it is where nearly all the range is
+      //   +4e-4 the night floor, so night is dim rather than black
+      // Then a camera-like response, rendered ≈ L^0.38. A photographer does
+      // stop down at noon — but only by about a stop and a half across the
+      // whole day, so noon still reads as noon and dusk still reads as dusk.
+      const elev = Math.asin(Math.max(-1, Math.min(1, sunNow.y))) / RAD;
+      const lift = 0.75 + 0.55 * Math.max(0, Math.sin(elev * RAD));
+      const dusk = 1 / (1 + Math.exp(-(elev - 1.5) / 1.05));
+      const L = lift * dusk + 0.00040;
+      su.uExposure.value = EXP_K / Math.pow(L, EXP_P);
       su.uTime.value = t * 0.001;
       su.uInvProj.value.copy(camera.projectionMatrix).invert();
       su.uCamWorld.value.copy(camera.matrixWorld);
@@ -519,6 +560,7 @@
       ru.uGold.value = stNow.gold;
       // the row plane's own normal against the sun — see uFace in ROW_FRAG
       ru.uFace.value = -Math.sin(ROW_DIR) * sunNow.x - Math.cos(ROW_DIR) * sunNow.z;
+      ru.uSunUp.value = Math.max(0, sunNow.y);
       renderer.render(scene, camera);
     }
 
@@ -574,6 +616,9 @@
       setQuietRects: setQuietRects,
       renderOnce: () => draw(performance.now()),
       draws: () => draws,
+      /* Verification hook: the stop the adaptation settled on, so a filmstrip
+         can record it alongside the frame. */
+      exposure: () => skyMat.uniforms.uExposure.value,
       /* Verification hook: drive the sun straight from an elevation/azimuth so
          a filmstrip can sweep an hour without the ceremony-hour pin. */
       setSunOverride: function (elevation, azimuth) {
