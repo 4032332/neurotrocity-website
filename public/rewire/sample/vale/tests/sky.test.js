@@ -41,10 +41,16 @@ test('the sun vector drives the model: no season/time colour tables', () => {
   assert.equal((FRAG.match(/uSeason/g) || []).length, 2, 'uSeason read outside the ground albedo');
 });
 
-test('quiet-rect attenuation is present and applied with a 0.16 floor', () => {
+test('quiet-rect attenuation is present and applied with a measured floor', () => {
   assert.match(FRAG, /float\s+quietness\s*\(\s*vec2/);
   assert.match(FRAG, /quietness\(/);
-  assert.match(FRAG, /mix\(0\.16/);
+  // The floor itself is set by the contrast gate in tests/e2e/vale.spec.ts,
+  // which measures the composited page rather than reading the source. All
+  // this test can honestly say is that a floor is applied, and that it is
+  // dark enough to be doing real work.
+  const m = /mix\(([0-9.]+),\s*1\.0,\s*quietness\(/.exec(FRAG);
+  assert.ok(m, 'quietness() is not applied to the final colour');
+  assert.ok(+m[1] > 0 && +m[1] <= 0.2, 'attenuation floor ' + m[1] + ' is not a floor');
 });
 
 test('the scattering terms are all there', () => {
