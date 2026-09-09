@@ -6,9 +6,18 @@
 <title>Vale &amp; Vine — vineyard weddings, Margaret River</title>
 <meta name="description" content="A single-wedding-a-week vineyard venue at Rosa Brook, Margaret River. See the dates that are actually free, and what your day costs, before you enquire.">
 <meta name="robots" content="noindex">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter+Tight:wght@300;350;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<!-- The opening backdrop is discovered only when the stage script runs, which is
+     several round trips in. Preloading it closes that gap. It is deliberately the
+     only photograph named here — the other five are fetched after first paint. -->
+<link rel="preload" as="image" fetchpriority="high" href="assets/img/stage-vin.jpg"
+      media="(min-aspect-ratio: 58/100)">
+<link rel="preload" as="image" fetchpriority="high" href="assets/img/stage-vin-tall.webp"
+      media="(max-aspect-ratio: 58/100)">
+<link rel="preload" href="assets/fonts/CormorantGaramond-300-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/CormorantGaramond-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/InterTight-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/JetBrainsMono-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -23,11 +32,11 @@
   <div class="stage__img" data-s-layer="vin"></div>
   <div class="stage__img" data-s-layer="pru"></div>
   <video class="stage__v" data-v-for="pru" muted loop playsinline preload="none"
-         poster="assets/video/venue-pru.jpg"></video>
+         data-poster="assets/video/venue-pru.jpg"></video>
   <div class="stage__img" data-stage="ceremony"></div>
   <div class="stage__img" data-stage="evening"></div>
   <video class="stage__v" data-v-for="evening" muted loop playsinline preload="none"
-         poster="assets/video/interior.jpg"></video>
+         data-poster="assets/video/interior.jpg"></video>
 </div>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
 
@@ -246,9 +255,9 @@
   </footer>
 </main>
 
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/seasons.js"></script>
-<script src="js/main.js"></script>
+<script defer src="js/vendor/gsap.min.js"></script>
+<script defer src="js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="js/seasons.js"></script>
+<script defer src="js/main.js"></script>
 </body>
 </html>

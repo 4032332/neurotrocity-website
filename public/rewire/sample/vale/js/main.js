@@ -33,17 +33,37 @@
      interior. Scroll decides which is on; the season decides what the
      hero layer is showing. Crossfade only — no transforms on a
      background-size:cover layer, it shimmers.                       */
-  const seasonLayers = VV.ORDER.map(id => {
-    const el = $('[data-s-layer="' + id + '"]');
-    el.style.backgroundImage = 'url(' + VV.SEASONS[id].stage + ')';
-    return el;
-  });
+  /* Arming a layer is what actually fetches its photograph, so a layer is
+     armed the moment it could be seen and not a second earlier — otherwise
+     all six backdrops race the first paint and the hero arrives last.
+     Nothing about the crossfade changes: by the time a layer's opacity
+     leaves zero it already has its image. */
+  /* On a portrait screen a background-size:cover landscape plate shows a narrow
+     centre slice and discards the rest — about three quarters of the file, paid
+     for and never seen. The -tall variant IS that slice, at the master's full
+     height and cut from its centre, and it is deliberately wider (0.62) than any
+     portrait viewport, so `cover` trims it exactly as it trims the master. Same
+     framing, same vertical resolution, a third of the bytes. Anything not clearly
+     portrait, or any browser without WebP, gets the untouched master. */
+  const webp = (function () {
+    try { return document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0; }
+    catch (e) { return false; }
+  }());
+  const tall = webp && (innerWidth / innerHeight) <= 0.58;
+  const plate = src => (tall ? src.replace(/\.jpg$/, '-tall.webp') : src);
+
+  function arm(el, src) {
+    if (el.dataset.armed) return;
+    el.dataset.armed = '1';
+    el.style.backgroundImage = 'url(' + plate(src) + ')';
+  }
+  const seasonLayers = VV.ORDER.map(id => $('[data-s-layer="' + id + '"]'));
+  const armSeason = i => arm(seasonLayers[i], VV.SEASONS[VV.ORDER[i]].stage);
   const layers = {
     ceremony: $('[data-stage="ceremony"]'),
     evening:  $('[data-stage="evening"]')
   };
-  layers.ceremony.style.backgroundImage = 'url(assets/img/ceremony.jpg)';
-  layers.evening.style.backgroundImage  = 'url(assets/img/interior.jpg)';
+  const SET_PIECE = { ceremony: 'assets/img/ceremony.jpg', evening: 'assets/img/interior.jpg' };
   Object.values(layers).forEach(l => {
     l.style.transition = reduced ? 'none' : 'opacity .9s cubic-bezier(.4,0,.2,1)';
   });
@@ -57,9 +77,15 @@
   let blend = 0;
   function setBlend(t) {
     blend = t;
-    seasonLayers.forEach((el, i) => {
-      el.style.opacity = i === 0 ? 1 : Math.max(0, Math.min(1, t - (i - 1)));
-    });
+    const op = seasonLayers.map((_, i) => (i === 0 ? 1 : Math.max(0, Math.min(1, t - (i - 1)))));
+    seasonLayers.forEach((el, i) => { el.style.opacity = op[i]; });
+    // A layer only needs its photograph if it is visible AND not completely
+    // painted over by an opaque layer stacked above it.
+    for (let i = 0; i < op.length; i++) {
+      if (op[i] <= 0) continue;
+      if (op.slice(i + 1).some(o => o >= 1)) continue;
+      armSeason(i);
+    }
     syncSeasonVideo();
   }
   function syncSeasonVideo() {
@@ -83,7 +109,12 @@
   function vidSync(key, on) {
     const v = vids[key];
     if (!v || reduced) return;
-    if (on > .02 && !v.getAttribute('src')) v.setAttribute('src', VIDEO_SRC[key]);
+    if (on > .02 && !v.getAttribute('src')) {
+      // The poster is what the video shows while it loads, so it is worth
+      // exactly as much as the video is — and not a byte before then.
+      if (v.dataset.poster) v.setAttribute('poster', v.dataset.poster);
+      v.setAttribute('src', VIDEO_SRC[key]);
+    }
     v.style.opacity = on;
     if (on > .05) { if (v.paused) { const p = v.play(); if (p) p.catch(() => {}); } }
     else if (!v.paused) v.pause();
@@ -93,6 +124,7 @@
   function show(which) {
     if (which === shown) return;
     shown = which;
+    if (SET_PIECE[which]) arm(layers[which], SET_PIECE[which]);
     Object.keys(layers).forEach(k => layers[k].classList.toggle('is-on', k === which));
     vidSync('evening', which === 'evening' ? 1 : 0);
     // the season plates are covered while a set piece is up, so stop paying for them
@@ -395,6 +427,30 @@
 
   /* ── go ────────────────────────────────────────────────────── */
   paintSeason('vin', false);   // the page opens on the frame that sells it
+
+  /* Once the opening frame is on screen and paid for, quietly fetch the rest
+     so that switching season or scrolling into a set piece is still instant.
+     They are only ever behind the first paint, never in front of it. */
+  function warmRest() {
+    const queue = VV.ORDER.map(id => VV.SEASONS[id].stage).concat(Object.values(SET_PIECE));
+    queue.forEach(src => {
+      // Warm the cache, not the layers: a detached Image can be marked low
+      // priority, so these never elbow ahead of anything still painting.
+      const im = new Image();
+      im.fetchPriority = 'low';
+      im.decoding = 'async';
+      im.src = plate(src);
+    });
+  }
+  // Two seconds past load is long after the opening frame has settled and long
+  // before anyone has scrolled into the year, so the prefetch competes with
+  // nothing and still lands ahead of the first crossfade.
+  const warm = () => setTimeout(() => (window.requestIdleCallback
+    ? requestIdleCallback(warmRest, { timeout: 2000 })
+    : warmRest()), 2000);
+  if (document.readyState === 'complete') warm();
+  else addEventListener('load', warm, { once: true });
+
   step();
   $('#gNow').textContent = state.guests;
 })();
