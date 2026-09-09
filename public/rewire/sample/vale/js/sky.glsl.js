@@ -241,8 +241,12 @@
     '    vec2 gp = rd.xz / max(dn, 0.0015) * 1.7;',
     '    float tex = vnoise(gp * 0.055) * 0.6 + vnoise(gp * 0.21) * 0.4;',
     '    tex = mix(1.0, 0.55 + 0.90 * tex, smoothstep(0.0, 0.045, dn));',
-    '    vec3 bare = vec3(0.042, 0.035, 0.028);',
-    '    vec3 gold = vec3(0.165, 0.112, 0.045);',
+    // Real dirt is not charcoal. Dry Margaret River gravel loam sits around
+    // 0.18-0.22 reflectance and the winter/wet ground around 0.11; the old
+    // 0.04 bare albedo was darker than fresh asphalt, which is why the block
+    // rendered as murk however much sun fell on it.
+    '    vec3 bare = vec3(0.118, 0.100, 0.082);',
+    '    vec3 gold = vec3(0.258, 0.192, 0.114);',
     '    vec3 alb = mix(bare, gold, clamp(uSeason, 0.0, 1.0)) * tex;',
     '    float sinEl = max(sd.y, 0.0);',
     // the ground is a diffuse surface: direct sun by Lambert on a flat plane,

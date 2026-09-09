@@ -275,8 +275,8 @@
     // A silhouette is not a colour, it is a fraction of the light behind it —
     // so this stays correct at every hour without ever being told the sky's
     // exposure, and the vines can never come out brighter than the sky.
-    '  vec3 wood = vec3(0.140, 0.114, 0.092);',
-    '  vec3 leaf = vec3(0.082, 0.108, 0.070);',
+    '  vec3 wood = vec3(0.150, 0.120, 0.096);',
+    '  vec3 leaf = vec3(0.086, 0.112, 0.072);',
     '  vec3 shade = mix(wood, leaf, uGrowth);',
     // Every row shares one normal, so the side of a row facing the sun and the
     // side facing away are exactly gl_FrontFacing and its negation. Lighting
@@ -288,7 +288,37 @@
     // went black at noon. A high sun lights the canopy from above: lift the
     // multiply toward daylight in proportion to the sun's height.
     '  float up = clamp(uSunUp, 0.0, 1.0);',
-    '  shade = mix(shade, mix(shade, vec3(0.78, 0.80, 0.66), 0.70), up);',
+    // How much of a lit surface this is. Zero while the sun is on the horizon,
+    // so dusk keeps its silhouette; near one by mid-morning. This is the only
+    // thing the hour touches — it is sin(elevation), not a clock.
+    '  float dayness = smoothstep(0.02, 0.42, up);',
+    // The old lift mixed toward a neutral khaki, so more sun made the block
+    // greyer instead of greener and noon resolved to brown. The rows are a
+    // MULTIPLY over the ground and sky behind them, so this is a filter, not a
+    // colour: hold green open and close red and blue down and warm dirt comes
+    // through the canopy as lit leaf. Gold swings the same filter to the other
+    // side of the spectrum, which is what makes vintage read as gold.
+    '  vec3 litLeaf = mix(vec3(0.44, 0.90, 0.34), vec3(1.00, 0.55, 0.14), uGold);',
+    '  vec3 litWood = mix(vec3(0.60, 0.50, 0.40), vec3(0.72, 0.52, 0.30), uGold);',
+    '  float leafy = canopy * smoothstep(0.04, 0.34, uGrowth);',
+    '  vec3 daylit = mix(litWood, litLeaf, leafy);',
+    // the sunward face of a row is lit, the other is its own shade — the same
+    // uFace cue as at dusk, just at daylight amplitude
+    '  daylit *= mix(0.48, 1.06, clamp(lit * 0.5 + 0.5, 0.0, 1.0));',
+    // late afternoon light is warm because it has come a long way through the
+    // atmosphere. Driven from the sun height, so it arrives on its own.
+    '  daylit *= mix(vec3(1.10, 0.95, 0.80), vec3(1.0), smoothstep(0.10, 0.85, up));',
+    // A canopy is not a flat panel. The sky reaches the top of it and almost
+    // nothing reaches the foot, so light falls off from the crown down to the
+    // fruiting wire. This vertical gradient is what gives a closed hedge its
+    // row rhythm — without it a hundred merged rows render as one green carpet.
+    '  float ch = clamp((y - cord) / max(top - cord, 0.001), 0.0, 1.0);',
+    '  daylit *= mix(0.40, 1.14, ch * ch * (3.0 - 2.0 * ch));',
+    // deep in the canopy, under the fruiting wire, no daylight reaches: keep
+    // that band near the base albedo so the rows have a dark foot and read as
+    // standing objects rather than painted stripes
+    '  daylit = mix(shade, daylit, 0.24 + 0.76 * smoothstep(cord - 0.02, cord + 0.10, y));',
+    '  shade = mix(shade, daylit, dayness);',
     // The crown: the top hand-width of the canopy, which is the only part of a
     // row the sky can see. Lighting it and leaving the body dark is what makes
     // a hundred rows read as rows and not as corrugated iron.
