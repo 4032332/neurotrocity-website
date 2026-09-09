@@ -6,9 +6,8 @@
 <title>Northbay Physio — Buderim. One patient an hour.</title>
 <meta name="description" content="Physiotherapy in Buderim, Queensland. One-hour appointments, hands-on every session, never double-booked.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/SchibstedGrotesk-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css?v=a7e9d6f9">
 </head>
 <body>
@@ -61,7 +60,7 @@
 <section class="hero" id="top">
   <div class="hero__bg">
     <div class="hero__frame"><img id="heroImg" src="assets/img/hero-treatment.jpg"
-      alt="A physiotherapist working on a patient's shoulder" width="1600" height="2400"></div>
+      alt="A physiotherapist working on a patient's shoulder" width="1600" height="2400" decoding="async"></div>
     <div class="hero__veil" aria-hidden="true"></div>
     <div class="hero__vign" aria-hidden="true"></div>
   </div>
@@ -372,7 +371,7 @@
 <!-- ══ WHO ══════════════════════════════════════════════ -->
 <section class="who section" id="who">
   <div class="who__img">
-    <img src="assets/img/portrait-1.jpg" alt="Daniel Mercer, physiotherapist" loading="lazy">
+    <img width="1200" height="938" src="assets/img/portrait-1.jpg" alt="Daniel Mercer, physiotherapist" loading="lazy" decoding="async">
     <span class="who__fade" aria-hidden="true"></span>
   </div>
   <div class="wrap who__grid">
@@ -489,9 +488,9 @@
   </div>
 </footer>
 
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/vendor/lenis.min.js"></script>
-<script src="js/main.js"></script>
+<script defer src="js/vendor/gsap.min.js"></script>
+<script defer src="js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="js/vendor/lenis.min.js"></script>
+<script defer src="js/main.js"></script>
 </body>
 </html>

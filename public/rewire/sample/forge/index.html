@@ -6,9 +6,10 @@
 <title>Forge Athletic — Coached strength, Islington Newcastle</title>
 <meta name="description" content="Coached strength training in Islington, Newcastle. Groups capped at eight, a coach on the floor every session.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Chivo:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/BigShouldersDisplay-700-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/Chivo-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/MartianMono-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -33,7 +34,13 @@
 
 <!-- ══ HERO ═══════════════════════════════════════════ -->
 <section class="hero">
-  <div class="hero__bg"><img src="assets/img/hero-lift.jpg" alt="A lifter setting up under a barbell"></div>
+  <!-- object-fit:cover shows only a centre slice of this photograph on a phone.
+       The -tall file is that slice, cut from the master at full height and wider
+       than any portrait viewport, so the framing and detail are unchanged. -->
+  <div class="hero__bg"><picture>
+    <source media="(max-aspect-ratio: 58/100)" srcset="assets/img/hero-lift-tall.webp" type="image/webp">
+    <img width="1900" height="1266" src="assets/img/hero-lift.jpg" alt="A lifter setting up under a barbell" fetchpriority="high" decoding="async">
+  </picture></div>
   <div class="wrap hero__in">
     <p class="mono sul rv">Islington, Newcastle</p>
     <h1 class="dsp hero__t" id="heroT" aria-label="Eight people. One coach. No guessing.">
@@ -144,22 +151,22 @@
   </div>
   <div class="coaches">
     <article class="coach rv">
-      <img src="assets/img/coach-mara.jpg" alt="Mara Ellis coaching" loading="lazy">
+      <img src="assets/img/coach-mara.jpg" alt="Mara Ellis coaching" loading="lazy" decoding="async">
       <div class="coach__b"><p class="coach__n">Mara Ellis</p><p class="coach__r mono">Head coach · 14 yrs</p>
         <p class="coach__p">Former state-level powerlifter. Writes most of the strength programming and does the intro sessions herself.</p></div>
     </article>
     <article class="coach rv" data-d="0.06">
-      <img src="assets/img/coach-tom.jpg" alt="Tom Vasilev coaching" loading="lazy">
+      <img src="assets/img/coach-tom.jpg" alt="Tom Vasilev coaching" loading="lazy" decoding="async">
       <div class="coach__b"><p class="coach__n">Tom Vasilev</p><p class="coach__r mono">Strength · 9 yrs</p>
         <p class="coach__p">Ex-rugby, now mostly rehabs shoulders and backs. The one to ask if something hurts and you don't know why.</p></div>
     </article>
     <article class="coach rv" data-d="0.12">
-      <img src="assets/img/coach-priya.jpg" alt="Priya Raman coaching" loading="lazy">
+      <img src="assets/img/coach-priya.jpg" alt="Priya Raman coaching" loading="lazy" decoding="async">
       <div class="coach__b"><p class="coach__n">Priya Raman</p><p class="coach__r mono">Technique · 6 yrs</p>
         <p class="coach__p">Olympic lifting background. Runs the Saturday technique sessions and will happily spend an hour on one movement.</p></div>
     </article>
     <article class="coach rv" data-d="0.18">
-      <img src="assets/img/coach-jack.jpg" alt="Jack Okafor coaching" loading="lazy">
+      <img src="assets/img/coach-jack.jpg" alt="Jack Okafor coaching" loading="lazy" decoding="async">
       <div class="coach__b"><p class="coach__n">Jack Okafor</p><p class="coach__r mono">Conditioning · 7 yrs</p>
         <p class="coach__p">Runs everything that leaves you on the floor. Also the one who talks the most, which some people need at 5:30am.</p></div>
     </article>
@@ -178,11 +185,11 @@
         two turf lanes, and no mirrors anywhere. There is no juice bar and there never will be.</p>
     </div>
     <div class="roomgrid">
-      <figure class="rv" style="grid-column:1/8;margin:0"><img src="assets/img/room-wide.jpg" alt="The main floor" loading="lazy" style="aspect-ratio:16/10"></figure>
-      <figure class="rv" data-d="0.06" style="grid-column:8/13;margin:0"><img src="assets/img/det-barbell.jpg" alt="A loaded barbell" loading="lazy" style="aspect-ratio:4/5"></figure>
-      <figure class="rv" data-d="0.1" style="grid-column:1/5;margin:0"><img src="assets/img/det-dumbs.jpg" alt="Dumbbell rack" loading="lazy" style="aspect-ratio:1/1"></figure>
-      <figure class="rv" data-d="0.14" style="grid-column:5/9;margin:0"><img src="assets/img/room-rack.jpg" alt="Racks and plates" loading="lazy" style="aspect-ratio:1/1"></figure>
-      <figure class="rv" data-d="0.18" style="grid-column:9/13;margin:0"><img src="assets/img/det-stack.jpg" alt="Weight stack" loading="lazy" style="aspect-ratio:1/1"></figure>
+      <figure class="rv" style="grid-column:1/8;margin:0"><img width="1700" height="2550" src="assets/img/room-wide.jpg" alt="The main floor" loading="lazy" style="aspect-ratio:16/10" decoding="async"></figure>
+      <figure class="rv" data-d="0.06" style="grid-column:8/13;margin:0"><img width="1400" height="2100" src="assets/img/det-barbell.jpg" alt="A loaded barbell" loading="lazy" style="aspect-ratio:4/5" decoding="async"></figure>
+      <figure class="rv" data-d="0.1" style="grid-column:1/5;margin:0"><img width="1400" height="2098" src="assets/img/det-dumbs.jpg" alt="Dumbbell rack" loading="lazy" style="aspect-ratio:1/1" decoding="async"></figure>
+      <figure class="rv" data-d="0.14" style="grid-column:5/9;margin:0"><img width="1500" height="1000" src="assets/img/room-rack.jpg" alt="Racks and plates" loading="lazy" style="aspect-ratio:1/1" decoding="async"></figure>
+      <figure class="rv" data-d="0.18" style="grid-column:9/13;margin:0"><img width="1200" height="900" src="assets/img/det-stack.jpg" alt="Weight stack" loading="lazy" style="aspect-ratio:1/1" decoding="async"></figure>
     </div>
   </div>
 </section>
@@ -269,10 +276,11 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="js/vendor/three.min.js"></script>
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/main.js"></script>
-<script src="js/barbell.js"></script>
+<script defer src="js/vendor/gsap.min.js"></script>
+<script defer src="js/vendor/ScrollTrigger.min.js"></script>
+<!-- three.js and the barbell are fetched by main.js when the loading section
+     comes within range. They are a long way below the fold and 125 KB of them
+     was arriving alongside the hero photograph. -->
+<script defer src="js/main.js"></script>
 </body>
 </html>

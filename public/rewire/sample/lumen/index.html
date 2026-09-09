@@ -6,9 +6,12 @@
 <title>Lumen &amp; Larch — The 610 shelving system</title>
 <meta name="description" content="One modular shelving system in Australian and European hardwood. Built to order in Bowden, Adelaide. Configure it yourself.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,300;0,400;1,300&family=Hanken+Grotesk:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/DMMono-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/DMMono-500-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/HankenGrotesk-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/Petrona-300-italic-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/Petrona-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -163,11 +166,11 @@
     </div>
   </div>
   <div class="wrap rooms">
-    <figure class="rv" style="grid-column:1/8"><img src="assets/img/room-shelf.jpg" alt="A 610 in a living room" loading="lazy" style="aspect-ratio:3/2">
+    <figure class="rv" style="grid-column:1/8"><img width="1600" height="1066" src="assets/img/room-shelf.jpg" alt="A 610 in a living room" loading="lazy" style="aspect-ratio:3/2" decoding="async">
       <figcaption class="mono dim">Four bays, five rows, oak · Norwood</figcaption></figure>
-    <figure class="rv" data-d="0.08" style="grid-column:8/13"><img src="assets/img/det-shelf.jpg" alt="Shelf detail" loading="lazy" style="aspect-ratio:2/3">
+    <figure class="rv" data-d="0.08" style="grid-column:8/13"><img width="1400" height="2100" src="assets/img/det-shelf.jpg" alt="Shelf detail" loading="lazy" style="aspect-ratio:2/3" decoding="async">
       <figcaption class="mono dim">Shelf into upright, no fixings</figcaption></figure>
-    <figure class="rv" data-d="0.14" style="grid-column:1/6"><img src="assets/img/room-cab.jpg" alt="Cabinet boxes in use" loading="lazy" style="aspect-ratio:3/2">
+    <figure class="rv" data-d="0.14" style="grid-column:1/6"><img width="1400" height="934" src="assets/img/room-cab.jpg" alt="Cabinet boxes in use" loading="lazy" style="aspect-ratio:3/2" decoding="async">
       <figcaption class="mono dim">Two cabinet boxes, walnut · Prospect</figcaption></figure>
   </div>
 </section>
@@ -232,10 +235,10 @@
   </div>
 </footer>
 
-<script src="js/vendor/three.min.js"></script>
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/shelf.js"></script>
-<script src="js/main.js"></script>
+<script defer src="js/vendor/three.min.js"></script>
+<script defer src="js/vendor/gsap.min.js"></script>
+<script defer src="js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="js/shelf.js"></script>
+<script defer src="js/main.js"></script>
 </body>
 </html>

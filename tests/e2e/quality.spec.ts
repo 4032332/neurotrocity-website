@@ -162,7 +162,15 @@ test('built dist/ bundles contain no debug-tooling identifiers', () => {
   const distDir = path.resolve(__dirname, '../../dist');
   expect(fs.existsSync(distDir), 'dist/ does not exist — run `npm run build` first').toBe(true);
 
+  // Matched on identifier boundaries, not as substrings: "leva" is also the
+  // middle of "elevation", which the Vale solar model says several hundred
+  // times, and a gate that cries wolf about a word in a comment is a gate
+  // people learn to ignore.
   const forbidden = ['leva', 'stats.js', 'rstats', 'dat.gui'];
+  const patterns = forbidden.map((t) => ({
+    term: t,
+    re: new RegExp(`(^|[^A-Za-z0-9_$])${t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^A-Za-z0-9_$]|$)`),
+  }));
   const jsFiles: string[] = [];
   (function walk(dir: string) {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -177,8 +185,8 @@ test('built dist/ bundles contain no debug-tooling identifiers', () => {
   const offenders: Array<{ file: string; term: string }> = [];
   for (const file of jsFiles) {
     const contents = fs.readFileSync(file, 'utf8');
-    for (const term of forbidden) {
-      if (contents.includes(term)) offenders.push({ file: path.relative(distDir, file), term });
+    for (const { term, re } of patterns) {
+      if (re.test(contents)) offenders.push({ file: path.relative(distDir, file), term });
     }
   }
   expect(offenders, JSON.stringify(offenders)).toEqual([]);

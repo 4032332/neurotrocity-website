@@ -306,4 +306,30 @@
     $$('.rv').forEach(x => { x.style.opacity = 1; x.style.transform = 'none'; });
     $$('.ch').forEach(x => { x.style.transform = 'none'; });
   }
+  /* -- the barbell, fetched when it is nearly due -------
+     three.js plus the piece itself is 125 KB, and the loading section is four
+     screens down. Holding them back until it is two screens away keeps them
+     out of the hero's way; barbell.js is a self-invoking piece that only needs
+     THREE and gsap to already be there, which loading them in order gives it. */
+  (function () {
+    const section = document.getElementById('load');
+    if (!section) return;
+
+    function loadBarbell() {
+      const script = src => new Promise((res, rej) => {
+        const el = document.createElement('script');
+        el.src = src; el.onload = res; el.onerror = rej;
+        document.head.appendChild(el);
+      });
+      script('js/vendor/three.min.js').then(() => script('js/barbell.js')).catch(() => {});
+    }
+
+    if (!window.IntersectionObserver) { loadBarbell(); return; }
+    const io = new IntersectionObserver((entries, obs) => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      obs.disconnect();
+      loadBarbell();
+    }, { rootMargin: '200% 0px' });
+    io.observe(section);
+  }());
 })();
