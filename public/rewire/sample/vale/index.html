@@ -28,6 +28,9 @@
   <div class="stage__img" data-stage="evening"></div>
   <video class="stage__v" data-v-for="evening" muted loop playsinline preload="none"
          poster="assets/video/interior.jpg"></video>
+  <!-- The computed sky. It sits above the photographic layers so the two can
+       be A/B compared by toggling .no-gl on <html>; Task 5 removes the photos. -->
+  <canvas class="stage__gl" id="stageGL"></canvas>
 </div>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
 
@@ -59,7 +62,7 @@
     <p class="mono brass rv">Rosa Brook &middot; Margaret River, WA &middot; <span id="heroWord">Autumn</span></p>
     <h1 class="dsp hero__ht rv">One wedding<br>a week. <em>Yours</em>.</h1>
     <div class="hero__sub">
-      <p class="lede hero__lede rv">Forty hectares of cabernet and marri forest, an open-sided
+      <p class="lede hero__lede rv" data-quiet>Forty hectares of cabernet and marri forest, an open-sided
         rammed-earth pavilion, and a rule we have never broken: one wedding a week, so the
         place is yours from the Friday.</p>
     </div>
@@ -77,12 +80,12 @@
         <div class="yr__head">
           <p class="mono kick rv">The year here</p>
           <h2 class="h2 dsp rv">Four different venues,<br>on <em>one</em> piece of dirt.</h2>
-          <p class="lede" id="yearP">Harvest runs through March and the vineyard smells like
+          <p class="lede" data-quiet id="yearP">Harvest runs through March and the vineyard smells like
             fermenting fruit for a fortnight. By late April the cabernet turns and the whole
             valley goes gold. If you have seen one photograph of this place, it was taken now.</p>
         </div>
 
-        <div class="yr__now">
+        <div class="yr__now" data-quiet>
           <p class="mono dim">Now showing</p>
           <p class="yr__month dsp" id="yrMonth">September</p>
           <p class="mono" id="yrSeason">Budburst &middot; shoulder rate</p>
@@ -121,7 +124,7 @@
     <div class="sec__head">
       <p class="mono kick rv">Dates &amp; cost</p>
       <h2 class="h2 dsp rv">Every free weekend,<br>with the <em>price on it</em>.</h2>
-      <p class="lede rv">One wedding a week, so what is free is a whole weekend, not a day.
+      <p class="lede rv" data-quiet>One wedding a week, so what is free is a whole weekend, not a day.
         Pick one, choose whether you marry on the Friday, Saturday or Sunday, tell us how many
         are coming, and the number below is the number.</p>
     </div>
@@ -174,7 +177,7 @@
     <div class="beat">
       <p class="mono kick rv">The day &middot; half past three</p>
       <h2 class="h2 dsp rv">Ceremony<br>on the <em>lawn</em>.</h2>
-      <p class="lede rv" id="dayP">A four o'clock ceremony puts the sun directly behind the
+      <p class="lede rv" data-quiet id="dayP">A four o'clock ceremony puts the sun directly behind the
         arbour, which is either the best or worst thing that can happen to your photographer,
         depending entirely on your photographer.</p>
       <p class="mono dim rv" style="margin-top:1.6rem">Seats 140 &middot; wet weather moves
@@ -186,7 +189,7 @@
     <div class="beat">
       <p class="mono kick rv">The day &middot; from seven</p>
       <h2 class="h2 dsp rv">Dinner under<br>the <em>iron</em>.</h2>
-      <p class="lede rv">One table, ninety-six seats, straight down the middle of the pavilion.
+      <p class="lede rv" data-quiet>One table, ninety-six seats, straight down the middle of the pavilion.
         Past that we run a second table and the room stops feeling like one conversation, which
         is the only reason we mention the number at all.</p>
       <p class="mono dim rv" style="margin-top:1.6rem">Festoon lighting to midnight &middot;
@@ -199,7 +202,7 @@
     <div class="sec__head">
       <p class="mono kick rv">The place</p>
       <h2 class="h2 dsp rv">Built out of the paddock<br>it stands in.</h2>
-      <p class="lede rv">The pavilion is rammed earth from the dam cut, jarrah poles from a
+      <p class="lede rv" data-quiet>The pavilion is rammed earth from the dam cut, jarrah poles from a
         wool shed in Nannup, and a Colorbond roof that makes rain sound like the best thing
         that ever happened to a wedding. It has no walls on the long sides, so the vineyard
         is the decoration and you can stop paying for flowers.</p>
@@ -218,7 +221,7 @@
     <div class="foot__top">
       <div>
         <h3 class="dsp">Come and walk it.</h3>
-        <p class="lede" style="margin-top:.7rem;max-width:34ch">Open days on the first Sunday
+        <p class="lede" data-quiet style="margin-top:.7rem;max-width:34ch">Open days on the first Sunday
           of the month. Bring your parents, they will ask better questions than you will.</p>
       </div>
       <div>
@@ -248,7 +251,11 @@
 
 <script src="js/vendor/gsap.min.js"></script>
 <script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/vendor/three.min.js"></script>
 <script src="js/seasons.js"></script>
+<script src="js/sun.js"></script>
+<script src="js/sky.glsl.js"></script>
+<script src="js/stage.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

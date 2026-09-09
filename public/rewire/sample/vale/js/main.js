@@ -393,6 +393,39 @@
     }, true));
   }
 
+  /* ── the computed stage ───────────────────────────────────────
+     One WebGL surface behind the document, drawing the real light at Rosa
+     Brook for the day you have scrolled to. It mounts above the photographic
+     layers rather than replacing them, so the two can be compared by toggling
+     html.no-gl; Task 5 deletes the photographs.
+
+     The scroll → day mapping below is deliberately the simplest thing that
+     works: the page is one vineyard year, September to August. Task 4
+     replaces it with the anchored table that lines each section up with its
+     own season. */
+  const glCanvas = $('#stageGL');
+  let stage = null;
+  try { stage = VV.stage.mount(glCanvas, { day: 60 }); }
+  catch (err) { document.documentElement.classList.add('no-gl'); console.warn('stage:', err); }
+
+  if (stage) {
+    window.VV.__stage = stage;                       // filmstrip / test handle
+    stage.setQuietRects($$('[data-quiet]'));
+    // the shader attenuates behind the text itself, so the scrim no longer
+    // has to carry legibility on its own
+    if (reduced) $('#scrim').style.opacity = .30;
+
+    const YEAR_START = 244;                          // 1 September
+    const dayFromScroll = () => {
+      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      const f = Math.max(0, Math.min(1, scrollY / max));
+      stage.setDay(((YEAR_START - 1 + f * 364) % 365) + 1);
+    };
+    addEventListener('scroll', dayFromScroll, { passive: true });
+    addEventListener('resize', () => { stage.setQuietRects($$('[data-quiet]')); dayFromScroll(); });
+    dayFromScroll();
+  }
+
   /* ── go ────────────────────────────────────────────────────── */
   paintSeason('vin', false);   // the page opens on the frame that sells it
   step();

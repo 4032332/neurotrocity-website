@@ -98,12 +98,18 @@
     '    if(uQuiet[i].z <= 0.0) continue;',
     '    vec2 d = abs(p - uQuiet[i].xy) - uQuiet[i].zw;',
     '    float sd = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);',
-    '    q = min(q, smoothstep(-0.02, 0.10, sd));',
+    '    q = min(q, smoothstep(-0.06, 0.34, sd));',
     '  }',
     '  return q;',
     '}',
     '',
     'float hash12(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
+    'float vnoise(vec2 p){',
+    '  vec2 i = floor(p), f = fract(p);',
+    '  vec2 u = f * f * (3.0 - 2.0 * f);',
+    '  return mix(mix(hash12(i), hash12(i + vec2(1.0, 0.0)), u.x),',
+    '             mix(hash12(i + vec2(0.0, 1.0)), hash12(i + vec2(1.0, 1.0)), u.x), u.y);',
+    '}',
     '',
     // Near/far intersection with a sphere centred on the origin. x > y is a miss.
     'vec2 raySphere(vec3 o, vec3 d, float r){',
@@ -191,9 +197,9 @@
     // Sun disc, ~0.27 degrees with a soft limb, extinguished by the very optical
     // depth the march just measured. It reddens, swells into the Mie halo and
     // dies as it meets the horizon because the aerosol path length says so.
-    '  float lim = smoothstep(0.999975, 0.999992, mu);',
+    '  float lim = smoothstep(0.999955, 0.999990, mu);',
     '  vec3 discT = exp(-(BETA_R * odR + BETA_M * uTurbidity * odM));',
-    '  col += SUN_I * 1.6 * lim * discT;',
+    '  col += SUN_I * 1.05 * lim * discT;',
     '  return col;',
     '}',
     '',
@@ -218,15 +224,25 @@
     // Ground: in shadow, seasonal, hazing out at the horizon.
     '  if(rd.y < 0.0){',
     '    float dn = -rd.y;',
-    '    vec3 bare = vec3(0.030, 0.024, 0.019);',
-    '    vec3 gold = vec3(0.150, 0.098, 0.038);',
-    '    vec3 alb = mix(bare, gold, clamp(uSeason, 0.0, 1.0));',
+    // where this ray meets the ground plane, in metres. Real perspective, so
+    // the ground has texture that recedes with it instead of a painted slab.
+    '    vec2 gp = rd.xz / max(dn, 0.0015) * 1.7;',
+    '    float tex = vnoise(gp * 0.055) * 0.6 + vnoise(gp * 0.21) * 0.4;',
+    '    tex = mix(1.0, 0.55 + 0.90 * tex, smoothstep(0.0, 0.045, dn));',
+    '    vec3 bare = vec3(0.042, 0.035, 0.028);',
+    '    vec3 gold = vec3(0.165, 0.112, 0.045);',
+    '    vec3 alb = mix(bare, gold, clamp(uSeason, 0.0, 1.0)) * tex;',
     '    float sinEl = max(sd.y, 0.0);',
-    '    vec3 direct = sunTint(sinEl) * sinEl * SUN_I * 0.055;',
-    '    vec3 ambient = haze * 0.5 + nightFloor(vec3(0.0, 1.0, 0.0)) * 6.0;',
+    // the ground is a diffuse surface: direct sun by Lambert on a flat plane,
+    // plus the whole sky dome as ambient. The haze value is the sky pinned to
+    // the horizon, which is the best single sample of that dome we already have.
+    '    vec3 direct = sunTint(sinEl) * sinEl * SUN_I * 0.070;',
+    '    vec3 ambient = haze * 0.21 + nightFloor(vec3(0.0, 1.0, 0.0)) * 7.0;',
     '    vec3 gcol = alb * (direct + ambient);',
-    '    gcol *= mix(1.0, 0.28, smoothstep(0.0, 0.55, dn));',
-    '    float mist = exp(-dn * 11.0);',
+    // it falls into its own shadow toward the viewer — the near ground is
+    // under the rows, and this is what keeps the lower third readable
+    '    gcol *= mix(1.0, 0.20, smoothstep(0.0, 0.40, dn));',
+    '    float mist = exp(-dn * 7.5);',
     '    col = mix(gcol, haze, mist);',
     '  }',
     '',
