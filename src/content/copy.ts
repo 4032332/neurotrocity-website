@@ -27,10 +27,9 @@ export interface Service {
 
 export const HOME = {
   meta: {
-    // Unchanged from the current live page — SEO parity constraint.
-    title: 'NeuroTrocity — focused, honest software',
+    title: 'NeuroTrocity — a thousand ideas. One built properly.',
     description:
-      'NeuroTrocity is what happens when a brain fires every idea at once. The few that survive get built properly, and become ventures.',
+      'A thousand ideas go off at once, like fireworks. Catching one before it fizzles and building it properly is the whole job. Software studio in Australia.',
     // Presentation: the Organization description in the home page's JSON-LD. Asserts no new fact.
     jsonLdDescription: 'Software studio building websites and iOS apps.',
   },
@@ -46,12 +45,12 @@ export const HOME = {
 
   hero: {
     kicker: `Software studio · ${CONTACT.madeIn}`,
-    // Live-site headline, verbatim. <em> wraps the second phrase.
-    headline: { lead: 'A brain that wires up ', em: 'honest software', tail: '.' },
+    // <em> wraps the second phrase.
+    headline: { lead: 'A thousand ideas go off at once. We catch one ', em: 'before it fizzles', tail: '.' },
     lede: {
-      a: 'Every idea fires at once — thousands of them, all shouting, each certain it’s the billion-dollar one. ',
+      a: 'They go off like fireworks — bright, loud, all at once, each one certain it’s the billion-dollar one. ',
       strong: 'Most are noise.',
-      b: ' The few that survive get built properly. We do that for ourselves, and we do it for you.',
+      b: ' Catching one while it’s still burning, and building it properly, is the whole discipline. We do that for ourselves, and we do it for you.',
     },
     primary: { label: 'Start a project', href: '#contact' },
     ghost: { label: 'See the proof', href: '#proof' },
@@ -59,7 +58,7 @@ export const HOME = {
 
   build: {
     eyebrow: '01 — What we build',
-    heading: 'Three things, done properly.',
+    heading: 'What survives gets built.',
     sub: {
       a: 'No discovery theatre, no deck of someone else’s screenshots. A scope you can read in one sitting, and ',
       strong: 'a person who answers the email',
@@ -68,10 +67,12 @@ export const HOME = {
     services: [
       {
         n: 'Service 01',
-        title: 'Websites that move',
-        blurb:
-          'Scroll-driven, 3D where it earns its place, fast on a phone. Built the way this page is built — the field behind these words is the demo.',
-        accent: 'volt',
+        title: 'Rewire',
+        href: rewire.path,
+        // First sentence is PRODUCTS.rewire.description verbatim; demo count and
+        // provenance derive from DEMOS.
+        blurb: `${rewire.description} Scroll-driven, 3D where it earns its place, fast on a phone — built the way this page is built. ${asWord(DEMOS.length)} working demo models you can open and try.`,
+        accent: 'ember',
       },
       {
         n: 'Service 02',
@@ -79,15 +80,6 @@ export const HOME = {
         // Platforms derive from PRODUCTS[].platforms (iPhone · Watch · Web).
         blurb: `Shipped on iPhone, Apple Watch and the web, and held to the same four rules as our own ventures — ${dataRule.title.replace(/\.$/, '').toLowerCase()}, ${personRule.title.replace(/\.$/, '').toLowerCase()}.`,
         accent: 'cyan',
-      },
-      {
-        n: 'Service 03',
-        title: 'Rewire',
-        href: rewire.path,
-        // First sentence is PRODUCTS.rewire.description verbatim; demo count and
-        // provenance derive from DEMOS.
-        blurb: `${rewire.description} ${asWord(DEMOS.length)} working demo models you can open and try — the brands are fictional, the engineering is what we ship.`,
-        accent: 'ember',
       },
     ] satisfies Service[],
   },
