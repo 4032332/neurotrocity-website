@@ -6,6 +6,9 @@
 <title>Apex Motor Club — Great Ocean Road Driving Tours</title>
 <meta name="description" content="Curated multi-day supercar drives on the Great Ocean Road. Torquay, Victoria.">
 <meta name="robots" content="noindex, nofollow">
+<!-- The hero poster is the largest thing on the first screen. Without this it
+     queues behind 139 KB of preloaded fonts and lands late on a slow connection. -->
+<link rel="preload" href="assets/img/hero-poster.webp" as="image" fetchpriority="high">
 <link rel="preload" href="assets/fonts/BricolageGrotesque-600-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/PublicSans-300-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SplineSansMono-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -37,7 +40,7 @@
 <section class="hero" id="top">
   <div class="hero__media">
     <video class="hero__video" id="heroVideo" autoplay muted loop playsinline
-           poster="assets/img/hero-poster.jpg">
+           poster="assets/img/hero-poster.webp">
       <!-- Armed by main.js once the page has painted. The poster is the designed
            first frame and shows until the footage is ready either way, so the only
            thing that changes is that five megabytes stop racing the headline. -->
@@ -90,7 +93,7 @@
 
 <!-- ══ SHOWCASE BAND ════════════════════════════════════ -->
 <section class="band">
-  <div class="band__media"><img id="bandImg" width="1500" height="1000" src="assets/img/car-gt3.jpg" alt="A 911 GT3 on the coast road" loading="lazy" decoding="async"></div>
+  <div class="band__media"><img id="bandImg" width="1500" height="1000" src="assets/img/car-gt3.webp" alt="A 911 GT3 on the coast road" loading="lazy" decoding="async"></div>
   <div class="band__scrim"></div>
   <div class="wrap band__inner">
     <p class="band__q">Eight cars in the garage at Torquay.<br><em>Six go out on any given departure.</em></p>
@@ -135,15 +138,15 @@
 
   <div class="premise__plates">
     <figure class="plate reveal">
-      <span class="plate__f"><img width="1200" height="1800" src="assets/img/det-headlight.jpg" alt="Headlight and front wing of a Huracán" loading="lazy" decoding="async"></span>
+      <span class="plate__f"><img width="1200" height="1800" src="assets/img/det-headlight.webp" alt="Headlight and front wing of a Huracán" loading="lazy" decoding="async"></span>
       <figcaption><span class="mono">Huracán STO</span><span class="mono dim">handover</span></figcaption>
     </figure>
     <figure class="plate reveal" data-d="0.1">
-      <span class="plate__f"><img width="1400" height="2100" src="assets/img/apostles-tall.jpg" alt="Limestone stacks off the Port Campbell coast" loading="lazy" decoding="async"></span>
+      <span class="plate__f"><img width="1400" height="2100" src="assets/img/apostles-tall.webp" alt="Limestone stacks off the Port Campbell coast" loading="lazy" decoding="async"></span>
       <figcaption><span class="mono">Twelve Apostles</span><span class="mono dim">km 243</span></figcaption>
     </figure>
     <figure class="plate reveal" data-d="0.2">
-      <span class="plate__f"><img width="1200" height="1500" src="assets/img/det-engine.jpg" alt="Naturally aspirated V12 engine bay" loading="lazy" decoding="async"></span>
+      <span class="plate__f"><img width="1200" height="1500" src="assets/img/det-engine.webp" alt="Naturally aspirated V12 engine bay" loading="lazy" decoding="async"></span>
       <figcaption><span class="mono">V12, before first light</span><span class="mono dim">06:40</span></figcaption>
     </figure>
   </div>
@@ -153,12 +156,12 @@
 <section class="route" id="route">
   <div class="route__sticky">
     <div class="route__bg">
-      <img class="route__img is-on" data-plate="0" width="1800" height="1200" data-src="assets/img/road-water.jpg" alt="" loading="lazy" decoding="async">
-      <img class="route__img" data-plate="1" width="2000" height="1500" data-src="assets/img/road-aerial.jpg" alt="" loading="lazy" decoding="async">
-      <img class="route__img" data-plate="2" width="2000" height="1500" data-src="assets/img/apostles-overcast.jpg" alt="" loading="lazy" decoding="async">
-      <img class="route__img" data-plate="3" width="2000" height="1126" data-src="assets/img/road-headland.jpg" alt="" loading="lazy" decoding="async">
-      <img class="route__img" data-plate="4" width="2000" height="1334" data-src="assets/img/apostles-grey.jpg" alt="" loading="lazy" decoding="async">
-      <img class="route__img" data-plate="5" width="2000" height="1334" data-src="assets/img/apostles-dusk.jpg" alt="" loading="lazy" decoding="async">
+      <img class="route__img is-on" data-plate="0" width="1800" height="1200" data-src="assets/img/road-water.webp" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="1" width="2000" height="1500" data-src="assets/img/road-aerial.webp" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="2" width="2000" height="1500" data-src="assets/img/apostles-overcast.webp" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="3" width="2000" height="1126" data-src="assets/img/road-headland.webp" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="4" width="2000" height="1334" data-src="assets/img/apostles-grey.webp" alt="" loading="lazy" decoding="async">
+      <img class="route__img" data-plate="5" width="2000" height="1334" data-src="assets/img/apostles-dusk.webp" alt="" loading="lazy" decoding="async">
       <div class="route__scrim"></div>
     </div>
 
@@ -296,7 +299,7 @@
   <div class="panel__scrim" data-close></div>
   <aside class="panel__body" role="dialog" aria-modal="true" aria-labelledby="panelName">
     <button class="panel__close" data-close aria-label="Close">✕</button>
-    <div class="panel__img"><img id="panelImg" width="1500" height="2000" src="assets/img/car-sto.jpg" alt="" loading="lazy" decoding="async"></div>
+    <div class="panel__img"><img id="panelImg" width="1500" height="2000" src="assets/img/car-sto.webp" alt="" loading="lazy" decoding="async"></div>
     <div class="panel__content">
       <p class="mono dim" id="panelMarque"></p>
       <h3 class="panel__name" id="panelName"></h3>
@@ -391,7 +394,7 @@
       <p class="kicker reveal">Practicalities</p>
       <h2 class="h2 reveal" data-d="0.1">The dull<br>but <em>important</em><br>part.</h2>
       <figure class="plate reveal" data-d="0.2">
-      <span class="plate__f"><img width="1200" height="1800" src="assets/img/det-wheel.jpg" alt="Front wheel and brake detail" loading="lazy" decoding="async"></span>
+      <span class="plate__f"><img width="1200" height="1800" src="assets/img/det-wheel.webp" alt="Front wheel and brake detail" loading="lazy" decoding="async"></span>
       </figure>
     </div>
 
@@ -442,7 +445,7 @@
 
 <!-- ══ ENQUIRE ══════════════════════════════════════════ -->
 <section class="enq section" id="enquire">
-  <div class="enq__bg"><img data-defer width="2000" height="1334" data-src="assets/img/apostles-dusk.jpg" alt="" loading="lazy" decoding="async"><div class="enq__scrim"></div></div>
+  <div class="enq__bg"><img data-defer width="2000" height="1334" data-src="assets/img/apostles-dusk.webp" alt="" loading="lazy" decoding="async"><div class="enq__scrim"></div></div>
   <div class="wrap enq__inner">
     <p class="kicker reveal">Enquire</p>
     <h2 class="h2 reveal" data-d="0.1">Tell us when you're<br>thinking of, and<br>we'll tell you <em>what's left</em>.</h2>

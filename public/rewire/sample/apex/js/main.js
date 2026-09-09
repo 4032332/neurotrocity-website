@@ -30,28 +30,28 @@
 
   /* ── Data ──────────────────────────────────────────── */
   const CARS = [
-    { id:'sto',  marque:'Lamborghini', name:'Huracán STO', img:'assets/img/car-sto.jpg',
+    { id:'sto',  marque:'Lamborghini', name:'Huracán STO', img:'assets/img/car-sto.webp',
       engine:'5.2 V10', kw:470, nm:565, zero:3.0, kg:1339, drive:'RWD', rate:2450,
       why:'The most single-minded car we run, and the one the Kennett River section was made for. Naturally aspirated, so the noise arrives with the revs rather than before them. It rides firmly. Nobody has ever cared.' },
-    { id:'675', marque:'McLaren', name:'675LT Spider', img:'assets/img/car-mclaren.jpg',
+    { id:'675', marque:'McLaren', name:'675LT Spider', img:'assets/img/car-mclaren.webp',
       engine:'3.8 V8 twin-turbo', kw:496, nm:700, zero:2.9, kg:1370, drive:'RWD', rate:2300,
       why:'The lightest car here and the one that flatters a good driver most. Roof stows in seventeen seconds, which matters on a road where the weather changes four times before lunch. The suspension reads broken tarmac past Apollo Bay better than anything else we run.' },
-    { id:'f12',  marque:'Ferrari', name:'F12', img:'assets/img/car-ferrari.jpg',
+    { id:'f12',  marque:'Ferrari', name:'F12', img:'assets/img/car-ferrari.webp',
       engine:'6.3 V12', kw:545, nm:690, zero:3.1, kg:1525, drive:'RWD', rate:2400,
       why:'The only twelve-cylinder in the fleet, and the reason a good number of people book at all. Long-geared and deceptively civil at touring pace, then genuinely serious above four thousand, which is roughly where the Otways start to make sense.' },
-    { id:'gt3', marque:'Porsche', name:'911 GT3', img:'assets/img/car-gt3.jpg',
+    { id:'gt3', marque:'Porsche', name:'911 GT3', img:'assets/img/car-gt3.webp',
       engine:'4.0 flat-six', kw:368, nm:460, zero:3.4, kg:1430, drive:'RWD', rate:1750,
       why:'The one the lead drivers fight over. Slowest car here on paper and quickest almost everywhere that matters, because it is the only one you can use all of without frightening yourself. Naturally aspirated to nine thousand.' },
-    { id:'van', marque:'Aston Martin', name:'Vantage', img:'assets/img/car-vantage.jpg',
+    { id:'van', marque:'Aston Martin', name:'Vantage', img:'assets/img/car-vantage.webp',
       engine:'4.0 V8 twin-turbo', kw:375, nm:685, zero:3.6, kg:1630, drive:'RWD', rate:1600,
       why:'The grand tourer of the group, and the one to book if the drive matters less than the four days around it. Softer, quieter, and far better at the long inland run home than anything else we keep.' },
-    { id:'r8',  marque:'Audi', name:'R8 V10', img:'assets/img/car-r8.jpg',
+    { id:'r8',  marque:'Audi', name:'R8 V10', img:'assets/img/car-r8.webp',
       engine:'5.2 V10', kw:456, nm:580, zero:3.1, kg:1595, drive:'AWD', rate:1700,
       why:'Four-wheel drive and a naturally aspirated ten, which is a combination nobody sells any more. Unflappable in the wet, undramatic at the limit, and quick enough that the drama is optional rather than compulsory.' },
-    { id:'mc20', marque:'Maserati', name:'MC20', img:'assets/img/car-mc20.jpg',
+    { id:'mc20', marque:'Maserati', name:'MC20', img:'assets/img/car-mc20.webp',
       engine:'3.0 V6 twin-turbo', kw:463, nm:730, zero:2.9, kg:1500, drive:'RWD', rate:1850,
       why:'The quiet one. Less shouty than the Lamborghinis and far rarer on this road, which some people care about more than lap times. Long-legged, beautifully damped, and the easiest car here to drive slowly.' },
-    { id:'evo',  marque:'Lamborghini', name:'Huracán EVO', img:'assets/img/car-huracan.jpg',
+    { id:'evo',  marque:'Lamborghini', name:'Huracán EVO', img:'assets/img/car-huracan.webp',
       engine:'5.2 V10', kw:449, nm:600, zero:2.9, kg:1422, drive:'AWD', rate:1950,
       why:'All-wheel drive, which matters more than pride does when the Otways are wet and they usually are. The car we put first-timers in, and the one most of them ask for again.' }
   ];
@@ -472,9 +472,16 @@
 
     // The footage is held back until the rest of the hero has painted, then
     // armed. Under reduced motion it is never fetched at all.
+    // Phones keep the poster. Two megabytes of decorative autoplay footage is
+    // a real cost on a phone plan and a real drain on a battery, and the poster
+    // is the designed first frame — the hero looks the same either way. Data
+    // Saver is honoured on every device.
+    const conn = navigator.connection || {};
+    const wantsFootage = matchMedia('(min-width: 900px)').matches && !conn.saveData;
+
     const armHero = () => {
       const src = hv.querySelector('source[data-src]');
-      if (!src || reduced) return;
+      if (!src || reduced || !wantsFootage) return;
       src.src = src.dataset.src;
       hv.load();
     };
