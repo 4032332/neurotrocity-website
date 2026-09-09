@@ -6,9 +6,9 @@
 <title>Vernier — Calibre 01</title>
 <meta name="description" content="Calibre 01: a hand-finished manual movement, rendered live in your browser. Wind it, take it apart, watch the escapement run.">
 <link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700&family=Fragment+Mono&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/FamiljenGrotesk-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/FragmentMono-400-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css?v=138ec64b">
 </head>
 <body>
@@ -33,8 +33,10 @@
   <!-- Phones: one still of the movement. iOS composited the fixed WebGL canvas
        with a visible blink on every setting we tried, and a scrubbed frame
        sequence skipped on-device; the live piece is desktop-only by design. -->
-  <img class="stage-still" src="assets/vernier-hero-portrait.jpg" alt="" decoding="async" fetchpriority="high">
-  <img id="fallback" class="fallback" src="assets/vernier-fallback.jpg" alt="" hidden>
+  <img class="stage-still" width="1080" height="1920" src="assets/vernier-hero-portrait.jpg" alt="" decoding="async" fetchpriority="high">
+  <!-- Only ever revealed if WebGL is unavailable; lazy keeps a hidden image from
+       being paid for on every visit that never needs it. -->
+  <img id="fallback" class="fallback" width="1600" height="1000" src="assets/vernier-fallback.jpg" alt="" hidden loading="lazy" decoding="async">
   <div class="scrim"></div>
 </div>
 
@@ -160,17 +162,17 @@
   </nav>
 </footer>
 
-<script src="js/vendor/three.min.js"></script>
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/vendor/lenis.min.js"></script>
-<script src="js/profile.js?v=e10c05f3"></script>
-<script src="js/tier.js?v=37056462"></script>
-<script src="js/materials.js?v=8831ef87"></script>
-<script src="js/geometry.js?v=9a259825"></script>
-<script src="js/hdr.js?v=bae6ea44"></script>
-<script src="js/post.js?v=a6e6b65d"></script>
-<script src="js/movement.js?v=848b05d7"></script>
-<script src="js/main.js?v=06e2917c"></script>
+<script defer src="js/vendor/three.min.js"></script>
+<script defer src="js/vendor/gsap.min.js"></script>
+<script defer src="js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="js/vendor/lenis.min.js"></script>
+<script defer src="js/profile.js?v=e10c05f3"></script>
+<script defer src="js/tier.js?v=37056462"></script>
+<script defer src="js/materials.js?v=8831ef87"></script>
+<script defer src="js/geometry.js?v=9a259825"></script>
+<script defer src="js/hdr.js?v=bae6ea44"></script>
+<script defer src="js/post.js?v=a6e6b65d"></script>
+<script defer src="js/movement.js?v=848b05d7"></script>
+<script defer src="js/main.js?v=06e2917c"></script>
 </body>
 </html>
