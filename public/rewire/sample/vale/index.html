@@ -8,31 +8,30 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter+Tight:wght@300;350;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<!-- The font stylesheet is a cross-origin round trip before anything can
+     paint, and it was the whole of this page's 4.3 s first paint. Fetched as
+     a preload and promoted to a stylesheet on load, it stops blocking; the
+     fallback stack in the CSS carries the first frame and display=swap
+     brings the real faces in. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter+Tight:wght@300;350;400;500&family=JetBrains+Mono:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter+Tight:wght@300;350;400;500&family=JetBrains+Mono:wght@400&display=swap"></noscript>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ══ the stage — one photograph, held behind everything ══════ -->
+<a class="skip" href="#top">Skip to content</a>
+
+<!-- ══ the stage — the light itself, computed ══════════════════
+     There is no photograph here any more. One WebGL surface draws the real
+     sky at Rosa Brook for the date the scroll has reached, at that season's
+     ceremony hour, and the vine rows in front of it carry the season. The
+     four season plates it replaced were 3.3 MB of the 4.8 MB page.
+     One set piece survives, because a render cannot show you a real room:
+     the interior, and only once you reach the section that is about it. -->
 <div class="stage" id="stage" aria-hidden="true">
-  <!-- The four seasons are stacked in year order and blended by opacity, so
-       scrolling through the year dissolves one into the next instead of
-       cutting. The two set pieces sit on top and simply take over. -->
-  <div class="stage__img" data-s-layer="bud"></div>
-  <div class="stage__img" data-s-layer="rip"></div>
-  <div class="stage__img" data-s-layer="vin"></div>
-  <div class="stage__img" data-s-layer="pru"></div>
-  <video class="stage__v" data-v-for="pru" muted loop playsinline preload="none"
-         poster="assets/video/venue-pru.jpg"></video>
-  <div class="stage__img" data-stage="ceremony"></div>
-  <div class="stage__img" data-stage="evening"></div>
-  <video class="stage__v" data-v-for="evening" muted loop playsinline preload="none"
-         poster="assets/video/interior.jpg"></video>
-  <!-- The computed sky. It sits above the photographic layers so the two can
-       be A/B compared by toggling .no-gl on <html>; Task 5 removes the photos. -->
   <canvas class="stage__gl" id="stageGL"></canvas>
+  <video class="stage__v" data-v-for="evening" muted loop playsinline preload="none"></video>
 </div>
-<div class="scrim" id="scrim" aria-hidden="true"></div>
 
 <header class="nav" id="nav">
   <a class="nav__mark" href="#top">Vale &amp; Vine</a>
@@ -58,15 +57,15 @@
 <main id="top">
 
   <!-- ══ hero ══════════════════════════════════════════════════ -->
-  <section class="hero wrap" data-veil="0">
-    <p class="mono brass rv">Rosa Brook &middot; Margaret River, WA &middot; <span id="heroWord">Spring</span></p>
-    <h1 class="dsp hero__ht rv">One wedding<br>a week. <em>Yours</em>.</h1>
+  <section class="hero wrap">
+    <p class="mono brass rv" data-quiet>Rosa Brook &middot; Margaret River, WA &middot; <span id="heroWord">Spring</span></p>
+    <h1 class="dsp hero__ht rv" data-quiet>One wedding<br>a week. <em>Yours</em>.</h1>
     <div class="hero__sub">
       <p class="lede hero__lede rv" data-quiet>Forty hectares of cabernet and marri forest, an open-sided
         rammed-earth pavilion, and a rule we have never broken: one wedding a week, so the
         place is yours from the Friday.</p>
     </div>
-    <p class="mono hero__scroll rv">Scroll, or choose a season</p>
+    <p class="mono hero__scroll rv" data-quiet>Scroll, or choose a season</p>
   </section>
 
   <!-- ══ the year ══════════════════════════════════════════════
@@ -74,13 +73,13 @@
        August: the photograph dissolves season to season, the daylight
        curve draws itself, and the facts move continuously rather than
        snapping between four fixed states. -->
-  <section class="yr" id="year" data-veil=".60">
+  <section class="yr" id="year">
     <div class="yr__stick">
       <div class="yr__ui wrap">
-        <div class="yr__head">
+        <div class="yr__head" data-quiet>
           <p class="mono kick rv">The year here</p>
           <h2 class="h2 dsp rv">Four different venues,<br>on <em>one</em> piece of dirt.</h2>
-          <p class="lede" data-quiet id="yearP">Harvest runs through March and the vineyard smells like
+          <p class="lede" id="yearP">Harvest runs through March and the vineyard smells like
             fermenting fruit for a fortnight. By late April the cabernet turns and the whole
             valley goes gold. If you have seen one photograph of this place, it was taken now.</p>
         </div>
@@ -101,7 +100,7 @@
       </div>
 
       <!-- daylight across the year, drawn as you go -->
-      <figure class="yr__chart" aria-label="Sunset time at Rosa Brook across the year">
+      <figure class="yr__chart" data-quiet aria-label="Sunset time at Rosa Brook across the year">
         <figcaption class="mono dim">Sunset, Rosa Brook &middot; 5:16 pm in June, 7:32 pm in January</figcaption>
         <svg id="yrSvg" viewBox="0 0 1200 190" preserveAspectRatio="none" aria-hidden="true">
           <path id="yrGrid" class="yr__grid" d=""></path>
@@ -120,7 +119,7 @@
   </section>
 
   <!-- ══ dates & cost ══════════════════════════════════════════ -->
-  <section class="sec wrap panel" id="dates" data-veil="1">
+  <section class="sec wrap panel" id="dates">
     <div class="sec__head">
       <p class="mono kick rv">Dates &amp; cost</p>
       <h2 class="h2 dsp rv">Every free weekend,<br>with the <em>price on it</em>.</h2>
@@ -170,35 +169,59 @@
   </section>
 
   <!-- ══ the day ═══════════════════════════════════════════════
-       Two beats, each handing the stage a different photograph. No
-       thumbnails: the background is already showing the thing, and a
-       plate of the same frame underneath it just reads as a mistake. -->
-  <section class="sec wrap day" id="day" data-veil=".24" data-stage-cue="ceremony">
-    <div class="beat">
+       Two beats. The stage behind them is the computed light at the
+       ceremony hour, which is the claim; the plate beside each beat is a
+       photograph of something a render cannot show you — the actual room,
+       the actual table. Both are below the fold, lazy, and served as AVIF
+       with a WebP fallback, so neither is ever on the critical path. -->
+  <section class="sec wrap day" id="day">
+    <div class="beat" data-quiet>
       <p class="mono kick rv">The day &middot; half past three</p>
       <h2 class="h2 dsp rv">Ceremony<br>on the <em>lawn</em>.</h2>
-      <p class="lede rv" data-quiet id="dayP">A four o'clock ceremony puts the sun directly behind the
+      <p class="lede rv" data-quiet id="dayP" >A four o'clock ceremony puts the sun directly behind the
         arbour, which is either the best or worst thing that can happen to your photographer,
         depending entirely on your photographer.</p>
       <p class="mono dim rv" style="margin-top:1.6rem">Seats 140 &middot; wet weather moves
         under cover, same lawn, ten metres left</p>
     </div>
+    <figure class="plate rv">
+      <picture>
+        <source type="image/avif" sizes="(min-width:861px) 42vw, 92vw"
+          srcset="assets/img/ceremony-640.avif 640w, assets/img/ceremony-1024.avif 1024w, assets/img/ceremony-1600.avif 1600w">
+        <source type="image/webp" sizes="(min-width:861px) 42vw, 92vw"
+          srcset="assets/img/ceremony-640.webp 640w, assets/img/ceremony-1024.webp 1024w, assets/img/ceremony-1600.webp 1600w">
+        <img src="assets/img/ceremony-1024.webp" width="1600" height="894" loading="lazy" decoding="async"
+             alt="Guests seated on the lawn for a ceremony, vine rows behind them.">
+      </picture>
+      <figcaption class="mono dim">The lawn, set for a ceremony</figcaption>
+    </figure>
   </section>
 
-  <section class="sec wrap day" id="dinner" data-veil=".18" data-stage-cue="evening">
-    <div class="beat">
+  <section class="sec wrap day" id="dinner" data-stage-cue="evening">
+    <div class="beat" data-quiet>
       <p class="mono kick rv">The day &middot; from seven</p>
       <h2 class="h2 dsp rv">Dinner under<br>the <em>iron</em>.</h2>
-      <p class="lede rv" data-quiet>One table, ninety-six seats, straight down the middle of the pavilion.
+      <p class="lede rv">One table, ninety-six seats, straight down the middle of the pavilion.
         Past that we run a second table and the room stops feeling like one conversation, which
         is the only reason we mention the number at all.</p>
       <p class="mono dim rv" style="margin-top:1.6rem">Festoon lighting to midnight &middot;
         music off at twelve, per the shire</p>
     </div>
+    <figure class="plate rv">
+      <picture>
+        <source type="image/avif" sizes="(min-width:861px) 42vw, 92vw"
+          srcset="assets/img/interior-640.avif 640w, assets/img/interior-1024.avif 1024w, assets/img/interior-1600.avif 1600w">
+        <source type="image/webp" sizes="(min-width:861px) 42vw, 92vw"
+          srcset="assets/img/interior-640.webp 640w, assets/img/interior-1024.webp 1024w, assets/img/interior-1600.webp 1600w">
+        <img src="assets/img/interior-1024.webp" width="1600" height="894" loading="lazy" decoding="async"
+             alt="The long table down the middle of the rammed-earth pavilion, lit for dinner.">
+      </picture>
+      <figcaption class="mono dim">One table, down the middle of the pavilion</figcaption>
+    </figure>
   </section>
 
   <!-- ══ the place ═════════════════════════════════════════════ -->
-  <section class="sec wrap panel" id="place" data-veil="1">
+  <section class="sec wrap panel" id="place">
     <div class="sec__head">
       <p class="mono kick rv">The place</p>
       <h2 class="h2 dsp rv">Built out of the paddock<br>it stands in.</h2>
@@ -215,9 +238,33 @@
         <div><span class="mono">Wet weather</span><b style="font-size:1.1rem">Under cover</b></div>
         <div><span class="mono">Weddings a week</span><b>1</b></div>
       </div>
+      <div class="plates">
+        <figure class="plate">
+          <picture>
+            <source type="image/avif" sizes="(min-width:861px) 44vw, 92vw"
+              srcset="assets/img/sup-pru2-640.avif 640w, assets/img/sup-pru2-1024.avif 1024w, assets/img/sup-pru2-1600.avif 1600w">
+            <source type="image/webp" sizes="(min-width:861px) 44vw, 92vw"
+              srcset="assets/img/sup-pru2-640.webp 640w, assets/img/sup-pru2-1024.webp 1024w, assets/img/sup-pru2-1600.webp 1600w">
+            <img src="assets/img/sup-pru2-1024.webp" width="1400" height="1000" loading="lazy" decoding="async"
+                 alt="Forty year old cabernet vines, cut back to bare spurs after pruning.">
+          </picture>
+          <figcaption class="mono dim">Forty year old cabernet, pruned back</figcaption>
+        </figure>
+        <figure class="plate">
+          <picture>
+            <source type="image/avif" sizes="(min-width:861px) 44vw, 92vw"
+              srcset="assets/img/detail-table-640.avif 640w, assets/img/detail-table-1024.avif 1024w, assets/img/detail-table-1600.avif 1600w">
+            <source type="image/webp" sizes="(min-width:861px) 44vw, 92vw"
+              srcset="assets/img/detail-table-640.webp 640w, assets/img/detail-table-1024.webp 1024w, assets/img/detail-table-1600.webp 1600w">
+            <img src="assets/img/detail-table-1024.webp" width="1400" height="1000" loading="lazy" decoding="async"
+                 alt="A long table laid with glassware and low candles before guests arrive.">
+          </picture>
+          <figcaption class="mono dim">Long table, set for 90</figcaption>
+        </figure>
+      </div>
   </section>
 
-  <footer class="foot wrap" data-veil="1">
+  <footer class="foot wrap">
     <div class="foot__top">
       <div>
         <h3 class="dsp">Come and walk it.</h3>
@@ -249,14 +296,13 @@
   </footer>
 </main>
 
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/vendor/three.min.js"></script>
-<script src="js/seasons.js"></script>
-<script src="js/sun.js"></script>
-<script src="js/sky.glsl.js"></script>
-<script src="js/year.js"></script>
-<script src="js/stage.js"></script>
-<script src="js/main.js"></script>
+<script defer src="js/vendor/gsap.min.js"></script>
+<script defer src="js/vendor/ScrollTrigger.min.js"></script>
+<script defer src="js/seasons.js"></script>
+<script defer src="js/sun.js"></script>
+<script defer src="js/sky.glsl.js"></script>
+<script defer src="js/year.js"></script>
+<script defer src="js/stage.js"></script>
+<script defer src="js/main.js"></script>
 </body>
 </html>

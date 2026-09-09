@@ -78,10 +78,16 @@
      re-sampled upward. The march step counts are compile-time defines, so
      they cannot change after the material is built — only the pixel ratio
      adapts at runtime, and only downward. */
+  /* GLSL ES 1.00 has no dynamic loops, so both march counts are unrolled at
+     compile time and the shader's source length — and its compile cost — is
+     roughly primary x light. On an emulated mid-range phone the medium tier
+     at 12x4 cost 880 ms of main-thread time to compile and link, which is
+     most of a second of unresponsiveness for a difference in the sky nobody
+     can see. 9x3 is 27 unrolled bodies instead of 48. */
   const TIERS = {
-    high:   { dpr: 2.0, rows: 34, primary: 16, light: 5 },
-    medium: { dpr: 1.5, rows: 22, primary: 12, light: 4 },
-    low:    { dpr: 1.0, rows: 14, primary: 8,  light: 3 }
+    high:   { dpr: 2.0, rows: 34, primary: 14, light: 4 },
+    medium: { dpr: 1.5, rows: 22, primary: 9,  light: 3 },
+    low:    { dpr: 1.0, rows: 14, primary: 7,  light: 2 }
   };
 
   function detectTier() {

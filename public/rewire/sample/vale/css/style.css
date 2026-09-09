@@ -10,7 +10,12 @@
   --night-3: #2A2320;   /* hairline fill */
   --ivory:   #F2EDE4;
   --ivory-2: #CFC6B8;
-  --muted:   #8C8175;
+  /* Every quiet label on the page. It used to be #8C8175, which clears 4.5:1
+     against flat --night and nothing else; over the live sky, even fully
+     attenuated, it measured 3.0:1 on the year section's field labels. This
+     is the lightest the greyed type has to be for the smallest of them to
+     clear the body-text floor everywhere it appears. */
+  --muted:   #B3A89A;
   --brass:   #C08B45;
   --brass-2: #E0B776;
   --line:    rgba(242,237,228,.16);
@@ -75,38 +80,60 @@ p{ margin:0; }
 .burger{ display:none; background:none; border:0; color:inherit; padding:6px; cursor:pointer; }
 .burger span{ display:block; width:22px; height:1px; background:var(--ivory); margin:5px 0; }
 
-/* ══ the stage — one photograph, held, crossfading ════════════ */
+/* A page whose first tab stop is a four-item nav and a fixed season rail
+   needs a way past them. Off-screen until focused, then it lands where the
+   ring is unmistakable. */
+.skip{
+  position:fixed; left:var(--pad); top:12px; z-index:200;
+  transform:translateY(-160%); transition:transform .18s ease;
+  background:var(--night-2); color:var(--ivory); text-decoration:none;
+  border:1px solid var(--brass-2); border-radius:100px; padding:10px 20px;
+  font-family:var(--mono); font-size:.78rem; letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.skip:focus{ transform:translateY(0); }
+@media (prefers-reduced-motion:reduce){ .skip{ transition:none; } }
+
+/* ══ the stage — the computed sky ═════════════════════════════
+   The four season photographs are gone; the canvas draws the light
+   itself. It carries no scrim of any kind: legibility over it comes
+   from the shader's quiet-rect attenuation, which darkens only the
+   patches of sky that actually sit behind running text.
+
+   Which also means the page has no full-page veil left to hide behind.
+   The two sections that are dense data rather than atmosphere carry
+   their own opaque ground instead — a local surface, not a curtain
+   over the whole document. */
 .stage{ position:fixed; inset:0; z-index:0; background:var(--night); }
-.stage__img{
-  position:absolute; inset:0; opacity:0; background-size:cover;
-  background-position:center; will-change:opacity;
-}
-/* A moving plate sits in the same stack as a still one. object-fit keeps it
-   behaving like background-size:cover at every aspect ratio. */
-.stage__v{ position:absolute; inset:0; width:100%; height:100%;
-  object-fit:cover; opacity:0; will-change:opacity; }
-.stage__img.is-on{ opacity:1; }
-/* The computed stage. Above the photographic layers and above .stage::after,
-   so it owns the frame outright; html.no-gl hides it to A/B against the
-   photographs until Task 5 deletes them. It carries no scrim of its own —
-   legibility comes from the shader's quiet-rect attenuation. */
 .stage__gl{ position:absolute; inset:0; width:100%; height:100%;
-  display:block; z-index:2; }
+  display:block; z-index:1; }
 html.no-gl .stage__gl{ display:none; }
-.stage::after{                       /* keeps type legible over any frame */
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:
-    linear-gradient(100deg, rgba(20,16,15,.90) 0%, rgba(20,16,15,.55) 42%, rgba(20,16,15,.18) 72%),
-    linear-gradient(rgba(20,16,15,.55), rgba(20,16,15,0) 26%, rgba(20,16,15,0) 62%, rgba(20,16,15,.86));
-}
-/* The photograph stays behind the whole page, but only the hero and the
-   day section want it at full strength — everywhere else it drops back far
-   enough for data and long copy to be read comfortably. */
-.scrim{ position:fixed; inset:0; z-index:1; background:var(--night); opacity:0;
-  pointer-events:none; transition:opacity .55s cubic-bezier(.4,0,.2,1); }
+/* The one surviving set piece. object-fit keeps it behaving like
+   background-size:cover at every aspect ratio, and it is only ever given a
+   src once the section it belongs to is reached.
+   The shader's attenuation cannot reach a DOM video, so this one is held
+   down globally instead: the dinner copy over it measured 4.64:1 at full
+   brightness, which clears the floor by too little to be worth trusting on
+   another machine's colour pipeline. */
+.stage__v{ position:absolute; inset:0; width:100%; height:100%; z-index:2;
+  object-fit:cover; opacity:0; will-change:opacity; filter:brightness(.55); }
 
 /* everything that isn't the stage rides above it */
 main{ position:relative; z-index:2; }
+
+/* The dense sections stand on their own ground. Reading a calendar through
+   a sky is not a design decision, it is a mistake with a mood. */
+.panel, .foot{ position:relative; background:var(--night); }
+
+/* ══ venue plates ═════════════════════════════════════════════
+   The only photographs left on the page. Below the fold, lazy, AVIF with a
+   WebP fallback, and sized in the markup so nothing shifts when they land. */
+.plate{ margin:0; }
+.plate img{ display:block; width:100%; height:auto; border-radius:2px; }
+.plate figcaption{ margin-top:10px; }
+.day .plate{ flex:1 1 320px; max-width:min(46vw, 620px); }
+.plates{ display:grid; gap:clamp(14px,2vw,26px); margin-top:clamp(2rem,4vw,3.4rem);
+  grid-template-columns:repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 
 
 /* ══ hero ═════════════════════════════════════════════════════ */
@@ -176,7 +203,10 @@ main{ position:relative; z-index:2; }
   border-top:1px solid var(--line); margin-top:clamp(1rem,2vw,1.6rem); }
 .yr__stats div{ padding:11px 14px 13px 0; min-width:0; }
 .yr__stats b{ display:block; font-family:var(--disp); font-weight:300;
-  font-size:clamp(1.15rem,1.75vw,1.6rem); margin-top:.2rem; color:var(--brass-2);
+  /* The numbers are the point of this panel, so they are the brightest thing
+     in it. Brass here competed with the month above and, at this size over a
+     bright sky, could not hold 4.5:1 in any season. */
+  font-size:clamp(1.15rem,1.75vw,1.6rem); margin-top:.2rem; color:var(--ivory);
   font-variant-numeric:lining-nums; line-height:1.15; }
 
 /* a rule keeps the caption reading as the chart's, not as a trailing line
@@ -197,7 +227,9 @@ main{ position:relative; z-index:2; }
 .yr__bands i.is-on{ background:var(--brass); }
 .yr__ruler{ display:grid; grid-template-columns:repeat(12,1fr); padding-top:9px; }
 .yr__ruler span{ color:var(--muted); font-size:.66rem; text-align:center;
-  letter-spacing:.12em; transition:color .3s, opacity .3s; opacity:.6; }
+  /* .6 put a 10.5px label at 3.6:1. The month that is on is picked out by
+     colour, not by everything else being too faint to read. */
+  letter-spacing:.12em; transition:color .3s, opacity .3s; opacity:.82; }
 .yr__ruler span.is-on{ color:var(--brass-2); opacity:1; }
 .yr__drop{ stroke:var(--brass); stroke-width:1; opacity:.32; }
 @media (max-width:700px){
@@ -245,7 +277,11 @@ main{ position:relative; z-index:2; }
   transition:background-color .2s, color .2s, border-color .2s; }
 .d.free:hover{ background:var(--brass); border-color:var(--brass); color:var(--night); }
 .d.is-sel{ background:var(--brass-2); border-color:var(--brass-2); color:var(--night); }
-.mo.off{ opacity:.32; }
+/* Out-of-season months read as secondary, not as unreadable: at .32 the
+   month names and the free Saturdays inside them measured 2.0-2.8:1. This
+   is as far back as they can go and still be read by someone who wants to
+   check a date outside the season they arrived on. */
+.mo.off{ opacity:.75; }
 .cal__side{ border:1px solid var(--line); padding:clamp(20px,2.4vw,30px); }
 .cal__row{ display:flex; justify-content:space-between; gap:16px;
   padding:11px 0; border-bottom:1px solid var(--line-2); align-items:baseline; }
@@ -277,8 +313,10 @@ main{ position:relative; z-index:2; }
 .days button span{ font-family:var(--mono); font-size:.58rem; letter-spacing:.12em;
   text-transform:uppercase; color:var(--muted); }
 .days button:hover{ background:var(--night-2); }
-.days button.is-on{ background:var(--brass); color:var(--night); }
-.days button.is-on span{ color:rgba(20,16,15,.72); }
+/* --brass is too dark a ground for near-black type in the vintage palette
+   (4.3:1); --brass-2 clears 4.5:1 in all four seasons. */
+.days button.is-on{ background:var(--brass-2); color:var(--night); }
+.days button.is-on span{ color:rgba(20,16,15,.82); }
 
 /* ══ plates ═══════════════════════════════════════════════════ */
 .plates{ display:grid; gap:clamp(14px,1.6vw,22px); grid-template-columns:repeat(6,1fr);
@@ -295,6 +333,16 @@ main{ position:relative; z-index:2; }
 
 /* ══ reveals ══════════════════════════════════════════════════ */
 .rv{ opacity:0; transform:translate3d(0,26px,0); }
+/* The hero is the largest thing the page paints, so it must not wait for a
+   118 KB WebGL library to download before it is allowed to appear. Below the
+   fold GSAP still does the reveals on scroll; the first screen does its own,
+   in CSS, and lands about a second sooner because of it. */
+@keyframes rvIn{ from{ opacity:0; transform:translate3d(0,26px,0); }
+                 to  { opacity:1; transform:none; } }
+.hero .rv{ animation:rvIn .9s cubic-bezier(.22,.7,.2,1) both; }
+.hero .rv:nth-of-type(2){ animation-delay:.10s; }
+.hero .hero__sub .rv{ animation-delay:.20s; }
+.hero .rv:last-of-type{ animation-delay:.30s; }
 
 /* ══ footer ═══════════════════════════════════════════════════ */
 .foot{ border-top:1px solid var(--line); padding-block:clamp(50px,7vh,80px) 30px; }
@@ -339,12 +387,14 @@ main{ position:relative; z-index:2; }
 
 @media (prefers-reduced-motion:reduce){
   .rv{ opacity:1; transform:none; }
-  .stage__img{ transition:none; }
+  .hero .rv{ animation:none; }
+  .stage__v{ transition:none; }
 }
 
-/* ══ the day — type over a full-bleed frame ═══════════════════ */
-.day{ min-height:88svh; display:flex; align-items:center; }
-.beat{ max-width:52ch; }
+/* ══ the day — type over the live sky, with one plate beside it ══ */
+.day{ min-height:88svh; display:flex; align-items:center;
+  flex-wrap:wrap; gap:clamp(1.6rem,4vw,3.4rem); }
+.beat{ max-width:52ch; flex:1 1 34ch; }
 
 /* Every anchor on this page jumps under a fixed header without this — the
    heading you asked for ends up hidden behind the bar. */
