@@ -248,14 +248,19 @@ export const APPS_PAGE = {
 
   hero: {
     kicker: `Apps · iPhone, Apple Watch and the web · ${CONTACT.madeIn}`,
-    headline: { lead: 'Two apps. ', em: 'Both finished.' },
+    // Derived, so adding or retiring an app cannot leave the headline lying.
+    headline: {
+      lead: `${asWord(APPS.length)} apps. `,
+      em: APPS.length === 2 ? 'Both finished.' : 'All finished.',
+    },
     lede: {
-      a: 'We would rather ship two apps properly than a shelf of half-built ones. ',
+      a: `We would rather ship ${asWord(APPS.length).toLowerCase()} apps properly than a shelf of half-built ones. `,
       strong: 'Each does one thing properly',
       b: ', and keeps doing it — no feature bloat, no roadmap theatre.',
     },
     primary: { label: `Open ${APPS[0].name}`, href: APPS[0].path },
-    ghost: { label: `Open ${APPS[1].name}`, href: APPS[1].path },
+    // Undefined when there is only one app; the template omits the ghost button.
+    ghost: APPS[1] ? { label: `Open ${APPS[1].name}`, href: APPS[1].path } : undefined,
   },
 
   apps: {

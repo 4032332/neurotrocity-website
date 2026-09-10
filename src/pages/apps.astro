@@ -188,7 +188,7 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
       <p class="lede">{hero.lede.a}<strong>{hero.lede.strong}</strong>{hero.lede.b}</p>
       <div class="cta">
         <a class="btn p" href={hero.primary.href}>{hero.primary.label} <span class="arw" aria-hidden="true">→</span></a>
-        <a class="btn g" href={hero.ghost.href}>{hero.ghost.label}</a>
+        {hero.ghost && <a class="btn g" href={hero.ghost.href}>{hero.ghost.label}</a>}
       </div>
     </div>
   </div>
