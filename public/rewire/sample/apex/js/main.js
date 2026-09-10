@@ -141,6 +141,94 @@
     });
   });
 
+  /* ── Premise comparison ────────────────────────────── */
+  const cmpStage = $('#cmpStage');
+  if (cmpStage) {
+    const cmpHandle = $('#cmpHandle');
+    let split = 52, cmpDrag = false, cmpPid = null;
+
+    // Below 820px the in-image captions are hidden and this carries the copy
+    // instead, so the handle still decides which proposition you are reading.
+    const cmpRead = $('#cmpRead');
+    const says = {
+      theirs: $('.cmp--theirs .cmp__say'),
+      ours: $('.cmp--ours .cmp__say')
+    };
+    let shown = null;
+
+    const applySplit = (v) => {
+      split = Math.max(0, Math.min(100, v));
+      cmpStage.style.setProperty('--split', split.toFixed(2) + '%');
+      const n = Math.round(split);
+      cmpHandle.setAttribute('aria-valuenow', String(n));
+      cmpHandle.setAttribute('aria-valuetext',
+        n + '% the usual way, ' + (100 - n) + '% the Apex way');
+
+      const want = split >= 50 ? 'theirs' : 'ours';
+      if (cmpRead && want !== shown && says[want]) {
+        shown = want;
+        cmpRead.innerHTML = says[want].innerHTML;
+      }
+    };
+
+    const fromClientX = (clientX) => {
+      const r = cmpStage.getBoundingClientRect();
+      applySplit(((clientX - r.left) / r.width) * 100);
+    };
+
+    cmpStage.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      cmpDrag = true; cmpPid = e.pointerId;
+      cmpStage.setPointerCapture(cmpPid);
+      fromClientX(e.clientX);
+    });
+    cmpStage.addEventListener('pointermove', (e) => {
+      if (cmpDrag) fromClientX(e.clientX);
+    });
+    const cmpEnd = () => {
+      if (!cmpDrag) return;
+      cmpDrag = false;
+      if (cmpPid !== null && cmpStage.hasPointerCapture(cmpPid)) {
+        cmpStage.releasePointerCapture(cmpPid);
+      }
+      cmpPid = null;
+    };
+    cmpStage.addEventListener('pointerup', cmpEnd);
+    cmpStage.addEventListener('pointercancel', cmpEnd);
+
+    cmpHandle.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowLeft' ? -4 : e.key === 'ArrowRight' ? 4
+              : e.key === 'Home' ? -100 : e.key === 'End' ? 100 : 0;
+      if (!d) return;
+      e.preventDefault();
+      applySplit(split + d);
+    });
+
+    applySplit(split);
+
+    // On first sight, sweep once from the usual way to ours. It states what the
+    // control does without a tooltip, and it is the moment that reads in a
+    // six-second clip. Once only, and never when motion is not wanted.
+    if (!reduced && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          io.disconnect();
+          const from = 88, to = 52, t0 = performance.now(), dur = 1500;
+          applySplit(from);
+          const sweep = (now) => {
+            const k = Math.min(1, (now - t0) / dur);
+            const e2 = 1 - Math.pow(1 - k, 3);           // ease out
+            applySplit(from + (to - from) * e2);
+            if (k < 1 && !cmpDrag) requestAnimationFrame(sweep);
+          };
+          requestAnimationFrame(sweep);
+        });
+      }, { threshold: 0.45 });
+      io.observe(cmpStage);
+    }
+  }
+
   /* ── Route: scrubbed line draw + waypoints ─────────── */
   const line  = $('#routeLine');
   const pins  = $$('#routePins .pin');

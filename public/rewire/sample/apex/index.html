@@ -139,20 +139,59 @@
     </div>
   </div>
 
-  <div class="premise__plates">
-    <figure class="plate reveal">
-      <span class="plate__f"><img width="1200" height="1800" src="assets/img/det-headlight.webp" alt="Headlight and front wing of a Huracán" loading="lazy" decoding="async"></span>
-      <figcaption><span class="mono">Huracán STO</span><span class="mono dim">handover</span></figcaption>
-    </figure>
-    <figure class="plate reveal" data-d="0.1">
-      <span class="plate__f"><img width="1400" height="2100" src="assets/img/apostles-tall.webp" alt="Limestone stacks off the Port Campbell coast" loading="lazy" decoding="async"></span>
-      <figcaption><span class="mono">Twelve Apostles</span><span class="mono dim">km 243</span></figcaption>
-    </figure>
-    <figure class="plate reveal" data-d="0.2">
-      <span class="plate__f"><img width="1200" height="1500" src="assets/img/det-engine.webp" alt="Naturally aspirated V12 engine bay" loading="lazy" decoding="async"></span>
-      <figcaption><span class="mono">V12, before first light</span><span class="mono dim">06:40</span></figcaption>
-    </figure>
+  <!-- The premise, argued rather than illustrated. The two photographs are
+       different viewpoints, not one view in two weathers, so this is a split
+       screen with its own copy either side rather than a before/after wipe
+       pretending the framing matches. -->
+  <div class="compare" id="compare">
+    <div class="compare__stage" id="cmpStage" style="--split:52%">
+
+      <figure class="cmp cmp--ours">
+        <img width="2000" height="1334" src="assets/img/apostles-dusk.webp"
+             alt="The Twelve Apostles backlit at dusk" loading="lazy" decoding="async"
+             draggable="false">
+        <figcaption class="cmp__say">
+          <p class="kicker">With us</p>
+          <p class="cmp__h">Four days, and the car is yours for all of them.</p>
+          <ul class="cmp__list mono">
+            <li>Four days, unhurried</li>
+            <li>Your car the whole trip</li>
+            <li>Six cars per departure, at most</li>
+            <li>A lead driver who knows the corners</li>
+          </ul>
+        </figcaption>
+      </figure>
+
+      <figure class="cmp cmp--theirs" id="cmpTheirs">
+        <img width="2000" height="1334" src="assets/img/apostles-grey.webp"
+             alt="The same coast under flat grey overcast" loading="lazy" decoding="async"
+             draggable="false">
+        <figcaption class="cmp__say">
+          <p class="kicker">Most people</p>
+          <p class="cmp__h">One afternoon, in the rain, in a hire car.</p>
+          <ul class="cmp__list mono">
+            <li>Out and back in a day</li>
+            <li>Someone else's hatchback</li>
+            <li>A coach in front of you at Lorne</li>
+            <li>Whatever the sky happens to give</li>
+          </ul>
+        </figcaption>
+      </figure>
+
+      <div class="compare__handle" id="cmpHandle" role="slider" tabindex="0"
+           aria-label="Compare a hire-car day with an Apex departure"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="52"
+           aria-valuetext="52% the usual way, 48% the Apex way">
+        <span class="compare__grip" aria-hidden="true"></span>
+      </div>
+
+    </div>
+    <!-- Narrow screens cannot hold two columns of copy side by side, so the
+         captions move out here and the handle chooses which one you read. -->
+    <div class="compare__readout" id="cmpRead" aria-live="polite"></div>
+    <p class="compare__hint mono dim">Drag to compare — or use ← →</p>
   </div>
+
 </section>
 
 <!-- ══ ROUTE (pinned) ═══════════════════════════════════ -->
