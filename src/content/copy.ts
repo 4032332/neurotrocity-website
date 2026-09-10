@@ -38,6 +38,7 @@ export const HOME = {
   nav: {
     links: [
       { label: 'What we build', href: '#build' },
+      { label: 'Apps', href: '/apps/' },
       { label: 'Proof', href: '#proof' },
       { label: 'How we work', href: '#rules' },
     ],
@@ -76,6 +77,7 @@ export const HOME = {
       {
         n: 'Service 02',
         title: 'iOS & web apps',
+        href: '/apps/',
         // Platforms derive from PRODUCTS[].platforms (iPhone · Watch · Web).
         blurb: `Shipped on iPhone, Apple Watch and the web, and held to the same four rules as our own ventures — ${dataRule.title.replace(/\.$/, '').toLowerCase()}, ${personRule.title.replace(/\.$/, '').toLowerCase()}.`,
         accent: 'cyan',
@@ -217,5 +219,77 @@ export const REWIRE_PAGE = {
     ],
     email: REWIRE.contact.email,
     legal: `© ${new Date().getFullYear()} NeuroTrocity · Rewire · Made in ${CONTACT.madeIn}`,
+  },
+} as const;
+
+/**
+ * Presentation strings for /apps/. Same rule as HOME and REWIRE_PAGE: every
+ * fact — app names, paths, descriptions, platforms, the four rules, the email
+ * — is interpolated from `facts.ts`. Nothing here asserts a new fact: no
+ * download counts, no reviews, no roadmap, no unreleased apps.
+ */
+const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
+
+export const APPS_PAGE = {
+  meta: {
+    title: 'Apps — NeuroTrocity',
+    description: `The apps we ship: ${APPS.map((a) => a.name).join(' and ')}. Built to the same four rules as everything else here — sharp, honest, private, answered by a person.`,
+    canonical: 'https://neurotrocity.com/apps/',
+  },
+
+  nav: {
+    back: { label: '← NeuroTrocity', href: '/' },
+    links: [
+      { label: 'The apps', href: '#apps' },
+      { label: 'How we build', href: '#rules' },
+    ],
+    cta: { label: 'Say hello', href: '#contact' },
+  },
+
+  hero: {
+    kicker: `Apps · iPhone, Apple Watch and the web · ${CONTACT.madeIn}`,
+    headline: { lead: 'Two apps. ', em: 'Both finished.' },
+    lede: {
+      a: 'We would rather ship two apps properly than a shelf of half-built ones. ',
+      strong: 'Each does one thing properly',
+      b: ', and keeps doing it — no feature bloat, no roadmap theatre.',
+    },
+    primary: { label: `Open ${APPS[0].name}`, href: APPS[0].path },
+    ghost: { label: `Open ${APPS[1].name}`, href: APPS[1].path },
+  },
+
+  apps: {
+    eyebrow: '01 — The apps',
+    heading: 'What we ship, and where to find it.',
+    sub: 'Each has its own page here — what it does, who it is for, and a support address that a person actually reads.',
+    // Order is the lead tile first; PRODUCTS supplies every value on a tile.
+    items: APPS,
+    open: 'Open the page',
+  },
+
+  rules: {
+    eyebrow: '02 — How we build',
+    // RULES.length is asserted to be 4 in tests/unit/facts.test.ts.
+    heading: 'Four rules. They apply to the apps too.',
+    sub: 'These are not aspirations we grew into. They are the reasons these two apps look the way they do.',
+    items: RULES,
+  },
+
+  contact: {
+    eyebrow: '03 — Say hello',
+    heading: 'Question about either app?',
+    // Restates RULES[3].
+    sub: personRule.body,
+    email: CONTACT.general,
+  },
+
+  footer: {
+    tagline: 'Building software that respects the people who use it.',
+    links: [
+      ...APPS.map((a) => ({ label: a.name, href: a.path })),
+      { label: 'NeuroTrocity', href: '/' },
+    ],
+    email: CONTACT.general,
+    legal: `© ${new Date().getFullYear()} NeuroTrocity · Made in ${CONTACT.madeIn}`,
   },
 } as const;

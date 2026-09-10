@@ -6,6 +6,7 @@ const SITE = 'https://neurotrocity.com';
 /** Static pages that aren't derived from facts.ts. */
 const STATIC_URLS = [
   '/',
+  '/apps/',
   '/rewire/landing/',
   '/rewire/contact/',
   '/rewire/sample/',

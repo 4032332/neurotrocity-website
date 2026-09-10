@@ -1,4 +1,4 @@
-export type Accent = 'volt' | 'jade';
+export type Accent = 'volt' | 'jade' | 'ember';
 
 export interface Palette {
   /** Hex colours for the three clusters, in ORIGINS order. */
@@ -22,5 +22,11 @@ export const PALETTES: Record<Accent, Palette> = {
     c1: [0.133, 0.769, 0.537],
     c2: [0.220, 0.882, 0.839],
     dust: 0x6FB8A0,
+  },
+  ember: {
+    clusters: [0xFF8A4C, 0x38E1D6, 0x7C6BFF],
+    c1: [1.0, 0.541, 0.298],
+    c2: [0.220, 0.882, 0.839],
+    dust: 0xD8A186,
   },
 };

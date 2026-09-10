@@ -92,11 +92,21 @@ const REWIRE_CASES: ContrastCase[] = [
   { label: 'front .deck-card .desc', selector: '.deck-card .desc', fg: MUTED, threshold: 4.5 },
 ];
 
+const APPS_CASES: ContrastCase[] = [
+  { label: 'hero .lede', selector: '.hero .lede', fg: MUTED, threshold: 4.5 },
+  { label: 'hero h1', selector: '.hero h1', fg: INK, threshold: 3.0 },
+  { label: 'lead tile description', selector: '.app.is-lead p', fg: MUTED, threshold: 4.5 },
+  { label: 'secondary tile description', selector: '.rest .app p', fg: MUTED, threshold: 4.5 },
+  { label: 'first .rule', selector: '.rule', fg: MUTED, threshold: 4.5 },
+  { label: '.contact .sub', selector: '.contact .sub', fg: MUTED, threshold: 4.5 },
+];
+
 const CONTRAST_TABLE: Array<{ path: string; label: string; min: number; threshold: number }> = [];
 
 for (const [pagePath, cases] of [
   ['/', HOME_CASES],
   ['/rewire/landing/', REWIRE_CASES],
+  ['/apps/', APPS_CASES],
 ] as const) {
   test(`${pagePath} keeps every text element above its WCAG floor against the live field`, async ({ page }) => {
     // Deliberately slow by design: 6 elements × 5 samples × 300 ms of waits,
@@ -133,7 +143,7 @@ for (const [pagePath, cases] of [
 }
 
 // ── Reduced motion: still frame ─────────────────────────────────────────────
-for (const pagePath of ['/', '/rewire/landing/']) {
+for (const pagePath of ['/', '/rewire/landing/', '/apps/']) {
   test(`${pagePath} holds a still frame under prefers-reduced-motion`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(pagePath);
@@ -150,7 +160,7 @@ for (const pagePath of ['/', '/rewire/landing/']) {
 }
 
 // ── Debug tooling ────────────────────────────────────────────────────────────
-for (const pagePath of ['/', '/rewire/landing/']) {
+for (const pagePath of ['/', '/rewire/landing/', '/apps/']) {
   test(`${pagePath} ships no debug tooling on window`, async ({ page }) => {
     await page.goto(pagePath);
     const found = await page.evaluate(() => ['Stats', 'leva', 'rstats', 'dat'].filter((k) => k in (window as any)));
@@ -196,6 +206,16 @@ test('built dist/ bundles contain no debug-tooling identifiers', () => {
 test('no horizontal overflow at 360px on /rewire/landing/', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto('/rewire/landing/');
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
+// ── 360px overflow (Apps) ────────────────────────────────────────────────────
+test('no horizontal overflow at 360px on /apps/', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 780 });
+  await page.goto('/apps/');
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth
   );

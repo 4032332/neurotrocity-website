@@ -4,7 +4,11 @@ import { DEMOS, PRODUCTS } from '../../src/content/facts';
 const PAGES = [
   { path: '/',                 canonical: 'https://neurotrocity.com/' },
   { path: '/rewire/landing/',  canonical: 'https://neurotrocity.com/rewire/landing/' },
+  { path: '/apps/',            canonical: 'https://neurotrocity.com/apps/' },
 ];
+
+/** The two apps the /apps/ hub lists — Rewire is a service and has its own page. */
+const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
 
 for (const p of PAGES) {
   test(`${p.path} declares a self-referencing canonical`, async ({ page }) => {
@@ -73,10 +77,33 @@ test('Rewire declares a Service, not an Organization', async ({ page }) => {
   expect(types).toContain('Service');
 });
 
+test('apps declares a CollectionPage listing both apps', async ({ page }) => {
+  await page.goto('/apps/');
+  const blocks = (await page.locator('script[type="application/ld+json"]').allTextContents()).map(b => JSON.parse(b));
+  const collection = blocks.find(b => b['@type'] === 'CollectionPage');
+  expect(collection, '/apps/ must declare a CollectionPage').toBeTruthy();
+  expect(collection.mainEntity['@type']).toBe('ItemList');
+  const items = collection.mainEntity.itemListElement.map((e: any) => e.item);
+  expect(items.map((i: any) => i['@type'])).toEqual(APPS.map(() => 'SoftwareApplication'));
+  expect(items.map((i: any) => i.name)).toEqual(APPS.map(a => a.name));
+  expect(items.map((i: any) => i.url)).toEqual(APPS.map(a => `https://neurotrocity.com${a.path}`));
+});
+
+test('apps links every tile at its real landing page', async ({ page }) => {
+  await page.goto('/apps/');
+  const hrefs = await page.locator('#apps a.app').evaluateAll(els => els.map(e => e.getAttribute('href')));
+  expect(hrefs).toEqual(APPS.map(a => a.path));
+  // The lead tile is the first app in PRODUCTS order (DoseTrack).
+  await expect(page.locator('#apps a.app.is-lead')).toHaveCount(1);
+  await expect(page.locator('#apps a.app.is-lead')).toHaveAttribute('href', APPS[0].path);
+  // No invented apps, no placeholder tiles.
+  await expect(page.locator('#apps a.app')).toHaveCount(APPS.length);
+});
+
 test('sitemap is generated from facts and covers every indexable URL', async ({ request }) => {
   const xml = await (await request.get('/sitemap.xml')).text();
   const required = [
-    '/', '/rewire/landing/', '/rewire/contact/', '/contact/rob/', '/contact/jaimi/',
+    '/', '/apps/', '/rewire/landing/', '/rewire/contact/', '/contact/rob/', '/contact/jaimi/',
     ...PRODUCTS.map(p => p.path),
     ...DEMOS.map(d => d.href),
   ];
