@@ -1,11 +1,24 @@
 ---
+interface Props { accent?: 'volt' | 'jade' | 'ember' | 'violet' }
+const { accent = 'volt' } = Astro.props;
+
+/** Gradient down the spine. volt and jade keep the original stops so the home
+ *  and Rewire pages are unchanged; violet drops the cyan midpoint, which was
+ *  the last green note on a page that is meant to read purple. */
+const STOPS: Record<string, readonly [string, string, string]> = {
+  volt:   ['#7C6BFF', '#38E1D6', '#FF8A4C'],
+  jade:   ['#7C6BFF', '#38E1D6', '#FF8A4C'],
+  ember:  ['#7C6BFF', '#38E1D6', '#FF8A4C'],
+  violet: ['#B45CFF', '#FF4FA3', '#FF8A4C'],
+};
+const [s0, s1, s2] = STOPS[accent] ?? STOPS.volt;
 ---
-<svg id="spine" aria-hidden="true">
+<svg id="spine" aria-hidden="true" data-accent={accent}>
   <defs>
     <linearGradient id="gSpine" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#7C6BFF"/>
-      <stop offset="55%"  stop-color="#38E1D6"/>
-      <stop offset="100%" stop-color="#FF8A4C"/>
+      <stop offset="0%"   stop-color={s0}/>
+      <stop offset="55%"  stop-color={s1}/>
+      <stop offset="100%" stop-color={s2}/>
     </linearGradient>
     <filter id="fGlow" x="-160%" y="-160%" width="420%" height="420%">
       <feGaussianBlur stdDeviation="4" result="b"/>

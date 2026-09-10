@@ -248,13 +248,11 @@ export const APPS_PAGE = {
 
   hero: {
     kicker: `Apps · iPhone, Apple Watch and the web · ${CONTACT.madeIn}`,
-    // Derived, so adding or retiring an app cannot leave the headline lying.
-    headline: {
-      lead: `${asWord(APPS.length)} apps. `,
-      em: APPS.length === 2 ? 'Both finished.' : 'All finished.',
-    },
+    // No count anywhere on this page: the list is what it is, and the copy
+    // should not need editing when it changes.
+    headline: { lead: 'Fewer apps. ', em: 'Finished ones.' },
     lede: {
-      a: `We would rather ship ${asWord(APPS.length).toLowerCase()} apps properly than a shelf of half-built ones. `,
+      a: 'We would rather ship a small number properly than a shelf of half-built ones. ',
       strong: 'Each does one thing properly',
       b: ', and keeps doing it — no feature bloat, no roadmap theatre.',
     },
@@ -270,19 +268,26 @@ export const APPS_PAGE = {
     // Order is the lead tile first; PRODUCTS supplies every value on a tile.
     items: APPS,
     open: 'Open the page',
+    // Mirrors the home page's client-privacy stance: this is proof of the work
+    // we can show, and deliberately not a claim about the size of the shelf.
+    stance: {
+      lead: 'These are the ones we can show you. ',
+      em: 'They are not everything we have built.',
+      note: 'Plenty of what we ship goes out under a client’s name, or under an agreement that keeps it off a page like this one. What is here is what is ours to hand over — open it, use it, and judge the work on that.',
+    },
   },
 
   rules: {
     eyebrow: '02 — How we build',
     // RULES.length is asserted to be 4 in tests/unit/facts.test.ts.
     heading: 'Four rules. They apply to the apps too.',
-    sub: 'These are not aspirations we grew into. They are the reasons these two apps look the way they do.',
+    sub: 'These are not aspirations we grew into. They are the reasons these apps look the way they do.',
     items: RULES,
   },
 
   contact: {
     eyebrow: '03 — Say hello',
-    heading: 'Question about either app?',
+    heading: 'Question about one of them?',
     // Restates RULES[3].
     sub: personRule.body,
     email: CONTACT.general,

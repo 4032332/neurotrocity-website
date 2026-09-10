@@ -11,7 +11,7 @@ interface Props {
   path: string;
   ogImage?: string;
   jsonLd?: Record<string, unknown>;
-  accent?: 'volt' | 'jade' | 'ember';
+  accent?: 'volt' | 'jade' | 'ember' | 'violet';
   /** Persistent fullscreen WebGL cortex behind the whole document. */
   field?: boolean;
   /** Dendrite spine navigation in the left gutter. */
@@ -89,7 +89,7 @@ const layered = field || spine;
 </head>
 <body class:list={[{ layered }]}>
   {field && <CortexField accent={accent} />}
-  {spine && <Spine />}
+  {spine && <Spine accent={accent} />}
   <a class="skip" href="#main">Skip to content</a>
   <header>
     <slot name="nav" />

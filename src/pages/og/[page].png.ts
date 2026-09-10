@@ -25,7 +25,7 @@ const CARDS: Record<string, Card> = {
   apps: {
     title: APPS_PAGE.meta.title,
     eyebrow: APPS_PAGE.hero.kicker.toUpperCase(),
-    accent: '#FF8A4C',
+    accent: '#B45CFF',
   },
 };
 

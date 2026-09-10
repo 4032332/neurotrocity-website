@@ -1,4 +1,4 @@
-export type Accent = 'volt' | 'jade' | 'ember';
+export type Accent = 'volt' | 'jade' | 'ember' | 'violet';
 
 export interface Palette {
   /** Hex colours for the three clusters, in ORIGINS order. */
@@ -28,5 +28,13 @@ export const PALETTES: Record<Accent, Palette> = {
     c1: [1.0, 0.541, 0.298],
     c2: [0.220, 0.882, 0.839],
     dust: 0xD8A186,
+  },
+  violet: {
+    clusters: [0xB45CFF, 0xFF4FA3, 0xFF8A4C],
+    c1: [0.706, 0.361, 1.0],
+    // Rose rather than the shared cyan: with a cyan second endpoint the field
+    // reads green whatever the accent is, which put this page next to Rewire.
+    c2: [1.0, 0.310, 0.639],
+    dust: 0xB98CD8,
   },
 };

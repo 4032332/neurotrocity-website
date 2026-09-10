@@ -8,7 +8,13 @@ import { spinePath, somaFraction } from './geometry';
 export interface SpineHandle { destroy(): void }
 
 const NS = 'http://www.w3.org/2000/svg';
-const COLS = ['#7C6BFF', '#9C8CFF', '#38E1D6', '#5BE3C8', '#FF8A4C'];
+/** Soma colours per page accent. volt, jade and ember keep the original set so
+ *  the home and Rewire pages are untouched; violet swaps the two cyans for the
+ *  rose the rest of that page uses. */
+const COL_SETS: Record<string, readonly string[]> = {
+  volt:   ['#7C6BFF', '#9C8CFF', '#38E1D6', '#5BE3C8', '#FF8A4C'],
+  violet: ['#B45CFF', '#C98CFF', '#FF4FA3', '#FF7DBC', '#FF8A4C'],
+};
 const CORE_OFF = '#0C0A16';
 
 interface Node {
@@ -26,6 +32,7 @@ function circle(r: string, fill: string): SVGCircleElement {
 
 export function mountSpine(svg: SVGSVGElement, sections: HTMLElement[]): SpineHandle {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const COLS = COL_SETS[svg.dataset.accent ?? 'volt'] ?? COL_SETS.volt;
   const pBase = svg.querySelector<SVGPathElement>('#spineBase')!;
   const pLit = svg.querySelector<SVGPathElement>('#spineLit')!;
   const gSom = svg.querySelector<SVGGElement>('#somata')!;
