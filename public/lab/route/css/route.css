@@ -1,0 +1,290 @@
+/* Route study — standalone. Brand palette: volt / cyan / ember on indigo graphite. */
+:root {
+  --ink: #05070f;
+  --ink-2: #0b1020;
+  --volt: #c8ff2e;
+  --cyan: #35e0ff;
+  --ember: #ff7a3d;
+  --paper: #e8ecf6;
+  --mute: #7f8aa6;
+  --edge: rgba(200, 255, 46, 0.22);
+  --ui: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: auto; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font: 400 16px/1.6 var(--ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+}
+
+/* ---------- heads-up readouts ---------- */
+
+.hud {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hud-tl { position: absolute; top: 28px; left: 32px; }
+
+.eyebrow {
+  margin: 0;
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--volt);
+}
+
+.hud-tl h1 {
+  margin: 10px 0 4px;
+  font-size: clamp(22px, 3vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.sub { margin: 0; color: var(--mute); font-size: 13px; }
+
+.hud-tr {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+
+.read {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.read .k {
+  font: 500 clamp(20px, 2.4vw, 30px)/1 var(--mono);
+  color: var(--paper);
+  min-width: 3.6ch;
+  text-align: right;
+}
+
+.read .u {
+  font: 500 10px/1 var(--mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.hud-place {
+  position: absolute;
+  left: 32px;
+  bottom: 168px;
+  border-left: 2px solid var(--volt);
+  padding-left: 14px;
+}
+
+.place-label {
+  margin: 0;
+  font: 600 10px/1 var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+}
+
+.place-name {
+  margin: 8px 0 2px;
+  font-size: clamp(19px, 2.4vw, 27px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.place-dist {
+  margin: 0;
+  font: 400 12px/1 var(--mono);
+  color: var(--cyan);
+}
+
+/* ---------- the elevation profile, which is also the scrubber ---------- */
+
+.strip {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 118px;
+  z-index: 5;
+  padding: 14px 32px 22px;
+  background: linear-gradient(180deg, rgba(5, 7, 15, 0) 0%, rgba(5, 7, 15, 0.82) 34%, rgba(5, 7, 15, 0.97) 100%);
+}
+
+#profile {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 26px;
+  width: calc(100% - 64px);
+  height: 74px;
+}
+
+#pFill { fill: rgba(53, 224, 255, 0.13); }
+
+#pLine {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.ticks {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 6px;
+  height: 16px;
+}
+
+.tick {
+  position: absolute;
+  transform: translateX(-50%);
+  font: 500 9px/1 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mute);
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.tick.on { color: var(--volt); }
+
+.tick.at-start { transform: none; }
+
+.tick.at-end { transform: translateX(-100%); }
+
+.tick.bare { font-size: 13px; color: #46506a; }
+
+.tick.bare.on { color: var(--volt); }
+
+.head {
+  position: absolute;
+  left: 0;
+  bottom: 26px;
+  width: 1px;
+  height: 74px;
+  background: var(--volt);
+  box-shadow: 0 0 12px 1px rgba(200, 255, 46, 0.55);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.scrub {
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 18px;
+  width: calc(100% - 64px);
+  height: 90px;
+  margin: 0;
+  appearance: none;
+  background: none;
+  cursor: ew-resize;
+}
+
+.scrub::-webkit-slider-thumb {
+  appearance: none;
+  width: 26px;
+  height: 90px;
+  background: none;
+}
+
+.scrub::-moz-range-thumb {
+  width: 26px;
+  height: 90px;
+  border: 0;
+  background: none;
+}
+
+.scrub:focus-visible { outline: 2px solid var(--volt); outline-offset: 4px; }
+
+/* ---------- scrolling prose ---------- */
+
+.prose {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Each panel belongs to a kilometre, not to a turn in the document. It is held
+   in one place and cross-faded as you reach the ground it describes, so it can
+   never drift into the title. */
+.panel {
+  position: absolute;
+  top: 25vh;
+  left: max(32px, 5vw);
+  width: min(430px, calc(100vw - 64px));
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+
+.panel.in { opacity: 1; transform: none; }
+
+.panel h2 {
+  margin: 0 0 14px;
+  font-size: clamp(26px, 3.6vw, 42px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+}
+
+.panel p {
+  margin: 0;
+  color: #b9c2d6;
+  font-size: 17px;
+  text-wrap: pretty;
+}
+
+.colophon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 60px 32px 190px;
+  color: var(--mute);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.ns { position: relative; z-index: 4; padding: 40px 32px; }
+
+@media (max-width: 720px) {
+  .hud-tl { top: 18px; left: 20px; }
+  .hud-tr { top: 18px; right: 20px; gap: 6px; }
+  .hud-place { left: 20px; bottom: 152px; }
+  .strip { padding-inline: 20px; }
+  #profile, .ticks, .scrub { left: 20px; right: 20px; width: calc(100% - 40px); }
+  .panel { left: 20px; width: calc(100vw - 40px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { opacity: 1; transform: none; transition: none; }
+}

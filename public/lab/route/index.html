@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Route study — Great Ocean Road</title>
+<link rel="stylesheet" href="css/route.css">
+</head>
+<body>
+
+<canvas id="stage" aria-hidden="true"></canvas>
+
+<div id="hud" class="hud" hidden>
+  <div class="hud-tl">
+    <p class="eyebrow">Route study</p>
+    <h1>Great Ocean Road</h1>
+    <p class="sub">Torquay to Port Campbell</p>
+  </div>
+
+  <div class="hud-tr" role="status" aria-live="off">
+    <div class="read"><span class="k" id="rKm">0.0</span><span class="u">km</span></div>
+    <div class="read"><span class="k" id="rEl">0</span><span class="u">m</span></div>
+    <div class="read"><span class="k" id="rBg">—</span><span class="u">brg</span></div>
+  </div>
+
+  <div class="hud-place">
+    <p class="place-label">Approaching</p>
+    <p class="place-name" id="rPlace">Torquay</p>
+    <p class="place-dist"><span id="rDist">0.0</span> km ahead</p>
+  </div>
+</div>
+
+<!-- The elevation profile is the scrubber: the route is the interface. -->
+<div id="strip" class="strip" hidden>
+  <svg id="profile" viewBox="0 0 1000 90" preserveAspectRatio="none" aria-hidden="true">
+    <path id="pFill"></path>
+    <path id="pLine"></path>
+  </svg>
+  <div id="ticks" class="ticks"></div>
+  <div id="head" class="head"></div>
+  <input id="scrub" class="scrub" type="range" min="0" max="1000" value="0"
+         aria-label="Distance along the route">
+</div>
+
+<div id="prose" class="prose">
+  <section class="panel" data-at="1">
+    <h2>Every corner is the real corner.</h2>
+    <p>This road is not drawn. Its 700 points come from OpenStreetMap and its
+       height from the ASTER global elevation model. When it climbs, the climb
+       happened.</p>
+  </section>
+  <section class="panel" data-at="27">
+    <h2>The blue line is the actual coast.</h2>
+    <p>Not a suggestion of one. It is the Southern Ocean shoreline as surveyed,
+       hatched seaward, sitting on the datum beneath the road so you can see how
+       close the two run.</p>
+  </section>
+  <section class="panel" data-at="88">
+    <h2>Apollo Bay, then up.</h2>
+    <p>The road leaves the water and climbs into the Otways. Every orange hair
+       is a gradient reading; they thicken because the climb does.</p>
+  </section>
+  <section class="panel" data-at="131">
+    <h2>Lavers Hill. The top.</h2>
+    <p>448 metres. Every metre of that number came out of the elevation model,
+       not out of a copywriter.</p>
+  </section>
+  <section class="panel" data-at="175">
+    <h2>Port Campbell.</h2>
+    <p>One hundred and seventy-nine kilometres. Drag the profile below to travel
+       any part of it again.</p>
+  </section>
+</div>
+
+<footer class="colophon">
+  <p>Road geometry and coastline &copy; OpenStreetMap contributors, ODbL.
+     Elevation: ASTER GDEM via opentopodata.org. Height is exaggerated six times
+     so the profile is readable; every other dimension is to scale. Nothing in
+     this drawing is invented.</p>
+</footer>
+
+<noscript><p class="ns">This study needs JavaScript and WebGL.</p></noscript>
+
+<script src="js/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
