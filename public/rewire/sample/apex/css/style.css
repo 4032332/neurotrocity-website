@@ -278,7 +278,7 @@ fieldset{ border:0; margin:0; padding:0; min-width:0; min-inline-size:0; }
 .fleet{ background:var(--ink-2); border-block:1px solid var(--line-2); overflow:hidden; }
 .fleet__head{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,6vw,7rem); align-items:end; margin-bottom:clamp(2.6rem,5vw,4.4rem); }
 .fleet__note{ color:var(--hi-dim); max-width:46ch; }
-.fleet__rail{ padding-inline:var(--pad); cursor:grab; user-select:none; }
+.fleet__rail{ padding-inline:var(--pad); cursor:grab; user-select:none; touch-action:pan-y; overscroll-behavior-x:contain; }
 .fleet__rail.is-static{ cursor:default; }
 .fleet__rail.is-drag{ cursor:grabbing; }
 .fleet__track{ display:flex; gap:clamp(14px,1.6vw,26px); will-change:transform; }

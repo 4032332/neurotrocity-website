@@ -43,7 +43,10 @@
            poster="assets/img/hero-poster.webp">
       <!-- Armed by main.js once the page has painted. The poster is the designed
            first frame and shows until the footage is ready either way, so the only
-           thing that changes is that five megabytes stop racing the headline. -->
+           thing that changes is that the footage stops racing the headline.
+           VP9 first: at the same weight it carries about twice the bitrate of the
+           H.264, which is what keeps the rock face out of blocking. -->
+      <source data-src="assets/video/hero.webm" type="video/webm">
       <source data-src="assets/video/hero.mp4" type="video/mp4">
     </video>
     <div class="hero__scrim"></div>
@@ -291,7 +294,7 @@
       <!-- cards injected by JS -->
     </div>
   </div>
-  <div class="wrap fleet__hint mono dim">Drag, or use ← → to move through the fleet</div>
+  <div class="wrap fleet__hint mono dim">Scroll sideways, drag, or use ← → to move through the fleet</div>
 </section>
 
 <!-- ══ SPEC PANEL ═══════════════════════════════════════ -->

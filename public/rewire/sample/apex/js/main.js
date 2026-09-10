@@ -204,39 +204,116 @@
       </div>
     </article>`).join('');
 
-  let x = 0, dragging = false, startX = 0, startPos = 0, moved = 0;
+  /* Input. The rail used to be drag-only: there was no wheel listener at all,
+     so a Magic Mouse or trackpad swipe did nothing, and the pointer was captured
+     on pointerdown, so on a phone a horizontal drag fought the page's own
+     vertical scroll. It now accepts wheel, trackpad, drag, touch and keyboard,
+     throws with the gesture, and settles on a card rather than mid-air. */
+  let x = 0, tx = 0, dragging = false, startX = 0, startPos = 0, moved = 0;
+  let vel = 0, lastX = 0, lastT = 0, pid = null, snapT = 0, raf = 0;
+
+  const gap = () => parseFloat(getComputedStyle(track).columnGap) || 20;
   const overflow = () => track.scrollWidth - rail.clientWidth;
   const maxX = () => Math.min(0, -overflow());
-  // When the fleet is narrower than the rail there is nothing to drag, so centre it
-  // rather than leaving it hard against the left edge on wide screens.
+  // When the fleet is narrower than the rail there is nothing to move, so centre
+  // it rather than leaving it hard against the left edge on wide screens.
   const centred = () => (overflow() <= 0 ? -overflow() / 2 : null);
-  const setX = v => {
+  const step = () => (track.firstElementChild ? track.firstElementChild.offsetWidth + gap() : 300);
+  const clampX = v => Math.max(maxX(), Math.min(0, v));
+
+  function setTarget(v, snap) {
     const c = centred();
-    x = c !== null ? c : Math.max(maxX(), Math.min(0, v));
-    gsap.to(track, { x, duration: dragging ? 0 : .8, ease: 'power3.out' });
+    if (c !== null) { tx = c; return; }
+    tx = clampX(v);
+    if (snap) tx = clampX(Math.round(tx / step()) * step());
+  }
+
+  function frame() {
+    const c = centred();
+    if (c !== null) tx = c;
+    x += (tx - x) * (dragging ? 1 : 0.18);
+    if (Math.abs(tx - x) < 0.4) x = tx;
+    gsap.set(track, { x });
+    if (x === tx && !dragging) { raf = 0; return; }   // idle: stop burning frames
+    raf = requestAnimationFrame(frame);
+  }
+  const run = () => { if (!raf) raf = requestAnimationFrame(frame); };
+
+  const scheduleSnap = () => {
+    clearTimeout(snapT);
+    snapT = setTimeout(() => { setTarget(tx, true); run(); }, 140);
   };
 
+  rail.addEventListener('wheel', e => {
+    if (centred() !== null) return;
+    // A Magic Mouse or trackpad sends a sideways swipe as deltaX; a plain wheel
+    // with shift held is the desktop equivalent. Anything predominantly vertical
+    // belongs to the page, so it is left alone.
+    const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX
+             : (e.shiftKey ? e.deltaY : 0);
+    if (!dx) return;
+    const next = clampX(tx - dx * 1.15);
+    if (next === tx) return;          // already at an end: let the gesture through
+    e.preventDefault();
+    e.stopPropagation();              // and keep it away from Lenis
+    setTarget(next, false);
+    scheduleSnap();
+    run();
+  }, { passive: false });
+
   rail.addEventListener('pointerdown', e => {
-    dragging = true; moved = 0; startX = e.clientX; startPos = x;
-    rail.classList.add('is-drag'); rail.setPointerCapture(e.pointerId);
+    if (centred() !== null) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragging = true; moved = 0; startX = e.clientX; startPos = tx;
+    lastX = e.clientX; lastT = performance.now(); vel = 0; pid = e.pointerId;
+    rail.classList.add('is-drag');
+    run();
   });
+
   rail.addEventListener('pointermove', e => {
     if (!dragging) return;
-    const d = e.clientX - startX; moved = Math.abs(d);
-    setX(startPos + d);
+    const d = e.clientX - startX;
+    moved = Math.abs(d);
+    // Capture only once this is unmistakably a drag. Capturing on pointerdown
+    // retargets the click that follows, and swallows vertical scroll on touch.
+    if (moved > 6 && pid !== null && !rail.hasPointerCapture(pid)) {
+      rail.setPointerCapture(pid);
+    }
+    const now = performance.now();
+    if (now > lastT) {
+      vel = (e.clientX - lastX) / (now - lastT);
+      lastX = e.clientX; lastT = now;
+    }
+    setTarget(startPos + d, false);
   });
-  const endDrag = () => { dragging = false; rail.classList.remove('is-drag'); };
+
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    rail.classList.remove('is-drag');
+    if (pid !== null && rail.hasPointerCapture(pid)) rail.releasePointerCapture(pid);
+    pid = null;
+    if (performance.now() - lastT > 90) vel = 0;   // held still before letting go
+    setTarget(tx + vel * 240, true);               // throw, then settle on a card
+    run();
+  };
   rail.addEventListener('pointerup', endDrag);
   rail.addEventListener('pointercancel', endDrag);
 
-  const step = () => (track.firstElementChild ? track.firstElementChild.offsetWidth + 20 : 300);
   rail.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') { e.preventDefault(); setX(x - step()); }
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); setX(x + step()); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); setTarget(tx - step(), true); run(); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); setTarget(tx + step(), true); run(); }
   });
   rail.tabIndex = 0;
-  window.addEventListener('resize', () => setX(x));
-  setX(0);                                   // centre on load if the rail has room
+
+  window.addEventListener('resize', () => {
+    setTarget(tx, false);
+    rail.classList.toggle('is-static', overflow() <= 0);
+    run();
+  });
+  setTarget(0, false);                       // centre on load if the rail has room
+  x = tx;
+  gsap.set(track, { x });
   rail.classList.toggle('is-static', overflow() <= 0);
 
   /* ── Spec panel ────────────────────────────────────── */
@@ -480,9 +557,9 @@
     const wantsFootage = matchMedia('(min-width: 900px)').matches && !conn.saveData;
 
     const armHero = () => {
-      const src = hv.querySelector('source[data-src]');
-      if (!src || reduced || !wantsFootage) return;
-      src.src = src.dataset.src;
+      const srcs = hv.querySelectorAll('source[data-src]');
+      if (!srcs.length || reduced || !wantsFootage) return;
+      srcs.forEach((s) => { s.src = s.dataset.src; });
       hv.load();
     };
     if (document.readyState === 'complete') armHero();
