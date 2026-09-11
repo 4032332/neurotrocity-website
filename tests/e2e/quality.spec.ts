@@ -95,8 +95,8 @@ const REWIRE_CASES: ContrastCase[] = [
 const APPS_CASES: ContrastCase[] = [
   { label: 'hero .lede', selector: '.hero .lede', fg: MUTED, threshold: 4.5 },
   { label: 'hero h1', selector: '.hero h1', fg: INK, threshold: 3.0 },
-  { label: 'lead tile description', selector: '.app.is-lead p', fg: MUTED, threshold: 4.5 },
-  { label: 'secondary tile description', selector: '.rest .app p', fg: MUTED, threshold: 4.5 },
+  { label: 'tile description', selector: '.app p', fg: MUTED, threshold: 4.5 },
+  { label: 'stance note', selector: '.stance .note', fg: MUTED, threshold: 4.5 },
   { label: 'first .rule', selector: '.rule', fg: MUTED, threshold: 4.5 },
   { label: '.contact .sub', selector: '.contact .sub', fg: MUTED, threshold: 4.5 },
 ];

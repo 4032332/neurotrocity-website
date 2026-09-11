@@ -93,11 +93,13 @@ test('apps links every tile at its real landing page', async ({ page }) => {
   await page.goto('/apps/');
   const hrefs = await page.locator('#apps a.app').evaluateAll(els => els.map(e => e.getAttribute('href')));
   expect(hrefs).toEqual(APPS.map(a => a.path));
-  // The lead tile is the first app in PRODUCTS order (DoseTrack).
-  await expect(page.locator('#apps a.app.is-lead')).toHaveCount(1);
-  await expect(page.locator('#apps a.app.is-lead')).toHaveAttribute('href', APPS[0].path);
   // No invented apps, no placeholder tiles.
   await expect(page.locator('#apps a.app')).toHaveCount(APPS.length);
+  // Every tile is an expression of its app, not a bare text card.
+  await expect(page.locator('#apps a.app .art img')).toHaveCount(APPS.length);
+  const alts = await page.locator('#apps a.app .art img')
+    .evaluateAll(els => els.map(e => (e.getAttribute('alt') || '').trim()));
+  expect(alts.every(a => a.length > 0)).toBe(true);
 });
 
 test('sitemap is generated from facts and covers every indexable URL', async ({ request }) => {

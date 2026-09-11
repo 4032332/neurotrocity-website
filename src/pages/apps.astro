@@ -6,7 +6,6 @@ import { APPS_PAGE } from '../content/copy';
 const { meta, nav, hero, apps, rules, contact, footer } = APPS_PAGE;
 
 // The two apps, straight from PRODUCTS (Rewire is a service and has its own page).
-const [lead, ...rest] = apps.items;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -98,43 +97,58 @@ section.sec + section.sec{ border-top:1px solid var(--line) }
 h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; max-width:21ch; text-wrap:balance }
 .sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65; max-width:56ch }
 
-/* ── #apps: one lead tile, the rest secondary ─────────────────────────────
-   Deliberately auto-flowing: two apps fill the block completely, and a third
-   or a sixth extends the secondary row rather than leaving empty cells. */
-.apps{ margin-top:44px; display:grid; gap:18px }
+/* ── #apps: two equal tiles, each carrying the app's own artwork ──────────
+   Equal by construction, not by coincidence: one column each, a shared art
+   frame with a fixed aspect ratio, and the body stretched so the footers of
+   both tiles sit on the same line whatever the copy length. */
+.apps{ margin-top:40px; display:grid; gap:20px; grid-template-columns:1fr 1fr }
 .app{
-  display:block; position:relative; border:1px solid var(--line); border-radius:6px;
-  background:color-mix(in srgb, var(--ground-2) 78%, transparent);
-  padding:26px 24px 28px; color:inherit;
-  transition:border-color .2s, background .2s, transform .2s;
+  display:flex; flex-direction:column; position:relative; overflow:hidden;
+  border:1px solid var(--line); border-radius:8px;
+  background:color-mix(in srgb, var(--ground-2) 80%, transparent);
+  color:inherit; transition:border-color .25s, background .25s, transform .25s;
 }
 .app:hover, .app:focus-visible{
-  border-color:color-mix(in srgb, var(--c) 55%, transparent);
-  background:color-mix(in srgb, var(--c) 7%, var(--ground-2));
-  transform:translateY(-2px);
+  border-color:color-mix(in srgb, var(--c) 58%, transparent);
+  background:color-mix(in srgb, var(--c) 8%, var(--ground-2));
+  transform:translateY(-3px);
 }
+
+.app .art{
+  display:block; position:relative; aspect-ratio:16/11; overflow:hidden;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(68% 76% at 50% 42%, color-mix(in srgb, var(--c) 26%, transparent), transparent 70%),
+    color-mix(in srgb, var(--ground) 82%, transparent);
+}
+.app .art img{
+  width:100%; height:100%; display:block;
+  transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+/* Milli is cut out, so she floats on the tint; the DisPoint plate is a
+   photograph of its own screen and fills the frame. */
+.app .art[data-fit="contain"] img{ object-fit:contain; padding:3.5% 3.5% 2% }
+.app .art[data-fit="cover"] img{ object-fit:cover; object-position:50% 50% }
+.app:hover .art img, .app:focus-visible .art img{ transform:scale(1.04) }
+
+.app .body{ display:flex; flex-direction:column; flex:1; padding:22px 22px 24px }
 .app .sl{ color:var(--c); display:block }
-.app h3{ margin-top:12px; font-weight:800; letter-spacing:-.03em; color:var(--ink); font-size:24px }
-.app p{ margin-top:10px; color:var(--muted); font-size:15px; line-height:1.6; max-width:52ch }
+.app h3{ margin-top:10px; font-weight:800; letter-spacing:-.03em; color:var(--ink); font-size:clamp(22px,2.3vw,28px) }
+.app p{ margin-top:10px; color:var(--muted); font-size:15px; line-height:1.6 }
 .app:hover p, .app:focus-visible p{ color:var(--ink) }
-.app .row{ margin-top:20px; display:flex; align-items:baseline; gap:14px 20px; flex-wrap:wrap }
+.app .row{ margin-top:auto; padding-top:22px; display:flex; align-items:baseline; gap:14px 20px; flex-wrap:wrap }
 .app .mt{ font-family:var(--mono); font-size:10.5px; color:var(--muted); letter-spacing:.09em }
 .app .go{ margin-left:auto; font-family:var(--mono); font-size:12.5px; color:var(--c); letter-spacing:.08em; text-transform:uppercase }
 .app .go .arw{ display:inline-block; transition:transform .25s }
 .app:hover .go .arw, .app:focus-visible .go .arw{ transform:translateX(4px) }
 
-.app.is-lead{
-  padding:clamp(28px,4vw,44px) clamp(24px,3.4vw,40px);
-  border-color:var(--line-2);
-  background:
-    linear-gradient(150deg,
-      color-mix(in srgb, var(--c) 11%, transparent),
-      color-mix(in srgb, var(--ember) 3%, transparent) 58%, transparent),
-    color-mix(in srgb, var(--ground-2) 78%, transparent);
+@media (max-width:860px){ .apps{ grid-template-columns:1fr } }
+
+@media (prefers-reduced-motion:reduce){
+  .app, .app .art img{ transition:none }
+  .app:hover, .app:focus-visible{ transform:none }
+  .app:hover .art img, .app:focus-visible .art img{ transform:none }
 }
-.app.is-lead h3{ font-size:clamp(30px,4.4vw,44px); letter-spacing:-.035em }
-.app.is-lead p{ font-size:clamp(16px,1.5vw,18px); max-width:44ch }
-.apps .rest{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr)) }
 
 /* ── #rules ────────────────────────────────────────────────────────────── */
 .rules{ margin-top:40px; border-top:1px solid var(--line); list-style:none; padding:0 }
@@ -154,7 +168,7 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── stance — what this page is, and is not, proof of ──────────────────── */
 .stance{
-  margin-top:52px; padding:clamp(26px,4vw,44px); border:1px solid var(--line-2); border-radius:4px;
+  margin-top:26px; padding:clamp(26px,4vw,44px); border:1px solid var(--line-2); border-radius:4px;
   background:
     linear-gradient(150deg,
       color-mix(in srgb, var(--violet) 10%, transparent),
@@ -206,43 +220,39 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
   </div>
 </div>
 
-<!-- the apps -->
-<section class="sec" id="apps" data-soma="The apps">
+<!-- the proof -->
+<section class="sec" id="apps" data-soma="The proof">
   <div class="wrap">
     <div data-quiet>
       <p class="mono eyebrow">{apps.eyebrow}</p>
-      <h2>{apps.heading}</h2>
-      <p class="sub">{apps.sub}</p>
-    </div>
-    <div class="apps">
-      <a class="app is-lead" href={lead.path} style={`--c:var(--${lead.accent})`} data-quiet>
-        <span class="mono sl">/{lead.slug}</span>
-        <h3>{lead.name}</h3>
-        <p>{lead.description}</p>
-        <span class="row">
-          <span class="mt">{lead.platforms}</span>
-          <span class="go">{apps.open} <span class="arw" aria-hidden="true">→</span></span>
-        </span>
-      </a>
-      <div class="rest">
-        {rest.map((a) => (
-          <a class="app" href={a.path} style={`--c:var(--${a.accent})`} data-quiet>
-            <span class="mono sl">/{a.slug}</span>
-            <h3>{a.name}</h3>
-            <p>{a.description}</p>
-            <span class="row">
-              <span class="mt">{a.platforms}</span>
-              <span class="go">{apps.open} <span class="arw" aria-hidden="true">→</span></span>
-            </span>
-          </a>
-        ))}
-      </div>
     </div>
     <div class="stance">
       <div data-quiet>
         <p>{apps.stance.lead}<em>{apps.stance.em}</em></p>
         <p class="note">{apps.stance.note}</p>
       </div>
+    </div>
+    <div class="apps">
+      {apps.items.map((a) => {
+        const art = apps.art[a.slug];
+        return (
+          <a class="app" href={a.path} style={`--c:var(--${a.accent})`} data-quiet>
+            <span class="art" data-fit={art.fit}>
+              <img src={art.src} alt={art.alt} width="1040" height="715"
+                   loading="lazy" decoding="async" />
+            </span>
+            <span class="body">
+              <span class="mono sl">/{a.slug}</span>
+              <h3>{a.name}</h3>
+              <p>{a.description}</p>
+              <span class="row">
+                <span class="mt">{a.platforms}</span>
+                <span class="go">{apps.open} <span class="arw" aria-hidden="true">→</span></span>
+              </span>
+            </span>
+          </a>
+        );
+      })}
     </div>
   </div>
 </section>

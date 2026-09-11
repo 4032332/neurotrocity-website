@@ -262,19 +262,30 @@ export const APPS_PAGE = {
   },
 
   apps: {
-    eyebrow: '01 — The apps',
-    heading: 'What we ship, and where to find it.',
-    sub: 'Each has its own page here — what it does, who it is for, and a support address that a person actually reads.',
-    // Order is the lead tile first; PRODUCTS supplies every value on a tile.
-    items: APPS,
-    open: 'Open the page',
-    // Mirrors the home page's client-privacy stance: this is proof of the work
-    // we can show, and deliberately not a claim about the size of the shelf.
+    eyebrow: '01 — The proof',
+    // No sub-heading: the stance is the only thing between the label and the
+    // tiles, because it is the point of the section.
     stance: {
       lead: 'These are the ones we can show you. ',
       em: 'They are not everything we have built.',
-      note: 'Plenty of what we ship goes out under a client’s name, or under an agreement that keeps it off a page like this one. What is here is what is ours to hand over — open it, use it, and judge the work on that.',
+      note: 'Most of what we build belongs to the people who paid for it, and it stays theirs. These are ours, so we can hand them straight over.',
     },
+    // PRODUCTS supplies every value on a tile; art is presentation, and each
+    // piece is the app's own existing artwork rather than anything invented.
+    items: APPS,
+    art: {
+      dosetrack: {
+        src: '/assets/img/apps/dosetrack-milli.webp',
+        alt: 'Milli, the DoseTrack character, juggling tablets and capsules',
+        fit: 'contain',
+      },
+      dispoint: {
+        src: '/assets/img/apps/dispoint-stack.webp',
+        alt: 'The DisPoint board: a final-call alert and offers ordered by what expires first',
+        fit: 'cover',
+      },
+    } as Record<string, { src: string; alt: string; fit: 'contain' | 'cover' }>,
+    open: 'Open the page',
   },
 
   rules: {
