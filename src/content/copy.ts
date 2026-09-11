@@ -276,8 +276,8 @@ export const APPS_PAGE = {
     art: {
       dosetrack: {
         src: '/assets/img/apps/dosetrack-milli.webp',
-        alt: 'Milli, the DoseTrack character, juggling tablets and capsules',
-        fit: 'contain',
+        alt: 'Milli, the DoseTrack character, in the app’s anime artwork',
+        fit: 'cover',
       },
       dispoint: {
         src: '/assets/img/apps/dispoint-stack.webp',

@@ -115,7 +115,7 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 }
 
 .app .art{
-  display:block; position:relative; aspect-ratio:16/11; overflow:hidden;
+  display:block; position:relative; aspect-ratio:4/3; overflow:hidden;
   border-bottom:1px solid var(--line);
   background:
     radial-gradient(68% 76% at 50% 42%, color-mix(in srgb, var(--c) 26%, transparent), transparent 70%),
@@ -238,7 +238,7 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
         return (
           <a class="app" href={a.path} style={`--c:var(--${a.accent})`} data-quiet>
             <span class="art" data-fit={art.fit}>
-              <img src={art.src} alt={art.alt} width="1040" height="715"
+              <img src={art.src} alt={art.alt} width="1040" height="780"
                    loading="lazy" decoding="async" />
             </span>
             <span class="body">
