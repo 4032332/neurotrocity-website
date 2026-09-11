@@ -79,3 +79,30 @@ describe('skill pack', () => {
     }
   });
 });
+
+describe('skill-pack funnel links', () => {
+  it('never ships a placeholder video id or free-edition URL', () => {
+    // Both are null until the real asset exists. The page hides its section
+    // when they are null, so a null here is correct — a guessed URL is not.
+    for (const v of [SKILL_PACK.videoId, SKILL_PACK.freeCheckout]) {
+      expect(v === null || (typeof v === 'string' && v.length > 0)).toBe(true);
+      if (typeof v === 'string') {
+        expect(v).not.toMatch(/example|placeholder|TODO|XXXX/i);
+      }
+    }
+  });
+
+  it('stores a bare YouTube id, not a URL, so the embed cannot double up', () => {
+    if (SKILL_PACK.videoId !== null) {
+      expect(SKILL_PACK.videoId).not.toMatch(/^https?:|youtu/i);
+      expect(SKILL_PACK.videoId).toMatch(/^[A-Za-z0-9_-]{11}$/);
+    }
+  });
+
+  it('points the free edition at a different product than the paid one', () => {
+    if (SKILL_PACK.freeCheckout !== null) {
+      expect(SKILL_PACK.freeCheckout).not.toBe(SKILL_PACK.checkout);
+      expect(SKILL_PACK.freeCheckout).toMatch(/^https:\/\//);
+    }
+  });
+});

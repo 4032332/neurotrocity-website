@@ -107,21 +107,34 @@ export const SKILL_PACK = {
   /** One-off, AUD, inclusive of tax — Gumroad is merchant of record and
    *  handles GST/VAT. Single price, no anchor and no countdown: an inflated
    *  "was" price is exactly the engineered regret RULES[1] rules out. */
-  price: { amount: 129, currency: 'AUD', note: 'one-off · includes every future update' },
+  price: { amount: 79, currency: 'AUD', note: 'one-off · includes every future update' },
   checkout: 'https://neurotrocity.gumroad.com/l/rewire',
+
+  /** Free edition, delivered as a $0 Gumroad product so the download is
+   *  email-gated and past downloaders get every future version automatically.
+   *  Set to null until that listing exists — the page hides the whole free
+   *  section rather than shipping a button that 404s. */
+  freeCheckout: null as string | null,
+
+  /** Unlisted YouTube id for the walkthrough — the id only, not the URL.
+   *  Set to null until the video is uploaded; the page hides the player
+   *  rather than rendering an empty frame. */
+  videoId: null as string | null,
 
   /** Stated plainly and early. Filtering unqualified buyers is deliberate:
    *  a refund from someone who could never have run it costs more than the sale. */
   prerequisites: [
     'A Claude Code subscription',
-    "A terminal you're comfortable in",
-    'Enough HTML and CSS to read an error message',
+    'A computer with git and Node — you will not be typing commands, Claude runs them',
+    'About 6 GB of disk space; the install clones ~24 public library repos',
+    'Willingness to make design decisions at five gates',
+    'A free Netlify account, only if you want the live demo link',
   ],
   notFor: [
     { title: "You want a website, not a workflow",
       body: 'If you need a site built rather than the means to build one, the done-for-you service is the better buy — and cheaper than learning this to do it once.' },
-    { title: 'You have never opened a terminal',
-      body: "This is not a no-code product and it does not pretend to be. You'll be running commands and reading errors on day one." },
+    { title: "You won't make the calls",
+      body: 'The pipeline stops five times and asks you to choose the direction. It will not pick for you, and picking well is what makes the result good.' },
     { title: 'You want it to work without you',
       body: 'The pack raises the ceiling on what you can build. It does not remove the judgement — deciding what looks right is still your job.' },
   ] as PackItem[],
