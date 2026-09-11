@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { SKILL_PACK_PAGE } from '../../content/copy';
 import { SKILL_PACK } from '../../content/facts';
 
-const { meta, nav, hero, argument, form, contents, craft, hydra, gate, price, faq, dfy, footer } = SKILL_PACK_PAGE;
+const { meta, nav, hero, argument, form, watch, free, contents, craft, hydra, gate, price, faq, dfy, footer } = SKILL_PACK_PAGE;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -86,6 +86,19 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.04; letter-spacing:-
 .hero .lede{ margin-top:24px; max-width:54ch; color:var(--muted);
   font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
 .cta{ margin-top:32px; display:flex; gap:11px; flex-wrap:wrap; align-items:center }
+
+/* ── walkthrough ── */
+.vid{ margin-top:30px; position:relative; aspect-ratio:16/9; border-radius:14px; overflow:hidden;
+  border:1px solid var(--line-2); background:var(--ground-2) }
+.vid iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block }
+.vnote{ margin-top:14px }
+
+/* ── free edition ── */
+.free .fpts{ margin-top:26px; padding:0; list-style:none; display:grid; gap:10px }
+.free .fpts li{ position:relative; padding-left:26px; color:var(--muted); line-height:1.6 }
+.free .fpts li::before{ content:''; position:absolute; left:6px; top:.62em; width:7px; height:7px;
+  border-radius:50%; background:var(--accent, var(--jade)) }
+@media (max-width:640px){ .vid{ border-radius:10px } }
 .btn{ display:inline-flex; align-items:center; gap:9px; font-size:14.5px; font-weight:800;
   padding:13px 21px; border-radius:6px; border:1px solid transparent; font-family:var(--body);
   transition:transform .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease), color .18s var(--ease) }
@@ -215,6 +228,43 @@ html.rv-on .rv.in{ opacity:1; translate:0 0 }
     <div class="arg">{argument.body.map((t) => <p>{t}</p>)}</div>
   </div>
 </section>
+
+{SKILL_PACK.videoId && (
+<section class="sec">
+  <div class="wrap rv">
+    <p class="mono eyebrow">{watch.eyebrow}</p>
+    <h2>{watch.heading}</h2>
+    <p class="sub">{watch.sub}</p>
+    <div class="vid">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${SKILL_PACK.videoId}?rel=0`}
+        title="ReWire walkthrough"
+        loading="lazy"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+    <p class="note vnote">{watch.caption}</p>
+  </div>
+</section>
+)}
+
+{SKILL_PACK.freeCheckout && (
+<section class="sec free">
+  <div class="wrap rv">
+    <p class="mono eyebrow">{free.eyebrow}</p>
+    <h2>{free.heading}</h2>
+    <p class="sub">{free.sub}</p>
+    <ul class="fpts">{free.points.map((t) => <li>{t}</li>)}</ul>
+    <div class="cta">
+      <a class="btn p" href={SKILL_PACK.freeCheckout}>{free.cta.label}<span class="arw">&rarr;</span></a>
+      <a class="btn g" href={SKILL_PACK.checkout}>Or get the full pack</a>
+    </div>
+    <p class="note">{free.note}</p>
+    <p class="proof">{free.compare}</p>
+  </div>
+</section>
+)}
 
 <section class="sec">
   <div class="wrap rv">

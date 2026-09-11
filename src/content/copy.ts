@@ -274,6 +274,27 @@ export const SKILL_PACK_PAGE = {
     ],
   },
 
+  watch: {
+    eyebrow: 'Watch it work',
+    heading: 'The whole thing, start to finish.',
+    sub: 'Install, a real site torn down and rebuilt, and the five points where it stops and asks you something. No face, no intro music \u2014 screen and voice, narrating the decisions rather than the keystrokes.',
+    caption: 'If you would rather read than watch, everything it covers is written out below.',
+  },
+
+  free: {
+    eyebrow: 'Start free',
+    heading: 'Try the pipeline before you pay for the craft layer.',
+    sub: 'The free edition installs the same way and runs the same trigger, on a cut-down pipeline that builds a single static page. It is genuinely useful on its own, and it is the honest way to find out whether this fits how you work.',
+    points: [
+      'One skill, three design skills, two reference repos.',
+      'Same install: unzip, type install, type clone, restart.',
+      'Builds a clean static page and deploys it to a live URL.',
+    ],
+    cta: { label: 'Get the free edition' },
+    note: 'Email required, because that is how you get the updated versions. No payment details, and it stays free.',
+    compare: 'What it will not do is the scroll-driven, 3D work in the demos \u2014 none of those skills contain a scroll-stage architecture or a motion vocabulary with numbers in it. That is the paid pack, and the difference is visible in about ten seconds.',
+  },
+
   contents: {
     eyebrow: "What's in it",
     heading: 'Eight skills, a working starter, and the craft layer.',
