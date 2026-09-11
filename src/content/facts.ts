@@ -107,7 +107,7 @@ export const SKILL_PACK = {
   /** One-off, AUD, inclusive of tax — Gumroad is merchant of record and
    *  handles GST/VAT. Single price, no anchor and no countdown: an inflated
    *  "was" price is exactly the engineered regret RULES[1] rules out. */
-  price: { amount: 129, currency: 'AUD', note: 'one-off · includes every future update' },
+  price: { amount: 79, currency: 'AUD', note: 'one-off · includes every future update' },
   checkout: 'https://neurotrocity.gumroad.com/l/rewire',
 
   /** Free edition, delivered as a $0 Gumroad product so the download is
