@@ -1,9 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-import { RULES } from '../content/facts';
 import { APPS_PAGE } from '../content/copy';
 
-const { meta, nav, hero, apps, rules, contact, footer } = APPS_PAGE;
+const { meta, nav, hero, apps, contact, footer } = APPS_PAGE;
 
 // The two apps, straight from PRODUCTS (Rewire is a service and has its own page).
 
@@ -154,11 +153,6 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
   .app:hover .art img, .app:focus-visible .art img{ transform:none }
 }
 
-/* ── #rules ────────────────────────────────────────────────────────────── */
-.rules{ margin-top:40px; border-top:1px solid var(--line); list-style:none; padding:0 }
-.rule{ padding:21px 0; border-bottom:1px solid var(--line); font-size:15.5px; line-height:1.64; color:var(--muted); max-width:76ch }
-.rule b{ color:var(--ink); font-weight:800 }
-
 /* ── #contact ──────────────────────────────────────────────────────────── */
 .contact{ text-align:center }
 .contact .copy{ max-width:56ch; margin-inline:auto }
@@ -262,21 +256,6 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
   </div>
 </section>
 
-<!-- how we build -->
-<section class="sec" id="rules" data-soma="How we build">
-  <div class="wrap">
-    <div data-quiet>
-      <p class="mono eyebrow">{rules.eyebrow}</p>
-      <h2>{rules.heading}</h2>
-      <p class="sub">{rules.sub}</p>
-    </div>
-    <ul class="rules">
-      {RULES.map((r) => <li class="rule" data-quiet><b>{r.title}</b> {r.body}</li>)}
-    </ul>
-  </div>
-</section>
-
-<!-- contact -->
 <section class="sec contact" id="contact" data-soma="Contact">
   <div class="wrap">
     <div class="copy" data-quiet>

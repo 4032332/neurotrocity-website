@@ -97,7 +97,7 @@ const APPS_CASES: ContrastCase[] = [
   { label: 'hero h1', selector: '.hero h1', fg: INK, threshold: 3.0 },
   { label: 'tile description', selector: '.app p', fg: MUTED, threshold: 4.5 },
   { label: 'stance note', selector: '.stance .note', fg: MUTED, threshold: 4.5 },
-  { label: 'first .rule', selector: '.rule', fg: MUTED, threshold: 4.5 },
+  { label: 'banner .sub', selector: '.hero .sub', fg: INK, threshold: 4.5 },
   { label: '.contact .sub', selector: '.contact .sub', fg: MUTED, threshold: 4.5 },
 ];
 

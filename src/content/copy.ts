@@ -233,7 +233,7 @@ const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
 export const APPS_PAGE = {
   meta: {
     title: 'Apps — NeuroTrocity',
-    description: `The apps we ship: ${APPS.map((a) => a.name).join(' and ')}. Built to the same four rules as everything else here — sharp, honest, private, answered by a person.`,
+    description: `App design and engineering for iPhone, Apple Watch and the web. The apps we ship: ${APPS.map((a) => a.name).join(' and ')}.`,
     canonical: 'https://neurotrocity.com/apps/',
   },
 
@@ -241,7 +241,6 @@ export const APPS_PAGE = {
     back: { label: '← NeuroTrocity', href: '/' },
     links: [
       { label: 'The apps', href: '#apps' },
-      { label: 'How we build', href: '#rules' },
     ],
     cta: { label: 'Say hello', href: '#contact' },
   },
@@ -288,16 +287,8 @@ export const APPS_PAGE = {
     open: 'Open the page',
   },
 
-  rules: {
-    eyebrow: '02 — How we build',
-    // RULES.length is asserted to be 4 in tests/unit/facts.test.ts.
-    heading: 'Four rules. They apply to the apps too.',
-    sub: 'These are not aspirations we grew into. They are the reasons these apps look the way they do.',
-    items: RULES,
-  },
-
   contact: {
-    eyebrow: '03 — Say hello',
+    eyebrow: '02 — Say hello',
     heading: 'Question about one of them?',
     // Restates RULES[3].
     sub: personRule.body,
