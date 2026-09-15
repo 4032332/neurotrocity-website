@@ -98,8 +98,13 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
   grid-template-columns:repeat(2,1fr);
 }
 @media (max-width:900px){ .svc{ grid-template-columns:1fr } }
-.svc > div{ background:var(--ground); padding:26px 24px 30px; transition:background .18s }
-.svc > div:hover{ background:var(--ground-2) }
+.svc > div{
+  padding:26px 24px 30px; transition:background .18s;
+  background:color-mix(in srgb, var(--ground) 56%, transparent);
+  backdrop-filter:blur(18px) saturate(125%);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+}
+.svc > div:hover{ background:color-mix(in srgb, var(--ground-2) 72%, transparent) }
 .svc h3{ font-weight:700; font-size:21px; letter-spacing:-.024em; margin-top:12px; color:var(--c) }
 .svc h3 a{ color:inherit; border-bottom:1px solid transparent; transition:border-color .18s }
 .svc h3 a:hover{ border-bottom-color:currentColor }
@@ -108,18 +113,27 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── #proof: ventures as evidence, then the stance ─────────────────────── */
 .man{ margin-top:40px }
-.stance{
-  margin-top:52px; padding:clamp(26px,4vw,44px); border-radius:10px;
-  border:1px solid color-mix(in srgb, var(--volt) 34%, transparent);
+/* One sheet, used wherever text sits directly on the field. The blur is what
+   makes it readable: the field carries on behind, diffused, instead of being
+   dimmed out by the shader. */
+.pane{
+  border-radius:10px; padding:clamp(22px,3.2vw,38px);
+  border:1px solid color-mix(in srgb, var(--volt) 26%, transparent);
   background:
     linear-gradient(150deg,
-      color-mix(in srgb, var(--volt) 9%, transparent),
+      color-mix(in srgb, var(--volt) 8%, transparent),
       transparent 62%),
-    color-mix(in srgb, var(--ground) 52%, transparent);
-  backdrop-filter:blur(16px) saturate(125%);
-  -webkit-backdrop-filter:blur(16px) saturate(125%);
-  box-shadow:inset 0 1px 0 color-mix(in srgb, var(--volt) 16%, transparent);
+    color-mix(in srgb, var(--ground) 56%, transparent);
+  backdrop-filter:blur(18px) saturate(125%);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+  box-shadow:inset 0 1px 0 color-mix(in srgb, var(--volt) 14%, transparent);
 }
+.stance{
+  margin-top:52px; padding:clamp(26px,4vw,44px);
+  border-color:color-mix(in srgb, var(--volt) 34%, transparent);
+}
+.pane + .man, .pane + .svc, .pane + .deck{ margin-top:22px }
+.rules{ margin-top:26px }
 .stance p{ font-family:var(--display); font-weight:700; font-size:clamp(19px,2.5vw,29px); line-height:1.22; letter-spacing:-.028em; max-width:26ch; text-wrap:balance }
 .stance p em{ font-style:normal; color:var(--cyan) }
 .stance .note{ margin-top:18px; font-family:var(--body); font-weight:400; font-size:15px; line-height:1.62; color:var(--muted); max-width:56ch; letter-spacing:0; text-wrap:pretty }
@@ -169,7 +183,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 <!-- hero -->
 <div class="hero" id="s-hero" data-hero data-soma="Hero">
   <div class="wrap">
-    <div class="copy" data-quiet>
+    <div class="copy pane">
     <p class="mono kick">{hero.kicker}</p>
     <h1>{hero.headline.lead}<em>{hero.headline.em}</em>{hero.headline.tail}</h1>
     <p class="lede">{hero.lede.a}<strong>{hero.lede.strong}</strong>{hero.lede.b}</p>
@@ -184,7 +198,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 <!-- what we build -->
 <section class="sec" id="build" data-soma="What we build">
   <div class="wrap">
-    <div data-quiet>
+    <div class="pane">
       <p class="mono eyebrow">{build.eyebrow}</p>
       <h2>{build.heading}</h2>
       <p class="sub">{build.sub.a}<strong>{build.sub.strong}</strong>{build.sub.b}</p>
@@ -204,12 +218,12 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 <!-- proof -->
 <section class="sec" id="proof" data-soma="Proof">
   <div class="wrap">
-    <div data-quiet>
+    <div class="pane">
       <p class="mono eyebrow">{proof.eyebrow}</p>
       <h2>{proof.heading}</h2>
       <p class="sub">{proof.sub.a}<strong>{proof.sub.strong}</strong>{proof.sub.b}</p>
     </div>
-    <div class="man">
+    <div class="man pane">
       {PRODUCTS.map((p) => <VentureRow product={p} />)}
     </div>
     <div class="stance">
@@ -224,20 +238,20 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 <!-- how we work -->
 <section class="sec" id="rules" data-soma="How we work">
   <div class="wrap">
-    <div data-quiet>
+    <div class="pane">
       <p class="mono eyebrow">{rules.eyebrow}</p>
       <h2>{rules.heading}</h2>
+      <ul class="rules">
+        {RULES.map((r) => <li class="rule"><b>{r.title}</b> {r.body}</li>)}
+      </ul>
     </div>
-    <ul class="rules">
-      {RULES.map((r) => <li class="rule" data-quiet><b>{r.title}</b> {r.body}</li>)}
-    </ul>
   </div>
 </section>
 
 <!-- contact -->
 <section class="sec contact" id="contact" data-soma="Contact">
   <div class="wrap">
-    <div class="copy" data-quiet>
+    <div class="copy pane">
       <p class="mono eyebrow">{contact.eyebrow}</p>
       <h2>{contact.heading}</h2>
       <p class="sub">{contact.sub}</p>
