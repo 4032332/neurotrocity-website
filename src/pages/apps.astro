@@ -70,15 +70,20 @@ body > header:has(.bar){
 
 /* ── hero ──────────────────────────────────────────────────────────────── */
 .hero{ min-height:min(72vh,640px); display:flex; align-items:center; padding-block:70px }
-.hero .copy{ width:fit-content; max-width:100% }
+/* .wrap is a flex item here, so it sizes to its content rather than honouring
+   max-width, and margin:0 auto then centres the shrunken box — which put the
+   banner 228px to the right of every section below it. Fill the line instead. */
+.hero .wrap{ width:100% }
+.hero .copy{ max-width:100% }
 .hero .kick{ color:var(--ember); margin-bottom:20px }
 .hero h1{ font-weight:800; font-size:var(--step-3); line-height:.99; letter-spacing:-.036em; max-width:15ch; text-wrap:balance }
 .hero h1 em{ font-style:normal; color:var(--violet) }
 .hero .sub{
-  margin-top:18px; max-width:40ch; color:var(--ink); font-weight:500;
+  margin-top:18px; max-width:46ch; color:var(--ink); font-weight:500;
   font-size:clamp(17px,1.9vw,21px); line-height:1.4; letter-spacing:-.012em;
+  text-wrap:balance;
 }
-.hero .lede{ margin-top:18px; max-width:52ch; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
+.hero .lede{ margin-top:18px; max-width:64ch; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
 .cta{ margin-top:32px; display:flex; gap:11px; flex-wrap:wrap }
 .btn{
   display:inline-flex; align-items:center; gap:9px; font-size:14.5px; font-weight:800;
