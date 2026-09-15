@@ -235,7 +235,7 @@
   const wps   = $$('.route__read .wp');
   const plates= $$('.route__img');
   const kmEl  = $('#routeKm');
-  const KM    = [0, 7, 45, 66, 90, 243];
+  const KM    = [0, 7, 45, 66, 90, 186];
 
   if (line) {
     const len = line.getTotalLength();
