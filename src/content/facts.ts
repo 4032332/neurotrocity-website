@@ -89,3 +89,72 @@ export const REWIRE = {
   ] as Step[],
   contact: { form: '/rewire/contact/', email: CONTACT.rewire },
 } as const;
+
+/* ── ReWire skill pack ────────────────────────────────────────────────────
+ * The paid digital product sold through Gumroad, distinct from the Rewire
+ * done-for-you service above.
+ *
+ * Everything here is a checkable fact about what ships. No outcome claims, no
+ * earnings figures, no testimonials — there are no buyers yet, and inventing
+ * proof would contradict RULES[1] ("Honest by default"). The craft details are
+ * quoted from the pack's own `taste` skill and are verifiable in the sample
+ * builds under /rewire/sample/.
+ */
+export interface PackItem { title: string; body: string; }
+
+export const SKILL_PACK = {
+  name: 'ReWire',
+  /** One-off, AUD, inclusive of tax — Gumroad is merchant of record and
+   *  handles GST/VAT. Single price, no anchor and no countdown: an inflated
+   *  "was" price is exactly the engineered regret RULES[1] rules out. */
+  price: { amount: 79, currency: 'AUD', note: 'one-off · includes every future update' },
+  checkout: 'https://neurotrocity.gumroad.com/l/rewire',
+
+  /** Free edition, delivered as a $0 Gumroad product so the download is
+   *  email-gated and past downloaders get every future version automatically.
+   *  Set to null until that listing exists — the page hides the whole free
+   *  section rather than shipping a button that 404s. */
+  freeCheckout: null as string | null,
+
+  /** Unlisted YouTube id for the walkthrough — the id only, not the URL.
+   *  Set to null until the video is uploaded; the page hides the player
+   *  rather than rendering an empty frame. */
+  videoId: null as string | null,
+
+  /** Stated plainly and early. Filtering unqualified buyers is deliberate:
+   *  a refund from someone who could never have run it costs more than the sale. */
+  prerequisites: [
+    'A Claude Code subscription',
+    'A computer with git and Node — you will not be typing commands, Claude runs them',
+    'About 6 GB of disk space; the install clones ~24 public library repos',
+    'Willingness to make design decisions at five gates',
+    'A free Netlify account, only if you want the live demo link',
+  ],
+  notFor: [
+    { title: "You want a website, not a workflow",
+      body: 'If you need a site built rather than the means to build one, the done-for-you service is the better buy — and cheaper than learning this to do it once.' },
+    { title: "You won't make the calls",
+      body: 'The pipeline stops five times and asks you to choose the direction. It will not pick for you, and picking well is what makes the result good.' },
+    { title: 'You want it to work without you',
+      body: 'The pack raises the ceiling on what you can build. It does not remove the judgement — deciding what looks right is still your job.' },
+  ] as PackItem[],
+
+  /** What is in the zip. Each maps to a real file or folder in the payload. */
+  contents: [
+    { title: 'The taste layer',
+      body: 'The craft skill — the actual numbers behind the sample builds. Type roles, the easing vocabulary, scroll-stage architecture, adaptive 3D quality tiering and the mobile WebGL policy, each with the reasoning and the evidence attached.' },
+    { title: 'hydra — adversarial review',
+      body: 'Fans out independent reviewers in fresh contexts, then merges what they find. Runs automatically before the flagship gate. Works on any Claude Code project, not just websites.' },
+    { title: 'The eight-phase pipeline',
+      body: 'harvest · analyse · angles · brief · build, plus the rewire orchestrator that runs them and stops at five gates for your input. Every phase is usable on its own.' },
+    { title: 'A working starter',
+      body: 'A scroll stage you can serve and scroll immediately: CSS-pinned rather than GSAP-pinned, scrub-driven, with frame-time tiering and a static fallback. The shortest path from the pack to something that looks like the samples.' },
+    { title: 'Vendored runtimes',
+      body: 'GSAP, ScrollTrigger, Three.js and Lenis as minified files, with licences. No build step and no framework — this is genuinely all the sample builds use.' },
+    { title: 'Spec template and prompt library',
+      body: 'The build spec with its acceptance checklist, and a copy-paste prompt library grouped by what you are trying to fix.' },
+  ] as PackItem[],
+
+  /** Why this is not a video course. The central positioning decision. */
+  form: 'A versioned zip, not a video course. Updates ship through Gumroad and past buyers re-download.',
+} as const;

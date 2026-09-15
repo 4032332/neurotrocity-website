@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('leads with the agency offer, not the venture list', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('h1')).toContainText(/honest software/i);
+  await expect(page.locator('h1')).toContainText(/before it fizzles/i);
   const build = page.locator('#build');
   const proof = page.locator('#proof');
   expect((await build.boundingBox())!.y).toBeLessThan((await proof.boundingBox())!.y);
