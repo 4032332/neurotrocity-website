@@ -233,7 +233,7 @@ const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
 export const APPS_PAGE = {
   meta: {
     title: 'Apps — NeuroTrocity',
-    description: `App design and engineering for iPhone, Apple Watch and the web. The apps we ship: ${APPS.map((a) => a.name).join(' and ')}.`,
+    description: `App design and software engineering for smart devices and the web. The apps we ship: ${APPS.map((a) => a.name).join(' and ')}.`,
     canonical: 'https://neurotrocity.com/apps/',
   },
 
@@ -250,7 +250,7 @@ export const APPS_PAGE = {
   hero: {
     kicker: `Software studio · ${CONTACT.madeIn}`,
     headline: { lead: 'The ', em: 'Apps.' },
-    sub: 'App design and engineering for iPhone, Apple Watch and the web.',
+    sub: 'App design and software engineering for smart devices and the web.',
     lede: {
       a: 'Most problems have an elegant, simple software solution. ',
       strong: 'We specialise in finding that solution and building it',

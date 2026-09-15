@@ -55,6 +55,10 @@ body > header:has(.bar){
 
 /* ── hero ──────────────────────────────────────────────────────────────── */
 .hero{ min-height:min(88vh,760px); display:flex; align-items:center; padding-block:70px }
+/* .wrap is a flex item here, so it sized to its content rather than honouring
+   max-width, and margin:0 auto then centred the shrunken box — putting the hero
+   right of every section below it. Fill the line instead. */
+.hero .wrap{ width:100% }
 .hero .copy{ width:fit-content; max-width:100% }
 .hero .kick{ color:var(--jade); margin-bottom:20px }
 .hero h1{ font-weight:800; font-size:var(--step-3); line-height:.99; letter-spacing:-.036em; max-width:15ch; text-wrap:balance }
