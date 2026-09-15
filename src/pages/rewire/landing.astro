@@ -91,10 +91,10 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 @media (max-width:720px){ .fits{ grid-template-columns:1fr } .fit{ padding:22px 18px 24px } }
 
 /* ── #how: a numbered rail, not another grid ───────────────────────────── */
-.steps{ margin-top:44px; list-style:none; padding:0; border-top:1px solid var(--line); counter-reset:step }
+.steps{ margin-top:44px; list-style:none; padding:0; display:grid; gap:10px; counter-reset:step }
 .step{
   display:grid; grid-template-columns:72px minmax(200px,1fr) 2fr; gap:10px 28px; align-items:baseline;
-  padding:24px 0; border-bottom:1px solid var(--line);
+  padding:16px 0;
 }
 .step .n{ color:var(--jade); font-size:13px }
 .step h3{ font-family:var(--display); font-weight:700; font-size:22px; letter-spacing:-.024em; color:var(--ink) }
@@ -147,7 +147,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 .foot .cols{ display:flex; gap:12px 28px; flex-wrap:wrap; font-family:var(--mono); font-size:12px; letter-spacing:.04em }
 .foot .cols a{ color:var(--muted); transition:color .18s }
 .foot .cols a:hover{ color:var(--jade) }
-.foot-base{ margin-top:36px; padding-top:20px; border-top:1px solid var(--line); font-family:var(--mono); font-size:11.5px; font-variant-numeric:tabular-nums }
+.foot-base{ margin-top:30px; padding-top:0; font-family:var(--mono); font-size:11.5px; font-variant-numeric:tabular-nums }
 </style>
 </Fragment>
 
