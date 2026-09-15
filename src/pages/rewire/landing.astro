@@ -79,7 +79,6 @@ body > header:has(.bar){
 
 /* ── sections ──────────────────────────────────────────────────────────── */
 section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
-section.sec + section.sec{ border-top:1px solid var(--line) }
 .eyebrow{ color:var(--jade); margin-bottom:16px }
 h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; max-width:21ch; text-wrap:balance }
 .sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65; max-width:56ch }
@@ -107,8 +106,16 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── #demos: the stance, then the full-bleed deck ──────────────────────── */
 .stance{
-  margin-top:40px; padding:clamp(26px,4vw,44px); border:1px solid var(--line-2); border-radius:4px;
-  background:linear-gradient(150deg, color-mix(in srgb, var(--jade) 10%, transparent), transparent 60%);
+  margin-top:40px; padding:clamp(26px,4vw,44px); border-radius:10px;
+  border:1px solid color-mix(in srgb, var(--jade) 34%, transparent);
+  background:
+    linear-gradient(150deg,
+      color-mix(in srgb, var(--jade) 9%, transparent),
+      transparent 62%),
+    color-mix(in srgb, var(--ground) 52%, transparent);
+  backdrop-filter:blur(16px) saturate(125%);
+  -webkit-backdrop-filter:blur(16px) saturate(125%);
+  box-shadow:inset 0 1px 0 color-mix(in srgb, var(--jade) 16%, transparent);
 }
 .stance p{ font-family:var(--display); font-weight:700; font-size:clamp(19px,2.5vw,29px); line-height:1.22; letter-spacing:-.028em; max-width:30ch; text-wrap:balance }
 .stance p em{ font-style:normal; color:var(--jade) }
@@ -132,7 +139,7 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 .say:hover{ border-bottom-color:var(--jade) }
 
 /* ── footer ────────────────────────────────────────────────────────────── */
-footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted); font-size:13px }
+footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 .foot{ display:flex; justify-content:space-between; gap:28px 48px; flex-wrap:wrap; align-items:flex-start }
 .foot .lead{ max-width:300px }
 .foot .lead .mk{ margin-bottom:12px; font-size:16px }
@@ -217,7 +224,7 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
       <h2>{demos.heading}</h2>
     </div>
     <div class="stance">
-      <div data-quiet>
+      <div>
         <p>{demos.stance.lead}<em>{demos.stance.em}</em>{demos.stance.tail}</p>
         <p class="note">{demos.note}</p>
       </div>

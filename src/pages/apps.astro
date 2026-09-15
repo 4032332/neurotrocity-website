@@ -100,7 +100,6 @@ body > header:has(.bar){
 
 /* ── sections ──────────────────────────────────────────────────────────── */
 section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
-section.sec + section.sec{ border-top:1px solid var(--line) }
 .eyebrow{ color:var(--muted); margin-bottom:16px }
 h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; max-width:21ch; text-wrap:balance }
 .sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65; max-width:56ch }
@@ -171,18 +170,23 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── stance — what this page is, and is not, proof of ──────────────────── */
 .stance{
-  margin-top:26px; padding:clamp(26px,4vw,44px); border:1px solid var(--line-2); border-radius:4px;
+  margin-top:26px; padding:clamp(26px,4vw,44px); border-radius:10px;
+  border:1px solid color-mix(in srgb, var(--violet) 34%, transparent);
   background:
     linear-gradient(150deg,
-      color-mix(in srgb, var(--violet) 10%, transparent),
-      color-mix(in srgb, var(--ember) 3%, transparent) 55%, transparent);
+      color-mix(in srgb, var(--violet) 9%, transparent),
+      transparent 62%),
+    color-mix(in srgb, var(--ground) 52%, transparent);
+  backdrop-filter:blur(16px) saturate(125%);
+  -webkit-backdrop-filter:blur(16px) saturate(125%);
+  box-shadow:inset 0 1px 0 color-mix(in srgb, var(--violet) 16%, transparent);
 }
 .stance p{ font-family:var(--display); font-weight:700; font-size:clamp(19px,2.5vw,29px); line-height:1.22; letter-spacing:-.028em; max-width:26ch; text-wrap:balance }
 .stance p em{ font-style:normal; color:var(--violet) }
 .stance .note{ margin-top:18px; font-family:var(--body); font-weight:400; font-size:15px; line-height:1.62; color:var(--muted); max-width:56ch; letter-spacing:0; text-wrap:pretty }
 
 /* ── footer ────────────────────────────────────────────────────────────── */
-footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted); font-size:13px }
+footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 .foot{ display:flex; justify-content:space-between; gap:28px 48px; flex-wrap:wrap; align-items:flex-start }
 .foot .lead{ max-width:280px }
 .foot .lead .mk{ margin-bottom:12px; font-size:16px }
@@ -231,7 +235,7 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
       <p class="mono eyebrow">{apps.eyebrow}</p>
     </div>
     <div class="stance">
-      <div data-quiet>
+      <div>
         <p>{apps.stance.lead}<em>{apps.stance.em}</em></p>
         <p class="note">{apps.stance.note}</p>
       </div>
