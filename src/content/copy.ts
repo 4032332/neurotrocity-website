@@ -246,19 +246,19 @@ export const APPS_PAGE = {
     cta: { label: 'Say hello', href: '#contact' },
   },
 
+  // A plain banner: what this page is, what we do, and how to start. The apps
+  // themselves are the section below, so the banner does not list them.
   hero: {
-    kicker: `Apps · iPhone, Apple Watch and the web · ${CONTACT.madeIn}`,
-    // No count anywhere on this page: the list is what it is, and the copy
-    // should not need editing when it changes.
-    headline: { lead: 'Fewer apps. ', em: 'Finished ones.' },
+    kicker: `Software studio · ${CONTACT.madeIn}`,
+    headline: { lead: 'The ', em: 'Apps.' },
+    sub: 'App design and engineering for iPhone, Apple Watch and the web.',
     lede: {
-      a: 'We would rather ship a small number properly than a shelf of half-built ones. ',
-      strong: 'Each does one thing properly',
-      b: ', and keeps doing it — no feature bloat, no roadmap theatre.',
+      a: 'Most problems have an elegant, simple software solution. ',
+      strong: 'We specialise in finding that solution and building it',
+      b: ' — so the work gets easier rather than busier. If something you do every day takes longer than it should, tell us what it is and we will build you something that does not.',
     },
-    primary: { label: `Open ${APPS[0].name}`, href: APPS[0].path },
-    // Undefined when there is only one app; the template omits the ghost button.
-    ghost: APPS[1] ? { label: `Open ${APPS[1].name}`, href: APPS[1].path } : undefined,
+    primary: { label: 'Ask about a custom build', href: '#contact' },
+    ghost: { label: 'See what we ship', href: '#apps' },
   },
 
   apps: {

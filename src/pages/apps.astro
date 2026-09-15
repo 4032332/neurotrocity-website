@@ -70,12 +70,16 @@ body > header:has(.bar){
 @media (max-width:420px){ .bar .wrap{ gap:12px } }
 
 /* ── hero ──────────────────────────────────────────────────────────────── */
-.hero{ min-height:min(80vh,700px); display:flex; align-items:center; padding-block:70px }
+.hero{ min-height:min(72vh,640px); display:flex; align-items:center; padding-block:70px }
 .hero .copy{ width:fit-content; max-width:100% }
 .hero .kick{ color:var(--ember); margin-bottom:20px }
 .hero h1{ font-weight:800; font-size:var(--step-3); line-height:.99; letter-spacing:-.036em; max-width:15ch; text-wrap:balance }
 .hero h1 em{ font-style:normal; color:var(--violet) }
-.hero .lede{ margin-top:24px; max-width:47ch; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
+.hero .sub{
+  margin-top:18px; max-width:40ch; color:var(--ink); font-weight:500;
+  font-size:clamp(17px,1.9vw,21px); line-height:1.4; letter-spacing:-.012em;
+}
+.hero .lede{ margin-top:18px; max-width:52ch; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
 .cta{ margin-top:32px; display:flex; gap:11px; flex-wrap:wrap }
 .btn{
   display:inline-flex; align-items:center; gap:9px; font-size:14.5px; font-weight:800;
@@ -211,10 +215,11 @@ footer{ border-top:1px solid var(--line); padding:44px 0 52px; color:var(--muted
     <div class="copy" data-quiet>
       <p class="mono kick">{hero.kicker}</p>
       <h1>{hero.headline.lead}<em>{hero.headline.em}</em></h1>
+      <p class="sub">{hero.sub}</p>
       <p class="lede">{hero.lede.a}<strong>{hero.lede.strong}</strong>{hero.lede.b}</p>
       <div class="cta">
         <a class="btn p" href={hero.primary.href}>{hero.primary.label} <span class="arw" aria-hidden="true">→</span></a>
-        {hero.ghost && <a class="btn g" href={hero.ghost.href}>{hero.ghost.label}</a>}
+        <a class="btn g" href={hero.ghost.href}>{hero.ghost.label}</a>
       </div>
     </div>
   </div>
