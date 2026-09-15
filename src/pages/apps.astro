@@ -195,6 +195,7 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── footer ────────────────────────────────────────────────────────────── */
 footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
+.foot-pane{ padding:clamp(24px,2.6vw,32px); opacity:.94 }
 .foot{ display:flex; justify-content:space-between; gap:28px 48px; flex-wrap:wrap; align-items:flex-start }
 .foot .lead{ max-width:280px }
 .foot .lead .mk{ margin-bottom:12px; font-size:16px }
@@ -285,6 +286,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 <Fragment slot="footer">
 <footer>
   <div class="wrap">
+    <div class="pane foot-pane">
     <div class="foot">
       <div class="lead">
         <a class="mk" href="/" aria-label="NeuroTrocity home"><i aria-hidden="true"></i><b>Neuro<span class="t">Trocity</span></b></a>
@@ -296,6 +298,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
       </nav>
     </div>
     <div class="foot-base">{footer.legal}</div>
+    </div>
   </div>
 </footer>
 </Fragment>
