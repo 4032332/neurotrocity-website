@@ -60,6 +60,19 @@ export const CONTACT = {
   madeIn: 'Australia',
 } as const;
 
+/**
+ * How an engagement starts, and what it costs to find out.
+ *
+ * These are promises about our own conduct — not claims about results — which
+ * is why they live here with the other facts rather than being typed into a
+ * page's copy. Stated once so the next page that talks about pricing quotes
+ * the same words rather than inventing its own.
+ */
+export const ENGAGEMENT = {
+  conversation: 'A free conversation about what you need — no charge, no obligation.',
+  quote: 'One fixed quote, agreed upfront. No hidden expenses, no surprise invoices.',
+} as const;
+
 /** The Rewire process claims, verbatim from the live /rewire/landing/ page
  *  ("Who this is for" and "How it works"). Presentation copy may frame these
  *  but must not add steps, promises or numbers beyond them. */

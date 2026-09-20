@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCTS, DEMOS, RULES, CONTACT, REWIRE, SKILL_PACK } from '../../src/content/facts';
+import { PRODUCTS, DEMOS, RULES, CONTACT, ENGAGEMENT, REWIRE, SKILL_PACK } from '../../src/content/facts';
 
 describe('facts', () => {
   it('has exactly the three real products', () => {
@@ -25,6 +25,16 @@ describe('facts', () => {
   it('carries the four rules verbatim', () => {
     expect(RULES).toHaveLength(4);
     expect(RULES[0].title).toBe('Sharp, not sprawling.');
+  });
+
+  it('states how we engage, once', () => {
+    expect(ENGAGEMENT.conversation).toContain('free conversation');
+    expect(ENGAGEMENT.quote).toContain('fixed quote');
+  });
+
+  it('promises conduct, not outcomes', () => {
+    const words = `${ENGAGEMENT.conversation} ${ENGAGEMENT.quote}`;
+    expect(words).not.toMatch(/\d+%|\bx\b|guarantee[sd]? (?:you|results)/i);
   });
 
   it('exposes no testimonial or metric fields', () => {
