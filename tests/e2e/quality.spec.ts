@@ -77,9 +77,9 @@ interface ContrastCase {
 const HOME_CASES: ContrastCase[] = [
   { label: 'hero .lede', selector: '.hero .lede', fg: MUTED, threshold: 4.5 },
   { label: 'hero h1', selector: '.hero h1', fg: INK, threshold: 3.0 },
-  { label: 'first .vrow .ds', selector: '.vrow .ds', fg: MUTED, threshold: 4.5 },
-  { label: 'first .rule', selector: '.rule', fg: MUTED, threshold: 4.5 },
-  { label: '.stance p', selector: '.stance p', fg: INK, threshold: 3.0 },
+  { label: 'first service blurb', selector: '.svc p', fg: MUTED, threshold: 4.5 },
+  { label: 'first step body', selector: '.steps p', fg: MUTED, threshold: 4.5 },
+  { label: '.contact h2', selector: '.contact h2', fg: INK, threshold: 3.0 },
   { label: '.contact .sub', selector: '.contact .sub', fg: MUTED, threshold: 4.5 },
 ];
 
