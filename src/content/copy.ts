@@ -7,12 +7,11 @@
  * and asserts no new fact — no numbers, no clients, no outcomes, no guarantees
  * beyond the four RULES.
  */
-import { PRODUCTS, RULES, CONTACT, DEMOS, REWIRE, SKILL_PACK, type Provenance } from './facts';
+import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, type Provenance } from './facts';
 
 const rewire = PRODUCTS.find((p) => p.slug === 'rewire')!;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 const asWord = (n: number): string => { const w = WORDS[n] ?? String(n); return w[0].toUpperCase() + w.slice(1); };
-const dataRule = RULES[2];     // "Your data stays yours."
 const personRule = RULES[3];   // "Answered by a person."
 
 /**
@@ -43,10 +42,8 @@ export const HOME = {
 
   nav: {
     links: [
-      { label: 'What we build', href: '#build' },
+      { label: 'Rewire', href: rewire.path },
       { label: 'Apps', href: '/apps/' },
-      { label: 'Proof', href: '#proof' },
-      { label: 'How we work', href: '#rules' },
     ],
     cta: { label: 'Start a project', href: '#contact' },
   },
@@ -61,7 +58,6 @@ export const HOME = {
       b: ' Catching one while it’s still burning, and building it properly, is the whole discipline. We do that for ourselves, and we do it for you.',
     },
     primary: { label: 'Start a project', href: '#contact' },
-    ghost: { label: 'See the proof', href: '#proof' },
   },
 
   build: {
@@ -86,39 +82,25 @@ export const HOME = {
         n: 'Service 02',
         title: 'iOS & web apps',
         href: '/apps/',
-        // Platforms derive from PRODUCTS[].platforms (iPhone · Watch · Web).
-        blurb: `Shipped on iPhone, Apple Watch and the web, and held to the same four rules as our own ventures — ${dataRule.title.replace(/\.$/, '').toLowerCase()}, ${personRule.title.replace(/\.$/, '').toLowerCase()}.`,
+        // Count derives from APPS — two today, three when Wall Estate lands.
+        // Never type the numeral; it would be false the moment APPS changes.
+        blurb: `Shipped on iPhone, Apple Watch and the web. ${asWord(APPS.length)} of them are ours, and you can open and use them right now.`,
         accent: 'cyan',
       },
     ] satisfies Service[],
   },
 
-  proof: {
-    eyebrow: '02 — Proof',
-    heading: 'We don’t show you pictures. We hand you the working thing.',
-    sub: {
-      a: 'Everything below is real and running. Open it, click everything, ',
-      strong: 'try to break it',
-      b: ' — that is a better test than a gallery of logos.',
-    },
-    stance: {
-      // Must contain "clients" (tested). A stance, not a client claim.
-      lead: 'We don’t use our clients’ brands to advertise ourselves. ',
-      em: 'We’d rather hand you something you can break.',
-      note:
-        'Their traffic, their numbers and the fact they needed a rebuild at all is their business, not marketing for ours. So we build fictional demo models instead — the brand names and copy are invented, the engineering is identical to what we ship.',
-    },
-  },
-
-  rules: {
-    eyebrow: '03 — How we work',
-    // Live-site heading, verbatim. RULES.length is asserted to be 4 in tests/unit/facts.test.ts.
-    heading: 'Four rules. No exceptions.',
-  },
-
   contact: {
-    eyebrow: '04 — Say hello',
-    heading: 'Got a project, a question, or a site that isn’t working?',
+    eyebrow: '02 — Start a project',
+    heading: 'Almost everything that wastes your time has a simple software solution.',
+    lede:
+      'The job that takes an hour and should take five minutes. The spreadsheet three people keep in sync by hand. The form you retype into another system. Most of it is a small app or a website away from being over — and in 2026 building that is faster and cheaper than it has ever been. That is the whole reason this is worth a conversation.',
+    // Both bodies are ENGAGEMENT verbatim: promises about our conduct, stated
+    // once in facts.ts. The titles are framing and assert nothing.
+    steps: [
+      { title: 'First, a conversation.', body: ENGAGEMENT.conversation },
+      { title: 'Then, a number.', body: ENGAGEMENT.quote },
+    ],
     // Live-site line, verbatim; restates RULES[3].
     sub: 'A person reads every message and replies. No ticket queue, no bot.',
     email: CONTACT.general,
