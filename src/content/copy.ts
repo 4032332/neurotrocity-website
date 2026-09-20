@@ -15,6 +15,13 @@ const asWord = (n: number): string => { const w = WORDS[n] ?? String(n); return 
 const dataRule = RULES[2];     // "Your data stays yours."
 const personRule = RULES[3];   // "Answered by a person."
 
+/**
+ * The products that appear on /apps/. Rewire is a service with its own page,
+ * so it is not an app. Declared here rather than beside APPS_PAGE because the
+ * home page's service blurb counts them too.
+ */
+const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
+
 export interface Service {
   /** Ordinal label, e.g. "Service 01". */
   n: string;
@@ -223,8 +230,6 @@ export const REWIRE_PAGE = {
  * — is interpolated from `facts.ts`. Nothing here asserts a new fact: no
  * download counts, no reviews, no roadmap, no unreleased apps.
  */
-const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
-
 export const APPS_PAGE = {
   meta: {
     title: 'Apps — NeuroTrocity',
