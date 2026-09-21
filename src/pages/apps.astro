@@ -1,11 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { APPS_PAGE } from '../content/copy';
-import { productHref, productUrl } from '../content/facts';
+import { productHref, productUrl, productLabel } from '../content/facts';
 
 const { meta, nav, hero, apps, contact, footer } = APPS_PAGE;
 
-// The two apps, straight from PRODUCTS (Rewire is a service and has its own page).
+// Every app, straight from PRODUCTS (Rewire is a service and has its own page).
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -105,7 +105,7 @@ section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
 h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; max-width:21ch; text-wrap:balance }
 .sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65; max-width:56ch }
 
-/* ── #apps: two equal tiles, each carrying the app's own artwork ──────────
+/* ── #apps: every tile equal, each carrying the app's own artwork ─────────
    Equal by construction, not by coincidence: one column each, a shared art
    frame with a fixed aspect ratio, and the body stretched so the footers of
    both tiles sit on the same line whatever the copy length. */
@@ -257,7 +257,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
                    loading="lazy" decoding="async" />
             </span>
             <span class="body">
-              <span class="mono sl">/{a.slug}</span>
+              <span class="mono sl">{productLabel(a)}</span>
               <h3>{a.name}</h3>
               <p>{a.description}</p>
               <span class="row">

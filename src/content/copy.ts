@@ -25,7 +25,7 @@ const listJoin = (items: string[]): string =>
  * so it is not an app. Declared here rather than beside APPS_PAGE because the
  * home page's service blurb counts them too.
  */
-const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
+export const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
 
 export interface Service {
   /** Ordinal label, e.g. "Service 01". */
@@ -88,7 +88,7 @@ export const HOME = {
         n: 'Service 02',
         title: 'iOS & web apps',
         href: '/apps/',
-        // Count derives from APPS — two today, three when Wall Estate lands.
+        // Count derives from APPS — three now that Wall Estate has landed.
         // Never type the numeral; it would be false the moment APPS changes.
         blurb: `Shipped on iPhone, Apple Watch and the web. ${asWord(APPS.length)} of them are ours, and you can open and use them right now.`,
         accent: 'cyan',

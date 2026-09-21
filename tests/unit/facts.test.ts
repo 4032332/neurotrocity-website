@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { PRODUCTS, DEMOS, RULES, CONTACT, ENGAGEMENT, REWIRE, SKILL_PACK } from '../../src/content/facts';
+import { APPS } from '../../src/content/copy';
 
 describe('facts', () => {
   it('has exactly the four real products', () => {
@@ -21,7 +22,7 @@ describe('facts', () => {
   });
 
   it('gives every app-page product an appCategory', () => {
-    for (const p of PRODUCTS.filter(p => p.slug !== 'rewire')) {
+    for (const p of APPS) {
       expect(p.appCategory, `${p.slug} is missing appCategory`).toBeTruthy();
     }
   });

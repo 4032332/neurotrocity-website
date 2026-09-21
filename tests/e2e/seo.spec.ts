@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { DEMOS, PRODUCTS, productHref, productUrl } from '../../src/content/facts';
+import { APPS } from '../../src/content/copy';
 
 const PAGES = [
   { path: '/',                 canonical: 'https://neurotrocity.com/' },
@@ -7,8 +8,7 @@ const PAGES = [
   { path: '/apps/',            canonical: 'https://neurotrocity.com/apps/' },
 ];
 
-/** The two apps the /apps/ hub lists — Rewire is a service and has its own page. */
-const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
+/** The apps the /apps/ hub lists — Rewire is a service and has its own page. */
 
 for (const p of PAGES) {
   test(`${p.path} declares a self-referencing canonical`, async ({ page }) => {
@@ -77,7 +77,7 @@ test('Rewire declares a Service, not an Organization', async ({ page }) => {
   expect(types).toContain('Service');
 });
 
-test('apps declares a CollectionPage listing both apps', async ({ page }) => {
+test('apps declares a CollectionPage listing every app', async ({ page }) => {
   await page.goto('/apps/');
   const blocks = (await page.locator('script[type="application/ld+json"]').allTextContents()).map(b => JSON.parse(b));
   const collection = blocks.find(b => b['@type'] === 'CollectionPage');
