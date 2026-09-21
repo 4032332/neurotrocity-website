@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import { APPS_PAGE } from '../content/copy';
+import { productHref, productUrl, productLabel } from '../content/facts';
 
 const { meta, nav, hero, apps, contact, footer } = APPS_PAGE;
 
-// The two apps, straight from PRODUCTS (Rewire is a service and has its own page).
+// Every app, straight from PRODUCTS (Rewire is a service and has its own page).
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -21,8 +22,8 @@ const jsonLd = {
       item: {
         '@type': 'SoftwareApplication',
         name: a.name,
-        url: `https://neurotrocity.com${a.path}`,
-        applicationCategory: 'MobileApplication',
+        url: productUrl(a),
+        applicationCategory: a.appCategory,
       },
     })),
   },
@@ -104,11 +105,11 @@ section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
 h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; max-width:21ch; text-wrap:balance }
 .sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65; max-width:56ch }
 
-/* ── #apps: two equal tiles, each carrying the app's own artwork ──────────
+/* ── #apps: every tile equal, each carrying the app's own artwork ─────────
    Equal by construction, not by coincidence: one column each, a shared art
    frame with a fixed aspect ratio, and the body stretched so the footers of
    both tiles sit on the same line whatever the copy length. */
-.apps{ margin-top:40px; display:grid; gap:20px; grid-template-columns:1fr 1fr }
+.apps{ margin-top:40px; display:grid; gap:20px; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)) }
 .app{
   display:flex; flex-direction:column; position:relative; overflow:hidden;
   border:1px solid var(--line); border-radius:8px;
@@ -149,7 +150,6 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 .app .go .arw{ display:inline-block; transition:transform .25s }
 .app:hover .go .arw, .app:focus-visible .go .arw{ transform:translateX(4px) }
 
-@media (max-width:860px){ .apps{ grid-template-columns:1fr } }
 
 @media (prefers-reduced-motion:reduce){
   .app, .app .art img{ transition:none }
@@ -251,13 +251,13 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
       {apps.items.map((a) => {
         const art = apps.art[a.slug];
         return (
-          <a class="app" href={a.path} style={`--c:var(--${a.accent})`}>
+          <a class="app" href={productHref(a)} style={`--c:var(--${a.accent})`}>
             <span class="art" data-fit={art.fit}>
               <img src={art.src} alt={art.alt} width="1040" height="780"
                    loading="lazy" decoding="async" />
             </span>
             <span class="body">
-              <span class="mono sl">/{a.slug}</span>
+              <span class="mono sl">{productLabel(a)}</span>
               <h3>{a.name}</h3>
               <p>{a.description}</p>
               <span class="row">

@@ -6,7 +6,7 @@ const BANNED = [
   /\btrusted by\b/i, /\bas seen (in|on)\b/i,
 ];
 
-for (const path of ['/', '/rewire/landing/']) {
+for (const path of ['/', '/rewire/landing/', '/apps/']) {
   test(`${path} contains no fabricated social proof`, async ({ page }) => {
     await page.goto(path);
     const text = await page.locator('body').innerText();

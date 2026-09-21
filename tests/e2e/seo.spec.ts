@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { DEMOS, PRODUCTS } from '../../src/content/facts';
+import { DEMOS, PRODUCTS, productHref, productUrl } from '../../src/content/facts';
+import { APPS } from '../../src/content/copy';
 
 const PAGES = [
   { path: '/',                 canonical: 'https://neurotrocity.com/' },
@@ -7,8 +8,7 @@ const PAGES = [
   { path: '/apps/',            canonical: 'https://neurotrocity.com/apps/' },
 ];
 
-/** The two apps the /apps/ hub lists — Rewire is a service and has its own page. */
-const APPS = PRODUCTS.filter((p) => p.slug !== 'rewire');
+/** The apps the /apps/ hub lists — Rewire is a service and has its own page. */
 
 for (const p of PAGES) {
   test(`${p.path} declares a self-referencing canonical`, async ({ page }) => {
@@ -77,7 +77,7 @@ test('Rewire declares a Service, not an Organization', async ({ page }) => {
   expect(types).toContain('Service');
 });
 
-test('apps declares a CollectionPage listing both apps', async ({ page }) => {
+test('apps declares a CollectionPage listing every app', async ({ page }) => {
   await page.goto('/apps/');
   const blocks = (await page.locator('script[type="application/ld+json"]').allTextContents()).map(b => JSON.parse(b));
   const collection = blocks.find(b => b['@type'] === 'CollectionPage');
@@ -86,13 +86,13 @@ test('apps declares a CollectionPage listing both apps', async ({ page }) => {
   const items = collection.mainEntity.itemListElement.map((e: any) => e.item);
   expect(items.map((i: any) => i['@type'])).toEqual(APPS.map(() => 'SoftwareApplication'));
   expect(items.map((i: any) => i.name)).toEqual(APPS.map(a => a.name));
-  expect(items.map((i: any) => i.url)).toEqual(APPS.map(a => `https://neurotrocity.com${a.path}`));
+  expect(items.map((i: any) => i.url)).toEqual(APPS.map(a => productUrl(a)));
 });
 
 test('apps links every tile at its real landing page', async ({ page }) => {
   await page.goto('/apps/');
   const hrefs = await page.locator('#apps a.app').evaluateAll(els => els.map(e => e.getAttribute('href')));
-  expect(hrefs).toEqual(APPS.map(a => a.path));
+  expect(hrefs).toEqual(APPS.map(a => productHref(a)));
   // No invented apps, no placeholder tiles.
   await expect(page.locator('#apps a.app')).toHaveCount(APPS.length);
   // Every tile is an expression of its app, not a bare text card.
@@ -106,11 +106,15 @@ test('sitemap is generated from facts and covers every indexable URL', async ({ 
   const xml = await (await request.get('/sitemap.xml')).text();
   const required = [
     '/', '/apps/', '/rewire/landing/', '/rewire/contact/', '/contact/rob/', '/contact/jaimi/',
-    ...PRODUCTS.map(p => p.path),
+    ...PRODUCTS.flatMap(p => (p.path ? [p.path] : [])),
     ...DEMOS.map(d => d.href),
   ];
   for (const loc of required) {
     expect(xml, `sitemap missing ${loc}`).toContain(`https://neurotrocity.com${loc}`);
+  }
+  // Off-site products (no `path`) must never appear in the sitemap.
+  for (const p of PRODUCTS.filter(p => p.url)) {
+    expect(xml, `sitemap must not include off-site ${p.slug}`).not.toContain(p.url);
   }
 });
 

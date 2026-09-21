@@ -2,14 +2,30 @@
  *  is deliberately NOT a legal value — it would imply a real client behind the demo. */
 export type Provenance = 'fictional';
 
-export interface Product {
-  slug: 'dosetrack' | 'dispoint' | 'rewire';
+interface ProductBase {
+  slug: 'dosetrack' | 'dispoint' | 'rewire' | 'wallestate';
   name: string;          // display name, verbatim from the live site's footer / venture rows
-  path: string;
   description: string;   // verbatim from the current live site
   platforms: string;
-  accent: 'volt' | 'ember' | 'cyan';
+  accent: 'volt' | 'ember' | 'cyan' | 'jade';
+  /** Only for the things on /apps/. Rewire is a service and omits it. */
+  appCategory?: 'MobileApplication' | 'WebApplication';
 }
+
+/** A product carries either a site-relative `path` or an off-site `url`, never both, never neither. */
+export type Product = ProductBase &
+  ({ path: string; url?: undefined } | { url: string; path?: undefined });
+
+/** Where a link to this product points. */
+export const productHref = (p: Product): string => p.url ?? p.path;
+
+/** Its absolute URL, for structured data. */
+export const productUrl = (p: Product): string =>
+  p.url ?? `https://neurotrocity.com${p.path}`;
+
+/** How it reads in a footer directory: a path here, a host elsewhere. */
+export const productLabel = (p: Product): string =>
+  p.url ? new URL(p.url).host : `/${p.slug}`;
 
 export interface DemoModel {
   slug: string;
@@ -25,11 +41,16 @@ export interface Rule { title: string; body: string; }
 
 export const PRODUCTS: Product[] = [
   { slug: 'dosetrack', name: 'DoseTrack', path: '/dosetrack/landing/', accent: 'volt', platforms: 'iPhone · Watch',
+    appCategory: 'MobileApplication',
     description: 'Medication reminders that actually stick — free for your first five meds, forever.' },
-  { slug: 'dispoint', name: 'DisPoint', path: '/dispoint/landing/', accent: 'ember', platforms: 'iPhone · AU',
+  { slug: 'dispoint', name: 'DisPoint', path: '/dispoint/landing/', accent: 'ember', platforms: 'iPhone',
+    appCategory: 'MobileApplication',
     description: "Deals and bonus-points offers, sorted by what's about to expire." },
   { slug: 'rewire', name: 'Rewire', path: '/rewire/landing/', accent: 'cyan', platforms: 'Web · AU',
     description: 'Underperforming business websites, rebuilt so they actually work.' },
+  { slug: 'wallestate', name: 'Wall Estate', url: 'https://wallestate.neurotrocity.com/',
+    accent: 'jade', platforms: 'Web', appCategory: 'WebApplication',
+    description: 'The calendar every agent hands out at Christmas, with your face on it and your listings in it — made in a minute, not a week.' },
 ];
 
 export const DEMOS: DemoModel[] = [

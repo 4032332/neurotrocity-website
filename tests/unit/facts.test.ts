@@ -1,15 +1,30 @@
 import { describe, it, expect } from 'vitest';
 import { PRODUCTS, DEMOS, RULES, CONTACT, ENGAGEMENT, REWIRE, SKILL_PACK } from '../../src/content/facts';
+import { APPS } from '../../src/content/copy';
 
 describe('facts', () => {
-  it('has exactly the three real products', () => {
-    expect(PRODUCTS.map(p => p.slug).sort()).toEqual(['dispoint', 'dosetrack', 'rewire']);
+  it('has exactly the four real products', () => {
+    expect(PRODUCTS.map(p => p.slug).sort()).toEqual(['dispoint', 'dosetrack', 'rewire', 'wallestate']);
   });
 
   it('names every product with its live-site display name', () => {
     expect(PRODUCTS.map(p => [p.slug, p.name])).toEqual([
-      ['dosetrack', 'DoseTrack'], ['dispoint', 'DisPoint'], ['rewire', 'Rewire'],
+      ['dosetrack', 'DoseTrack'], ['dispoint', 'DisPoint'], ['rewire', 'Rewire'], ['wallestate', 'Wall Estate'],
     ]);
+  });
+
+  it('carries exactly one of path/url per product, never both, never neither', () => {
+    for (const p of PRODUCTS) {
+      const hasPath = typeof p.path === 'string';
+      const hasUrl = typeof p.url === 'string';
+      expect(hasPath !== hasUrl, `${p.slug} must have exactly one of path/url`).toBe(true);
+    }
+  });
+
+  it('gives every app-page product an appCategory', () => {
+    for (const p of APPS) {
+      expect(p.appCategory, `${p.slug} is missing appCategory`).toBeTruthy();
+    }
   });
 
   it('has exactly the six real demo models', () => {

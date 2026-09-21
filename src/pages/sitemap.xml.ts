@@ -41,7 +41,7 @@ export const GET: APIRoute = () => {
   const urls = Array.from(
     new Set([
       ...STATIC_URLS,
-      ...PRODUCTS.map((p) => p.path),
+      ...PRODUCTS.flatMap((p) => (p.path ? [p.path] : [])),
       ...DEMOS.map((d) => d.href),
       ...LEGACY_URLS,
     ]),
