@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-test('leads with the agency offer, not the venture list', async ({ page }) => {
+test('leads with the agency offer, then asks for the project', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('h1')).toContainText(/before it fizzles/i);
   const build = page.locator('#build');
-  const proof = page.locator('#proof');
-  expect((await build.boundingBox())!.y).toBeLessThan((await proof.boundingBox())!.y);
+  const contact = page.locator('#contact');
+  expect((await build.boundingBox())!.y).toBeLessThan((await contact.boundingBox())!.y);
 });
 
 test('routes an SMB visitor to Rewire within the first two screens', async ({ page }) => {
@@ -15,17 +15,12 @@ test('routes an SMB visitor to Rewire within the first two screens', async ({ pa
   expect((await link.boundingBox())!.y).toBeLessThan(page.viewportSize()!.height * 2);
 });
 
-test('surfaces the client-privacy stance as a heading-scale element', async ({ page }) => {
+test('renders exactly two sections, build then contact', async ({ page }) => {
   await page.goto('/');
-  const stance = page.locator('.stance p').first();
-  await expect(stance).toContainText(/clients/i);
-  const size = await stance.evaluate(n => parseFloat(getComputedStyle(n).fontSize));
-  expect(size).toBeGreaterThan(18);
-});
-
-test('renders all four rules from facts', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.locator('#rules .rule')).toHaveCount(4);
+  const ids = await page.locator('main section, body > section').evaluateAll(
+    ns => ns.map(n => n.id)
+  );
+  expect(ids).toEqual(['build', 'contact']);
 });
 
 test('page is visible at rest with no content parked at opacity 0', async ({ page }) => {
