@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { PRODUCTS, CONTACT } from '../content/facts';
+import { PRODUCTS, CONTACT, productUrl } from '../content/facts';
 import { HOME } from '../content/copy';
 
 const { meta, nav, hero, build, contact, footer } = HOME;
@@ -16,7 +16,7 @@ const jsonLd = {
   makesOffer: PRODUCTS.map((p) => ({
     '@type': 'Offer',
     // Rewire is a service; the two apps are software.
-    itemOffered: { '@type': p.slug === 'rewire' ? 'Service' : 'SoftwareApplication', name: p.name, url: `https://neurotrocity.com${p.path}` },
+    itemOffered: { '@type': p.slug === 'rewire' ? 'Service' : 'SoftwareApplication', name: p.name, url: productUrl(p) },
   })),
 };
 ---
@@ -243,7 +243,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
         <p>{footer.tagline}</p>
       </div>
       <nav class="cols" aria-label="Footer">
-        {footer.ventures.map((v) => <a href={v.href}>/{v.label}</a>)}
+        {footer.ventures.map((v) => <a href={v.href}>{v.label}</a>)}
         <a href={`mailto:${footer.email}`}>{footer.email}</a>
       </nav>
     </div>

@@ -7,12 +7,18 @@
  * and asserts no new fact — no numbers, no clients, no outcomes, no guarantees
  * beyond RULES and ENGAGEMENT.
  */
-import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, type Provenance } from './facts';
+import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, productHref, productLabel, type Provenance } from './facts';
 
 const rewire = PRODUCTS.find((p) => p.slug === 'rewire')!;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 const asWord = (n: number): string => { const w = WORDS[n] ?? String(n); return w[0].toUpperCase() + w.slice(1); };
 const personRule = RULES[3];   // "Answered by a person."
+
+/** "A", "A and B", "A, B and C" — reads right at any length, unlike a plain join. */
+const listJoin = (items: string[]): string =>
+  items.length <= 1 ? (items[0] ?? '') :
+  items.length === 2 ? `${items[0]} and ${items[1]}` :
+  `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
 
 /**
  * The products that appear on /apps/. Rewire is a service with its own page,
@@ -109,7 +115,7 @@ export const HOME = {
   footer: {
     // Verbatim from the live site's footer.
     tagline: 'Building software that respects the people who use it.',
-    ventures: PRODUCTS.map((p) => ({ label: p.slug, href: p.path })),
+    ventures: PRODUCTS.map((p) => ({ label: productLabel(p), href: productHref(p) })),
     email: CONTACT.general,
     legal: `© ${new Date().getFullYear()} NeuroTrocity · Made in ${CONTACT.madeIn}`,
   },
@@ -215,7 +221,7 @@ export const REWIRE_PAGE = {
 export const APPS_PAGE = {
   meta: {
     title: 'Apps — NeuroTrocity',
-    description: `App design and software engineering for smart devices and the web. The apps we ship: ${APPS.map((a) => a.name).join(' and ')}.`,
+    description: `App design and software engineering for smart devices and the web. The apps we ship: ${listJoin(APPS.map((a) => a.name))}.`,
     canonical: 'https://neurotrocity.com/apps/',
   },
 
@@ -265,6 +271,11 @@ export const APPS_PAGE = {
         alt: 'The DisPoint board: a final-call alert and offers ordered by what expires first',
         fit: 'cover',
       },
+      wallestate: {
+        src: '/assets/img/apps/wallestate-sheets.webp',
+        alt: 'Three finished Wall Estate calendar sheets — Classic, Bold and Editorial — fanned in a stack',
+        fit: 'cover',
+      },
     } as Record<string, { src: string; alt: string; fit: 'contain' | 'cover' }>,
     open: 'Open the page',
   },
@@ -280,7 +291,7 @@ export const APPS_PAGE = {
   footer: {
     tagline: 'Building software that respects the people who use it.',
     links: [
-      ...APPS.map((a) => ({ label: a.name, href: a.path })),
+      ...APPS.map((a) => ({ label: a.name, href: productHref(a) })),
       { label: 'NeuroTrocity', href: '/' },
     ],
     email: CONTACT.general,
