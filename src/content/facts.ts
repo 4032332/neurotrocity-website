@@ -43,13 +43,13 @@ export const PRODUCTS: Product[] = [
   { slug: 'dosetrack', name: 'DoseTrack', path: '/dosetrack/landing/', accent: 'volt', platforms: 'iPhone · Watch',
     appCategory: 'MobileApplication',
     description: 'Medication reminders that actually stick — free for your first five meds, forever.' },
-  { slug: 'dispoint', name: 'DisPoint', path: '/dispoint/landing/', accent: 'ember', platforms: 'iPhone · AU',
+  { slug: 'dispoint', name: 'DisPoint', path: '/dispoint/landing/', accent: 'ember', platforms: 'iPhone',
     appCategory: 'MobileApplication',
     description: "Deals and bonus-points offers, sorted by what's about to expire." },
   { slug: 'rewire', name: 'Rewire', path: '/rewire/landing/', accent: 'cyan', platforms: 'Web · AU',
     description: 'Underperforming business websites, rebuilt so they actually work.' },
   { slug: 'wallestate', name: 'Wall Estate', url: 'https://wallestate.neurotrocity.com/',
-    accent: 'jade', platforms: 'Web · PDF', appCategory: 'WebApplication',
+    accent: 'jade', platforms: 'Web', appCategory: 'WebApplication',
     description: 'The calendar every agent hands out at Christmas, with your face on it and your listings in it — made in a minute, not a week.' },
 ];
 

@@ -77,6 +77,21 @@ slug, no special case, just `flatMap(p => p.path ? [p.path] : [])`.
   description: 'The calendar every agent hands out at Christmas, with your face on it and your listings in it — made in a minute, not a week.' }
 ```
 
+### Two deliberate deviations, decided by Rob 2026-09-21
+
+**The description asserts more than `facts.ts` can back.** "every agent hands
+out at Christmas" is a claim about the market, and "made in a minute, not a
+week" is an outcome carrying a time. The rule at the top of `copy.ts` bans both.
+Rob chose to keep the line: it is the sharpest version and he owns the claim.
+Recorded here so a later reader does not "correct" it back to a capability line.
+
+**`platforms` no longer reads device · market.** Rather than bend Wall Estate to
+the old pattern, Rob simplified the pattern itself: DisPoint drops `· AU` to
+read `iPhone`, and Wall Estate reads `Web`. The field now names the platform
+only. DoseTrack (`iPhone · Watch`) still names two devices, which is a device
+list, not a market. Rewire keeps `Web · AU` — it is a service sold into a
+market, not an app.
+
 **Accent.** `--jade` is the one unused accent token. Wall Estate's own identity
 is deliberately monochrome — its brand README says *"One ink, always… a Wall
 Estate brand colour would fight every calendar it is printed on."* Jade is
