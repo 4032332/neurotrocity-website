@@ -5,7 +5,7 @@
  * fact (email, country, product description, rule wording, demo count) it is
  * interpolated from `facts.ts` rather than retyped. Everything else is framing
  * and asserts no new fact — no numbers, no clients, no outcomes, no guarantees
- * beyond the four RULES.
+ * beyond RULES and ENGAGEMENT.
  */
 import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, type Provenance } from './facts';
 
@@ -94,7 +94,7 @@ export const HOME = {
     eyebrow: '02 — Start a project',
     heading: 'Almost everything that wastes your time has a simple software solution.',
     lede:
-      'The job that takes an hour and should take five minutes. The spreadsheet three people keep in sync by hand. The form you retype into another system. Most of it is a small app or a website away from being over — and in 2026 building that is faster and cheaper than it has ever been. That is the whole reason this is worth a conversation.',
+      'The job that takes an hour and should take five minutes. The spreadsheet three people keep in sync by hand. The form you retype into another system. Most of it is a small app or a website away from being over — and today building that is faster and cheaper than it has ever been. That is the whole reason this is worth a conversation.',
     // Both bodies are ENGAGEMENT verbatim: promises about our conduct, stated
     // once in facts.ts. The titles are framing and assert nothing.
     steps: [

@@ -81,8 +81,6 @@ body > header:has(.bar){
 .btn:hover .arw{ transform:translateX(4px) }
 .btn.p{ background:var(--volt); color:#fff }
 .btn.p:hover{ background:color-mix(in srgb, var(--volt) 88%, white); transform:translateY(-2px) }
-.btn.g{ border-color:var(--line-2); color:var(--ink) }
-.btn.g:hover{ border-color:var(--cyan); color:var(--cyan); transform:translateY(-2px) }
 
 /* ── sections — disciplined after the hero ─────────────────────────────── */
 section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
@@ -226,6 +224,10 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
         </div>
       ))}
     </div>
+    {/* `.sub` is the site-wide class for the paragraph under a heading, so the
+        lede takes it; `contact.sub` is the closing line and gets `.close`. Both
+        `.close` and `.say` sit OUTSIDE the pane, directly on the field — which
+        is why HOME_CASES probes them separately. */}
     <p class="close">{contact.sub}</p>
     <a class="say" href={`mailto:${contact.email}`}>{contact.email}</a>
   </div>

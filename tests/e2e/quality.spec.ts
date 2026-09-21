@@ -81,6 +81,8 @@ const HOME_CASES: ContrastCase[] = [
   { label: 'first step body', selector: '.steps p', fg: MUTED, threshold: 4.5 },
   { label: '.contact h2', selector: '.contact h2', fg: INK, threshold: 3.0 },
   { label: '.contact .sub', selector: '.contact .sub', fg: MUTED, threshold: 4.5 },
+  { label: '.contact .close', selector: '.close', fg: MUTED, threshold: 4.5 },
+  { label: '.contact .say', selector: '.say', fg: [124, 107, 255], threshold: 3.0 },
 ];
 
 const REWIRE_CASES: ContrastCase[] = [
