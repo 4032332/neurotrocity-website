@@ -273,7 +273,7 @@ export const APPS_PAGE = {
       },
       wallestate: {
         src: '/assets/img/apps/wallestate-sheets.webp',
-        alt: 'Three finished Wall Estate calendar sheets — Classic, Bold and Editorial — fanned in a stack',
+        alt: 'A finished Wall Estate calendar — a listing photo, the agent’s details and a two-year month grid — with more sheets fanned behind it',
         fit: 'cover',
       },
     } as Record<string, { src: string; alt: string; fit: 'contain' | 'cover' }>,

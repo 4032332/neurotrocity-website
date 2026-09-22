@@ -113,6 +113,18 @@ the product's own `renderCalendarPdf`, each with a different real photo from the
 app's `sample-images/`, two-year span, QR block present. Fanned on the dark
 ground with a drop shadow, under a faint jade wash.
 
+**Framed for the thumbnail, not the full page (2026-09-22).** The first version
+fanned all three sheets whole, which at the tile's real render size (333×250)
+read as white rectangles with grey texture — you could not tell they were
+calendars. The front sheet is now scaled past the frame so its listing photo,
+agent block, QR and month grid are all legible small; the other two peek from
+behind to keep the stack. The framing was chosen by rendering candidates at
+333×250 and judging them at that size, not scaled down from the full composition.
+
+The mark's corner is **verified dark before the paste** (mean luminance 18.6 of
+a 42 threshold) rather than placed by eye — at this crop the sheet covers most
+of the frame, and an earlier attempt left the mark straddling the paper edge.
+
 The Wall Estate mark sits on the **ground**, never on the paper. Printing the
 mark onto a sheet would say Wall Estate brands the agent's calendar, which is
 the opposite of what the product does. Ink is `#f2f0ec`, the brand's dark-scheme
