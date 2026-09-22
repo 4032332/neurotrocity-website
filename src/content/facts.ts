@@ -50,7 +50,7 @@ export const PRODUCTS: Product[] = [
     description: 'Underperforming business websites, rebuilt so they actually work.' },
   { slug: 'wallestate', name: 'Wall Estate', url: 'https://wallestate.neurotrocity.com/',
     accent: 'jade', platforms: 'Web', appCategory: 'WebApplication',
-    description: 'The calendar every agent hands out at Christmas, with your face on it and your listings in it.' },
+    description: 'The calendar every agent hands out at Christmas, with your face on it and your listings in it — the whole folder done in one go.' },
 ];
 
 export const DEMOS: DemoModel[] = [

@@ -85,8 +85,10 @@ out at Christmas" is a claim about the market, which the rule at the top of
 later reader does not "correct" it back to a capability line.
 
 The line originally ended "— made in a minute, not a week". That was cut on
-2026-09-22: it read as generated filler, and it was also an outcome carrying a
-time, which the same rule bans. The sentence is complete without it.
+2026-09-22 as generated filler. Cutting it lost the product's real edge, so the
+speed went back the same day as "— the whole folder done in one go": the speed
+IS the batch, which is a mechanism the product demonstrably has rather than a
+time it has to live up to. Do not restore a bare time claim here.
 
 **`platforms` no longer reads device · market.** Rather than bend Wall Estate to
 the old pattern, Rob simplified the pattern itself: DisPoint drops `· AU` to
