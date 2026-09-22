@@ -79,11 +79,14 @@ slug, no special case, just `flatMap(p => p.path ? [p.path] : [])`.
 
 ### Two deliberate deviations, decided by Rob 2026-09-21
 
-**The description asserts more than `facts.ts` can back.** "every agent hands
-out at Christmas" is a claim about the market, and "made in a minute, not a
-week" is an outcome carrying a time. The rule at the top of `copy.ts` bans both.
-Rob chose to keep the line: it is the sharpest version and he owns the claim.
-Recorded here so a later reader does not "correct" it back to a capability line.
+**The description asserts a claim `facts.ts` cannot back.** "every agent hands
+out at Christmas" is a claim about the market, which the rule at the top of
+`copy.ts` bans. Rob chose to keep it: he owns the claim. Recorded here so a
+later reader does not "correct" it back to a capability line.
+
+The line originally ended "— made in a minute, not a week". That was cut on
+2026-09-22: it read as generated filler, and it was also an outcome carrying a
+time, which the same rule bans. The sentence is complete without it.
 
 **`platforms` no longer reads device · market.** Rather than bend Wall Estate to
 the old pattern, Rob simplified the pattern itself: DisPoint drops `· AU` to
