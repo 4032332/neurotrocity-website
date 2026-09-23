@@ -27,18 +27,18 @@ export const BEEPTEST = {
   nav: { cta: { label: 'Get notified', href: '/beeptest/landing/#launch' } },
 
   hero: {
-    // Rob's words, 23 Sep 2026, set as a three-size sequence. "cheat the beep",
+    // Rob’s words, 23 Sep 2026, set as a three-size sequence. "cheat the beep",
     // not "cheat the system": spec §5.1 records why, and the copy test fails
     // if it drifts back.
     lines: [
       'The beep test sucks.',
       'It has demonic powers stronger than Final Destination.',
-      "There's only one way to beat it before it beats you…",
+      'There’s only one way to beat it before it beats you…',
     ],
     payoff: 'cheat the beep.',
     // Store description, opening two sentences, verbatim.
     lede: 'Most beep test apps play you a beep and leave you to guess the rest. This one tells you where you should be.',
-    primary: { label: "Get told when it's out", href: '#launch' },
+    primary: { label: 'Get told when it’s out', href: '#launch' },
     secondary: { label: 'How it works', href: '#pacing' },
     skullAlt: 'The Before the Beep skull, drawn in thick black ink: cracked, dripping sweat, tongue hanging out',
   },
@@ -51,7 +51,7 @@ export const BEEPTEST = {
     // Store description, PACING CUES block, verbatim.
     body: 'Three short cues sound at 70%, 80% and 90% of every shuttle, so you can hear whether you are ahead or behind before the beep arrives — not after. It is the difference between learning the pace and chasing it.',
     // Arbitrary: a mid-table level, so the loop is neither slow nor frantic.
-    // It is not any agency's standard and must never be described as one.
+    // It is not any agency’s standard and must never be described as one.
     demoLevel: 6,
     beepLabel: 'Beep',
     caption: (level: number, speedKph: number, seconds: number): string =>
@@ -60,7 +60,7 @@ export const BEEPTEST = {
 
   frames: {
     eyebrow: 'The app',
-    heading: "What you'll be looking at",
+    heading: 'What you’ll be looking at',
     pending: 'Screenshot pending',
     // app-store-listing.md "Screenshots": screen and caption, in its order, verbatim.
     items: [
@@ -102,7 +102,7 @@ export const BEEPTEST = {
     id: 'launch',
     eyebrow: 'Coming soon',
     heading: 'Not out yet.',
-    body: "Leave your email and we'll tell you when Before the Beep is on the App Store.",
+    body: 'Leave your email and we’ll tell you when Before the Beep is on the App Store.',
     label: 'Email address',
     placeholder: 'you@example.com',
     button: 'Notify me',
