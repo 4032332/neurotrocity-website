@@ -31,26 +31,39 @@ async function webp(file, width, out) {
 //
 // 1. In this sharp build (0.34.5), .dilate() SHRINKS bright regions and
 //    .erode() GROWS them — the opposite of the conventional morphology
-//    names. Verified directly: dilate(5) on a 40x40 white square on black
-//    leaves a 30x30 square; erode(5) leaves a 50x50 square. So "growing" a
-//    mask here means calling .erode(), and "shrinking" it means .dilate().
+//    names. Verified directly on a 9x9 single-channel mask with one white
+//    pixel dead centre: .dilate(1) REMOVES it (0 white pixels left);
+//    .erode(1) GROWS it into a solid 3x3 block (9 white pixels). Also
+//    checked on a 40x40 white square on black: dilate(5) shrinks it to
+//    30x30; erode(5) grows it to 50x50. So "growing" a mask here means
+//    calling .erode(), and "shrinking" it means .dilate().
 // 2. The skull's ink (outline, cracks, eye sockets, nostril, mouth cavity)
 //    is drawn in the same near-black as the background, and the outline is
 //    one continuous stroke touching the background all the way round. A
 //    plain border flood over "is this pixel dark" therefore leaks through
 //    that thin (a few px) outline into the interior fills — the eye
 //    sockets and mouth cavity are themselves solid near-black, so once the
-//    flood reaches them via the outline it swallows them whole. A single
-//    large close-after-the-fact can bridge those interior holes, but by
-//    the time it is large enough to do that it also bridges genuine
+//    flood reaches them via the outline it swallows them whole. The mouth
+//    in particular reaches the background through a narrow gap by the
+//    tongue, wide open on both sides once the flood is through it. A
+//    single large close-after-the-fact can bridge those interior holes,
+//    but by the time it is large enough to do that it also bridges genuine
 //    exterior background gaps next to the artwork (e.g. between a sweat
 //    drop's stem and the skull's edge), painting solid black rectangles
 //    into what should stay transparent. So instead the candidate "is dark"
-//    mask is shrunk by a few px BEFORE flooding — enough to sever the thin
-//    outline stroke from the wide-open background it sits between — and
-//    the flood result is grown back by the same amount afterwards. That
-//    keeps the eye sockets/nostril/mouth correctly enclosed (never reached
-//    by the border flood) without needing a large, over-eager close step.
+//    mask is shrunk BEFORE flooding — enough to sever the thin outline
+//    stroke, and the narrow corridor by the tongue, from the wide-open
+//    background they sit between — and the flood result is grown back by
+//    the same amount afterwards. That keeps the eye sockets, nostril and
+//    mouth correctly enclosed (never reached by the border flood) without
+//    needing a large, over-eager close step. The radius has to be at least
+//    half the corridor's width to sever it: 4px left the mouth (and a
+//    smaller notch by the jaw) reachable and transparent; the mouth itself
+//    closed at 8px, but the jaw notch needed 16px. 16px was checked against
+//    the gaps between the flying sweat drops and the skull on both sides —
+//    still clean, no black wedge — so that's what's used; going as high as
+//    40px (tried while diagnosing this) starts painting exactly those
+//    wedges solid.
 async function cutout(file, width) {
   const { data, info } = await sharp(src(file))
     .resize({ width })
@@ -90,11 +103,11 @@ async function cutout(file, width) {
     darkMask[p] = (data[i] < 40 && data[i + 1] < 40 && data[i + 2] < 40) ? 255 : 0;
   }
 
-  // Shrink the candidate mask (severs the thin ink outline from the true
-  // background field — see note 2), flood-fill background from the image
-  // border through it, then grow the result back to restore its true
-  // extent, right up to the object's edge.
-  const shrunkDark = await shrinkWhite(darkMask, 4);
+  // Shrink the candidate mask (severs the thin ink outline, and the narrow
+  // corridor by the tongue, from the true background field — see note 2),
+  // flood-fill background from the image border through it, then grow the
+  // result back to restore its true extent, right up to the object's edge.
+  const shrunkDark = await shrinkWhite(darkMask, 16);
   const bg = new Uint8Array(w * h); // 1 = background
   const stack = [];
   const seed = (x, y) => {
@@ -123,7 +136,7 @@ async function cutout(file, width) {
   }
   let bgMask = Buffer.alloc(w * h);
   for (let p = 0; p < w * h; p++) bgMask[p] = bg[p] ? 255 : 0;
-  bgMask = await growWhite(bgMask, 4);
+  bgMask = await growWhite(bgMask, 16);
 
   // keep mask: 255 where not background, 0 where background.
   let mask = Buffer.alloc(w * h);
