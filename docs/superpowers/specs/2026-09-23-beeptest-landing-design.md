@@ -116,7 +116,7 @@ measures, which is why the geometry is coded rather than generated (B6).
 | **B14** | **New accent token `--flare:#FF3B2F`** for the `/apps/` tile | All four existing accents are taken (volt=DoseTrack, ember=DisPoint, cyan=Rewire, jade=Wall Estate). Flame is already in the app's own celebration vocabulary |
 | **B15** | **Display type is Bricolage Grotesque at 900**, already loaded by `Base` | Big, heavy and brutal, at zero additional font bytes. A new condensed face would cost a download for a page that measures its weight |
 | **B16** | **There is no App Store link. A "coming soon" section with an email capture takes its place** (§5.7) | Rob, 23 Sep. The app has no listing yet, so a badge would link nowhere. A launch-notification list converts the traffic this page gets in the meantime instead of wasting it |
-| **B17** | **The mailing list uses a real email service provider, not the `formsubmit.co` / `web3forms` relays used elsewhere on this site** | Rob, 23 Sep. Those relay a form to an inbox; they are not a list. The **Spam Act 2003 (Cth)** requires consent, sender identification and a *functional unsubscribe facility* on commercial electronic messages — an inbox full of addresses provides none of that, and the launch broadcast is exactly a commercial electronic message. Provider still to be named (§11.3) |
+| **B17** | **The mailing list uses a real email service provider, not the `formsubmit.co` / `web3forms` relays used elsewhere on this site** | Rob, 23 Sep. Those relay a form to an inbox; they are not a list. The **Spam Act 2003 (Cth)** requires consent, sender identification and a *functional unsubscribe facility* on commercial electronic messages — an inbox full of addresses provides none of that, and the launch broadcast is exactly a commercial electronic message. **Provider: Buttondown** (Rob, 23 Sep), chosen because it accepts a plain HTML form POST, so §5.7's form keeps our styling with no third-party script |
 | **B18** | **The page may claim the app is entirely on-device. It may NOT claim iCloud sync** | Verified 23 Sep by source audit (§2.4). The on-device claim is unusually strong and true. The iCloud claim is **false for this app** and sits in shared site copy, which makes it a live trap |
 
 ---
@@ -247,8 +247,8 @@ A short "not out yet" statement and a single email field. Requirements:
   one place §2.4's "nothing leaves your phone" needs a careful boundary: that claim is about the
   **app**, and the page must not let it read as covering the website form.
 
-Provider is not yet chosen (§11.3). Until it is, the form is built complete against a clearly
-marked placeholder endpoint.
+Provider is **Buttondown** (B17). The form posts to its endpoint; until the account and list
+exist, it is built complete against a clearly marked placeholder endpoint.
 
 ### 5.8 Footer
 
