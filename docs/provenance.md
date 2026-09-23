@@ -185,3 +185,35 @@ fictional-brand demo model.
 - **Zero team or location claims beyond `Australia`.** `CONTACT.madeIn = 'Australia'` is the only geography/team-size claim on either page; no headcount, office address, or individual bio beyond what already exists on the site's separate `/contact/rob/` and `/contact/jaimi/` pages (out of scope for this rebuild, untouched).
 - **All six demo brands fictional.** Confirmed directly in this table and enforced in code via the `Provenance` type.
 - **DoseTrack "free for your first five meds, forever" claim confirmed true.** Directly confirmed by Rob 2026-09-03 before reuse in `PRODUCTS[dosetrack].description`.
+
+---
+
+## `/beeptest/*` — Before the Beep (added 2026-09-23)
+
+Spec: `docs/superpowers/specs/2026-09-23-beeptest-landing-design.md`. Every string below lives
+in `src/content/beeptest.ts` unless noted. "Store" means `beep-test/docs/app-store-listing.md`,
+whose copy is already checked line by line against NSW Civil Liability Act s5M(8). The only
+change made to quoted store text is `" - "` set as `" — "`.
+
+| Surface | Item | Kind | Source | Notes |
+|---|---|---|---|---|
+| facts.ts | `PRODUCTS[beeptest].name` "Before the Beep" | fact | Rob 2026-09-23 | Store title decision; the "Beep Test: Shuttle Run Trainer" recommendation was declined |
+| facts.ts | `PRODUCTS[beeptest].description` | verbatim store copy | Store, "Promotional text", first sentence | |
+| facts.ts | `PRODUCTS[beeptest].platforms` "iPhone · Watch" | fact | `beep-test-app-spec.md` §2: v1 ships iPhone and Apple Watch together | |
+| facts.ts | `PRODUCTS[beeptest].status` "coming-soon" | fact | No App Store listing exists (Rob 2026-09-23, spec B16) | Excluded from "use them right now", "the apps we ship" and `makesOffer` |
+| beeptest.ts | `hero.lines`, `hero.payoff` | presentation copy | Rob 2026-09-23 | "cheat the system" changed to "cheat the beep"; spec §5.1 records why |
+| beeptest.ts | `hero.lede` | verbatim store copy | Store, description, opening two sentences | |
+| beeptest.ts | `pacing.heading`, `frames.items[0].caption` | verbatim store copy | Store, Screenshots table, caption 1 | |
+| beeptest.ts | `pacing.body` | verbatim store copy | Store, description, PACING CUES | |
+| PacingBar | Timing: level 6, 11.0 km/h, 6.545455 s; cues at 0.7/0.8/0.9 | fact | `beep-test/protocols.json`, QPS level 6 and `audioDesign.pacingCues.fractionsOfShuttle` | Copied into `beeptest-protocol.ts`; a unit test checks it against the file's own formula and totals. Level 6 is arbitrary and is not presented as any standard |
+| beeptest.ts | `frames.items` (screen and caption) | verbatim store copy | Store, Screenshots table | Frames are marked "Screenshot pending" (B13) |
+| beeptest.ts | `watch.body` | verbatim store copy | Store, description, APPLE WATCH | ⚠️ Watch device items 3a–3h are unrun (`beep-test/docs/device-test-results.md`). Re-verify before release |
+| beeptest.ts | `effort.warning`, `.detail`, `.aid` | verbatim store copy | Store, description, BEFORE YOU START, complete | `effort.warning` is the s5M(8) required sentence (B9) |
+| beeptest.ts | `effort.heading` "It is designed to beat you." | presentation copy | Paraphrases the required sentence; reinforces the risk rather than softening it | |
+| beeptest.ts | `free.heading`, `free.body` | verbatim store copy | Store, description, closing line | True per D20 (`navigation-and-shell-design.md`) and the 2026-09-23 source audit: no network code in the app |
+| beeptest.ts | `launch.*` | presentation copy | Spec §5.7, B16, B17 | Consent line satisfies Spam Act 2003 sender, subject and unsubscribe |
+| beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
+| beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |
+| Art | `skull-hero.webp`, `/assets/img/apps/beeptest-skull.webp`, OG card | own-asset | Higgsfield job `af0e3436-42a0-45d0-acf4-14d6d7d23ee3`, reference-locked to `beep-test` `AppIcon-1024.png` (Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`) | OG text duplicates `hero.lines[0]` by hand (`scripts/beeptest-assets.mjs`) |
+| Art | `skull-flame.webp` | own-asset | **Pending — generated in Task 12**, same reference | |
+| Art | `skull-closing.webp` | own-asset | **Pending — generated in Task 12**, same reference | |

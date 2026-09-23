@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { BEEPTEST } from '../../src/content/beeptest';
 import { pacingSchedule } from '../../src/content/beeptest-protocol';
-import { REQUIRED_WARNING } from '../../src/content/beeptest-rules';
+import { BANNED, REQUIRED_WARNING } from '../../src/content/beeptest-rules';
 import { buttondownAction } from '../../src/content/beeptest-signup';
 
 const LANDING = '/beeptest/landing/';
@@ -199,4 +199,22 @@ test('nothing on the page fetches Buttondown', async ({ page }) => {
   await page.goto(LANDING);
   await page.waitForLoadState('networkidle');
   expect(calls).toEqual([]);
+});
+
+for (const path of ['/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/', '/beeptest/support/']) {
+  test(`${path} renders no s5M(8)-banned phrase`, async ({ page }) => {
+    await page.goto(path);
+    const text = await page.locator('body').innerText();
+    const alts = await page.locator('img').evaluateAll((els) => els.map((e) => e.getAttribute('alt') ?? ''));
+    for (const { re, why } of BANNED) {
+      expect(`${text}\n${alts.join('\n')}`, `${path}: ${why}`).not.toMatch(re);
+    }
+  });
+}
+
+test('/apps/ shows Before the Beep as coming soon, linking to its page', async ({ page }) => {
+  await page.goto('/apps/');
+  const tile = page.locator('#apps a.app', { hasText: BEEPTEST.name });
+  await expect(tile).toHaveAttribute('href', '/beeptest/landing/');
+  await expect(tile).toContainText('Coming soon');
 });
