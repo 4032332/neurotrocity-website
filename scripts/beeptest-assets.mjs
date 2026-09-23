@@ -17,8 +17,145 @@ async function webp(file, width, out) {
   await sharp(src(file)).resize({ width }).webp({ quality: 82 }).toFile(path.join(OUT, out));
 }
 
+// The generated art sits on opaque black (#010101), so on the hero it hides
+// the speed lines behind a solid square and the drop-shadow filter traces
+// that square's corner instead of the skull's silhouette. This cuts the
+// skull out: flood-fill the near-black background that touches the image
+// border away to transparency, close the mask so the open mouth and any
+// narrow leak through the ink don't stay punched through, then grow the
+// mask back out a little so the skull's own black outline — which the
+// flood also removed, since it is dark and touches the background — is
+// restored around the cutout.
+//
+// Two implementation notes the naive version of this algorithm runs into:
+//
+// 1. In this sharp build (0.34.5), .dilate() SHRINKS bright regions and
+//    .erode() GROWS them — the opposite of the conventional morphology
+//    names. Verified directly: dilate(5) on a 40x40 white square on black
+//    leaves a 30x30 square; erode(5) leaves a 50x50 square. So "growing" a
+//    mask here means calling .erode(), and "shrinking" it means .dilate().
+// 2. The skull's ink (outline, cracks, eye sockets, nostril, mouth cavity)
+//    is drawn in the same near-black as the background, and the outline is
+//    one continuous stroke touching the background all the way round. A
+//    plain border flood over "is this pixel dark" therefore leaks through
+//    that thin (a few px) outline into the interior fills — the eye
+//    sockets and mouth cavity are themselves solid near-black, so once the
+//    flood reaches them via the outline it swallows them whole. A single
+//    large close-after-the-fact can bridge those interior holes, but by
+//    the time it is large enough to do that it also bridges genuine
+//    exterior background gaps next to the artwork (e.g. between a sweat
+//    drop's stem and the skull's edge), painting solid black rectangles
+//    into what should stay transparent. So instead the candidate "is dark"
+//    mask is shrunk by a few px BEFORE flooding — enough to sever the thin
+//    outline stroke from the wide-open background it sits between — and
+//    the flood result is grown back by the same amount afterwards. That
+//    keeps the eye sockets/nostril/mouth correctly enclosed (never reached
+//    by the border flood) without needing a large, over-eager close step.
+async function cutout(file, width) {
+  const { data, info } = await sharp(src(file))
+    .resize({ width })
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const { width: w, height: h } = info;
+
+  const firstChannel = (buf, channels) => {
+    if (channels === 1) return buf;
+    const out = Buffer.alloc(w * h);
+    for (let p = 0; p < w * h; p++) out[p] = buf[p * channels];
+    return out;
+  };
+  // See note 1 above: .dilate() shrinks bright regions, .erode() grows them.
+  const shrinkWhite = async (buf, r) => {
+    if (r <= 0) return buf;
+    const res = await sharp(buf, { raw: { width: w, height: h, channels: 1 } })
+      .dilate(r).raw().toBuffer({ resolveWithObject: true });
+    const out = firstChannel(res.data, res.info.channels);
+    if (out.length !== w * h) throw new Error(`shrink: expected ${w * h} bytes, got ${out.length}`);
+    return out;
+  };
+  const growWhite = async (buf, r) => {
+    if (r <= 0) return buf;
+    const res = await sharp(buf, { raw: { width: w, height: h, channels: 1 } })
+      .erode(r).raw().toBuffer({ resolveWithObject: true });
+    const out = firstChannel(res.data, res.info.channels);
+    if (out.length !== w * h) throw new Error(`grow: expected ${w * h} bytes, got ${out.length}`);
+    return out;
+  };
+
+  // Candidate-dark mask: 255 where a pixel is near-black.
+  const darkMask = Buffer.alloc(w * h);
+  for (let p = 0; p < w * h; p++) {
+    const i = p * 4;
+    darkMask[p] = (data[i] < 40 && data[i + 1] < 40 && data[i + 2] < 40) ? 255 : 0;
+  }
+
+  // Shrink the candidate mask (severs the thin ink outline from the true
+  // background field — see note 2), flood-fill background from the image
+  // border through it, then grow the result back to restore its true
+  // extent, right up to the object's edge.
+  const shrunkDark = await shrinkWhite(darkMask, 4);
+  const bg = new Uint8Array(w * h); // 1 = background
+  const stack = [];
+  const seed = (x, y) => {
+    const p = y * w + x;
+    if (bg[p]) return;
+    if (!shrunkDark[p]) return;
+    bg[p] = 1;
+    stack.push(p);
+  };
+  for (let x = 0; x < w; x++) {
+    seed(x, 0);
+    seed(x, h - 1);
+  }
+  for (let y = 0; y < h; y++) {
+    seed(0, y);
+    seed(w - 1, y);
+  }
+  while (stack.length) {
+    const p = stack.pop();
+    const x = p % w;
+    const y = (p - x) / w;
+    if (x > 0) seed(x - 1, y);
+    if (x < w - 1) seed(x + 1, y);
+    if (y > 0) seed(x, y - 1);
+    if (y < h - 1) seed(x, y + 1);
+  }
+  let bgMask = Buffer.alloc(w * h);
+  for (let p = 0; p < w * h; p++) bgMask[p] = bg[p] ? 255 : 0;
+  bgMask = await growWhite(bgMask, 4);
+
+  // keep mask: 255 where not background, 0 where background.
+  let mask = Buffer.alloc(w * h);
+  for (let p = 0; p < w * h; p++) mask[p] = bgMask[p] ? 0 : 255;
+
+  // Close: grow then shrink, as a safety net for any narrow gap the flood
+  // still leaked through, so speed lines never show inside the mouth.
+  mask = await growWhite(mask, 16);
+  mask = await shrinkWhite(mask, 16);
+
+  // Grow the closed mask back out: the flood removed the skull's outer
+  // black ink outline too, since it is dark and touches the background.
+  // Growing puts that band — and its original black pixels — back. Then
+  // soften the edge slightly.
+  let finalMask = await growWhite(mask, 8);
+  const blurred = await sharp(finalMask, { raw: { width: w, height: h, channels: 1 } })
+    .blur(0.8).raw().toBuffer({ resolveWithObject: true });
+  finalMask = firstChannel(blurred.data, blurred.info.channels);
+  if (finalMask.length !== w * h) throw new Error(`blur: expected ${w * h} bytes, got ${finalMask.length}`);
+
+  // Write the mask into the alpha channel of the original RGBA buffer.
+  const rgba = Buffer.from(data);
+  for (let p = 0; p < w * h; p++) rgba[p * 4 + 3] = finalMask[p];
+
+  return sharp(rgba, { raw: { width: w, height: h, channels: 4 } });
+}
+
 // The flame and closing beats are generated in Task 8; until they exist this
-// script skips them, so it can be re-run as each source arrives.
+// script skips them, so it can be re-run as each source arrives. The hero is
+// exported specially, cut out of its black square (see cutout() above); the
+// flame and closing beats stay opaque — they sit on plain black with no
+// speed lines and no drop-shadow behind them.
 for (const [file, width, out] of [
   ['hero.png', 1200, 'skull-hero.webp'],
   ['flame.png', 1000, 'skull-flame.webp'],
@@ -28,7 +165,11 @@ for (const [file, width, out] of [
     console.log(`skipped ${out}: ${src(file)} not generated yet`);
     continue;
   }
-  await webp(file, width, out);
+  if (file === 'hero.png') {
+    await (await cutout(file, width)).webp({ quality: 82, alphaQuality: 90 }).toFile(path.join(OUT, out));
+  } else {
+    await webp(file, width, out);
+  }
 }
 
 // /apps/ tile: 4:3 like every other tile (1040x780), skull centred on black.
