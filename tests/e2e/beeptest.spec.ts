@@ -103,3 +103,25 @@ test('the pacing bar labels never overlap, even on a phone', async ({ page }) =>
     }
   }
 });
+
+for (const doc of ['privacy', 'eula', 'support'] as const) {
+  const path = `/beeptest/${doc}/`;
+  const meta = BEEPTEST.docs.pages[doc];
+
+  test(`${path} is a real page, honestly pending, and kept out of search`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.locator('h1')).toHaveText(meta.heading);
+    await expect(page.locator('main')).toContainText(BEEPTEST.docs.pending);
+    await expect(page.locator(`main a[href="mailto:${BEEPTEST.footer.email}"]`)).toHaveCount(1);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+    await expect(page).toHaveTitle(meta.title);
+  });
+}
+
+test('pending policy pages are not in the sitemap yet', async ({ request }) => {
+  const xml = await (await request.get('/sitemap.xml')).text();
+  for (const doc of ['privacy', 'eula', 'support']) {
+    expect(xml).not.toContain(`/beeptest/${doc}/`);
+  }
+  expect(xml).toContain('/beeptest/landing/');
+});

@@ -1,0 +1,28 @@
+---
+// /beeptest/privacy/, /beeptest/eula/ and /beeptest/support/.
+// Pending by design (spec §7): the routes exist now so nothing 404s and the
+// app can hard-code the URLs. The reviewed text replaces docs.pending; when a
+// page gets its real text, drop `noindex` and add it to sitemap.xml.ts
+// STATIC_URLS in the same commit.
+import BeeptestLayout from '../../components/beeptest/BeeptestLayout.astro';
+import { BEEPTEST } from '../../content/beeptest';
+
+type Doc = keyof typeof BEEPTEST.docs.pages;
+
+export function getStaticPaths() {
+  return (Object.keys(BEEPTEST.docs.pages) as Doc[]).map((doc) => ({ params: { doc } }));
+}
+
+const doc = Astro.params.doc as Doc;
+const meta = BEEPTEST.docs.pages[doc];
+const { docs, footer } = BEEPTEST;
+---
+<BeeptestLayout title={meta.title} description={meta.description} path={`/beeptest/${doc}/`} noindex>
+  <section class="bt-doc">
+    <div class="bt-wrap">
+      <h1 class="bt-h2">{meta.heading}</h1>
+      <p class="bt-body">{docs.pending}</p>
+      <p class="bt-body">{docs.contact} <a href={`mailto:${footer.email}`}>{footer.email}</a>.</p>
+    </div>
+  </section>
+</BeeptestLayout>
