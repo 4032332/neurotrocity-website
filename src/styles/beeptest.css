@@ -126,3 +126,23 @@ body{ background:var(--bt-void); color:var(--bt-bone); font-family:var(--body) }
   .bt-pace, .bt-runner, .bt-tick::before{ animation:none }
   .bt-runner{ left:90% }
 }
+
+/* ── screen frames: honest placeholders (B13) ──────────────────────────── */
+.bt-frames{ margin-top:48px; display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:22px }
+.bt-frame{ margin:0 }
+.bt-phone{ aspect-ratio:9/19.5; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; padding:18px; text-align:center; color:var(--bt-dim); border:3px solid var(--bt-bone); border-radius:30px;
+  background:repeating-linear-gradient(-45deg, var(--bt-panel) 0 14px, #13110F 14px 28px) }
+.bt-screen{ font-size:14px; line-height:1.35; color:var(--bt-bone) }
+.bt-frame figcaption{ margin-top:14px; font-weight:800; font-size:16px; line-height:1.3 }
+
+/* ── the maximal-effort panel (B9) ─────────────────────────────────────── */
+.bt-effort{ display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(24px,4vw,56px); align-items:center }
+.bt-effort-panel{ margin-top:28px; padding:clamp(22px,3vw,40px); border:4px solid var(--bt-flare); border-radius:10px;
+  background:var(--bt-panel); box-shadow:10px 10px 0 var(--bt-flare) }
+.bt-effort-panel p{ margin:0; font-size:17px; line-height:1.6 }
+.bt-effort-panel p + p{ margin-top:16px }
+.bt-effort-panel .lead{ font-family:var(--display); font-weight:900; font-size:clamp(22px,2.6vw,30px);
+  line-height:1.15; letter-spacing:-.02em }
+.bt-effort-panel .aid{ color:var(--bt-dim) }
+@media (max-width:820px){ .bt-effort{ grid-template-columns:1fr } }

@@ -1,0 +1,24 @@
+---
+import { BEEPTEST } from '../../content/beeptest';
+
+const { frames } = BEEPTEST;
+// Marked placeholders, not drawn mock-ups (B13): real screenshots are not
+// producible yet. Swap each .bt-phone for an <img> when they are.
+---
+<section class="bt-sec" aria-labelledby="bt-frames-h">
+  <div class="bt-wrap">
+    <p class="bt-mono bt-eyebrow">{frames.eyebrow}</p>
+    <h2 class="bt-h2" id="bt-frames-h">{frames.heading}</h2>
+    <div class="bt-frames">
+      {frames.items.map((item) => (
+        <figure class="bt-frame">
+          <div class="bt-phone">
+            <span class="bt-mono">{frames.pending}</span>
+            <span class="bt-screen">{item.screen}</span>
+          </div>
+          <figcaption>{item.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>

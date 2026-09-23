@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { BEEPTEST } from '../../src/content/beeptest';
 import { pacingSchedule } from '../../src/content/beeptest-protocol';
+import { REQUIRED_WARNING } from '../../src/content/beeptest-rules';
 
 const LANDING = '/beeptest/landing/';
 
@@ -124,4 +125,33 @@ test('pending policy pages are not in the sitemap yet', async ({ request }) => {
     expect(xml).not.toContain(`/beeptest/${doc}/`);
   }
   expect(xml).toContain('/beeptest/landing/');
+});
+
+test('five screen frames, each honestly marked as pending, with their store captions', async ({ page }) => {
+  await page.goto(LANDING);
+  const frames = page.locator('.bt-frame');
+  await expect(frames).toHaveCount(5);
+  for (const [i, item] of BEEPTEST.frames.items.entries()) {
+    await expect(frames.nth(i)).toContainText(BEEPTEST.frames.pending);
+    await expect(frames.nth(i).locator('figcaption')).toContainText(item.caption);
+  }
+});
+
+test('the required maximal-test sentence is on the page, visible', async ({ page }) => {
+  await page.goto(LANDING);
+  await expect(page.getByText(REQUIRED_WARNING, { exact: true })).toBeVisible();
+});
+
+test('the whole store warning is present, including the training-aid paragraph', async ({ page }) => {
+  await page.goto(LANDING);
+  const panel = page.locator('#before-you-start .bt-effort-panel');
+  await expect(panel).toContainText(BEEPTEST.effort.detail);
+  await expect(panel).toContainText(BEEPTEST.effort.aid);
+});
+
+test('the flame and closing skulls are lazy-loaded and described', async ({ page }) => {
+  await page.goto(LANDING);
+  for (const alt of [BEEPTEST.effort.skullAlt, BEEPTEST.free.skullAlt]) {
+    await expect(page.getByAltText(alt)).toHaveAttribute('loading', 'lazy');
+  }
 });

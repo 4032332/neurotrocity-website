@@ -1,0 +1,15 @@
+---
+import { BEEPTEST } from '../../content/beeptest';
+
+const { free } = BEEPTEST;
+---
+<section class="bt-sec" aria-labelledby="bt-free-h">
+  <div class="bt-wrap bt-split">
+    <div>
+      <h2 class="bt-h2" id="bt-free-h">{free.heading}</h2>
+      <p class="bt-body">{free.body}</p>
+    </div>
+    <img class="bt-beat" src="/beeptest/assets/img/skull-closing.webp" alt={free.skullAlt}
+         width="1000" height="1000" loading="lazy" decoding="async" />
+  </div>
+</section>
