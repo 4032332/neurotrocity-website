@@ -36,6 +36,8 @@ test('the hero skull loads', async ({ page }) => {
 });
 
 test('the speed lines cover the whole hero, edge to edge', async ({ page }) => {
+  // Motion off: the entrance scale(1.35) would inflate the box and hide a clipped SVG.
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(LANDING);
   const [hero, rays] = await Promise.all([
     page.locator('.bt-hero').boundingBox(),
