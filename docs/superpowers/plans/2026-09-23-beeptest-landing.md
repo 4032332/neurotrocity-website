@@ -39,7 +39,7 @@
 | `src/content/beeptest-rules.ts` | create | `REQUIRED_WARNING` and the `BANNED` list — one source for both test suites |
 | `src/content/beeptest.ts` | create | Every string on `/beeptest/*` |
 | `src/content/beeptest-signup.ts` | create | `buttondownAction()` |
-| `scripts/beeptest-assets.mjs` | create | One-shot export: sources → web images and OG card |
+| `scripts/beeptest-assets.mjs` | create | Re-runnable export: sources → web images and OG card (skips beats not yet generated) |
 | `src/content/facts.ts` | modify | Register the product; `status`, `isReleased` |
 | `src/content/copy.ts` | modify | `/apps/` art; released-only counts |
 | `src/pages/index.astro` | modify | Released-only `makesOffer` |
@@ -677,17 +677,17 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ### Task 4: The skull art and the OG card
 
-Generated art is reference-locked to the shipped app icon (B5) through Higgsfield Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`, which already exists. Pose direction does not survive the reference; treatment does (B7). So every prompt changes the **treatment** and keeps the character.
+Generated art is reference-locked to the shipped app icon (B5) through Higgsfield Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`, which already exists. This task exports everything that derives from the **hero**, which is already generated: the hero image, the `/apps/` tile and the OG card. The flame and closing beats are generated at the start of Task 8, the task that uses them (re-sequenced 2026-09-23 when Higgsfield's daily generation limit blocked them).
 
 **Files:**
-- Create: `assets-src/beeptest/hero.png`, `flame.png`, `closing.png` (not committed)
+- Create: `assets-src/beeptest/hero.png` (not committed)
 - Create: `scripts/beeptest-assets.mjs`
-- Create (generated): `public/beeptest/assets/img/skull-hero.webp`, `skull-flame.webp`, `skull-closing.webp`, `og-beeptest.png`, `public/assets/img/apps/beeptest-skull.webp`
+- Create (generated): `public/beeptest/assets/img/skull-hero.webp`, `og-beeptest.png`, `public/assets/img/apps/beeptest-skull.webp`
 - Modify: `.gitignore`
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: the five image paths above, used by Tasks 5–8. Sizes: hero 1200×1200, flame and closing 1000×1000, tile 1040×780, OG 1200×630 PNG.
+- Produces: the three image paths above, used by Tasks 5 and 6 (hero 1200×1200, tile 1040×780, OG 1200×630 PNG), and `scripts/beeptest-assets.mjs`, which Task 8 re-runs to export the flame and closing beats.
 
 - [ ] **Step 1: Download the hero source (already generated and approved)**
 
@@ -701,41 +701,7 @@ file assets-src/beeptest/hero.png
 
 Expected: `PNG image data, 2048 x 2048`.
 
-- [ ] **Step 2: Generate the flame beat**
-
-The 23 Sep test draw lost the white highlight dots in the eye sockets, so it is regenerated with that called out. Call `mcp__e48d5fc7-a163-4e37-af37-22d97633b367__generate_image` with:
-
-```json
-{
-  "model": "nano_banana_pro",
-  "aspect_ratio": "1:1",
-  "count": 2,
-  "prompt": "<<<a44f8f52-6b91-4a36-991b-02d0df8ed1b0>>> engulfed in roaring flames. Big stylised cel-shaded fire rising from the bottom of the frame behind and around the skull, drawn in flat layered tones of red, orange and yellow with heavy black ink outlines. The skull's cracks are splitting wider and glowing hot orange along their edges. Same character throughout: bone-white skull, large black eye sockets EACH WITH ITS TWO SMALL WHITE HIGHLIGHT DOTS, pink tongue lolling out, cyan sweat. Completely flat cel-shaded colour fills, absolutely no gradients, no soft shading, no photorealistic fire, no glow blur. Pure solid black background behind the flames. Vintage tattoo-flash and skate-sticker illustration style.",
-  "medias": [{ "value": "fbb60af6-f9f3-4440-916e-c19cd17ae0cd", "role": "reference_image" }]
-}
-```
-
-Poll with `jobs_wait` until both are `completed`. Download both, look at both, and keep the one where **both eye sockets have their highlight dots** and the character matches `hero.png`. Save it as `assets-src/beeptest/flame.png`. Record its job ID for Task 11.
-
-If neither draw has the dots, run the call once more. If the third draw still lacks them, stop and report to Rob with the images rather than shipping a drifted character.
-
-- [ ] **Step 3: Generate the closing beat**
-
-Same tool:
-
-```json
-{
-  "model": "nano_banana_pro",
-  "aspect_ratio": "1:1",
-  "count": 2,
-  "prompt": "<<<a44f8f52-6b91-4a36-991b-02d0df8ed1b0>>> knocked out and beaten: the skull lies tipped over on its side, a single deep crack running clean through it, cartoon dizzy stars and little spirals circling above it, sweat droplets flung everywhere, tongue flopped out. It has lost. Same character throughout: bone-white skull, large black eye sockets each with two small white highlight dots, pink tongue, cyan sweat. Heavy black ink outlines, completely flat cel-shaded colour fills, absolutely no gradients, no soft shading, no texture. Pure solid black background. Vintage tattoo-flash and skate-sticker illustration style. Whole skull visible with margin around it.",
-  "medias": [{ "value": "fbb60af6-f9f3-4440-916e-c19cd17ae0cd", "role": "reference_image" }]
-}
-```
-
-Download both, keep the one that most clearly reads as **defeated** while staying the same character, save as `assets-src/beeptest/closing.png`, and record its job ID.
-
-- [ ] **Step 4: Keep the sources out of git**
+- [ ] **Step 2: Keep the sources out of git**
 
 Append to `.gitignore`:
 
@@ -745,7 +711,7 @@ Append to `.gitignore`:
 assets-src/
 ```
 
-- [ ] **Step 5: Write the export script**
+- [ ] **Step 3: Write the export script**
 
 Create `scripts/beeptest-assets.mjs`:
 
@@ -769,9 +735,19 @@ async function webp(file, width, out) {
   await sharp(src(file)).resize({ width }).webp({ quality: 82 }).toFile(path.join(OUT, out));
 }
 
-await webp('hero.png', 1200, 'skull-hero.webp');
-await webp('flame.png', 1000, 'skull-flame.webp');
-await webp('closing.png', 1000, 'skull-closing.webp');
+// The flame and closing beats are generated in Task 8; until they exist this
+// script skips them, so it can be re-run as each source arrives.
+for (const [file, width, out] of [
+  ['hero.png', 1200, 'skull-hero.webp'],
+  ['flame.png', 1000, 'skull-flame.webp'],
+  ['closing.png', 1000, 'skull-closing.webp'],
+]) {
+  if (!fs.existsSync(src(file))) {
+    console.log(`skipped ${out}: ${src(file)} not generated yet`);
+    continue;
+  }
+  await webp(file, width, out);
+}
 
 // /apps/ tile: 4:3 like every other tile (1040x780), skull centred on black.
 await sharp(src('hero.png'))
@@ -812,7 +788,7 @@ fs.writeFileSync(path.join(OUT, 'og-beeptest.png'), new Resvg(svg).render().asPn
 console.log('beeptest assets written');
 ```
 
-- [ ] **Step 6: Run it and check every output**
+- [ ] **Step 4: Run it and check every output**
 
 ```bash
 node scripts/beeptest-assets.mjs
@@ -821,24 +797,22 @@ for f in public/beeptest/assets/img/* public/assets/img/apps/beeptest-skull.webp
 done
 ```
 
-Expected: `beeptest assets written`, then five files:
-- `skull-hero.webp` 1200x1200, `skull-flame.webp` and `skull-closing.webp` 1000x1000, `beeptest-skull.webp` 1040x780
+Expected: two `skipped …: not generated yet` lines (flame and closing), `beeptest assets written`, then three files:
+- `skull-hero.webp` 1200x1200, `beeptest-skull.webp` 1040x780
 - `og-beeptest.png` — `PNG image data, 1200 x 630`
-- every `.webp` **under 300,000 bytes**. If one is over, re-run that line at `quality: 72`.
+- every `.webp` **under 300,000 bytes**. If one is over, lower that output's `quality` to 72.
 
 Then open `og-beeptest.png` and `beeptest-skull.webp` and look at them: text not clipped, skull not cropped.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add .gitignore scripts/beeptest-assets.mjs public/beeptest/assets/img public/assets/img/apps/beeptest-skull.webp
-git commit -m "feat(beeptest): add the skull art and OG card
+git commit -m "feat(beeptest): add the hero skull, apps tile and OG card
 
-Three beats of the same character, reference-locked to the shipped app
-icon: the hero, the flame beat for the maximal-effort panel, and the
-knocked-out closing beat. Treatment carries the arc because the
-reference overrides pose direction (spec B7). 2048px sources stay out
-of git; their job IDs are recorded in provenance.
+The hero is reference-locked to the shipped app icon (spec B5). The
+export script skips the flame and closing beats until Task 8 generates
+them. 2048px sources stay out of git; their job IDs go in provenance.
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
@@ -1688,6 +1662,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ### Task 8: Screen frames, Watch, the maximal-effort panel, and the free first test
 
 **Files:**
+- Create: `assets-src/beeptest/flame.png`, `closing.png` (git-ignored)
+- Create (generated): `public/beeptest/assets/img/skull-flame.webp`, `skull-closing.webp`
 - Create: `src/components/beeptest/ScreenFrames.astro`
 - Create: `src/components/beeptest/Watch.astro`
 - Create: `src/components/beeptest/Effort.astro`
@@ -1697,10 +1673,57 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Test: `tests/e2e/beeptest.spec.ts` (append)
 
 **Interfaces:**
-- Consumes: `BEEPTEST.frames|watch|effort|free` (Task 2); `REQUIRED_WARNING` (Task 2); `skull-flame.webp`, `skull-closing.webp` (Task 4); the Task 6 classes, including `.bt-split` and `.bt-beat`.
-- Produces: `#before-you-start`.
+- Consumes: `BEEPTEST.frames|watch|effort|free` (Task 2); `REQUIRED_WARNING` (Task 2); `scripts/beeptest-assets.mjs` and `assets-src/beeptest/hero.png` (Task 4); Higgsfield Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0` and reference media `fbb60af6-f9f3-4440-916e-c19cd17ae0cd`; the Task 6 classes, including `.bt-split` and `.bt-beat`.
+- Produces: `#before-you-start`; the FLAME and CLOSING Higgsfield job IDs, for Task 11.
 
-- [ ] **Step 1: Write the failing tests**
+Pose direction does not survive the reference; treatment does (B7), so every prompt changes the **treatment** and keeps the character. Load the Higgsfield tools with ToolSearch (`select:mcp__e48d5fc7-a163-4e37-af37-22d97633b367__generate_image,mcp__e48d5fc7-a163-4e37-af37-22d97633b367__jobs_wait`). If `generate_image` refuses with a daily generation limit, or returns an `unlim_choice` question, stop and report BLOCKED — spending decisions are Rob's.
+
+- [ ] **Step 1: Generate the flame beat**
+
+The 23 Sep test draw lost the white highlight dots in the eye sockets, so it is regenerated with that called out. Call `mcp__e48d5fc7-a163-4e37-af37-22d97633b367__generate_image` with:
+
+```json
+{
+  "model": "nano_banana_pro",
+  "aspect_ratio": "1:1",
+  "count": 2,
+  "prompt": "<<<a44f8f52-6b91-4a36-991b-02d0df8ed1b0>>> engulfed in roaring flames. Big stylised cel-shaded fire rising from the bottom of the frame behind and around the skull, drawn in flat layered tones of red, orange and yellow with heavy black ink outlines. The skull's cracks are splitting wider and glowing hot orange along their edges. Same character throughout: bone-white skull, large black eye sockets EACH WITH ITS TWO SMALL WHITE HIGHLIGHT DOTS, pink tongue lolling out, cyan sweat. Completely flat cel-shaded colour fills, absolutely no gradients, no soft shading, no photorealistic fire, no glow blur. Pure solid black background behind the flames. Vintage tattoo-flash and skate-sticker illustration style.",
+  "medias": [{ "value": "fbb60af6-f9f3-4440-916e-c19cd17ae0cd", "role": "reference_image" }]
+}
+```
+
+Poll with `jobs_wait` until both are `completed`. Download both, look at both, and keep the one where **both eye sockets have their highlight dots** and the character matches `hero.png`. Save it as `assets-src/beeptest/flame.png`. Record its job ID: Task 11 needs it.
+
+If neither draw has the dots, run the call once more. If the third draw still lacks them, stop and report to Rob with the images rather than shipping a drifted character.
+
+- [ ] **Step 2: Generate the closing beat**
+
+Same tool:
+
+```json
+{
+  "model": "nano_banana_pro",
+  "aspect_ratio": "1:1",
+  "count": 2,
+  "prompt": "<<<a44f8f52-6b91-4a36-991b-02d0df8ed1b0>>> knocked out and beaten: the skull lies tipped over on its side, a single deep crack running clean through it, cartoon dizzy stars and little spirals circling above it, sweat droplets flung everywhere, tongue flopped out. It has lost. Same character throughout: bone-white skull, large black eye sockets each with two small white highlight dots, pink tongue, cyan sweat. Heavy black ink outlines, completely flat cel-shaded colour fills, absolutely no gradients, no soft shading, no texture. Pure solid black background. Vintage tattoo-flash and skate-sticker illustration style. Whole skull visible with margin around it.",
+  "medias": [{ "value": "fbb60af6-f9f3-4440-916e-c19cd17ae0cd", "role": "reference_image" }]
+}
+```
+
+Download both, keep the one that most clearly reads as **defeated** while staying the same character, save as `assets-src/beeptest/closing.png`, and record its job ID: Task 11 needs it.
+
+- [ ] **Step 3: Export the two beats**
+
+```bash
+node scripts/beeptest-assets.mjs
+for f in public/beeptest/assets/img/skull-flame.webp public/beeptest/assets/img/skull-closing.webp; do
+  printf '%-52s %8s  ' "$f" "$(wc -c < "$f")"; file -b "$f" | cut -c1-60
+done
+```
+
+Expected: no `skipped` lines; both files `1000x1000`, each **under 300,000 bytes**. Look at both.
+
+- [ ] **Step 4: Write the failing tests**
 
 At the top of `tests/e2e/beeptest.spec.ts`, add:
 
@@ -1741,12 +1764,12 @@ test('the flame and closing skulls are lazy-loaded and described', async ({ page
 });
 ```
 
-- [ ] **Step 2: Run them to verify they fail**
+- [ ] **Step 5: Run them to verify they fail**
 
 Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts`
 Expected: the four new tests FAIL; earlier tests pass.
 
-- [ ] **Step 3: Write the four components**
+- [ ] **Step 6: Write the four components**
 
 Create `src/components/beeptest/ScreenFrames.astro`:
 
@@ -1840,7 +1863,7 @@ const { free } = BEEPTEST;
 </section>
 ```
 
-- [ ] **Step 4: Append the styles**
+- [ ] **Step 7: Append the styles**
 
 Append to `src/styles/beeptest.css`:
 
@@ -1866,7 +1889,7 @@ Append to `src/styles/beeptest.css`:
 @media (max-width:820px){ .bt-effort{ grid-template-columns:1fr } }
 ```
 
-- [ ] **Step 5: Put them on the page**
+- [ ] **Step 8: Put them on the page**
 
 In `src/pages/beeptest/landing.astro`, add after the `PacingBar` import:
 
@@ -1895,19 +1918,21 @@ with:
   <FreeFirst />
 ```
 
-- [ ] **Step 6: Run the tests to verify they pass**
+- [ ] **Step 9: Run the tests to verify they pass**
 
 Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts`
 Expected: PASS, every test in the file.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
-git add src/components/beeptest/ScreenFrames.astro src/components/beeptest/Watch.astro src/components/beeptest/Effort.astro src/components/beeptest/FreeFirst.astro src/pages/beeptest/landing.astro src/styles/beeptest.css tests/e2e/beeptest.spec.ts
+git add public/beeptest/assets/img/skull-flame.webp public/beeptest/assets/img/skull-closing.webp src/components/beeptest/ScreenFrames.astro src/components/beeptest/Watch.astro src/components/beeptest/Effort.astro src/components/beeptest/FreeFirst.astro src/pages/beeptest/landing.astro src/styles/beeptest.css tests/e2e/beeptest.spec.ts
 git commit -m "feat(beeptest): add the frames, Watch, warning and free-test sections
 
 The store's risk warning gets a hard inked panel and the flame skull
-rather than small print, verbatim and complete. The five screenshot
+rather than small print, verbatim and complete. The flame and knocked-out
+beats are generated here, reference-locked to the app icon; treatment,
+not pose, carries the arc (spec B7). The five screenshot
 slots say plainly that they are pending.
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
@@ -2212,7 +2237,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Modify: `docs/provenance.md` (append a section)
 
 **Interfaces:**
-- Consumes: `BANNED`, `REQUIRED_WARNING` (Task 2); every page from Tasks 6–10; the job IDs recorded in Task 4.
+- Consumes: `BANNED`, `REQUIRED_WARNING` (Task 2); every page from Tasks 6–10; the job IDs recorded in Task 8.
 - Produces: nothing new. This is the gate.
 
 - [ ] **Step 1: Scan the rendered text, not just the source**
@@ -2266,7 +2291,7 @@ Expected: PASS. If a scan fails, fix the component copy by moving the string int
 
 - [ ] **Step 3: Record provenance**
 
-Append to `docs/provenance.md`, filling the two job IDs recorded in Task 4 Steps 2 and 3:
+Append to `docs/provenance.md`, filling the two job IDs recorded in Task 8 Steps 1 and 2:
 
 ```markdown
 ---
@@ -2298,11 +2323,11 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
 | beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |
 | Art | `skull-hero.webp`, `/assets/img/apps/beeptest-skull.webp`, OG card | own-asset | Higgsfield job `af0e3436-42a0-45d0-acf4-14d6d7d23ee3`, reference-locked to `beep-test` `AppIcon-1024.png` (Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`) | OG text duplicates `hero.lines[0]` by hand (`scripts/beeptest-assets.mjs`) |
-| Art | `skull-flame.webp` | own-asset | Higgsfield job `<ID FROM TASK 4 STEP 2>`, same reference | |
-| Art | `skull-closing.webp` | own-asset | Higgsfield job `<ID FROM TASK 4 STEP 3>`, same reference | |
+| Art | `skull-flame.webp` | own-asset | Higgsfield job `<ID FROM TASK 8 STEP 1>`, same reference | |
+| Art | `skull-closing.webp` | own-asset | Higgsfield job `<ID FROM TASK 8 STEP 2>`, same reference | |
 ```
 
-Replace both `<ID FROM TASK 4 …>` markers with the real job IDs before saving. Confirm none remain:
+Replace both `<ID FROM TASK 8 …>` markers with the real job IDs before saving. Confirm none remain:
 
 Run: `grep -n "ID FROM TASK" docs/provenance.md`
 Expected: no output.
