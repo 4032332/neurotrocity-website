@@ -212,6 +212,15 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `effort.heading` "It is designed to beat you." | presentation copy | Paraphrases the required sentence; reinforces the risk rather than softening it | |
 | beeptest.ts | `free.heading`, `free.body` | verbatim store copy | Store, description, closing line | True per D20 (`navigation-and-shell-design.md`) and the 2026-09-23 source audit: no network code in the app |
 | beeptest.ts | `launch.*` | presentation copy | Spec §5.7, B16, B17 | Consent line satisfies Spam Act 2003 sender, subject and unsubscribe |
+| beeptest.ts | `meta.title` "Before the Beep — beep test training for iPhone and Apple Watch" | presentation copy | Brand (Rob 2026-09-23); platforms per `beep-test-app-spec.md` §2 | |
+| beeptest.ts | `meta.description` | verbatim store copy + status | First sentence: Store, "Promotional text", verbatim. Second, "Coming to iPhone and Apple Watch.": status per B16 | |
+| beeptest.ts | `nav.cta.label`, `hero.primary.label`, `hero.secondary.label` | presentation copy | Spec §5.1, §5.7 | CTA labels; no claim |
+| beeptest.ts | `hero.skullAlt`, `effort.skullAlt`, `free.skullAlt` | presentation copy | Describe the own-asset images below | Rendered as `alt`; scanned by the e2e s5M(8) check |
+| beeptest.ts | `pacing.eyebrow` "Pacing cues", `watch.eyebrow` "Apple Watch", `effort.eyebrow` "Before you start" | verbatim store copy | Store, description, block headings (sentence case) | |
+| beeptest.ts | `watch.heading` "Run from your wrist." | verbatim store copy | Store, description, APPLE WATCH, opening words | |
+| beeptest.ts | `pacing.beepLabel`, `pacing.caption` | presentation copy + fact | Caption values from `beeptest-protocol.ts` (level 6, 11.0 km/h, 6.545455 s) | "shown at real speed" is true: the CSS loop runs at `durationSec` |
+| beeptest.ts | `frames.eyebrow` "The app", `frames.heading`, `frames.pending` "Screenshot pending" | presentation copy | Spec §5.3, B13 | |
+| beeptest.ts | `footer.tagline`, `footer.links` labels | presentation copy + fact | "Made in Australia": `facts.ts` `CONTACT.madeIn` | |
 | beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
 | beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |
 | Art | `skull-hero.webp`, `/assets/img/apps/beeptest-skull.webp`, OG card | own-asset | Higgsfield job `af0e3436-42a0-45d0-acf4-14d6d7d23ee3`, reference-locked to `beep-test` `AppIcon-1024.png` (Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`) | OG text duplicates `hero.lines[0]` by hand (`scripts/beeptest-assets.mjs`) |
