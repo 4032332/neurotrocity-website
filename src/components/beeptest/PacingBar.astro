@@ -1,0 +1,27 @@
+---
+import { BEEPTEST } from '../../content/beeptest';
+import { pacingSchedule } from '../../content/beeptest-protocol';
+
+const { pacing } = BEEPTEST;
+// Real cadence from the protocol table (B8), not an invented rhythm.
+const s = pacingSchedule(pacing.demoLevel);
+---
+<section class="bt-sec" id={pacing.id} aria-labelledby="bt-pacing-h">
+  <div class="bt-wrap">
+    <p class="bt-mono bt-eyebrow">{pacing.eyebrow}</p>
+    <h2 class="bt-h2" id="bt-pacing-h">{pacing.heading}</h2>
+    <p class="bt-body">{pacing.body}</p>
+
+    <figure class="bt-pace" style={`--dur:${s.durationSec}s`}>
+      <div class="bt-track" aria-hidden="true">
+        <div class="bt-rail"></div>
+        {s.cues.map((c) => (
+          <div class="bt-tick" style={`--f:${c.fraction}`}><b>{Math.round(c.fraction * 100)}%</b></div>
+        ))}
+        <div class="bt-tick beep" style="--f:1"><b>{pacing.beepLabel}</b></div>
+        <div class="bt-runner"></div>
+      </div>
+      <figcaption class="bt-mono bt-pace-meta">{pacing.caption(s.level, s.speedKph, s.durationSec)}</figcaption>
+    </figure>
+  </div>
+</section>

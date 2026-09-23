@@ -95,3 +95,34 @@ body{ background:var(--bt-void); color:var(--bt-bone); font-family:var(--body) }
   .bt-impact{ display:none }
   .bt-btn{ transition:none }
 }
+
+/* ── pacing bar (spec §5.2) ──────────────────────────────────────────────
+   --dur is one real shuttle. Every tick flashes on the same period, offset by
+   its own fraction of it, so the flashes stay locked to the runner forever. */
+.bt-pace{ margin:48px 0 0; padding:clamp(20px,3vw,36px); border:3px solid var(--bt-bone); border-radius:10px;
+  background:var(--bt-panel); animation:bt-beep-edge var(--dur) linear infinite; animation-delay:var(--dur) }
+@keyframes bt-beep-edge{ 0%{ border-color:var(--bt-flare); box-shadow:0 0 0 4px var(--bt-flare) }
+  8%,100%{ border-color:var(--bt-bone); box-shadow:none } }
+.bt-track{ position:relative; height:96px; margin-inline:18px }
+.bt-rail{ position:absolute; left:0; right:0; top:50%; height:6px; margin-top:-3px; border-radius:3px; background:var(--bt-line) }
+.bt-runner{ position:absolute; top:50%; left:0; width:26px; height:26px; margin:-13px 0 0 -13px; border-radius:50%;
+  background:var(--bt-bone); border:3px solid var(--bt-ink); box-shadow:0 0 0 3px var(--bt-bone);
+  animation:bt-run var(--dur) linear infinite }
+@keyframes bt-run{ from{ left:0 } to{ left:100% } }
+.bt-tick{ position:absolute; top:0; bottom:0; width:0; left:calc(var(--f) * 100%) }
+.bt-tick::before{ content:''; position:absolute; top:24px; bottom:24px; left:-2px; width:4px; border-radius:2px;
+  background:var(--bt-sweat); animation:bt-flash var(--dur) linear infinite;
+  animation-delay:calc(var(--dur) * var(--f)) }
+.bt-tick b{ position:absolute; bottom:0; left:0; transform:translateX(-50%);
+  font-family:var(--mono); font-size:12px; font-weight:500; color:var(--bt-sweat); white-space:nowrap }
+.bt-tick.beep::before{ top:16px; bottom:16px; left:-4px; width:8px; background:var(--bt-flare) }
+/* The beep's label sits above the track: below it, it met "90%" on a phone and the red bar ran through it. */
+.bt-tick.beep b{ top:-4px; bottom:auto; color:var(--bt-flare); text-transform:uppercase; font-weight:500 }
+@keyframes bt-flash{ 0%{ transform:scaleY(1.9); filter:brightness(1.8) } 10%,100%{ transform:none; filter:none } }
+.bt-pace-meta{ margin-top:22px; color:var(--bt-dim); letter-spacing:.1em }
+
+@media (prefers-reduced-motion:reduce){
+  /* A static diagram: runner parked at the last cue, every mark labelled. */
+  .bt-pace, .bt-runner, .bt-tick::before{ animation:none }
+  .bt-runner{ left:90% }
+}
