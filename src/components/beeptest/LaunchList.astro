@@ -1,0 +1,41 @@
+---
+import { BEEPTEST } from '../../content/beeptest';
+import { buttondownAction } from '../../content/beeptest-signup';
+
+const { launch } = BEEPTEST;
+// A native POST into a new tab, never fetch (spec §5.7, B19). Buttondown shows
+// CAPTCHA, validation errors and confirmation in that tab, while this page,
+// and what was typed, stay exactly as they were. While the username is null
+// the form renders disabled and says the list opens soon.
+const action = buttondownAction(launch.buttondownUsername);
+---
+<section class="bt-sec" id={launch.id} aria-labelledby="bt-launch-h">
+  <div class="bt-wrap">
+    <p class="bt-mono bt-eyebrow">{launch.eyebrow}</p>
+    <h2 class="bt-h2" id="bt-launch-h">{launch.heading}</h2>
+    <p class="bt-body">{launch.body}</p>
+
+    <form class="bt-form" data-bt-signup method="post" action={action ?? undefined}
+          target="_blank" data-opened={launch.opened}>
+      <label for="bt-email">{launch.label}</label>
+      <input id="bt-email" type="email" name="email" autocomplete="email" required
+             placeholder={launch.placeholder} disabled={!action} />
+      <input type="hidden" name="embed" value="1" />
+      <button class="bt-btn" type="submit" disabled={!action}>{launch.button}</button>
+    </form>
+    <p class="bt-status" data-bt-status role="status">{action ? '' : launch.closed}</p>
+    <p class="bt-consent">{launch.consent} <a href="/beeptest/privacy/">{launch.privacyLink}</a>.</p>
+  </div>
+</section>
+
+<script>
+  // Progressive enhancement only: the POST itself is the browser's. The
+  // submit event fires only after native email validation has passed.
+  const form = document.querySelector<HTMLFormElement>('form[data-bt-signup]');
+  const status = document.querySelector<HTMLElement>('[data-bt-status]');
+  if (form && status && form.hasAttribute('action')) {
+    form.addEventListener('submit', () => {
+      status.textContent = form.dataset.opened ?? '';
+    });
+  }
+</script>

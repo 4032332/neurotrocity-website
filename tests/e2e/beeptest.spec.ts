@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { BEEPTEST } from '../../src/content/beeptest';
 import { pacingSchedule } from '../../src/content/beeptest-protocol';
 import { REQUIRED_WARNING } from '../../src/content/beeptest-rules';
+import { buttondownAction } from '../../src/content/beeptest-signup';
 
 const LANDING = '/beeptest/landing/';
 
@@ -154,4 +155,48 @@ test('the flame and closing skulls are lazy-loaded and described', async ({ page
   for (const alt of [BEEPTEST.effort.skullAlt, BEEPTEST.free.skullAlt]) {
     await expect(page.getByAltText(alt)).toHaveAttribute('loading', 'lazy');
   }
+});
+
+test('the launch list is a plain labelled email field', async ({ page }) => {
+  await page.goto(LANDING);
+  const email = page.getByLabel(BEEPTEST.launch.label);
+  await expect(email).toHaveAttribute('type', 'email');
+  await expect(email).toHaveAttribute('name', 'email');
+  await expect(email).toHaveAttribute('autocomplete', 'email');
+  await expect(page.locator('#launch')).toContainText(BEEPTEST.launch.consent);
+  await expect(page.locator('#launch a[href="/beeptest/privacy/"]')).toHaveCount(1);
+});
+
+test('the launch list posts natively to Buttondown when configured, and is visibly closed when not', async ({ page }) => {
+  await page.goto(LANDING);
+  const form = page.locator('form[data-bt-signup]');
+  const action = buttondownAction(BEEPTEST.launch.buttondownUsername);
+  if (action === null) {
+    expect(await form.getAttribute('action')).toBeNull();
+    await expect(page.getByLabel(BEEPTEST.launch.label)).toBeDisabled();
+    await expect(page.locator('[data-bt-status]')).toHaveText(BEEPTEST.launch.closed);
+  } else {
+    await expect(form).toHaveAttribute('action', action);
+    await expect(form).toHaveAttribute('method', 'post');
+    await expect(form).toHaveAttribute('target', '_blank');
+    await expect(form.locator('input[name="embed"]')).toHaveValue('1');
+  }
+});
+
+test('the hero’s first button reaches the launch list', async ({ page }) => {
+  await page.goto(LANDING);
+  await page.getByRole('link', { name: BEEPTEST.hero.primary.label }).click();
+  await expect(page).toHaveURL(/#launch$/);
+  await expect(page.locator('#launch')).toBeInViewport();
+});
+
+test('nothing on the page fetches Buttondown', async ({ page }) => {
+  // B19: Buttondown's docs forbid fetch; CAPTCHA and errors need a real page.
+  const calls: string[] = [];
+  page.on('request', (r) => {
+    if (r.url().includes('buttondown') && ['fetch', 'xhr'].includes(r.resourceType())) calls.push(r.url());
+  });
+  await page.goto(LANDING);
+  await page.waitForLoadState('networkidle');
+  expect(calls).toEqual([]);
 });
