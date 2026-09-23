@@ -2181,18 +2181,160 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
-### Task 11: Generate the flame and closing beats, scan the rendered pages, record provenance, and verify everything
+### Task 11: Scan the rendered pages, record provenance, and verify everything
+
+The flame and closing images are generated in Task 12 (re-sequenced 2026-09-24: Higgsfield's daily generation limit blocked them a third time).
 
 **Files:**
-- Create: `assets-src/beeptest/flame.png`, `closing.png` (git-ignored)
-- Create (generated): `public/beeptest/assets/img/skull-flame.webp`, `skull-closing.webp`
 - Test: `tests/e2e/beeptest.spec.ts` (append)
 - Modify: `tests/e2e/honesty.spec.ts:10`
 - Modify: `docs/provenance.md` (append a section)
 
 **Interfaces:**
-- Consumes: `BANNED`, `REQUIRED_WARNING` (Task 2); every page from Tasks 6–10; the Higgsfield Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`, reference media `fbb60af6-f9f3-4440-916e-c19cd17ae0cd`, `scripts/beeptest-assets.mjs` and `assets-src/beeptest/hero.png` (Task 4).
+- Consumes: `BANNED`, `REQUIRED_WARNING` (Task 2); every page from Tasks 6–10. The flame and closing images still 404 (Task 12); nothing in this task loads them, and the final look notes their absence.
 - Produces: nothing new. This is the gate.
+
+- [ ] **Step 1: Scan the rendered text, not just the source**
+
+The unit test scans `beeptest.ts`. This catches a string typed straight into a component.
+
+At the top of `tests/e2e/beeptest.spec.ts`, change the `beeptest-rules` import to:
+
+```ts
+import { BANNED, REQUIRED_WARNING } from '../../src/content/beeptest-rules';
+```
+
+Append:
+
+```ts
+for (const path of ['/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/', '/beeptest/support/']) {
+  test(`${path} renders no s5M(8)-banned phrase`, async ({ page }) => {
+    await page.goto(path);
+    const text = await page.locator('body').innerText();
+    const alts = await page.locator('img').evaluateAll((els) => els.map((e) => e.getAttribute('alt') ?? ''));
+    for (const { re, why } of BANNED) {
+      expect(`${text}\n${alts.join('\n')}`, `${path}: ${why}`).not.toMatch(re);
+    }
+  });
+}
+
+test('/apps/ shows Before the Beep as coming soon, linking to its page', async ({ page }) => {
+  await page.goto('/apps/');
+  const tile = page.locator('#apps a.app', { hasText: BEEPTEST.name });
+  await expect(tile).toHaveAttribute('href', '/beeptest/landing/');
+  await expect(tile).toContainText('Coming soon');
+});
+```
+
+In `tests/e2e/honesty.spec.ts`, replace:
+
+```ts
+for (const path of ['/', '/rewire/landing/', '/apps/']) {
+```
+
+with:
+
+```ts
+for (const path of ['/', '/rewire/landing/', '/apps/', '/beeptest/landing/']) {
+```
+
+- [ ] **Step 2: Run the new checks**
+
+Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts tests/e2e/honesty.spec.ts`
+Expected: PASS. If a scan fails, fix the component copy by moving the string into `beeptest.ts` and rewording it. Never loosen `BANNED`.
+
+- [ ] **Step 3: Record provenance**
+
+Append to `docs/provenance.md`, leaving the two flame and closing art rows marked pending, since Task 12 generates those images and fills them in:
+
+```markdown
+---
+
+## `/beeptest/*` — Before the Beep (added 2026-09-23)
+
+Spec: `docs/superpowers/specs/2026-09-23-beeptest-landing-design.md`. Every string below lives
+in `src/content/beeptest.ts` unless noted. "Store" means `beep-test/docs/app-store-listing.md`,
+whose copy is already checked line by line against NSW Civil Liability Act s5M(8). The only
+change made to quoted store text is `" - "` set as `" — "`.
+
+| Surface | Item | Kind | Source | Notes |
+|---|---|---|---|---|
+| facts.ts | `PRODUCTS[beeptest].name` "Before the Beep" | fact | Rob 2026-09-23 | Store title decision; the "Beep Test: Shuttle Run Trainer" recommendation was declined |
+| facts.ts | `PRODUCTS[beeptest].description` | verbatim store copy | Store, "Promotional text", first sentence | |
+| facts.ts | `PRODUCTS[beeptest].platforms` "iPhone · Watch" | fact | `beep-test-app-spec.md` §2: v1 ships iPhone and Apple Watch together | |
+| facts.ts | `PRODUCTS[beeptest].status` "coming-soon" | fact | No App Store listing exists (Rob 2026-09-23, spec B16) | Excluded from "use them right now", "the apps we ship" and `makesOffer` |
+| beeptest.ts | `hero.lines`, `hero.payoff` | presentation copy | Rob 2026-09-23 | "cheat the system" changed to "cheat the beep"; spec §5.1 records why |
+| beeptest.ts | `hero.lede` | verbatim store copy | Store, description, opening two sentences | |
+| beeptest.ts | `pacing.heading`, `frames.items[0].caption` | verbatim store copy | Store, Screenshots table, caption 1 | |
+| beeptest.ts | `pacing.body` | verbatim store copy | Store, description, PACING CUES | |
+| PacingBar | Timing: level 6, 11.0 km/h, 6.545455 s; cues at 0.7/0.8/0.9 | fact | `beep-test/protocols.json`, QPS level 6 and `audioDesign.pacingCues.fractionsOfShuttle` | Copied into `beeptest-protocol.ts`; a unit test checks it against the file's own formula and totals. Level 6 is arbitrary and is not presented as any standard |
+| beeptest.ts | `frames.items` (screen and caption) | verbatim store copy | Store, Screenshots table | Frames are marked "Screenshot pending" (B13) |
+| beeptest.ts | `watch.body` | verbatim store copy | Store, description, APPLE WATCH | ⚠️ Watch device items 3a–3h are unrun (`beep-test/docs/device-test-results.md`). Re-verify before release |
+| beeptest.ts | `effort.warning`, `.detail`, `.aid` | verbatim store copy | Store, description, BEFORE YOU START, complete | `effort.warning` is the s5M(8) required sentence (B9) |
+| beeptest.ts | `effort.heading` "It is designed to beat you." | presentation copy | Paraphrases the required sentence; reinforces the risk rather than softening it | |
+| beeptest.ts | `free.heading`, `free.body` | verbatim store copy | Store, description, closing line | True per D20 (`navigation-and-shell-design.md`) and the 2026-09-23 source audit: no network code in the app |
+| beeptest.ts | `launch.*` | presentation copy | Spec §5.7, B16, B17 | Consent line satisfies Spam Act 2003 sender, subject and unsubscribe |
+| beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
+| beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |
+| Art | `skull-hero.webp`, `/assets/img/apps/beeptest-skull.webp`, OG card | own-asset | Higgsfield job `af0e3436-42a0-45d0-acf4-14d6d7d23ee3`, reference-locked to `beep-test` `AppIcon-1024.png` (Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`) | OG text duplicates `hero.lines[0]` by hand (`scripts/beeptest-assets.mjs`) |
+| Art | `skull-flame.webp` | own-asset | **Pending — generated in Task 12**, same reference | |
+| Art | `skull-closing.webp` | own-asset | **Pending — generated in Task 12**, same reference | |
+```
+
+Both art rows for the flame and closing beats stay marked **Pending — generated in Task 12**; Task 12 replaces them with job IDs.
+
+- [ ] **Step 4: Run the whole suite**
+
+```bash
+npm test
+npm run build
+npx playwright test
+```
+
+Expected: `astro check` 0 errors; every Vitest file passes; the build completes; **every** Playwright test passes, the pre-existing ones included. A failure in an existing spec means Task 5 changed something it should not have. Fix it; do not skip the test.
+
+- [ ] **Step 5: Check page weight**
+
+With `npm run preview` running:
+
+```bash
+npx lighthouse http://localhost:4321/beeptest/landing/ --preset=desktop --only-categories=performance,accessibility --quiet --chrome-flags='--headless' --output=json --output-path=./.superpowers/sdd/lh-beeptest-desktop.json
+node -e "const r=require('./.superpowers/sdd/lh-beeptest-desktop.json');for(const k of ['performance','accessibility'])console.log(k,Math.round(r.categories[k].score*100))"
+```
+
+Expected: performance ≥ 90 and accessibility ≥ 95. If performance is below 90, check the hero `webp` size first (Task 4 Step 6 limit).
+
+- [ ] **Step 6: Final look, desktop and phone**
+
+In the browser pane, at desktop width and at 375 wide, scroll the whole of `/beeptest/landing/` once with motion on and once with the pane emulating reduced motion. Then open `/apps/` and each of the three pending pages. Take a desktop and a mobile screenshot of the landing page and send both to Rob.
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add tests/e2e/beeptest.spec.ts tests/e2e/honesty.spec.ts docs/provenance.md
+git commit -m "test(beeptest): scan the rendered pages and record provenance
+
+The s5M(8) list is now checked against what the pages actually render,
+alt text included, as well as against the copy module. Every new string
+and asset traces to a source in provenance.md.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+```
+
+---
+
+### Task 12: Generate the flame and closing beats
+
+The only remaining work: the two skull images the Effort and FreeFirst sections reference. Blocked three times by Higgsfield's daily generation limit (grace period); run when generation is available.
+
+**Files:**
+- Create: `assets-src/beeptest/flame.png`, `closing.png` (git-ignored)
+- Create (generated): `public/beeptest/assets/img/skull-flame.webp`, `skull-closing.webp`
+- Modify: `docs/provenance.md` (the two pending art rows)
+
+**Interfaces:**
+- Consumes: Higgsfield Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`, reference media `fbb60af6-f9f3-4440-916e-c19cd17ae0cd`, `scripts/beeptest-assets.mjs` and `assets-src/beeptest/hero.png` (Task 4); the provenance rows marked **Pending — generated in Task 12** (Task 11).
+- Produces: `skull-flame.webp`, `skull-closing.webp` (1000×1000); the two job IDs in provenance.
 
 Pose direction does not survive the reference; treatment does (B7), so every prompt changes the **treatment** and keeps the character. Load the Higgsfield tools with ToolSearch (`select:mcp__e48d5fc7-a163-4e37-af37-22d97633b367__generate_image,mcp__e48d5fc7-a163-4e37-af37-22d97633b367__jobs_wait`). If `generate_image` refuses with a daily generation limit, or returns an `unlim_choice` question, stop and report BLOCKED — spending decisions are Rob's.
 
@@ -2241,132 +2383,29 @@ done
 
 Expected: no `skipped` lines; both files `1000x1000`, each **under 300,000 bytes**. Look at both.
 
-- [ ] **Step 4: Scan the rendered text, not just the source**
+- [ ] **Step 4: Record the job IDs**
 
-The unit test scans `beeptest.ts`. This catches a string typed straight into a component.
+In `docs/provenance.md`, replace the first `**Pending — generated in Task 12**` (the `skull-flame.webp` row) with `Higgsfield job `<flame job ID>`` and the second (the `skull-closing.webp` row) with `Higgsfield job `<closing job ID>``, using the IDs from Steps 1 and 2.
 
-At the top of `tests/e2e/beeptest.spec.ts`, change the `beeptest-rules` import to:
-
-```ts
-import { BANNED, REQUIRED_WARNING } from '../../src/content/beeptest-rules';
-```
-
-Append:
-
-```ts
-for (const path of ['/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/', '/beeptest/support/']) {
-  test(`${path} renders no s5M(8)-banned phrase`, async ({ page }) => {
-    await page.goto(path);
-    const text = await page.locator('body').innerText();
-    const alts = await page.locator('img').evaluateAll((els) => els.map((e) => e.getAttribute('alt') ?? ''));
-    for (const { re, why } of BANNED) {
-      expect(`${text}\n${alts.join('\n')}`, `${path}: ${why}`).not.toMatch(re);
-    }
-  });
-}
-
-test('/apps/ shows Before the Beep as coming soon, linking to its page', async ({ page }) => {
-  await page.goto('/apps/');
-  const tile = page.locator('#apps a.app', { hasText: BEEPTEST.name });
-  await expect(tile).toHaveAttribute('href', '/beeptest/landing/');
-  await expect(tile).toContainText('Coming soon');
-});
-```
-
-In `tests/e2e/honesty.spec.ts`, replace:
-
-```ts
-for (const path of ['/', '/rewire/landing/', '/apps/']) {
-```
-
-with:
-
-```ts
-for (const path of ['/', '/rewire/landing/', '/apps/', '/beeptest/landing/']) {
-```
-
-- [ ] **Step 5: Run the new checks**
-
-Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts tests/e2e/honesty.spec.ts`
-Expected: PASS. If a scan fails, fix the component copy by moving the string into `beeptest.ts` and rewording it. Never loosen `BANNED`.
-
-- [ ] **Step 6: Record provenance**
-
-Append to `docs/provenance.md`, filling the two job IDs recorded in Steps 1 and 2 of this task:
-
-```markdown
----
-
-## `/beeptest/*` — Before the Beep (added 2026-09-23)
-
-Spec: `docs/superpowers/specs/2026-09-23-beeptest-landing-design.md`. Every string below lives
-in `src/content/beeptest.ts` unless noted. "Store" means `beep-test/docs/app-store-listing.md`,
-whose copy is already checked line by line against NSW Civil Liability Act s5M(8). The only
-change made to quoted store text is `" - "` set as `" — "`.
-
-| Surface | Item | Kind | Source | Notes |
-|---|---|---|---|---|
-| facts.ts | `PRODUCTS[beeptest].name` "Before the Beep" | fact | Rob 2026-09-23 | Store title decision; the "Beep Test: Shuttle Run Trainer" recommendation was declined |
-| facts.ts | `PRODUCTS[beeptest].description` | verbatim store copy | Store, "Promotional text", first sentence | |
-| facts.ts | `PRODUCTS[beeptest].platforms` "iPhone · Watch" | fact | `beep-test-app-spec.md` §2: v1 ships iPhone and Apple Watch together | |
-| facts.ts | `PRODUCTS[beeptest].status` "coming-soon" | fact | No App Store listing exists (Rob 2026-09-23, spec B16) | Excluded from "use them right now", "the apps we ship" and `makesOffer` |
-| beeptest.ts | `hero.lines`, `hero.payoff` | presentation copy | Rob 2026-09-23 | "cheat the system" changed to "cheat the beep"; spec §5.1 records why |
-| beeptest.ts | `hero.lede` | verbatim store copy | Store, description, opening two sentences | |
-| beeptest.ts | `pacing.heading`, `frames.items[0].caption` | verbatim store copy | Store, Screenshots table, caption 1 | |
-| beeptest.ts | `pacing.body` | verbatim store copy | Store, description, PACING CUES | |
-| PacingBar | Timing: level 6, 11.0 km/h, 6.545455 s; cues at 0.7/0.8/0.9 | fact | `beep-test/protocols.json`, QPS level 6 and `audioDesign.pacingCues.fractionsOfShuttle` | Copied into `beeptest-protocol.ts`; a unit test checks it against the file's own formula and totals. Level 6 is arbitrary and is not presented as any standard |
-| beeptest.ts | `frames.items` (screen and caption) | verbatim store copy | Store, Screenshots table | Frames are marked "Screenshot pending" (B13) |
-| beeptest.ts | `watch.body` | verbatim store copy | Store, description, APPLE WATCH | ⚠️ Watch device items 3a–3h are unrun (`beep-test/docs/device-test-results.md`). Re-verify before release |
-| beeptest.ts | `effort.warning`, `.detail`, `.aid` | verbatim store copy | Store, description, BEFORE YOU START, complete | `effort.warning` is the s5M(8) required sentence (B9) |
-| beeptest.ts | `effort.heading` "It is designed to beat you." | presentation copy | Paraphrases the required sentence; reinforces the risk rather than softening it | |
-| beeptest.ts | `free.heading`, `free.body` | verbatim store copy | Store, description, closing line | True per D20 (`navigation-and-shell-design.md`) and the 2026-09-23 source audit: no network code in the app |
-| beeptest.ts | `launch.*` | presentation copy | Spec §5.7, B16, B17 | Consent line satisfies Spam Act 2003 sender, subject and unsubscribe |
-| beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
-| beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |
-| Art | `skull-hero.webp`, `/assets/img/apps/beeptest-skull.webp`, OG card | own-asset | Higgsfield job `af0e3436-42a0-45d0-acf4-14d6d7d23ee3`, reference-locked to `beep-test` `AppIcon-1024.png` (Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`) | OG text duplicates `hero.lines[0]` by hand (`scripts/beeptest-assets.mjs`) |
-| Art | `skull-flame.webp` | own-asset | Higgsfield job `<ID FROM STEP 1>`, same reference | |
-| Art | `skull-closing.webp` | own-asset | Higgsfield job `<ID FROM STEP 2>`, same reference | |
-```
-
-Replace both `<ID FROM STEP …>` markers with the real job IDs before saving. Confirm none remain:
-
-Run: `grep -n "ID FROM STEP" docs/provenance.md`
+Run: `grep -n "Pending — generated in Task 12" docs/provenance.md`
 Expected: no output.
 
-- [ ] **Step 7: Run the whole suite**
+- [ ] **Step 5: Verify on the page**
 
 ```bash
-npm test
-npm run build
-npx playwright test
+npm run build && npx playwright test
 ```
 
-Expected: `astro check` 0 errors; every Vitest file passes; the build completes; **every** Playwright test passes, the pre-existing ones included. A failure in an existing spec means Task 5 changed something it should not have. Fix it; do not skip the test.
+Expected: every test passes. Then, with `npm run preview` running, screenshot `/beeptest/landing/` full-page at 1280 and 375 wide and look at the flame and closing sections: both skulls load, sit on the page black with no visible box edge, and are the same character as the hero.
 
-- [ ] **Step 8: Check page weight**
-
-With `npm run preview` running:
+- [ ] **Step 6: Commit**
 
 ```bash
-npx lighthouse http://localhost:4321/beeptest/landing/ --preset=desktop --only-categories=performance,accessibility --quiet --chrome-flags='--headless' --output=json --output-path=./.superpowers/sdd/lh-beeptest-desktop.json
-node -e "const r=require('./.superpowers/sdd/lh-beeptest-desktop.json');for(const k of ['performance','accessibility'])console.log(k,Math.round(r.categories[k].score*100))"
-```
+git add public/beeptest/assets/img/skull-flame.webp public/beeptest/assets/img/skull-closing.webp docs/provenance.md
+git commit -m "feat(beeptest): add the flame and knocked-out skulls
 
-Expected: performance ≥ 90 and accessibility ≥ 95. If performance is below 90, check the hero `webp` size first (Task 4 Step 6 limit).
-
-- [ ] **Step 9: Final look, desktop and phone**
-
-In the browser pane, at desktop width and at 375 wide, scroll the whole of `/beeptest/landing/` once with motion on and once with the pane emulating reduced motion. Then open `/apps/` and each of the three pending pages. Take a desktop and a mobile screenshot of the landing page and send both to Rob.
-
-- [ ] **Step 10: Commit**
-
-```bash
-git add public/beeptest/assets/img/skull-flame.webp public/beeptest/assets/img/skull-closing.webp tests/e2e/beeptest.spec.ts tests/e2e/honesty.spec.ts docs/provenance.md
-git commit -m "feat(beeptest): add the flame and closing skulls; scan the pages; record provenance
-
-The s5M(8) list is now checked against what the pages actually render,
-alt text included, as well as against the copy module. Every new string
-and asset traces to a source in provenance.md.
+Reference-locked to the app icon; treatment, not pose, carries the arc
+(spec B7). Job IDs recorded in provenance.
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ```
