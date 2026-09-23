@@ -34,3 +34,14 @@ test('the hero skull loads', async ({ page }) => {
   await expect(img).toHaveAttribute('alt', BEEPTEST.hero.skullAlt);
   expect(await img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
 });
+
+test('the speed lines cover the whole hero, edge to edge', async ({ page }) => {
+  await page.goto(LANDING);
+  const [hero, rays] = await Promise.all([
+    page.locator('.bt-hero').boundingBox(),
+    page.locator('.bt-rays').boundingBox(),
+  ]);
+  // base.css caps svg at max-width:100%; the rays must still overhang both sides.
+  expect(rays!.x).toBeLessThanOrEqual(hero!.x);
+  expect(rays!.x + rays!.width).toBeGreaterThanOrEqual(hero!.x + hero!.width);
+});

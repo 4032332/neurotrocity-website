@@ -41,7 +41,7 @@ body{ background:var(--bt-void); color:var(--bt-bone); font-family:var(--body) }
 /* ── hero ──────────────────────────────────────────────────────────────── */
 .bt-hero{ position:relative; overflow:hidden; isolation:isolate; min-height:min(92vh,860px);
   display:flex; align-items:center; padding-block:40px 72px }
-.bt-rays{ position:absolute; inset:-10%; width:120%; height:120%; z-index:-1; fill:var(--bt-bone);
+.bt-rays{ position:absolute; inset:-10%; width:120%; max-width:none; /* base.css caps svg at 100% */ height:120%; z-index:-1; fill:var(--bt-bone);
   opacity:.16; animation:bt-rays 700ms cubic-bezier(.2,.9,.2,1) both }
 @keyframes bt-rays{ from{ opacity:0; transform:scale(1.35) } 30%{ opacity:.55 } to{ opacity:.16; transform:none } }
 /* The impact frame (celebration spec §5.2): one white flash, once, on load. */
