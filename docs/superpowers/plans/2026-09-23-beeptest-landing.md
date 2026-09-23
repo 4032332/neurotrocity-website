@@ -771,9 +771,10 @@ const svg = await satori(
         {
           type: 'div',
           props: {
-            style: { display: 'flex', flexDirection: 'column', marginLeft: 28, color: '#F2EDE4' },
+            // 1200 − 36 − 560 − 28 − 64 = 512px of room; without a width the headline runs off the card.
+            style: { display: 'flex', flexDirection: 'column', marginLeft: 28, width: 512, color: '#F2EDE4' },
             children: [
-              { type: 'div', props: { style: { fontSize: 88, lineHeight: 0.92, letterSpacing: -3 }, children: 'THE BEEP TEST SUCKS.' } },
+              { type: 'div', props: { style: { fontSize: 72, lineHeight: 0.95, letterSpacing: -3 }, children: 'THE BEEP TEST SUCKS.' } },
               { type: 'div', props: { style: { fontSize: 34, marginTop: 30, color: '#FF3B2F' }, children: 'Before the Beep · coming soon' } },
             ],
           },
