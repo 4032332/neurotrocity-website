@@ -227,3 +227,38 @@ test('the free-test section jokes, then states the offer plainly', async ({ page
   // The joke never carries the fact alone: the offer is stated in plain words.
   await expect(section).toContainText('Your first test is free.');
 });
+
+test('the /apps/ Before the Beep tile renders no s5M(8)-banned phrase', async ({ page }) => {
+  // Only this tile: the studio's own copy elsewhere on /apps/ is not bound by s5M(8).
+  await page.goto('/apps/');
+  const tile = page.locator('#apps a.app', { hasText: BEEPTEST.name });
+  const text = await tile.innerText();
+  const alt = (await tile.locator('img').getAttribute('alt')) ?? '';
+  for (const { re, why } of BANNED) {
+    expect(`${text}\n${alt}`, why).not.toMatch(re);
+  }
+});
+
+test('the screenshot placeholders sit two to a row on a phone', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(LANDING);
+  const [a, b] = await Promise.all([
+    page.locator('.bt-frame').nth(0).boundingBox(),
+    page.locator('.bt-frame').nth(1).boundingBox(),
+  ]);
+  expect(Math.abs(a!.y - b!.y), 'first two frames share a row').toBeLessThan(1);
+});
+
+test('keyboard focus on the landing page uses the flame-red ring, not the studio default', async ({ page }) => {
+  await page.goto(LANDING);
+  await page.keyboard.press('Tab'); // the studio skip link, which keeps its own ring
+  await page.keyboard.press('Tab'); // the wordmark
+  const ring = await page.evaluate(() => {
+    const el = document.activeElement as HTMLElement;
+    const cs = getComputedStyle(el);
+    return { cls: el.className, color: cs.outlineColor, width: cs.outlineWidth };
+  });
+  expect(ring.cls).toContain('bt-mark');
+  expect(ring.color).toBe('rgb(255, 59, 47)');
+  expect(ring.width).toBe('3px');
+});

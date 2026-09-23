@@ -164,7 +164,7 @@ async function cutout(file, width) {
   return sharp(rgba, { raw: { width: w, height: h, channels: 4 } });
 }
 
-// The flame and closing beats are generated in Task 8; until they exist this
+// The flame and closing beats are generated in Task 12; until they exist this
 // script skips them, so it can be re-run as each source arrives. The hero is
 // exported specially, cut out of its black square (see cutout() above); the
 // flame and closing beats stay opaque — they sit on plain black with no

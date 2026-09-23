@@ -210,7 +210,7 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `watch.body` | verbatim store copy | Store, description, APPLE WATCH | ⚠️ Watch device items 3a–3h are unrun (`beep-test/docs/device-test-results.md`). Re-verify before release |
 | beeptest.ts | `effort.warning`, `.detail`, `.aid` | verbatim store copy | Store, description, BEFORE YOU START, complete | `effort.warning` is the s5M(8) required sentence (B9) |
 | beeptest.ts | `effort.heading` "It is designed to beat you." | presentation copy | Paraphrases the required sentence; reinforces the risk rather than softening it | |
-| beeptest.ts | `free.heading` "The first hit is always free…", `free.payoff` "…that's how you end up addicted for life." | presentation copy | Rob 2026-09-24 | A joke about the offer; the offer itself is stated plainly in `free.body` |
+| beeptest.ts | `free.heading` "The first hit is always free…", `free.payoff` "…that’s how you end up addicted for life." | presentation copy | Rob 2026-09-24 | A joke about the offer; the offer itself is stated plainly in `free.body` |
 | beeptest.ts | `free.body` | verbatim store copy | Store, description, closing line, complete | True per D20 (`navigation-and-shell-design.md`) and the 2026-09-23 source audit: no network code in the app |
 | beeptest.ts | `launch.*` | presentation copy | Spec §5.7, B16, B17 | Consent line satisfies Spam Act 2003 sender, subject and unsubscribe |
 | beeptest.ts | `name` "Before the Beep" | fact | Rob 2026-09-23, store title decision | Header wordmark; same fact as `PRODUCTS[beeptest].name` |
@@ -225,6 +225,9 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `footer.tagline`, `footer.links` labels | presentation copy + fact | "Made in Australia": `facts.ts` `CONTACT.madeIn` | |
 | beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
 | beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |
+| copy.ts | `APPS_PAGE.apps.art.beeptest.alt` | presentation copy | Describes the own-asset tile image below | Scanned by the s5M(8) unit test |
+| apps.astro | " · Coming soon" after the tile's platforms | fact | `PRODUCTS[beeptest].status` "coming-soon" (B16) | |
+| Art | OG card second line "Before the Beep · coming soon" | presentation copy + fact | Brand (Rob 2026-09-23) and status (B16) | Scanned by the s5M(8) unit test via `scripts/beeptest-assets.mjs` |
 | Art | `skull-hero.webp`, `/assets/img/apps/beeptest-skull.webp`, OG card | own-asset | Higgsfield job `af0e3436-42a0-45d0-acf4-14d6d7d23ee3`, reference-locked to `beep-test` `AppIcon-1024.png` (Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`) | OG text duplicates `hero.lines[0]` by hand (`scripts/beeptest-assets.mjs`) |
 | Art | `skull-flame.webp` | own-asset | **Pending — generated in Task 12**, same reference | |
 | Art | `skull-closing.webp` | own-asset | **Pending — generated in Task 12**, same reference | |

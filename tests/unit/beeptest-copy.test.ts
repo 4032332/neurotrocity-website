@@ -1,7 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { BEEPTEST } from '../../src/content/beeptest';
 import { BANNED, REQUIRED_WARNING } from '../../src/content/beeptest-rules';
-import { RULES } from '../../src/content/facts';
+import fs from 'node:fs';
+import { PRODUCTS, RULES } from '../../src/content/facts';
+import { APPS_PAGE } from '../../src/content/copy';
 
 /** Every string reachable from a value, however deeply nested. */
 function strings(v: unknown): string[] {
@@ -11,10 +13,20 @@ function strings(v: unknown): string[] {
   return [];
 }
 
+// Every surface that describes this app, not just the copy module: the
+// /apps/ tile (PRODUCTS entry and its art alt) and the OG card, whose text is
+// typed into the export script because a .mjs script cannot import this module.
+const product = PRODUCTS.find((p) => p.slug === 'beeptest')!;
+const ogScript = fs.readFileSync(new URL('../../scripts/beeptest-assets.mjs', import.meta.url), 'utf8');
+const OG_TEXT = [...ogScript.matchAll(/children: '([^']+)'/g)].map((m) => m[1]);
+
 // The pacing caption is a function; scan what it actually renders too.
 const ALL = [
   ...strings(BEEPTEST),
   BEEPTEST.pacing.caption(6, 11, 6.545455),
+  ...strings(product),
+  ...strings(APPS_PAGE.apps.art.beeptest),
+  ...OG_TEXT,
 ];
 
 describe('s5M(8) — NSW Civil Liability Act 1998', () => {
@@ -65,6 +77,10 @@ describe('the banned list itself', () => {
 });
 
 describe('provenance traps', () => {
+  it('finds the OG card text it scans (guards the guard)', () => {
+    expect(OG_TEXT).toEqual(['THE BEEP TEST SUCKS.', 'Before the Beep · coming soon']);
+  });
+
   it('never repeats the studio-wide iCloud rule, which is false for this app', () => {
     const icloudRule = RULES[2].body;
     expect(ALL.some((s) => s.includes('through your own iCloud'))).toBe(false);
