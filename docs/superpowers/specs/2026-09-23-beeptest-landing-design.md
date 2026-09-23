@@ -57,7 +57,39 @@ a source. This page inherits that discipline (B11).
 
 Per the app spec §0 rule 2. Metres, practise (verb), organisation.
 
-### 2.4 Performance
+### 2.4 What the app actually does with data — verified, not assumed
+
+Established 23 September by a source audit of the `beep-test` repo, carried out while drafting
+the policy pages. The page may rely on these:
+
+- **No network code exists anywhere in the app.** A repo-wide search for `URLSession`,
+  `URLRequest`, `NWConnection` and `CFNetwork` returns nothing. `BeepCore/Package.swift`
+  declares no external dependencies; every import is a first-party Apple framework.
+- **No analytics, no crash SDK, no accounts.**
+- Location is **speed-only** and each `CLLocation` is discarded after conversion.
+- ARKit retains no frame.
+- The share card's QR encodes **one fixed URL, identical for every user** — it is not a tracking
+  link and must never be described as personalised.
+- Purchases are StoreKit 2, processed by Apple.
+
+So "nothing leaves your phone" is not marketing language here — it is literally true, and
+unusually strong. The page should lean on it.
+
+> **⚠️ The trap.** `src/content/facts.ts` `RULES[2]` reads *"synced privately through your own
+> iCloud."* That is a studio-wide principle and it is **false for this app** — the entitlements
+> contain only HealthKit and an app group, and `SwiftDataSessionStore` builds a plain local
+> `ModelConfiguration`. There is no CloudKit. Do not copy that sentence onto this page or into
+> `beeptest.ts`, however natural it looks sitting in the shared rules.
+>
+> **Ban the claim, not the word.** A first pass at this test banned the string `iCloud`
+> outright and immediately failed a *correct* sentence in the privacy draft: *"If you back up
+> your iPhone — to iCloud or to a computer — that backup is made by iOS and may include this
+> app's data."* That disclosure is true, and required. What must not appear is the assertion
+> that **this app syncs through iCloud** — so B10 matches sync-claim phrasings (`sync`/`synced`
+> /`syncs` within the same sentence as `iCloud`, and the verbatim `RULES[2]` string), not the
+> bare word.
+
+### 2.5 Performance
 
 `package.json` ships a `perf` Lighthouse script. Page weight is something this repo already
 measures, which is why the geometry is coded rather than generated (B6).
@@ -68,7 +100,7 @@ measures, which is why the geometry is coded rather than generated (B6).
 
 | ID | Decision | Why |
 |---|---|---|
-| **B1** | **URL is `/beeptest/`**, not `/beforethebeep/` | Rob, 23 Sep. Matches what people search and type; survives the store title becoming `Beep Test: Shuttle Run Trainer`; short enough to read off a QR card. Keeps "Before the Beep" free to remain the wordmark, so the URL does not pre-empt the open store-title question in `app-store-listing.md` |
+| **B1** | **URL is `/beeptest/`**, not `/beforethebeep/` | Rob, 23 Sep. Matches what people search and type, and is short enough to read off a QR card. The brand name is **Before the Beep** (§11.1) and remains the wordmark; the URL is deliberately the search term rather than the brand, so the page is findable by people who do not yet know the name |
 | **B2** | **Built as Astro pages under `src/pages/beeptest/`**, not hand-written HTML in `public/` | `public/dosetrack/` and `public/dispoint/` are legacy; `src/pages/rewire/` is the current pattern. Astro gives `Base`, `Seo`, JSON-LD and sitemap registration without retyping them |
 | **B3** | **The page wears app clothes, not studio clothes.** `Base` is used with `field={false} spine={false}`, and a `--bt-*` token namespace layers over it | Established precedent: `dosetrack.css` and `dispoint.css` each define a venture identity. The violet cortex field and dendrite spine belong to the studio site and fight this brand |
 | **B4** | **The skull is the test, personified** — not the user failing | Rob, 23 Sep, chose the skull as protagonist over the number and over the last-shuttle concept. The icon's expression is a *giving-up* expression, which reads as defeat if the skull is the user. Casting it as the opponent — cocky, sweating, already beaten everyone once — turns that expression from a liability into the premise |
@@ -83,6 +115,9 @@ measures, which is why the geometry is coded rather than generated (B6).
 | **B13** | **Screens are marked placeholder frames**, not drawn mock-ups | Rob, 23 Sep. `app-store-listing.md` records that real screenshots are not producible yet (placeholder screening screen, §"Not producible yet"). Marked frames are honest and swap out in one commit |
 | **B14** | **New accent token `--flare:#FF3B2F`** for the `/apps/` tile | All four existing accents are taken (volt=DoseTrack, ember=DisPoint, cyan=Rewire, jade=Wall Estate). Flame is already in the app's own celebration vocabulary |
 | **B15** | **Display type is Bricolage Grotesque at 900**, already loaded by `Base` | Big, heavy and brutal, at zero additional font bytes. A new condensed face would cost a download for a page that measures its weight |
+| **B16** | **There is no App Store link. A "coming soon" section with an email capture takes its place** (§5.7) | Rob, 23 Sep. The app has no listing yet, so a badge would link nowhere. A launch-notification list converts the traffic this page gets in the meantime instead of wasting it |
+| **B17** | **The mailing list uses a real email service provider, not the `formsubmit.co` / `web3forms` relays used elsewhere on this site** | Rob, 23 Sep. Those relay a form to an inbox; they are not a list. The **Spam Act 2003 (Cth)** requires consent, sender identification and a *functional unsubscribe facility* on commercial electronic messages — an inbox full of addresses provides none of that, and the launch broadcast is exactly a commercial electronic message. Provider still to be named (§11.3) |
+| **B18** | **The page may claim the app is entirely on-device. It may NOT claim iCloud sync** | Verified 23 Sep by source audit (§2.4). The on-device claim is unusually strong and true. The iCloud claim is **false for this app** and sits in shared site copy, which makes it a live trap |
 
 ---
 
@@ -120,22 +155,35 @@ pacing cues, traced to the store description's lead. Primary CTA is the App Stor
 rendering in a "coming to the App Store" state until the listing exists rather than linking
 nowhere. Secondary CTA anchors to §5.2.
 
-**Headline candidates.** This is the only genuinely new copy on the page, so it is the only
-line needing fresh s5M(8) clearance. Three, checked against §2.1 — none contains a banned term,
-none states who the app is for, none implies the app assesses or clears anyone:
+**The headline — Rob's words, 23 Sep, set in three sizes:**
 
-1. **"It's beaten everyone. Learn its rhythm."** *(recommended)* — states the opponent premise
-   of B4 and the product benefit in one line. "Learn the pace" is not new framing: the store
-   description already says *"the difference between learning the pace and chasing it"*, so it
-   inherits that line's existing clearance.
-2. **"Hear where you should be."** — the safest option, lifted almost directly from the store
-   description's lead (*"This one tells you where you should be"*). Product-led rather than
-   character-led, so it under-uses the skull.
-3. **"Most apps play you a beep and leave you to guess."** — verbatim-adjacent to the store
-   description's opening. Strongest competitive framing, weakest as a hero line at display size.
+> **THE BEEP TEST SUCKS.**
+> It has demonic powers stronger than Final Destination.
+> There's only one way to beat it before it beats you… **cheat the beep.**
 
-Note that "learn its rhythm" is a claim about *the app's function*, not about the test being
-manageable. If it ever drifts toward the latter in a future edit, it engages s5M(8).
+**Set as a sequence, not a block.** Line 1 enormous, line 2 mid-size, line 3 landing on its own
+as the beat before the CTA. One idea, three weights. Setting the whole thing at display size
+would be unreadable and would flatten the joke's timing.
+
+**s5M(8) check.** *"The beep test sucks"* is not merely permitted, it is **helpful** — it
+reinforces difficulty rather than softening it, which is the direction s5M(8) pushes. No line
+states who the app is for, and none implies the app assesses or clears anyone.
+
+**Why "cheat the beep" and not "cheat the system"** (Rob's original). The audience is applicants
+to police, fire, ambulance and defence. `app-store-listing.md` is careful that nothing implies
+the app relates to an agency's *official* assessment — the `ADF`, `police`, `PCT` and `PFA`
+keywords are flagged there as "search terms, not claims". *"Cheat the system"* beside a
+recruitment fitness test can be read as *beat the official assessment dishonestly*, which is a
+reputational risk out of proportion to the joke, and it also undersells the product: the app
+teaches pace, it does not circumvent anything. *"Cheat the beep"* keeps the word, the joke and
+the edge, and points them at the audio cue — which is literally what pacing cues let you do.
+
+**Do not let this drift back.** A future edit that restores "the system", or that extends the
+joke toward "beat the test without training", re-engages both s5M(8) and the agency-association
+problem.
+
+*Minor, noted not blocking:* "Final Destination" is a trademarked franchise. A joke comparison
+is almost certainly nominative fair use.
 
 ### 5.2 The pacing bar — the signature section
 
@@ -174,7 +222,35 @@ rhythm.
 The closing beat. "Your first test is free. No account, no sign-up — nothing leaves your
 phone." — verbatim from the store description.
 
-### 5.7 Footer
+### 5.7 Coming soon, and the launch list (B16, B17)
+
+Replaces the App Store CTA, which would link nowhere. This is the page's conversion goal until
+the app ships, and the hero CTA scrolls here.
+
+A short "not out yet" statement and a single email field. Requirements:
+
+- **One field, one button.** No name, no agency, no goal level. Every extra field costs
+  signups, and under §2.4's posture the less collected the better.
+- **Consent must be explicit and the wording must survive the Spam Act 2003 (Cth):** the visitor
+  is told, at the point of entry, who is sending, what they are signing up to receive (a
+  notification when the app is released), and that they can unsubscribe at any time. No
+  pre-ticked boxes, no bundling the list into a different action.
+- **Real states.** Idle, submitting, success, and a failure state that does not lose what was
+  typed. A silent failure on the one conversion point on the page is the worst available bug.
+- **Accessible**: a real `<label>`, `type="email"`, `autocomplete="email"`, an `aria-live`
+  region for the result.
+- **The provider's own embed script is not used** unless unavoidable — post to its endpoint and
+  keep the styling ours, so the section matches the page rather than arriving in someone else's
+  design (and so it costs nothing against §2.5).
+- **The privacy policy must describe this before it goes live.** The list is the *only* thing on
+  any NeuroTrocity surface that collects personal information for this app, which makes it the
+  one place §2.4's "nothing leaves your phone" needs a careful boundary: that claim is about the
+  **app**, and the page must not let it read as covering the website form.
+
+Provider is not yet chosen (§11.3). Until it is, the form is built complete against a clearly
+marked placeholder endpoint.
+
+### 5.8 Footer
 
 NeuroTrocity mark and tie-back, and links to the four routes in §4 plus the contact address.
 
@@ -244,7 +320,15 @@ are ~3 MB each and are source material, not shippable assets.
   `https://neurotrocity.com/beeptest/landing/`. One line, different repo. Not changed from here
   without Rob asking.
 - **Real screenshots** — blocked upstream on the placeholder screening screen (B13).
-- **App Store link** — the hero CTA stays in its pre-launch state until a listing exists.
+- **App Store link** — replaced by §5.7 until a listing exists (B16).
+- **`app-store-listing.md`** in the `beep-test` repo still presents
+  `Beep Test: Shuttle Run Trainer` as a live title recommendation. Rob declined it on 23 Sep
+  (§11.1); that document should be updated to record the decision.
+- **HealthKit purpose-string mismatch** — found 23 Sep during the policy audit and raised
+  separately. `NSHealthShareUsageDescription` promises VO2max and heart-rate reads the app does
+  not perform. It does not affect this page, but it blocks submission, and the policy drafts
+  deliberately do not repeat the claim — so the app and the policy currently disagree, with the
+  app in the wrong.
 - **`docs/provenance.md` rows** for every new string. Required by §2.2; done as part of the
   build, listed here so it is not forgotten.
 
@@ -252,9 +336,12 @@ are ~3 MB each and are source material, not shippable assets.
 
 ## 11. Open questions
 
-1. **Store title.** `app-store-listing.md` records `Beep Test: Shuttle Run Trainer` as a
-   recommendation explicitly *not* approved. B1 is deliberately compatible with either outcome,
-   so this does not block the page — but the wordmark in §5.1 assumes "Before the Beep".
+1. ~~**Store title.**~~ **Resolved, Rob, 23 Sep: the store title is "Before the Beep."** The
+   `Beep Test: Shuttle Run Trainer` recommendation in `app-store-listing.md` is declined. The
+   wordmark in §5.1, the `PRODUCTS[].name` entry and the JSON-LD `name` all read *Before the
+   Beep*. **`app-store-listing.md` in the `beep-test` repo still presents the alternative as a
+   live recommendation and should be updated to record this decision** — that is a follow-up in
+   the other repo (§10).
 2. **Headline wording.** Three candidates are drafted and s5M(8)-checked in §5.1, with a
    recommendation. Rob picks. The build is not blocked — it proceeds on the recommendation
    unless Rob says otherwise.
