@@ -29,6 +29,7 @@
     "@types/three": "0.185.4",
     "lighthouse": "^13.4.1",
     "satori": "0.33.4",
+    "sharp": "0.34.5",
     "typescript": "^5.9.3",
     "vitest": "^4.1.11"
   }
