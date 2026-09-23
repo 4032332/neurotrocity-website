@@ -6,6 +6,7 @@ const PAGES = [
   { path: '/',                 canonical: 'https://neurotrocity.com/' },
   { path: '/rewire/landing/',  canonical: 'https://neurotrocity.com/rewire/landing/' },
   { path: '/apps/',            canonical: 'https://neurotrocity.com/apps/' },
+  { path: '/beeptest/landing/', canonical: 'https://neurotrocity.com/beeptest/landing/' },
 ];
 
 /** The apps the /apps/ hub lists — Rewire is a service and has its own page. */

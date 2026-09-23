@@ -1,0 +1,47 @@
+---
+// The shell for every /beeptest/* page: the site's Base (SEO, fonts, skip
+// link) with the studio's cortex field and spine left off, and the app's own
+// identity on top. Spec B2, B3.
+import Base from '../../layouts/Base.astro';
+import '../../styles/beeptest.css';
+import { BEEPTEST } from '../../content/beeptest';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  jsonLd?: Record<string, unknown>;
+  /** Pages whose content is not written yet stay out of search results. */
+  noindex?: boolean;
+}
+
+const { title, description, path, jsonLd, noindex = false } = Astro.props;
+const { name, nav, footer } = BEEPTEST;
+---
+<Base title={title} description={description} path={path} ogImage="/beeptest/assets/img/og-beeptest.png" jsonLd={jsonLd}>
+  <Fragment slot="head">
+    <meta name="theme-color" content="#000000" />
+    {noindex && <meta name="robots" content="noindex" />}
+  </Fragment>
+
+  <Fragment slot="nav">
+    <div class="bt-bar">
+      <a class="bt-mark" href="/beeptest/landing/">{name}</a>
+      <a class="bt-navcta" href={nav.cta.href}>{nav.cta.label}</a>
+    </div>
+  </Fragment>
+
+  <slot />
+
+  <Fragment slot="footer">
+    <footer class="bt-foot">
+      <div class="bt-wrap">
+        <p>{footer.tagline}</p>
+        <nav aria-label={name}>
+          {footer.links.map((l) => <a href={l.href}>{l.label}</a>)}
+          <a href={`mailto:${footer.email}`}>{footer.email}</a>
+        </nav>
+      </div>
+    </footer>
+  </Fragment>
+</Base>

@@ -1,0 +1,42 @@
+---
+import { BEEPTEST } from '../../content/beeptest';
+
+const { hero } = BEEPTEST;
+
+// Manga speed lines: thin wedges converging on the centre. Computed at build
+// time and deterministic, so the SVG is identical on every build.
+const C = 500;
+const at = (angle: number, r: number) =>
+  `${(C + Math.cos(angle) * r).toFixed(1)},${(C + Math.sin(angle) * r).toFixed(1)}`;
+const RAYS = Array.from({ length: 64 }, (_, i) => {
+  const a = (i / 64) * Math.PI * 2;
+  const spread = i % 3 === 0 ? 0.034 : 0.016;
+  const inner = 250 + ((i * 37) % 110);
+  return `${at(a - spread, 900)} ${at(a + spread, 900)} ${at(a, inner)}`;
+});
+---
+<section class="bt-hero" aria-labelledby="bt-hero-h">
+  <svg class="bt-rays" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    {RAYS.map((points) => <polygon points={points} />)}
+  </svg>
+  <div class="bt-impact" aria-hidden="true"></div>
+
+  <div class="bt-wrap bt-hero-grid">
+    <div>
+      <h1 class="bt-h1" id="bt-hero-h">
+        <span class="l1">{hero.lines[0]}</span>
+        <span class="l2">{hero.lines[1]}</span>
+        <span class="l3">{hero.lines[2]} <em>{hero.payoff}</em></span>
+      </h1>
+      <p class="bt-lede">{hero.lede}</p>
+      <div class="bt-cta">
+        <a class="bt-btn" href={hero.primary.href}>{hero.primary.label}</a>
+        <a class="bt-btn ghost" href={hero.secondary.href}>{hero.secondary.label}</a>
+      </div>
+    </div>
+    <div class="bt-skull-wrap">
+      <img class="bt-skull" src="/beeptest/assets/img/skull-hero.webp" alt={hero.skullAlt}
+           width="1200" height="1200" fetchpriority="high" decoding="async" />
+    </div>
+  </div>
+</section>

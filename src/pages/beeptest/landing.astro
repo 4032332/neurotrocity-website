@@ -1,0 +1,23 @@
+---
+import BeeptestLayout from '../../components/beeptest/BeeptestLayout.astro';
+import Hero from '../../components/beeptest/Hero.astro';
+import { BEEPTEST } from '../../content/beeptest';
+
+const { name, meta } = BEEPTEST;
+
+// No offers, ratings or download URL: there is nothing to download yet (B16).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name,
+  operatingSystem: 'iOS, watchOS',
+  applicationCategory: 'HealthApplication',
+  description: meta.description,
+  url: `https://neurotrocity.com${meta.path}`,
+  inLanguage: 'en-AU',
+  author: { '@type': 'Organization', name: 'NeuroTrocity', url: 'https://neurotrocity.com' },
+};
+---
+<BeeptestLayout title={meta.title} description={meta.description} path={meta.path} jsonLd={jsonLd}>
+  <Hero />
+</BeeptestLayout>
