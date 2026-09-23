@@ -1126,6 +1126,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Test: `tests/e2e/beeptest.spec.ts`
 - Modify: `tests/e2e/seo.spec.ts:5-9`
 - Modify: `tests/e2e/routes.spec.ts:3-10`
+- Modify: `tests/e2e/a11y-base.spec.ts:12-37`
 
 **Interfaces:**
 - Consumes: `BEEPTEST` (Task 2); `skull-hero.webp`, `og-beeptest.png` (Task 4).
@@ -1175,27 +1176,45 @@ test('the hero skull loads', async ({ page }) => {
   expect(await img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
 });
 
-test('no horizontal overflow at 360px', async ({ page }) => {
-  await page.setViewportSize({ width: 360, height: 780 });
-  await page.goto(LANDING);
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(overflow).toBeLessThanOrEqual(0);
-});
+```
 
-test('every interactive element shows a focus ring', async ({ page }) => {
-  await page.goto(LANDING);
-  const count = await page.locator('a[href], button:not([disabled]), input:not([disabled])').count();
-  for (let i = 0; i < count; i++) {
-    await page.keyboard.press('Tab');
-    const outline = await page.evaluate(() => {
-      const cs = getComputedStyle(document.activeElement as Element);
-      return `${cs.outlineStyle} ${cs.outlineWidth}`;
-    });
-    expect(outline).not.toMatch(/none|0px/);
-  }
-});
+In `tests/e2e/a11y-base.spec.ts`, run the focus-ring and 360px checks over the new page too,
+rather than copying them. Replace the whole `every interactive element has a visible focus ring`
+test **and** the `no horizontal overflow at 360px` test (lines 12–37, including the comment
+block above the focus-ring test) with:
+
+```ts
+// Reaching each element via a real keyboard Tab keeps focus "keyboard-initiated",
+// so :focus-visible reliably matches (Chromium does not always apply it to
+// programmatic element.focus() on non-text elements).
+for (const path of ['/', '/beeptest/landing/']) {
+  test(`${path} every interactive element has a visible focus ring`, async ({ page }) => {
+    await page.goto(path);
+    // Only what Tab can reach. Disabled controls and hidden inputs are skipped
+    // by Tab, so counting them would tab past the last element and fail.
+    const els = page.locator(
+      'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), [tabindex="0"]',
+    );
+    const count = await els.count();
+    for (let i = 0; i < count; i++) {
+      await page.keyboard.press('Tab');
+      const outline = await page.evaluate(() => {
+        const cs = getComputedStyle(document.activeElement as Element);
+        return cs.outlineStyle + ' ' + cs.outlineWidth;
+      });
+      expect(outline).not.toMatch(/none|0px/);
+    }
+  });
+
+  test(`${path} has no horizontal overflow at 360px`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto(path);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
 ```
 
 In `tests/e2e/seo.spec.ts`, add a row to `PAGES`:
@@ -1218,7 +1237,7 @@ In `tests/e2e/routes.spec.ts`, add `'/beeptest/landing/'` to `MUST_RESOLVE`, aft
 
 - [ ] **Step 2: Run them to verify they fail**
 
-Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts tests/e2e/routes.spec.ts tests/e2e/seo.spec.ts`
+Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts tests/e2e/routes.spec.ts tests/e2e/seo.spec.ts tests/e2e/a11y-base.spec.ts`
 Expected: the `/beeptest/landing/` tests FAIL with 404s; every existing test still passes.
 
 - [ ] **Step 3: Write the identity stylesheet**
@@ -1460,7 +1479,7 @@ const jsonLd = {
 
 - [ ] **Step 7: Run the tests to verify they pass**
 
-Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts tests/e2e/routes.spec.ts tests/e2e/seo.spec.ts`
+Run: `npm run build && npx playwright test tests/e2e/beeptest.spec.ts tests/e2e/routes.spec.ts tests/e2e/seo.spec.ts tests/e2e/a11y-base.spec.ts`
 Expected: PASS, all of them. The `/beeptest/landing/` rows in `seo.spec.ts` confirm the canonical, a complete OG card, a 1200×630 PNG `og:image` and valid JSON-LD.
 
 - [ ] **Step 8: Look at it**
@@ -1470,7 +1489,7 @@ Run `npm run preview`, open `http://localhost:4321/beeptest/landing/` in the bro
 - [ ] **Step 9: Commit**
 
 ```bash
-git add src/styles/beeptest.css src/components/beeptest/BeeptestLayout.astro src/components/beeptest/Hero.astro src/pages/beeptest/landing.astro tests/e2e/beeptest.spec.ts tests/e2e/seo.spec.ts tests/e2e/routes.spec.ts
+git add src/styles/beeptest.css src/components/beeptest/BeeptestLayout.astro src/components/beeptest/Hero.astro src/pages/beeptest/landing.astro tests/e2e/beeptest.spec.ts tests/e2e/seo.spec.ts tests/e2e/routes.spec.ts tests/e2e/a11y-base.spec.ts
 git commit -m "feat(beeptest): add the layout, identity and hero
 
 The page wears app clothes: Base with the studio field and spine off,
