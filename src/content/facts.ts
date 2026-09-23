@@ -3,13 +3,16 @@
 export type Provenance = 'fictional';
 
 interface ProductBase {
-  slug: 'dosetrack' | 'dispoint' | 'rewire' | 'wallestate';
+  slug: 'dosetrack' | 'dispoint' | 'rewire' | 'wallestate' | 'beeptest';
   name: string;          // display name, verbatim from the live site's footer / venture rows
   description: string;   // verbatim from the current live site
   platforms: string;
-  accent: 'volt' | 'ember' | 'cyan' | 'jade';
+  accent: 'volt' | 'ember' | 'cyan' | 'jade' | 'flare';
   /** Only for the things on /apps/. Rewire is a service and omits it. */
   appCategory?: 'MobileApplication' | 'WebApplication';
+  /** Set while an app has no App Store listing. /apps/ labels its tile, and
+   *  every sentence claiming you can use our apps right now leaves it out. */
+  status?: 'coming-soon';
 }
 
 /** A product carries either a site-relative `path` or an off-site `url`, never both, never neither. */
@@ -26,6 +29,9 @@ export const productUrl = (p: Product): string =>
 /** How it reads in a footer directory: a path here, a host elsewhere. */
 export const productLabel = (p: Product): string =>
   p.url ? new URL(p.url).host : `/${p.slug}`;
+
+/** Something a visitor can actually get today. */
+export const isReleased = (p: Product): boolean => p.status !== 'coming-soon';
 
 export interface DemoModel {
   slug: string;
@@ -51,6 +57,10 @@ export const PRODUCTS: Product[] = [
   { slug: 'wallestate', name: 'Wall Estate', url: 'https://wallestate.neurotrocity.com/',
     accent: 'jade', platforms: 'Web', appCategory: 'WebApplication',
     description: 'The calendar every agent hands out at Christmas, with your face on it and your listings in it — the whole folder done in one go.' },
+  { slug: 'beeptest', name: 'Before the Beep', path: '/beeptest/landing/', accent: 'flare',
+    platforms: 'iPhone · Watch', appCategory: 'MobileApplication', status: 'coming-soon',
+    // Store promotional text, first sentence, verbatim (beep-test/docs/app-store-listing.md).
+    description: 'Pacing cues at 70, 80 and 90 percent of every shuttle, so you learn the pace instead of guessing it.' },
 ];
 
 export const DEMOS: DemoModel[] = [

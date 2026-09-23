@@ -1,16 +1,28 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCTS, DEMOS, RULES, CONTACT, ENGAGEMENT, REWIRE, SKILL_PACK } from '../../src/content/facts';
-import { APPS } from '../../src/content/copy';
+import { PRODUCTS, DEMOS, RULES, CONTACT, ENGAGEMENT, REWIRE, SKILL_PACK, isReleased } from '../../src/content/facts';
+import { APPS, APPS_PAGE, HOME } from '../../src/content/copy';
 
 describe('facts', () => {
-  it('has exactly the four real products', () => {
-    expect(PRODUCTS.map(p => p.slug).sort()).toEqual(['dispoint', 'dosetrack', 'rewire', 'wallestate']);
+  it('has exactly the five real products', () => {
+    expect(PRODUCTS.map(p => p.slug).sort()).toEqual(['beeptest', 'dispoint', 'dosetrack', 'rewire', 'wallestate']);
   });
 
   it('names every product with its live-site display name', () => {
     expect(PRODUCTS.map(p => [p.slug, p.name])).toEqual([
       ['dosetrack', 'DoseTrack'], ['dispoint', 'DisPoint'], ['rewire', 'Rewire'], ['wallestate', 'Wall Estate'],
+      ['beeptest', 'Before the Beep'],
     ]);
+  });
+
+  it('marks only Before the Beep as not yet released', () => {
+    expect(PRODUCTS.filter(p => !isReleased(p)).map(p => p.slug)).toEqual(['beeptest']);
+  });
+
+  it('never tells a visitor they can use an app today that has no listing', () => {
+    // Home: "… of them are ours, and you can open and use them right now."
+    expect(JSON.stringify(HOME)).toContain('Three of them are ours');
+    // /apps/: "The apps we ship: …"
+    expect(APPS_PAGE.meta.description).not.toContain('Before the Beep');
   });
 
   it('carries exactly one of path/url per product, never both, never neither', () => {

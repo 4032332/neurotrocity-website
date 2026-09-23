@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { PRODUCTS, CONTACT, productUrl } from '../content/facts';
+import { PRODUCTS, CONTACT, productUrl, isReleased } from '../content/facts';
 import { HOME } from '../content/copy';
 
 const { meta, nav, hero, build, contact, footer } = HOME;
@@ -13,7 +13,8 @@ const jsonLd = {
   email: CONTACT.general,
   description: meta.jsonLdDescription,
   address: { '@type': 'PostalAddress', addressCountry: 'AU' },
-  makesOffer: PRODUCTS.map((p) => ({
+  // An app with no listing is not yet on offer.
+  makesOffer: PRODUCTS.filter(isReleased).map((p) => ({
     '@type': 'Offer',
     // Rewire is a service; the two apps are software.
     itemOffered: { '@type': p.slug === 'rewire' ? 'Service' : 'SoftwareApplication', name: p.name, url: productUrl(p) },

@@ -261,7 +261,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
               <h3>{a.name}</h3>
               <p>{a.description}</p>
               <span class="row">
-                <span class="mt">{a.platforms}</span>
+                <span class="mt">{a.platforms}{a.status === 'coming-soon' && ' · Coming soon'}</span>
                 <span class="go">{apps.open} <span class="arw" aria-hidden="true">→</span></span>
               </span>
             </span>

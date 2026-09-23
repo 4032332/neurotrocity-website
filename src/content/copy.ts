@@ -7,7 +7,7 @@
  * and asserts no new fact — no numbers, no clients, no outcomes, no guarantees
  * beyond RULES and ENGAGEMENT.
  */
-import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, productHref, productLabel, type Provenance } from './facts';
+import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, productHref, productLabel, isReleased, type Provenance } from './facts';
 
 const rewire = PRODUCTS.find((p) => p.slug === 'rewire')!;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
@@ -88,9 +88,9 @@ export const HOME = {
         n: 'Service 02',
         title: 'iOS & web apps',
         href: '/apps/',
-        // Count derives from APPS — three now that Wall Estate has landed.
-        // Never type the numeral; it would be false the moment APPS changes.
-        blurb: `Shipped on iPhone, Apple Watch and the web. ${asWord(APPS.length)} of them are ours, and you can open and use them right now.`,
+        // Count derives from the released APPS. Never type the numeral, and
+        // never count an app with no listing: "use them right now" would be false.
+        blurb: `Shipped on iPhone, Apple Watch and the web. ${asWord(APPS.filter(isReleased).length)} of them are ours, and you can open and use them right now.`,
         accent: 'cyan',
       },
     ] satisfies Service[],
@@ -216,12 +216,13 @@ export const REWIRE_PAGE = {
  * Presentation strings for /apps/. Same rule as HOME and REWIRE_PAGE: every
  * fact — app names, paths, descriptions, platforms, the four rules, the email
  * — is interpolated from `facts.ts`. Nothing here asserts a new fact: no
- * download counts, no reviews, no roadmap, no unreleased apps.
+ * download counts, no reviews, no roadmap. An unreleased app appears only as
+ * a tile labelled "Coming soon", and is left out of "the apps we ship".
  */
 export const APPS_PAGE = {
   meta: {
     title: 'Apps — NeuroTrocity',
-    description: `App design and software engineering for smart devices and the web. The apps we ship: ${listJoin(APPS.map((a) => a.name))}.`,
+    description: `App design and software engineering for smart devices and the web. The apps we ship: ${listJoin(APPS.filter(isReleased).map((a) => a.name))}.`,
     canonical: 'https://neurotrocity.com/apps/',
   },
 
@@ -274,6 +275,11 @@ export const APPS_PAGE = {
       wallestate: {
         src: '/assets/img/apps/wallestate-sheets.webp',
         alt: 'A finished Wall Estate calendar — a listing photo, the agent’s details and a two-year month grid — with more sheets fanned behind it',
+        fit: 'cover',
+      },
+      beeptest: {
+        src: '/assets/img/apps/beeptest-skull.webp',
+        alt: 'The Before the Beep skull, drawn in thick black ink: cracked, sweating, tongue out',
         fit: 'cover',
       },
     } as Record<string, { src: string; alt: string; fit: 'contain' | 'cover' }>,
