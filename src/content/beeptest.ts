@@ -92,9 +92,12 @@ export const BEEPTEST = {
   },
 
   free: {
+    // Rob's words, 24 Sep 2026, set as heading + punchline like the hero.
+    // The plain offer stays in `body`, so the joke never carries the fact alone.
+    heading: 'The first hit is always free…',
+    payoff: '…that’s how you end up addicted for life.',
     // Store description, closing line, verbatim. D20: the first test is free.
-    heading: 'Your first test is free.',
-    body: 'No account, no sign-up — nothing leaves your phone.',
+    body: 'Your first test is free. No account, no sign-up — nothing leaves your phone.',
     skullAlt: 'The skull knocked flat and cracked through, with cartoon stars circling it',
   },
 

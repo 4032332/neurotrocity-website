@@ -218,3 +218,12 @@ test('/apps/ shows Before the Beep as coming soon, linking to its page', async (
   await expect(tile).toHaveAttribute('href', '/beeptest/landing/');
   await expect(tile).toContainText('Coming soon');
 });
+
+test('the free-test section jokes, then states the offer plainly', async ({ page }) => {
+  await page.goto(LANDING);
+  const section = page.locator('section', { has: page.locator('#bt-free-h') });
+  await expect(section.locator('h2')).toHaveText(BEEPTEST.free.heading);
+  await expect(section.locator('.bt-payoff')).toHaveText(BEEPTEST.free.payoff);
+  // The joke never carries the fact alone: the offer is stated in plain words.
+  await expect(section).toContainText('Your first test is free.');
+});

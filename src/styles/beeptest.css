@@ -158,3 +158,7 @@ body{ background:var(--bt-void); color:var(--bt-bone); font-family:var(--body) }
 .bt-status{ margin:14px 0 0; min-height:1.5em; font-weight:800; color:var(--bt-sweat) }
 .bt-consent{ margin:10px 0 0; max-width:60ch; font-size:14px; line-height:1.55; color:var(--bt-dim) }
 .bt-consent a{ color:var(--bt-bone) }
+
+/* ── free first test: the punchline under the heading (Rob, 2026-09-24) ─── */
+.bt-payoff{ margin:14px 0 0; max-width:22ch; font-family:var(--display); font-weight:900;
+  font-size:clamp(22px,2.6vw,34px); line-height:1.1; letter-spacing:-.02em; color:var(--bt-flare) }
