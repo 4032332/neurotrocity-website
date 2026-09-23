@@ -118,6 +118,8 @@ measures, which is why the geometry is coded rather than generated (B6).
 | **B16** | **There is no App Store link. A "coming soon" section with an email capture takes its place** (§5.7) | Rob, 23 Sep. The app has no listing yet, so a badge would link nowhere. A launch-notification list converts the traffic this page gets in the meantime instead of wasting it |
 | **B17** | **The mailing list uses a real email service provider, not the `formsubmit.co` / `web3forms` relays used elsewhere on this site** | Rob, 23 Sep. Those relay a form to an inbox; they are not a list. The **Spam Act 2003 (Cth)** requires consent, sender identification and a *functional unsubscribe facility* on commercial electronic messages — an inbox full of addresses provides none of that, and the launch broadcast is exactly a commercial electronic message. **Provider: Buttondown** (Rob, 23 Sep), chosen because it accepts a plain HTML form POST, so §5.7's form keeps our styling with no third-party script |
 | **B18** | **The page may claim the app is entirely on-device. It may NOT claim iCloud sync** | Verified 23 Sep by source audit (§2.4). The on-device claim is unusually strong and true. The iCloud claim is **false for this app** and sits in shared site copy, which makes it a live trap |
+| **B19** | **The launch list is a native HTML form POST into a new tab — never `fetch`** | Buttondown's docs: the endpoint "must be the `action` of a standard HTML `<form>`"; do not call it with `fetch`, because subscribers "sometimes need to follow Buttondown's response to complete CAPTCHA verification or correct a validation error". A new tab keeps this page, and what was typed, intact (§5.7) |
+| **B20** | **The free-test heading is Rob's joke; the offer is still stated plainly beneath it** | Rob, 24 Sep: *"the first hit is always free... that's how you end up addicted for life"*, replacing "Your first test is free." as the heading. That line moves into the body, verbatim, so a reader who misses the joke still reads the offer, and the page keeps a plain, sourced statement of what is free (D20) |
 
 ---
 
@@ -223,8 +225,14 @@ rhythm.
 
 ### 5.6 Free first test
 
-The closing beat. "Your first test is free. No account, no sign-up — nothing leaves your
-phone." — verbatim from the store description.
+The closing beat, set like the hero — heading, then a flame-red punchline (B20):
+
+> **THE FIRST HIT IS ALWAYS FREE…**
+> …that’s how you end up addicted for life.
+
+Then, in plain words, the store description's closing line, verbatim and complete: "Your first
+test is free. No account, no sign-up — nothing leaves your phone." The joke never carries the
+fact on its own.
 
 ### 5.7 Coming soon, and the launch list (B16, B17)
 
