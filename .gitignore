@@ -4,3 +4,7 @@ node_modules/
 dist/
 .astro/
 test-results/
+
+# 2048px Higgsfield sources for /beeptest/ — ~3 MB each. The web exports in
+# public/beeptest/ are committed; job IDs in docs/provenance.md re-fetch these.
+assets-src/
