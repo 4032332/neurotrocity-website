@@ -137,7 +137,11 @@ public/beeptest/assets/img/          hero, flame and closing skulls, og card
 Registered by adding one entry to `PRODUCTS` in `src/content/facts.ts`, which yields the
 `/apps/` tile and the sitemap row together (`sitemap.xml.ts` derives from `PRODUCTS[].path`).
 This requires extending the `accent` union with `'flare'` and adding art to `APPS_PAGE.art`
-in `copy.ts`, keyed `beeptest`, using the app icon at `data-fit="contain"`.
+in `copy.ts`, keyed `beeptest`: the hero skull letterboxed on black into the 1040×780 frame every
+tile uses, at `data-fit="cover"`. A release status (`status: 'coming-soon'`, `isReleased()`)
+labels the tile and keeps the app out of the two live sentences that would otherwise become
+false: the home page's *"you can open and use them right now"* and `/apps/`'s *"the apps we
+ship"*.
 
 The OG card is a hand-made 1200×630 asset under `public/beeptest/assets/img/`, matching how
 DoseTrack and DisPoint do it. The satori generator at `src/pages/og/[page].png.ts` renders the
@@ -235,8 +239,14 @@ A short "not out yet" statement and a single email field. Requirements:
   is told, at the point of entry, who is sending, what they are signing up to receive (a
   notification when the app is released), and that they can unsubscribe at any time. No
   pre-ticked boxes, no bundling the list into a different action.
-- **Real states.** Idle, submitting, success, and a failure state that does not lose what was
-  typed. A silent failure on the one conversion point on the page is the worst available bug.
+- **A native form POST into a new tab — never `fetch`** (B19). Buttondown's documentation says
+  the endpoint *"must be the `action` of a standard HTML `<form>`"* and not to call it with
+  `fetch`, because *"subscribers sometimes need to follow Buttondown's response to complete
+  CAPTCHA verification or correct a validation error."* So success, CAPTCHA and server-side
+  validation errors are shown by Buttondown, in the new tab. What this page owns: native
+  `required`/`type="email"` validation before anything is sent; a "finish up in the new tab"
+  status after submit; and — because the POST opens a new tab — the page, and what was typed,
+  stay exactly as they were. That is how "a failure never loses what was typed" is met.
 - **Accessible**: a real `<label>`, `type="email"`, `autocomplete="email"`, an `aria-live`
   region for the result.
 - **The provider's own embed script is not used** unless unavoidable — post to its endpoint and
@@ -277,7 +287,8 @@ already loaded by `Base`.
 ## 7. The three stub routes
 
 `privacy`, `eula` and `support` ship as **real, styled pages at the correct URLs** with a body
-that is explicitly marked as pending. They are not written in this pass: the legal text needs
+that is explicitly marked as pending. While pending they are `noindex` and left out of the
+sitemap; the commit that lands a page's reviewed text drops both. They are not written in this pass: the legal text needs
 Rob's review, and writing it before the page shape settles wastes it.
 
 **This is a submission blocker, recorded here so it is not discovered late:** App Store Connect
