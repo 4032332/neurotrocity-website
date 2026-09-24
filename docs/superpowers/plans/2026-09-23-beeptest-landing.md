@@ -2327,6 +2327,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 The only remaining work: the two skull images the Effort and FreeFirst sections reference. Blocked three times by Higgsfield's daily generation limit (grace period); run when generation is available.
 
+The page already shipped without them (spec B21): `Effort.astro` and `FreeFirst.astro` render each image only when `hasBeeptestArt(file)` is true, so no code changes here. Once the two webps exist, the next build shows them, and `every image on the landing page actually loads` and `the flame and closing skulls show once generated…` check they load.
+
 **Files:**
 - Create: `assets-src/beeptest/flame.png`, `closing.png` (git-ignored)
 - Create (generated): `public/beeptest/assets/img/skull-flame.webp`, `skull-closing.webp`
