@@ -217,7 +217,7 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `meta.title` "Before the Beep — beep test training for iPhone and Apple Watch" | presentation copy | Brand (Rob 2026-09-23); platforms per `beep-test-app-spec.md` §2 | |
 | beeptest.ts | `meta.description` | verbatim store copy + status | First sentence: Store, "Promotional text", verbatim. Second, "Coming to iPhone and Apple Watch.": status per B16 | |
 | beeptest.ts | `nav.cta.label`, `hero.primary.label`, `hero.secondary.label` | presentation copy | Spec §5.1, §5.7 | CTA labels; no claim |
-| beeptest.ts | `hero.skullAlt`, `effort.skullAlt`, `free.skullAlt` | presentation copy | Describe the own-asset images below | Rendered as `alt`; scanned by the e2e s5M(8) check |
+| beeptest.ts | `hero.skullAlt`, `effort.skullAlt`, `free.skullAlt` | presentation copy | Describe the own-asset images below | Rendered as `alt` (flame and closing only once generated, B21); all three scanned by the unit s5M(8) check, rendered ones by the e2e check too |
 | beeptest.ts | `pacing.eyebrow` "Pacing cues", `watch.eyebrow` "Apple Watch", `effort.eyebrow` "Before you start" | presentation copy | Store, description, block headings `PACING CUES`, `APPLE WATCH`, `BEFORE YOU START`, set in sentence case | Wording unchanged; case is not |
 | beeptest.ts | `watch.heading` "Run from your wrist." | presentation copy | Truncates the store's APPLE WATCH sentence, "Run from your wrist with haptics for every cue and beep." | The full sentence is `watch.body`, verbatim |
 | beeptest.ts | `pacing.beepLabel`, `pacing.caption` | presentation copy + fact | Caption values from `beeptest-protocol.ts` (level 6, 11.0 km/h, 6.545455 s) | "shown at real speed" is true: the CSS loop runs at `durationSec` |
