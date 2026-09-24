@@ -34,7 +34,7 @@ export interface Service {
   /** Where the title links; undefined renders a plain heading. */
   href?: string;
   blurb: string;
-  accent: 'volt' | 'cyan' | 'ember';
+  accent: 'volt' | 'cyan' | 'ember' | 'flare';
 }
 
 export const HOME = {
@@ -50,6 +50,7 @@ export const HOME = {
     links: [
       { label: 'Rewire', href: rewire.path },
       { label: 'Apps', href: '/apps/' },
+      { label: 'Products', href: '/products/' },
     ],
     cta: { label: 'Start a project', href: '#contact' },
   },
@@ -93,6 +94,14 @@ export const HOME = {
         blurb: `Shipped on iPhone, Apple Watch and the web. ${asWord(APPS.filter(isReleased).length)} of them are ours, and you can open and use them right now.`,
         accent: 'cyan',
       },
+      {
+        n: 'Service 03',
+        title: 'Products',
+        href: '/products/',
+        // Count derives from live BOOKS; a coming-soon book is never "out now".
+        blurb: `Swear-word colouring books for adults, one profession at a time. ${asWord(BOOKS.filter(isLive).length)} out now on Amazon.`,
+        accent: 'flare',
+      },
     ] satisfies Service[],
   },
 
@@ -115,7 +124,10 @@ export const HOME = {
   footer: {
     // Verbatim from the live site's footer.
     tagline: 'Building software that respects the people who use it.',
-    ventures: PRODUCTS.map((p) => ({ label: productLabel(p), href: productHref(p) })),
+    ventures: [
+      ...PRODUCTS.map((p) => ({ label: productLabel(p), href: productHref(p) })),
+      { label: '/products', href: '/products/' },
+    ],
     email: CONTACT.general,
     legal: `© ${new Date().getFullYear()} NeuroTrocity · Made in ${CONTACT.madeIn}`,
   },
