@@ -229,5 +229,5 @@ change made to quoted store text is `" - "` set as `" — "`.
 | apps.astro | " · Coming soon" after the tile's platforms | fact | `PRODUCTS[beeptest].status` "coming-soon" (B16) | |
 | Art | OG card second line "Before the Beep · coming soon" | presentation copy + fact | Brand (Rob 2026-09-23) and status (B16) | Scanned by the s5M(8) unit test via `scripts/beeptest-assets.mjs` |
 | Art | `skull-hero.webp`, `/assets/img/apps/beeptest-skull.webp`, OG card | own-asset | Higgsfield job `af0e3436-42a0-45d0-acf4-14d6d7d23ee3`, reference-locked to `beep-test` `AppIcon-1024.png` (Reference Element `a44f8f52-6b91-4a36-991b-02d0df8ed1b0`) | OG text duplicates `hero.lines[0]` by hand (`scripts/beeptest-assets.mjs`) |
-| Art | `skull-flame.webp` | own-asset | **Pending — generated in Task 12**, same reference | Not rendered until the file exists (B21) |
-| Art | `skull-closing.webp` | own-asset | **Pending — generated in Task 12**, same reference | Not rendered until the file exists (B21) |
+| Art | `skull-flame.webp` | own-asset | Higgsfield job `5d18d377-11e8-4c61-9da9-f0277df49aea`, same reference | Not rendered until the file exists (B21) |
+| Art | `skull-closing.webp` | own-asset | Higgsfield job `d5c50e99-1d62-446f-b968-4713e6a6ef13`, same reference | Not rendered until the file exists (B21) |
