@@ -55,6 +55,18 @@ test('no horizontal overflow at 360px on /products/', async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
+test('footer Amazon links open in a new tab', async ({ page }) => {
+  await page.goto('/products/');
+  const links = page.locator('a[href*="amazon."]');
+  const count = await links.count();
+  expect(count).toBeGreaterThan(0);
+  for (let i = 0; i < count; i++) {
+    const l = links.nth(i);
+    await expect(l).toHaveAttribute('target', '_blank');
+    expect(await l.getAttribute('rel')).toContain('noopener');
+  }
+});
+
 test('logs no console errors', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
