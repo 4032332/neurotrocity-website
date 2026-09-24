@@ -1,13 +1,17 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
+import { hasBeeptestArt } from '../../content/beeptest-art';
 
 const { effort } = BEEPTEST;
 // B9: prominent, never footer small print, and never trimmed.
+const hasArt = hasBeeptestArt('skull-flame.webp');
 ---
 <section class="bt-sec" id="before-you-start" aria-labelledby="bt-effort-h">
-  <div class="bt-wrap bt-effort">
-    <img class="bt-beat" src="/beeptest/assets/img/skull-flame.webp" alt={effort.skullAlt}
-         width="1000" height="1000" loading="lazy" decoding="async" />
+  <div class:list={['bt-wrap', 'bt-effort', { 'bt-no-art': !hasArt }]}>
+    {hasArt && (
+      <img class="bt-beat" src="/beeptest/assets/img/skull-flame.webp" alt={effort.skullAlt}
+           width="1000" height="1000" loading="lazy" decoding="async" />
+    )}
     <div>
       <p class="bt-mono bt-eyebrow">{effort.eyebrow}</p>
       <h2 class="bt-h2" id="bt-effort-h">{effort.heading}</h2>

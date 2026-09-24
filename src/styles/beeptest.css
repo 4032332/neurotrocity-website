@@ -165,3 +165,8 @@ body{ background:var(--bt-void); color:var(--bt-bone); font-family:var(--body) }
 
 /* One placeholder per row on a phone was ~45% of the page (final review). */
 @media (max-width:480px){ .bt-frames{ grid-template-columns:repeat(2,1fr) } }
+
+/* Until Task 12's art exists the image is left out; the text takes the row,
+   and the warning panel keeps a readable measure. */
+.bt-effort.bt-no-art, .bt-split.bt-no-art{ grid-template-columns:1fr }
+.bt-no-art .bt-effort-panel{ max-width:760px }

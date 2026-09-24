@@ -3,6 +3,7 @@ import { BEEPTEST } from '../../src/content/beeptest';
 import { pacingSchedule } from '../../src/content/beeptest-protocol';
 import { BANNED, REQUIRED_WARNING } from '../../src/content/beeptest-rules';
 import { buttondownAction } from '../../src/content/beeptest-signup';
+import { hasBeeptestArt } from '../../src/content/beeptest-art';
 
 const LANDING = '/beeptest/landing/';
 
@@ -150,10 +151,32 @@ test('the whole store warning is present, including the training-aid paragraph',
   await expect(panel).toContainText(BEEPTEST.effort.aid);
 });
 
-test('the flame and closing skulls are lazy-loaded and described', async ({ page }) => {
+test('the flame and closing skulls show once generated, and never as broken images', async ({ page }) => {
   await page.goto(LANDING);
-  for (const alt of [BEEPTEST.effort.skullAlt, BEEPTEST.free.skullAlt]) {
-    await expect(page.getByAltText(alt)).toHaveAttribute('loading', 'lazy');
+  const beats = [
+    ['skull-flame.webp', BEEPTEST.effort.skullAlt],
+    ['skull-closing.webp', BEEPTEST.free.skullAlt],
+  ] as const;
+  for (const [file, alt] of beats) {
+    const img = page.getByAltText(alt);
+    if (hasBeeptestArt(file)) {
+      await expect(img).toHaveAttribute('loading', 'lazy');
+    } else {
+      await expect(img, `${file} is not generated yet, so it must not render`).toHaveCount(0);
+    }
+  }
+});
+
+test('every image on the landing page actually loads', async ({ page }) => {
+  await page.goto(LANDING);
+  const imgs = page.locator('img');
+  const count = await imgs.count();
+  for (let i = 0; i < count; i++) {
+    await imgs.nth(i).scrollIntoViewIfNeeded();
+    await expect
+      .poll(() => imgs.nth(i).evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0),
+        { message: `image ${i} (${await imgs.nth(i).getAttribute('src')}) loads` })
+      .toBe(true);
   }
 });
 
