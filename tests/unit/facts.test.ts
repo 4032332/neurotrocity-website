@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { PRODUCTS, DEMOS, RULES, CONTACT, ENGAGEMENT, REWIRE, SKILL_PACK, isReleased } from '../../src/content/facts';
+import { PRODUCTS, DEMOS, RULES, CONTACT, ENGAGEMENT, REWIRE, SKILL_PACK, isReleased, BOOKS, isLive } from '../../src/content/facts';
 import { APPS, APPS_PAGE, HOME } from '../../src/content/copy';
 
 describe('facts', () => {
@@ -114,6 +114,25 @@ describe('skill pack', () => {
       expect(c.title.length).toBeGreaterThan(0);
       expect(c.body.length).toBeGreaterThan(30);
     }
+  });
+});
+
+describe('home services', () => {
+  it('offers three services, Products third, linking to /products/', () => {
+    const s = HOME.build.services;
+    expect(s.map(x => x.title)).toEqual(['Rewire', 'iOS & web apps', 'Products']);
+    expect(s[2].href).toBe('/products/');
+    expect(s[2].n).toBe('Service 03');
+  });
+
+  it('counts only live books as out now', () => {
+    const n = BOOKS.filter(isLive).length;
+    const word = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'][n];
+    expect(HOME.build.services[2].blurb).toContain(`${word} out now on Amazon.`);
+  });
+
+  it('links Products from the home nav', () => {
+    expect(HOME.nav.links.map(l => l.href)).toContain('/products/');
   });
 });
 

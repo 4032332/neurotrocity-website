@@ -14,6 +14,7 @@ const NS = 'http://www.w3.org/2000/svg';
 const COL_SETS: Record<string, readonly string[]> = {
   volt:   ['#7C6BFF', '#9C8CFF', '#38E1D6', '#5BE3C8', '#FF8A4C'],
   violet: ['#B45CFF', '#C98CFF', '#FF4FA3', '#FF7DBC', '#FF8A4C'],
+  flare:  ['#FF3B2F', '#FF6B5F', '#FFC93C', '#FFD970', '#FF4FA3'],
 };
 const CORE_OFF = '#0C0A16';
 

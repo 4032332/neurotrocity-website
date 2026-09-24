@@ -6,6 +6,7 @@ const MUST_RESOLVE = [
   '/rewire/sample/forge/', '/rewire/sample/lumen/',
   '/rewire/sample/northbay/', '/rewire/sample/vale/',
   '/dispoint/', '/dosetrack/',
+  '/products/', '/og/products.png',
   '/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/', '/beeptest/support/',
   '/robots.txt', '/sitemap.xml', '/app-ads.txt', '/favicon.ico',
   '/contact/rob/', '/contact/jaimi/', '/rewire/contact/thanks.html',

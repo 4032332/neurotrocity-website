@@ -40,3 +40,13 @@ test('logs no console errors', async ({ page }) => {
   await page.waitForTimeout(2500);
   expect(errors).toEqual([]);
 });
+
+test('shows three services side by side on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto('/');
+  const cells = page.locator('#build .svc > div');
+  await expect(cells).toHaveCount(3);
+  const ys = await cells.evaluateAll(ns => ns.map(n => Math.round(n.getBoundingClientRect().top)));
+  expect(new Set(ys).size).toBe(1);
+  await expect(page.locator('#build a[href="/products/"]')).toBeVisible();
+});

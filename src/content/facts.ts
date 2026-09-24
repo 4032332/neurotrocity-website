@@ -202,3 +202,45 @@ export const SKILL_PACK = {
   /** Why this is not a video course. The central positioning decision. */
   form: 'A versioned zip, not a video course. Updates ship through Gumroad and past buyers re-download.',
 } as const;
+
+/** The NeuroTrocity author store on Amazon AU. A live book links here until it
+ *  has its own listing URL, which then replaces its `url`. */
+export const STORE_URL =
+  'https://www.amazon.com.au/s?i=books-single-index&rh=p_27%3ANeuroTrocity&s=relevancerank&text=NeuroTrocity&ref=dp_byline_sr_book_1';
+
+interface BookBase {
+  slug: string;
+  /** Verbatim as published on the cover. */
+  title: string;
+  /** Live: the KDP subtitle up to the colon, from colouring-books/<book>/kdp/listing.md. */
+  hook: string;
+}
+
+export type Book = BookBase & (
+  | { status: 'live'; url: string; cover: string; coverAlt: string }
+  | { status: 'coming-soon'; prop: 'defib' | 'santa-hat' | 'doughnut' }
+);
+
+export const isLive = (b: Book): b is Extract<Book, { status: 'live' }> => b.status === 'live';
+
+export const BOOKS: Book[] = [
+  { slug: 'nurses', title: 'Nurse Sh*t', status: 'live', url: STORE_URL,
+    hook: 'What Nurses Really Want to Say at Crime Scenes',
+    cover: '/assets/img/books/nurses.webp',
+    coverAlt: 'Cover: the title on a white panel over a pattern of pills, coffee cups and crime-scene tape' },
+  { slug: 'teachers', title: 'Teacher Sh*t', status: 'live', url: STORE_URL,
+    hook: 'What Primary Teachers Really Want to Say by Week Three',
+    cover: '/assets/img/books/teachers.webp',
+    coverAlt: 'Cover: the title on a white panel over a pattern of pencils, rulers, apples, whistles and bucket hats' },
+  { slug: 'high-school', title: 'High School Sh*t', status: 'live', url: STORE_URL,
+    hook: 'What High School Teachers Really Want to Say by Period Five',
+    cover: '/assets/img/books/high-school.webp',
+    coverAlt: 'Cover: the title on a white panel over a pattern of clocks, laptops, coffee cups, lanyards and clipboards' },
+  // Coming-soon hooks: placeholder copy until each book has its listing.
+  { slug: 'ambos', title: 'Ambo Sh*t', status: 'coming-soon', prop: 'defib',
+    hook: 'What paramedics really want to say with the lights on' },
+  { slug: 'christmas', title: 'Christmas Crime Scenes', status: 'coming-soon', prop: 'santa-hat',
+    hook: 'Festive felonies, ready to colour' },
+  { slug: 'cops', title: 'Cop Sh*t', status: 'coming-soon', prop: 'doughnut',
+    hook: 'What cops really want to say at the scene' },
+];
