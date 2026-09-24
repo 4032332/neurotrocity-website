@@ -1,5 +1,5 @@
 ---
-interface Props { accent?: 'volt' | 'jade' | 'ember' | 'violet' }
+interface Props { accent?: 'volt' | 'jade' | 'ember' | 'violet' | 'flare' }
 const { accent = 'volt' } = Astro.props;
 
 /** Gradient down the spine. volt and jade keep the original stops so the home
@@ -10,6 +10,7 @@ const STOPS: Record<string, readonly [string, string, string]> = {
   jade:   ['#7C6BFF', '#38E1D6', '#FF8A4C'],
   ember:  ['#7C6BFF', '#38E1D6', '#FF8A4C'],
   violet: ['#B45CFF', '#FF4FA3', '#FF8A4C'],
+  flare:  ['#FF3B2F', '#FFC93C', '#FF4FA3'],
 };
 const [s0, s1, s2] = STOPS[accent] ?? STOPS.volt;
 ---
