@@ -7,6 +7,7 @@ const SITE = 'https://neurotrocity.com';
 const STATIC_URLS = [
   '/',
   '/apps/',
+  '/products/',
   '/rewire/landing/',
   '/rewire/skill-pack/',
   '/rewire/contact/',

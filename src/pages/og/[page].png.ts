@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
-import { HOME, REWIRE_PAGE, APPS_PAGE } from '../../content/copy';
+import { HOME, REWIRE_PAGE, APPS_PAGE, PRODUCTS_PAGE } from '../../content/copy';
 
 const FONT_DIR = path.join(process.cwd(), 'public/assets/fonts');
 const titleFont = fs.readFileSync(path.join(FONT_DIR, 'Manrope-ExtraBold.ttf'));
@@ -26,6 +26,11 @@ const CARDS: Record<string, Card> = {
     title: APPS_PAGE.meta.title,
     eyebrow: APPS_PAGE.hero.kicker.toUpperCase(),
     accent: '#B45CFF',
+  },
+  products: {
+    title: PRODUCTS_PAGE.meta.title,
+    eyebrow: PRODUCTS_PAGE.hero.kicker.toUpperCase(),
+    accent: '#FF3B2F',
   },
 };
 

@@ -7,7 +7,7 @@
  * and asserts no new fact — no numbers, no clients, no outcomes, no guarantees
  * beyond RULES and ENGAGEMENT.
  */
-import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, productHref, productLabel, isReleased, type Provenance } from './facts';
+import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, BOOKS, STORE_URL, isLive, productHref, productLabel, isReleased, type Provenance } from './facts';
 
 const rewire = PRODUCTS.find((p) => p.slug === 'rewire')!;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
@@ -34,7 +34,7 @@ export interface Service {
   /** Where the title links; undefined renders a plain heading. */
   href?: string;
   blurb: string;
-  accent: 'volt' | 'cyan' | 'ember';
+  accent: 'volt' | 'cyan' | 'ember' | 'flare';
 }
 
 export const HOME = {
@@ -50,6 +50,7 @@ export const HOME = {
     links: [
       { label: 'Rewire', href: rewire.path },
       { label: 'Apps', href: '/apps/' },
+      { label: 'Products', href: '/products/' },
     ],
     cta: { label: 'Start a project', href: '#contact' },
   },
@@ -93,6 +94,14 @@ export const HOME = {
         blurb: `Shipped on iPhone, Apple Watch and the web. ${asWord(APPS.filter(isReleased).length)} of them are ours, and you can open and use them right now.`,
         accent: 'cyan',
       },
+      {
+        n: 'Service 03',
+        title: 'Products',
+        href: '/products/',
+        // Count derives from live BOOKS; a coming-soon book is never "out now".
+        blurb: `Swear-word colouring books for adults, one profession at a time. ${asWord(BOOKS.filter(isLive).length)} out now on Amazon.`,
+        accent: 'flare',
+      },
     ] satisfies Service[],
   },
 
@@ -115,7 +124,10 @@ export const HOME = {
   footer: {
     // Verbatim from the live site's footer.
     tagline: 'Building software that respects the people who use it.',
-    ventures: PRODUCTS.map((p) => ({ label: productLabel(p), href: productHref(p) })),
+    ventures: [
+      ...PRODUCTS.map((p) => ({ label: productLabel(p), href: productHref(p) })),
+      { label: '/products', href: '/products/' },
+    ],
     email: CONTACT.general,
     legal: `© ${new Date().getFullYear()} NeuroTrocity · Made in ${CONTACT.madeIn}`,
   },
@@ -298,6 +310,65 @@ export const APPS_PAGE = {
     tagline: 'Building software that respects the people who use it.',
     links: [
       ...APPS.map((a) => ({ label: a.name, href: productHref(a) })),
+      { label: 'NeuroTrocity', href: '/' },
+    ],
+    email: CONTACT.general,
+    legal: `© ${new Date().getFullYear()} NeuroTrocity · Made in ${CONTACT.madeIn}`,
+  },
+} as const;
+
+/**
+ * Presentation strings for /products/. Same rule as the rest of this file:
+ * titles, hooks and links come from BOOKS in facts.ts. A coming-soon book is
+ * never counted as available and never linked.
+ */
+export const PRODUCTS_PAGE = {
+  meta: {
+    title: 'Products — NeuroTrocity',
+    description: `Things NeuroTrocity makes that you can buy. Swear-word colouring books for adults: ${listJoin(BOOKS.filter(isLive).map((b) => b.title))}, on Amazon.`,
+    canonical: 'https://neurotrocity.com/products/',
+  },
+
+  nav: {
+    back: { label: '← NeuroTrocity', href: '/' },
+    links: [{ label: 'Colouring books', href: '#books' }],
+    cta: { label: 'Say hello', href: '#contact' },
+  },
+
+  hero: {
+    kicker: `Products · ${CONTACT.madeIn}`,
+    headline: { lead: 'The ', em: 'Products.' },
+    sub: 'Things we make that you can actually buy.',
+    lede: {
+      a: 'Not everything we build is software. ',
+      strong: 'These ones you can hold in your hands',
+      b: ', and they are on Amazon now.',
+    },
+    primary: { label: 'Shop on Amazon', href: STORE_URL },
+    ghost: { label: 'See the books', href: '#books' },
+  },
+
+  books: {
+    eyebrow: '01 — Colouring books',
+    heading: 'One profession at a time.',
+    note: 'Swear-word colouring books for adults. Printed single-sided, so your pens can’t bleed through.',
+    items: BOOKS,
+    buy: 'Buy on Amazon',
+    soon: 'Coming soon',
+  },
+
+  contact: {
+    eyebrow: '02 — Say hello',
+    heading: 'Want one for your profession?',
+    sub: personRule.body,
+    email: CONTACT.general,
+  },
+
+  footer: {
+    tagline: 'Building software that respects the people who use it.',
+    links: [
+      { label: 'Books on Amazon', href: STORE_URL },
+      { label: 'Apps', href: '/apps/' },
       { label: 'NeuroTrocity', href: '/' },
     ],
     email: CONTACT.general,

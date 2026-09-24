@@ -103,12 +103,21 @@ const APPS_CASES: ContrastCase[] = [
   { label: '.contact .sub', selector: '.contact .sub', fg: MUTED, threshold: 4.5 },
 ];
 
+const PRODUCTS_CASES: ContrastCase[] = [
+  { label: 'hero .lede', selector: '.hero .lede', fg: MUTED, threshold: 4.5 },
+  { label: 'hero h1', selector: '.hero h1', fg: INK, threshold: 3.0 },
+  { label: 'banner .sub', selector: '.hero .sub', fg: INK, threshold: 4.5 },
+  { label: 'range note', selector: '.range .note', fg: MUTED, threshold: 4.5 },
+  { label: '.contact .sub', selector: '.contact .sub', fg: MUTED, threshold: 4.5 },
+];
+
 const CONTRAST_TABLE: Array<{ path: string; label: string; min: number; threshold: number }> = [];
 
 for (const [pagePath, cases] of [
   ['/', HOME_CASES],
   ['/rewire/landing/', REWIRE_CASES],
   ['/apps/', APPS_CASES],
+  ['/products/', PRODUCTS_CASES],
 ] as const) {
   test(`${pagePath} keeps every text element above its WCAG floor against the live field`, async ({ page }) => {
     // Deliberately slow by design: 6 elements × 5 samples × 300 ms of waits,
@@ -145,7 +154,7 @@ for (const [pagePath, cases] of [
 }
 
 // ── Reduced motion: still frame ─────────────────────────────────────────────
-for (const pagePath of ['/', '/rewire/landing/', '/apps/']) {
+for (const pagePath of ['/', '/rewire/landing/', '/apps/', '/products/']) {
   test(`${pagePath} holds a still frame under prefers-reduced-motion`, async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(pagePath);
@@ -162,7 +171,7 @@ for (const pagePath of ['/', '/rewire/landing/', '/apps/']) {
 }
 
 // ── Debug tooling ────────────────────────────────────────────────────────────
-for (const pagePath of ['/', '/rewire/landing/', '/apps/']) {
+for (const pagePath of ['/', '/rewire/landing/', '/apps/', '/products/']) {
   test(`${pagePath} ships no debug tooling on window`, async ({ page }) => {
     await page.goto(pagePath);
     const found = await page.evaluate(() => ['Stats', 'leva', 'rstats', 'dat'].filter((k) => k in (window as any)));
