@@ -1,0 +1,40 @@
+---
+/**
+ * Coming-soon art for /products/: a crime-scene chalk outline, with one prop
+ * per book so the three tiles are told apart. Decorative only; the tile
+ * carries the title and "Coming soon" as text.
+ */
+interface Props { prop: 'defib' | 'santa-hat' | 'doughnut' }
+const { prop } = Astro.props;
+---
+<svg class="chalk" viewBox="0 0 120 160" aria-hidden="true" data-prop={prop}>
+  <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- the body: head, torso, one arm flung up, one out, legs splayed -->
+    <path d="M52 22c0-7 5-12 11-12s11 5 11 12-5 12-11 12-11-5-11-12z"/>
+    <path d="M58 34c-3 6-4 10-4 14l-18-16c-3-3-8 0-6 4l19 22c2 3 2 7 1 11l-3 24-16 30c-2 4 3 7 6 4l19-28 4 0 13 30c2 4 7 2 6-2l-9-32 1-26c0-4 2-7 5-8l22-6c4-1 3-7-1-6l-24 4c-3-6-5-11-6-15"/>
+    {prop === 'defib' && (
+      <!-- a defib paddle in the raised hand -->
+      <g transform="translate(14 6) rotate(-20)">
+        <rect x="0" y="0" width="18" height="12" rx="3"/>
+        <path d="M9 12v10M5 22h8"/>
+        <path d="M22 4l5-3M23 9h6M22 14l5 3" stroke-width="2"/>
+      </g>
+    )}
+    {prop === 'santa-hat' && (
+      <!-- a Santa hat, slipped half off the head -->
+      <g>
+        <path d="M50 20c4-10 16-14 26-8l14 14"/>
+        <path d="M48 22c8-3 20-3 28 1"/>
+        <circle cx="93" cy="29" r="4"/>
+      </g>
+    )}
+    {prop === 'doughnut' && (
+      <!-- a doughnut, dropped by the outstretched hand -->
+      <g>
+        <circle cx="104" cy="66" r="9"/>
+        <circle cx="104" cy="66" r="3"/>
+        <path d="M98 60l2 1M108 59l1 2M111 68l-2 1M100 72l1-2" stroke-width="1.8"/>
+      </g>
+    )}
+  </g>
+</svg>
