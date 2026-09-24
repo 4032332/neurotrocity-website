@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { DEMOS, PRODUCTS, productHref, productUrl } from '../../src/content/facts';
+import { DEMOS, PRODUCTS, productHref, productUrl, BOOKS, isLive } from '../../src/content/facts';
 import { APPS } from '../../src/content/copy';
 
 const PAGES = [
@@ -7,6 +7,7 @@ const PAGES = [
   { path: '/rewire/landing/',  canonical: 'https://neurotrocity.com/rewire/landing/' },
   { path: '/apps/',            canonical: 'https://neurotrocity.com/apps/' },
   { path: '/beeptest/landing/', canonical: 'https://neurotrocity.com/beeptest/landing/' },
+  { path: '/products/', canonical: 'https://neurotrocity.com/products/' },
 ];
 
 /** The apps the /apps/ hub lists — Rewire is a service and has its own page. */
@@ -107,6 +108,7 @@ test('sitemap is generated from facts and covers every indexable URL', async ({ 
   const xml = await (await request.get('/sitemap.xml')).text();
   const required = [
     '/', '/apps/', '/rewire/landing/', '/rewire/contact/', '/contact/rob/', '/contact/jaimi/',
+    '/products/',
     ...PRODUCTS.flatMap(p => (p.path ? [p.path] : [])),
     ...DEMOS.map(d => d.href),
   ];
@@ -133,4 +135,14 @@ test('robots.txt allows crawling and points at the sitemap', async ({ request })
   const txt = await (await request.get('/robots.txt')).text();
   expect(txt).toContain('Sitemap: https://neurotrocity.com/sitemap.xml');
   expect(txt).not.toMatch(/Disallow:\s*\/\s*$/m);
+});
+
+test('products declares a CollectionPage of live books only', async ({ page }) => {
+  await page.goto('/products/');
+  const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const collection = blocks.map(b => JSON.parse(b)).find(j => j['@type'] === 'CollectionPage');
+  expect(collection).toBeTruthy();
+  const items = collection.mainEntity.itemListElement.map((i: any) => i.item);
+  expect(items.map((i: any) => i['@type'])).toEqual(BOOKS.filter(isLive).map(() => 'Book'));
+  expect(items.map((i: any) => i.name)).toEqual(BOOKS.filter(isLive).map(b => b.title));
 });
