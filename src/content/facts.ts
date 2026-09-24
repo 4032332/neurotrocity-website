@@ -236,7 +236,7 @@ export const BOOKS: Book[] = [
     hook: 'What High School Teachers Really Want to Say by Period Five',
     cover: '/assets/img/books/high-school.webp',
     coverAlt: 'Cover: the title on a white panel over a pattern of clocks, laptops, coffee cups, lanyards and clipboards' },
-  // Coming-soon hooks are draft copy. Rob reviews them before merge.
+  // Coming-soon hooks: placeholder copy until each book has its listing.
   { slug: 'ambos', title: 'Ambo Sh*t', status: 'coming-soon', prop: 'defib',
     hook: 'What paramedics really want to say with the lights on' },
   { slug: 'christmas', title: 'Christmas Crime Scenes', status: 'coming-soon', prop: 'santa-hat',
