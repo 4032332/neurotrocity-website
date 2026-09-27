@@ -27,9 +27,9 @@ const RISK = [
 ] as const;
 
 const SUBSCRIPTION = [
-  'Before the Beep offers an optional paid subscription called <strong>Xtreme</strong>, billed monthly or annually. Each comes with a 7-day free trial for eligible new subscribers. The price and billing period are shown in the app before you buy.',
+  'Before the Beep offers an optional paid subscription called <strong>Xtreme Mode</strong>, billed monthly (Xtreme Monthly) or annually (Xtreme Annual). Each comes with a 7-day free trial for eligible new subscribers. The price and billing period are shown in the app before you buy.',
   'Payment is charged to your Apple ID account when you confirm the purchase or, if you start a free trial, when the trial ends. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period, and your account is charged for the renewal within the 24 hours before that period ends.',
-  'You can manage or cancel your subscription at any time in your Apple account settings (on iPhone: Settings → your name → Subscriptions), or from <strong>Settings → Manage subscription</strong> in the app. Any unused part of a free trial ends when you buy a subscription.',
+  'You can manage or cancel your subscription at any time in your Apple account settings (on iPhone: Settings → your name → Subscriptions), or from <strong>Settings → Xtreme Mode → Manage subscription</strong> in the app. Any unused part of a free trial ends when you buy a subscription.',
   'Purchases and refunds are handled by Apple. Nothing in these terms limits your rights under the Australian Consumer Law.',
 ] as const;
 
@@ -148,7 +148,7 @@ export const SUPPORT_SECTIONS: readonly DocSection[] = [
   {
     h: 'How do I cancel my subscription?',
     body: [
-      'In the app, go to <strong>Settings → Manage subscription</strong>, or on iPhone go to Settings → your name → Subscriptions → Before the Beep. Cancel at least 24 hours before the end of the current period, or it renews automatically. Refunds are handled by Apple at <a href="https://reportaproblem.apple.com/">reportaproblem.apple.com</a>.',
+      'In the app, go to <strong>Settings → Xtreme Mode → Manage subscription</strong>, or on iPhone go to Settings → your name → Subscriptions → Before the Beep. Cancel at least 24 hours before the end of the current period, or it renews automatically. Refunds are handled by Apple at <a href="https://reportaproblem.apple.com/">reportaproblem.apple.com</a>.',
     ],
   },
   {
