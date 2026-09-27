@@ -12,6 +12,7 @@
  */
 import { CONTACT } from './facts';
 import { REQUIRED_WARNING } from './beeptest-rules';
+import { LAST_UPDATED, PRIVACY_SECTIONS, EULA_SECTIONS, SUPPORT_SECTIONS } from './beeptest-docs';
 
 export const BEEPTEST = {
   name: 'Before the Beep',
@@ -138,23 +139,25 @@ export const BEEPTEST = {
   },
 
   docs: {
-    pending: 'This page is being written, and will be published before Before the Beep is released.',
-    contact: 'Until then, questions go to',
+    updated: `Last updated: ${LAST_UPDATED}`,
     pages: {
       privacy: {
         title: 'Privacy policy — Before the Beep',
         heading: 'Privacy policy',
         description: 'How Before the Beep handles your information.',
+        sections: PRIVACY_SECTIONS,
       },
       eula: {
         title: 'Licence agreement — Before the Beep',
         heading: 'End user licence agreement',
         description: 'The licence terms for Before the Beep.',
+        sections: EULA_SECTIONS,
       },
       support: {
         title: 'Support — Before the Beep',
         heading: 'Support',
         description: 'Help with Before the Beep.',
+        sections: SUPPORT_SECTIONS,
       },
     },
   },

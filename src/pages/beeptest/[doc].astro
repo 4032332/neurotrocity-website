@@ -1,9 +1,8 @@
 ---
 // /beeptest/privacy/, /beeptest/eula/ and /beeptest/support/.
-// Pending by design (spec §7): the routes exist now so nothing 404s and the
-// app can hard-code the URLs. The reviewed text replaces docs.pending; when a
-// page gets its real text, drop `noindex` and add it to sitemap.xml.ts
-// STATIC_URLS in the same commit.
+// Text lives in src/content/beeptest-docs.ts (reached through BEEPTEST.docs so
+// the s5M(8) unit test scans it). /beeptest/terms/ redirects to /eula/
+// (astro.config.mjs). All three are indexed and listed in sitemap.xml.ts.
 import BeeptestLayout from '../../components/beeptest/BeeptestLayout.astro';
 import { BEEPTEST } from '../../content/beeptest';
 
@@ -15,14 +14,23 @@ export function getStaticPaths() {
 
 const doc = Astro.params.doc as Doc;
 const meta = BEEPTEST.docs.pages[doc];
-const { docs, footer } = BEEPTEST;
+const { docs } = BEEPTEST;
 ---
-<BeeptestLayout title={meta.title} description={meta.description} path={`/beeptest/${doc}/`} noindex>
-  <section class="bt-doc">
+<BeeptestLayout title={meta.title} description={meta.description} path={`/beeptest/${doc}/`}>
+  <article class="bt-doc">
     <div class="bt-wrap">
       <h1 class="bt-h2">{meta.heading}</h1>
-      <p class="bt-body">{docs.pending}</p>
-      <p class="bt-body">{docs.contact} <a href={`mailto:${footer.email}`}>{footer.email}</a>.</p>
+      <p class="bt-body bt-updated">{BEEPTEST.name} · {docs.updated}</p>
+      {meta.sections.map((s) => (
+        <section>
+          <h2 class="bt-doc-h">{s.h}</h2>
+          {s.body.map((b) =>
+            typeof b === 'string'
+              ? <p class="bt-body" set:html={b} />
+              : <ul class="bt-body">{b.map((li) => <li set:html={li} />)}</ul>
+          )}
+        </section>
+      ))}
     </div>
-  </section>
+  </article>
 </BeeptestLayout>

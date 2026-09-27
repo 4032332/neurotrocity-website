@@ -111,20 +111,32 @@ for (const doc of ['privacy', 'eula', 'support'] as const) {
   const path = `/beeptest/${doc}/`;
   const meta = BEEPTEST.docs.pages[doc];
 
-  test(`${path} is a real page, honestly pending, and kept out of search`, async ({ page }) => {
+  test(`${path} publishes its real text and is indexable`, async ({ page }) => {
     await page.goto(path);
     await expect(page.locator('h1')).toHaveText(meta.heading);
-    await expect(page.locator('main')).toContainText(BEEPTEST.docs.pending);
-    await expect(page.locator(`main a[href="mailto:${BEEPTEST.footer.email}"]`)).toHaveCount(1);
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');
+    await expect(page.locator('main')).toContainText(BEEPTEST.docs.updated);
+    for (const s of meta.sections) await expect(page.locator('main h2', { hasText: s.h })).toHaveCount(1);
+    await expect(page.locator(`main a[href="mailto:${BEEPTEST.footer.email}"]`).first()).toBeVisible();
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(0);
     await expect(page).toHaveTitle(meta.title);
   });
 }
 
-test('pending policy pages are not in the sitemap yet', async ({ request }) => {
+test('the licence page points at Apple\'s standard EULA and carries the risk warning', async ({ page }) => {
+  await page.goto('/beeptest/eula/');
+  await expect(page.locator('main a[href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"]')).toHaveCount(1);
+  await expect(page.locator('main')).toContainText(REQUIRED_WARNING);
+});
+
+test('/beeptest/terms/ sends you to the licence', async ({ page }) => {
+  await page.goto('/beeptest/terms/');
+  await expect(page).toHaveURL(/\/beeptest\/eula\/$/);
+});
+
+test('the policy pages are in the sitemap', async ({ request }) => {
   const xml = await (await request.get('/sitemap.xml')).text();
   for (const doc of ['privacy', 'eula', 'support']) {
-    expect(xml).not.toContain(`/beeptest/${doc}/`);
+    expect(xml).toContain(`/beeptest/${doc}/`);
   }
   expect(xml).toContain('/beeptest/landing/');
 });

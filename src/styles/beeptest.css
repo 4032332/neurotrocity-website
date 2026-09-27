@@ -81,6 +81,12 @@ body{ background:var(--bt-void); color:var(--bt-bone); font-family:var(--body) }
 .bt-doc{ padding-block:clamp(56px,8vw,104px) }
 .bt-doc .bt-body{ color:var(--bt-dim) }
 .bt-doc a{ color:var(--bt-bone) }
+.bt-doc .bt-wrap{ max-width:72ch }
+.bt-doc-h{ font-family:var(--display); font-weight:900; font-size:clamp(20px,2.4vw,26px); letter-spacing:-.01em;
+  color:var(--bt-bone); margin:48px 0 12px }
+.bt-doc ul{ padding-left:1.2em }
+.bt-doc li{ margin-block:6px }
+.bt-updated{ font-family:var(--mono); font-size:13px }
 
 /* ── footer ────────────────────────────────────────────────────────────── */
 .bt-foot{ border-top:3px solid var(--bt-line); padding-block:40px 56px; font-size:14px; color:var(--bt-dim) }
