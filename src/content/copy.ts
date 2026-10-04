@@ -12,7 +12,6 @@ import { PRODUCTS, RULES, CONTACT, DEMOS, ENGAGEMENT, REWIRE, SKILL_PACK, BOOKS,
 const rewire = PRODUCTS.find((p) => p.slug === 'rewire')!;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 const asWord = (n: number): string => { const w = WORDS[n] ?? String(n); return w[0].toUpperCase() + w.slice(1); };
-const personRule = RULES[3];   // "Answered by a person."
 
 /** "A", "A and B", "A, B and C" — reads right at any length, unlike a plain join. */
 const listJoin = (items: string[]): string =>
@@ -39,11 +38,11 @@ export interface Service {
 
 export const HOME = {
   meta: {
-    title: 'NeuroTrocity — a thousand ideas. One built properly.',
+    title: 'NeuroTrocity — simple software for the jobs that waste your time',
     description:
-      'A thousand ideas go off at once, like fireworks. Catching one before it fizzles and building it properly is the whole job. Software studio in Australia.',
+      'Almost everything that wastes your time has a simple software solution. NeuroTrocity builds websites and apps for people and businesses, and its own product line. Australia.',
     // Presentation: the Organization description in the home page's JSON-LD. Asserts no new fact.
-    jsonLdDescription: 'Software studio building websites and iOS apps.',
+    jsonLdDescription: 'Software studio building websites and apps.',
   },
 
   nav: {
@@ -55,51 +54,51 @@ export const HOME = {
     cta: { label: 'Start a project', href: '#contact' },
   },
 
+  // The hero is the pitch: the custom-build offer is what the studio sells.
   hero: {
     kicker: `Software studio · ${CONTACT.madeIn}`,
     // <em> wraps the second phrase.
-    headline: { lead: 'A thousand ideas go off at once. We catch one ', em: 'before it fizzles', tail: '.' },
-    lede: {
-      a: 'They go off like fireworks — bright, loud, all at once, each one certain it’s the billion-dollar one. ',
-      strong: 'Most are noise.',
-      b: ' Catching one while it’s still burning, and building it properly, is the whole discipline. We do that for ourselves, and we do it for you.',
-    },
+    headline: { lead: 'Almost everything that wastes your time has a ', em: 'simple software solution', tail: '.' },
+    lede:
+      'The job that takes an hour and should take five minutes. The spreadsheet three people keep in sync by hand. The form you retype into another system. Most of it is a small app or a website away from being over — and building that is faster and cheaper than it has ever been.',
+    // Both bodies are ENGAGEMENT verbatim: promises about our conduct, stated
+    // once in facts.ts. The titles are framing and assert nothing.
+    steps: [
+      { title: 'First, a conversation.', body: ENGAGEMENT.conversation },
+      { title: 'Then, a number.', body: ENGAGEMENT.quote },
+    ],
     primary: { label: 'Start a project', href: '#contact' },
   },
 
   build: {
-    eyebrow: '01 — What we build',
-    heading: 'What survives gets built.',
+    eyebrow: '01 — Who we are',
+    heading: 'Wired differently, on purpose.',
+    // Rob's framing: the studio as the founder's AuDHD, pointed at work.
     sub: {
-      a: 'No discovery theatre, no deck of someone else’s screenshots. A scope you can read in one sitting, and ',
-      strong: 'a person who answers the email',
-      b: '.',
+      a: 'NeuroTrocity is a living embodiment of its founder’s AuDHD. ',
+      strong: 'It goes after an idea with explosive speed',
+      b: ' — like fireworks, or a live wire — and then builds it properly. Here is where that energy goes.',
     },
     services: [
       {
         n: 'Service 01',
         title: 'Rewire',
         href: rewire.path,
-        // First sentence is PRODUCTS.rewire.description verbatim; demo count and
-        // provenance derive from DEMOS.
-        blurb: `${rewire.description} Scroll-driven, 3D where it earns its place, fast on a phone — built the way this page is built. ${asWord(DEMOS.length)} working demo models you can open and try.`,
+        blurb: 'We rewire underperforming or outdated websites with modern design and modern code, using efficient, cost-effective methods. Contact us for a free consultation.',
         accent: 'ember',
       },
       {
         n: 'Service 02',
-        title: 'iOS & web apps',
+        title: 'Apps',
         href: '/apps/',
-        // Count derives from the released APPS. Never type the numeral, and
-        // never count an app with no listing: "use them right now" would be false.
-        blurb: `Shipped on iPhone, Apple Watch and the web. ${asWord(APPS.filter(isReleased).length)} of them are ours, and you can open and use them right now.`,
+        blurb: 'Bespoke apps for phones, tablets and computers, built to suit your personal or professional needs. We have shipped a number of our own apps as proof of our work.',
         accent: 'cyan',
       },
       {
         n: 'Service 03',
         title: 'Products',
         href: '/products/',
-        // Count derives from live BOOKS; a coming-soon book is never "out now".
-        blurb: `Swear-word colouring books for adults, one profession at a time. ${asWord(BOOKS.filter(isLive).length)} out now on Amazon.`,
+        blurb: 'Our own product line — inspired by ADHD, our lives and experience, and the things we simply enjoyed building.',
         accent: 'flare',
       },
     ] satisfies Service[],
@@ -107,17 +106,8 @@ export const HOME = {
 
   contact: {
     eyebrow: '02 — Start a project',
-    heading: 'Almost everything that wastes your time has a simple software solution.',
-    lede:
-      'The job that takes an hour and should take five minutes. The spreadsheet three people keep in sync by hand. The form you retype into another system. Most of it is a small app or a website away from being over — and today building that is faster and cheaper than it has ever been. That is the whole reason this is worth a conversation.',
-    // Both bodies are ENGAGEMENT verbatim: promises about our conduct, stated
-    // once in facts.ts. The titles are framing and assert nothing.
-    steps: [
-      { title: 'First, a conversation.', body: ENGAGEMENT.conversation },
-      { title: 'Then, a number.', body: ENGAGEMENT.quote },
-    ],
-    // Live-site line, verbatim; restates RULES[3].
-    sub: 'A person reads every message and replies. No ticket queue, no bot.',
+    heading: 'Tell us what is wasting your time.',
+    lede: 'One line is enough to start. Describe the job, the spreadsheet or the website that is slowing you down, and we will come back with how we would fix it.',
     email: CONTACT.general,
   },
 
@@ -139,16 +129,15 @@ export const provenanceLabel = (p: Provenance): string =>
 
 /**
  * Presentation strings for /rewire/landing/. Same rule as HOME: every fact is
- * interpolated from `facts.ts` (REWIRE, DEMOS, CONTACT, PRODUCTS); headings,
- * kickers, ledes and CTAs marked "live" are verbatim from the current page;
- * the stance is Rob's own words, verbatim. Nothing here asserts a new fact.
+ * interpolated from `facts.ts` (REWIRE, DEMOS, CONTACT, PRODUCTS). The framing
+ * was rewritten in Oct 2026 to match the home page's plain service wording; the
+ * stance is Rob's own words, verbatim. Nothing here asserts a new fact.
  */
 export const REWIRE_PAGE = {
   meta: {
-    // Unchanged from the current live page — SEO parity constraint.
-    title: 'Rewire — website design for businesses that deserve better traffic',
+    title: 'Rewire — modern rebuilds for underperforming business websites',
     description:
-      'Rewire takes underperforming small and medium business websites and rebuilds them to actually work — clearer message, faster load, more customers.',
+      'Rewire rebuilds underperforming or outdated business websites with modern design and modern code, using efficient, cost-effective methods. Free consultation. NeuroTrocity, Australia.',
     canonical: 'https://neurotrocity.com/rewire/landing/',
     image: `https://neurotrocity.com/rewire/sample/assets/${DEMOS[0].slug}-tile.jpg`,
   },
@@ -160,39 +149,39 @@ export const REWIRE_PAGE = {
   },
 
   hero: {
-    kicker: 'Rewire · Website design for real businesses',                    // live, verbatim
-    headline: { lead: "Your website isn't broken. It's just ", em: 'wired wrong.' }, // live, verbatim
+    kicker: `Rewire · Website rebuilds · ${CONTACT.madeIn}`,
+    headline: { lead: "Your website isn't broken. It's just ", em: 'wired wrong.' },
     lede:
-      'We take small and medium business websites that used to work — or never quite did — and rebuild them properly: clearer message, faster load, an actual path to becoming a customer.', // live, verbatim
-    primary: { label: 'Get a free site review', href: REWIRE.contact.form },  // live, verbatim
+      'We rewire underperforming or outdated websites with modern design and modern code, using efficient, cost-effective methods. Clearer message, faster on a phone, and an actual path to becoming a customer.',
+    primary: { label: 'Book a free consultation', href: REWIRE.contact.form },
     ghost: { label: 'Try a demo model', href: '#demos' },
   },
 
   fits: {
-    eyebrow: 'Who this is for',                                                // live, verbatim
-    heading: "You already have a website. It's just not doing its job.",       // live, verbatim
-    sub: "Rewire isn't for brand-new startups building a site from scratch — it's for businesses that already have one, and know something's off.", // live, verbatim
+    eyebrow: 'Who this is for',
+    heading: 'You already have a website. It just isn’t doing its job.',
+    sub: 'Rewire is for businesses with a site that has fallen behind — not for building a brand-new one from nothing.',
     items: REWIRE.fits,
   },
 
   how: {
-    eyebrow: 'How it works',                                                   // live, verbatim
-    heading: 'Four steps. No jargon, no lock-in contracts.',                    // live, verbatim (count asserted in facts.test.ts)
-    sub: "We tell you exactly what's underperforming before you commit to anything.", // live, verbatim
+    eyebrow: 'How it works',
+    heading: 'Four steps. No jargon, no lock-in.',
+    sub: 'You know what is wrong, and what it costs to fix, before you commit to anything.',
     // 01–04 is legitimate here: the steps are a sequence.
     steps: REWIRE.steps.map((s, i) => ({ n: String(i + 1).padStart(2, '0'), ...s })),
   },
 
   demos: {
     eyebrow: 'Demo models',                                                    // live, verbatim
-    heading: 'Test drive a demo model.',                                       // live, verbatim
+    heading: 'Test drive a demo model.',
     // Rob's own words, verbatim; split only to colour the em span.
     stance: {
       lead: 'We choose not to use our clients and their websites to advertise ourselves. We believe the right approach is to showcase our capability through ',
       em: 'demo websites you can test-drive',
       tail: ", without leaning on our client's brands.",
     },
-    note: 'Open one, click everything, try to break it.',                     // live, verbatim
+    note: 'Open one, click everything, try to break it.',
     deck: {
       ariaLabel: 'Demo models',
       hint: 'Tap or click to try it here',
@@ -203,10 +192,10 @@ export const REWIRE_PAGE = {
   },
 
   review: {
-    eyebrow: 'Get in touch',                                                   // live, verbatim
-    heading: "Want to know what's actually wrong with your site?",             // live, verbatim
-    sub: 'Free review, no obligation, a person replies.',                      // live, verbatim
-    cta: { label: 'Start your free review', href: REWIRE.contact.form },       // live, verbatim
+    eyebrow: 'Get in touch',
+    heading: 'Want to know what’s holding your site back?',
+    sub: 'Start with a free consultation. No charge, no obligation.',
+    cta: { label: 'Book a free consultation', href: REWIRE.contact.form },
   },
 
   footer: {
@@ -243,21 +232,21 @@ export const APPS_PAGE = {
     links: [
       { label: 'The apps', href: '#apps' },
     ],
-    cta: { label: 'Say hello', href: '#contact' },
+    cta: { label: 'Start a project', href: '#contact' },
   },
 
   // A plain banner: what this page is, what we do, and how to start. The apps
   // themselves are the section below, so the banner does not list them.
   hero: {
-    kicker: `Software studio · ${CONTACT.madeIn}`,
-    headline: { lead: 'The ', em: 'Apps.' },
-    sub: 'App design and software engineering for smart devices and the web.',
+    kicker: `Apps · ${CONTACT.madeIn}`,
+    headline: { lead: 'Bespoke apps, built around ', em: 'how you work.' },
+    sub: 'Apps for phones, tablets and computers, built to suit your personal or professional needs.',
     lede: {
-      a: 'Most problems have an elegant, simple software solution. ',
-      strong: 'We specialise in finding that solution and building it',
-      b: ' — so the work gets easier rather than busier. If something you do every day takes longer than it should, tell us what it is and we will build you something that does not.',
+      a: 'If something you do every day takes longer than it should, there is usually a simple app that fixes it. ',
+      strong: 'We have shipped a number of our own',
+      b: ' — they are below, as proof of the work.',
     },
-    primary: { label: 'Ask about a custom build', href: '#contact' },
+    primary: { label: 'Start a project', href: '#contact' },
     ghost: { label: 'See what we ship', href: '#apps' },
   },
 
@@ -299,10 +288,9 @@ export const APPS_PAGE = {
   },
 
   contact: {
-    eyebrow: '02 — Say hello',
-    heading: 'Question about one of them?',
-    // Restates RULES[3].
-    sub: personRule.body,
+    eyebrow: '02 — Start a project',
+    heading: 'Have a job an app could fix?',
+    sub: 'Tell us what it is in a line or two. The first conversation is free, and the quote is fixed before any work starts.',
     email: CONTACT.general,
   },
 
@@ -325,7 +313,7 @@ export const APPS_PAGE = {
 export const PRODUCTS_PAGE = {
   meta: {
     title: 'Products — NeuroTrocity',
-    description: `Things NeuroTrocity makes that you can buy. Swear-word colouring books for adults: ${listJoin(BOOKS.filter(isLive).map((b) => b.title))}, on Amazon.`,
+    description: `NeuroTrocity's own product line, inspired by ADHD, our lives and experience. First up, swear-word colouring books for adults: ${listJoin(BOOKS.filter(isLive).map((b) => b.title))}, on Amazon.`,
     canonical: 'https://neurotrocity.com/products/',
   },
 
@@ -338,11 +326,11 @@ export const PRODUCTS_PAGE = {
   hero: {
     kicker: `Products · ${CONTACT.madeIn}`,
     headline: { lead: 'The ', em: 'Products.' },
-    sub: 'Things we make that you can actually buy.',
+    sub: 'Our own product line.',
     lede: {
-      a: 'Not everything we build is software. ',
-      strong: 'These ones you can hold in your hands',
-      b: ', and they are on Amazon now.',
+      a: 'Inspired by ADHD, our lives and experience, and the things we simply enjoyed building. ',
+      strong: 'First up: swear-word colouring books',
+      b: ', one profession at a time, on Amazon now.',
     },
     primary: { label: 'Shop on Amazon', href: STORE_URL },
     ghost: { label: 'See the books', href: '#books' },
@@ -360,7 +348,7 @@ export const PRODUCTS_PAGE = {
   contact: {
     eyebrow: '02 — Say hello',
     heading: 'Want one for your profession?',
-    sub: personRule.body,
+    sub: 'Tell us your trade. The next book might be yours.',
     email: CONTACT.general,
   },
 

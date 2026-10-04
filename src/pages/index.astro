@@ -62,16 +62,16 @@ body > header:has(.bar){
 .navcta:hover{ background:color-mix(in srgb, var(--volt) 26%, transparent); border-color:var(--volt) }
 
 /* ── hero — the one full-volume moment ─────────────────────────────────── */
-.hero{ min-height:min(88vh,760px); display:flex; align-items:center; padding-block:70px }
+.hero{ display:flex; align-items:center; padding-block:clamp(48px,7vw,84px) clamp(0px,2vw,16px) }
 /* .wrap is a flex item here, so it sized to its content rather than honouring
    max-width, and margin:0 auto then centred the shrunken box — putting the hero
    right of every section below it. Fill the line instead. */
 .hero .wrap{ width:100% }
-.hero .copy{ width:fit-content; max-width:100% }
+/* Every pane fills the same column, so the hero lines up with the sections. */
 .hero .kick{ color:var(--cyan); margin-bottom:20px }
-.hero h1{ font-weight:800; font-size:var(--step-3); line-height:.99; letter-spacing:-.036em; max-width:15ch; text-wrap:balance }
+.hero h1{ font-weight:800; font-size:clamp(32px,3.9vw,52px); line-height:1.04; letter-spacing:-.032em; text-wrap:pretty }
 .hero h1 em{ font-style:normal; color:var(--volt) }
-.hero .lede{ margin-top:24px; max-width:47ch; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
+.hero .lede{ margin-top:22px; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
 .cta{ margin-top:32px; display:flex; gap:11px; flex-wrap:wrap }
 .btn{
   display:inline-flex; align-items:center; gap:9px; font-size:14.5px; font-weight:800;
@@ -86,8 +86,8 @@ body > header:has(.bar){
 /* ── sections — disciplined after the hero ─────────────────────────────── */
 section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
 .eyebrow{ color:var(--muted); margin-bottom:16px }
-h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; max-width:21ch; text-wrap:balance }
-.sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65; max-width:56ch }
+h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; text-wrap:balance }
+.sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65 }
 
 /* ── #build: services as a ruled grid ────────────────────────────── */
 .svc{
@@ -125,12 +125,11 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
   -webkit-backdrop-filter:blur(18px) saturate(125%);
   box-shadow:inset 0 1px 0 color-mix(in srgb, var(--volt) 14%, transparent);
 }
-.pane + .svc, .pane + .deck{ margin-top:22px }
+.pane + .svc, .pane + .deck, .pane + .steps{ margin-top:14px }
 
-/* ── #contact: the pitch, the two steps, the address ───────────────────── */
-.contact .sub{ margin-top:16px; max-width:64ch }
+/* ── hero steps + #contact address ─────────────────────────────────────── */
 .steps{
-  margin-top:22px; display:grid; gap:14px; grid-template-columns:1fr 1fr;
+  display:grid; gap:14px; grid-template-columns:1fr 1fr;
 }
 @media (max-width:900px){ .steps{ grid-template-columns:1fr } }
 .steps > div{
@@ -140,9 +139,8 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 }
 .steps h3{ font-weight:800; font-size:18px; letter-spacing:-.024em; color:var(--ink) }
 .steps p{ margin-top:8px; color:var(--muted); font-size:15px; line-height:1.62 }
-.close{ margin-top:30px; color:var(--muted); font-size:15.5px; line-height:1.64 }
 .say{
-  display:inline-block; margin-top:28px; font-family:var(--display); font-size:clamp(21px,3.3vw,33px);
+  display:inline-block; margin-top:22px; font-family:var(--display); font-size:clamp(21px,3.3vw,33px);
   font-weight:800; letter-spacing:-.03em; color:var(--volt);
   border-bottom:2px solid transparent; transition:border-color .2s;
 }
@@ -181,10 +179,18 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
     <div class="copy pane">
     <p class="mono kick">{hero.kicker}</p>
     <h1>{hero.headline.lead}<em>{hero.headline.em}</em>{hero.headline.tail}</h1>
-    <p class="lede">{hero.lede.a}<strong>{hero.lede.strong}</strong>{hero.lede.b}</p>
+    <p class="lede">{hero.lede}</p>
     <div class="cta">
       <a class="btn p" href={hero.primary.href}>{hero.primary.label} <span class="arw" aria-hidden="true">→</span></a>
     </div>
+    </div>
+    <div class="steps">
+      {hero.steps.map((s) => (
+        <div>
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+        </div>
+      ))}
     </div>
   </div>
 </div>
@@ -216,21 +222,8 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
       <p class="mono eyebrow">{contact.eyebrow}</p>
       <h2>{contact.heading}</h2>
       <p class="sub">{contact.lede}</p>
+      <a class="say" href={`mailto:${contact.email}`}>{contact.email}</a>
     </div>
-    <div class="steps">
-      {contact.steps.map((s) => (
-        <div>
-          <h3>{s.title}</h3>
-          <p>{s.body}</p>
-        </div>
-      ))}
-    </div>
-    {/* `.sub` is the site-wide class for the paragraph under a heading, so the
-        lede takes it; `contact.sub` is the closing line and gets `.close`. Both
-        `.close` and `.say` sit OUTSIDE the pane, directly on the field — which
-        is why HOME_CASES probes them separately. */}
-    <p class="close">{contact.sub}</p>
-    <a class="say" href={`mailto:${contact.email}`}>{contact.email}</a>
   </div>
 </section>
 

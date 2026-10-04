@@ -19,8 +19,7 @@ describe('facts', () => {
   });
 
   it('never tells a visitor they can use an app today that has no listing', () => {
-    // Home: "… of them are ours, and you can open and use them right now."
-    expect(JSON.stringify(HOME)).toContain('Three of them are ours');
+    expect(JSON.stringify(HOME)).not.toContain('right now');
     // /apps/: "The apps we ship: …"
     expect(APPS_PAGE.meta.description).not.toContain('Before the Beep');
   });
@@ -120,15 +119,9 @@ describe('skill pack', () => {
 describe('home services', () => {
   it('offers three services, Products third, linking to /products/', () => {
     const s = HOME.build.services;
-    expect(s.map(x => x.title)).toEqual(['Rewire', 'iOS & web apps', 'Products']);
+    expect(s.map(x => x.title)).toEqual(['Rewire', 'Apps', 'Products']);
     expect(s[2].href).toBe('/products/');
     expect(s[2].n).toBe('Service 03');
-  });
-
-  it('counts only live books as out now', () => {
-    const n = BOOKS.filter(isLive).length;
-    const word = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'][n];
-    expect(HOME.build.services[2].blurb).toContain(`${word} out now on Amazon.`);
   });
 
   it('links Products from the home nav', () => {

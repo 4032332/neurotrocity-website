@@ -77,14 +77,14 @@ body > header:has(.bar){
 .hero .wrap{ width:100% }
 .hero .copy{ max-width:100% }
 .hero .kick{ color:var(--ember); margin-bottom:20px }
-.hero h1{ font-weight:800; font-size:var(--step-3); line-height:.99; letter-spacing:-.036em; max-width:15ch; text-wrap:balance }
+.hero h1{ font-weight:800; font-size:clamp(32px,3.9vw,52px); line-height:1.04; letter-spacing:-.032em; text-wrap:pretty }
 .hero h1 em{ font-style:normal; color:var(--violet) }
 .hero .sub{
-  margin-top:18px; max-width:46ch; color:var(--ink); font-weight:500;
+  margin-top:18px; color:var(--ink); font-weight:500;
   font-size:clamp(17px,1.9vw,21px); line-height:1.4; letter-spacing:-.012em;
   text-wrap:balance;
 }
-.hero .lede{ margin-top:18px; max-width:64ch; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
+.hero .lede{ margin-top:18px; color:var(--muted); font-size:clamp(15.5px,1.5vw,17.5px); line-height:1.64 }
 .cta{ margin-top:32px; display:flex; gap:11px; flex-wrap:wrap }
 .btn{
   display:inline-flex; align-items:center; gap:9px; font-size:14.5px; font-weight:800;
@@ -102,8 +102,8 @@ body > header:has(.bar){
 /* ── sections ──────────────────────────────────────────────────────────── */
 section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
 .eyebrow{ color:var(--muted); margin-bottom:16px }
-h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; max-width:21ch; text-wrap:balance }
-.sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65; max-width:56ch }
+h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; text-wrap:balance }
+.sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65 }
 
 /* ── #apps: every tile equal, each carrying the app's own artwork ─────────
    Equal by construction, not by coincidence: one column each, a shared art
@@ -159,7 +159,6 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
 
 /* ── #contact ──────────────────────────────────────────────────────────── */
 .contact{ text-align:center }
-.contact .copy{ max-width:56ch; margin-inline:auto }
 .contact h2, .contact .sub{ margin-inline:auto }
 .say{
   display:inline-block; margin-top:28px; font-family:var(--display); font-size:clamp(21px,3.3vw,33px);
@@ -189,9 +188,9 @@ h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-
   border-color:color-mix(in srgb, var(--violet) 34%, transparent);
 }
 .stance .eyebrow{ margin-bottom:18px }
-.stance p{ font-family:var(--display); font-weight:700; font-size:clamp(19px,2.5vw,29px); line-height:1.22; letter-spacing:-.028em; max-width:26ch; text-wrap:balance }
+.stance p{ font-family:var(--display); font-weight:700; font-size:clamp(19px,2.5vw,29px); line-height:1.22; letter-spacing:-.028em; text-wrap:balance }
 .stance p em{ font-style:normal; color:var(--violet) }
-.stance .note{ margin-top:18px; font-family:var(--body); font-weight:400; font-size:15px; line-height:1.62; color:var(--muted); max-width:56ch; letter-spacing:0; text-wrap:pretty }
+.stance .note{ margin-top:18px; font-family:var(--body); font-weight:400; font-size:15px; line-height:1.62; color:var(--muted); letter-spacing:0; text-wrap:pretty }
 
 /* ── footer ────────────────────────────────────────────────────────────── */
 footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
