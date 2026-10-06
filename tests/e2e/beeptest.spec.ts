@@ -141,14 +141,16 @@ test('the policy pages are in the sitemap', async ({ request }) => {
   expect(xml).toContain('/beeptest/landing/');
 });
 
-test('five screen frames, each honestly marked as pending, with their store captions', async ({ page }) => {
+test('the eight App Store screenshots, in order, each described', async ({ page }) => {
   await page.goto(LANDING);
-  const frames = page.locator('.bt-frame');
-  await expect(frames).toHaveCount(5);
-  for (const [i, item] of BEEPTEST.frames.items.entries()) {
-    await expect(frames.nth(i)).toContainText(BEEPTEST.frames.pending);
-    await expect(frames.nth(i).locator('figcaption')).toContainText(item.caption);
+  expect(BEEPTEST.frames.shots).toHaveLength(8);
+  const shots = page.locator('.bt-frame img');
+  await expect(shots).toHaveCount(BEEPTEST.frames.shots.length);
+  for (const [i, shot] of BEEPTEST.frames.shots.entries()) {
+    await expect(shots.nth(i)).toHaveAttribute('src', `/beeptest/assets/img/screens/${shot.file}`);
+    await expect(shots.nth(i)).toHaveAttribute('alt', shot.alt);
   }
+  await expect(page.getByText('Screenshot pending')).toHaveCount(0);
 });
 
 test('the required maximal-test sentence is on the page, visible', async ({ page }) => {
@@ -296,4 +298,15 @@ test('keyboard focus on the landing page uses the flame-red ring, not the studio
   expect(ring.cls).toContain('bt-mark');
   expect(ring.color).toBe('rgb(255, 59, 47)');
   expect(ring.width).toBe('3px');
+});
+
+test('Merch goes straight to the store, from the nav and the hero, and hides until it exists', async ({ page }) => {
+  await page.goto(LANDING);
+  const merch = page.getByRole('link', { name: BEEPTEST.merch.label, exact: true });
+  if (BEEPTEST.merch.url === null) {
+    await expect(merch).toHaveCount(0);
+  } else {
+    await expect(page.locator('header').getByRole('link', { name: BEEPTEST.merch.label, exact: true })).toHaveAttribute('href', BEEPTEST.merch.url);
+    await expect(page.locator('.bt-hero').getByRole('link', { name: BEEPTEST.merch.label, exact: true })).toHaveAttribute('href', BEEPTEST.merch.url);
+  }
 });

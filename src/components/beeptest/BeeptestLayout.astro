@@ -16,7 +16,7 @@ interface Props {
 }
 
 const { title, description, path, jsonLd, noindex = false } = Astro.props;
-const { name, nav, footer } = BEEPTEST;
+const { name, nav, footer, merch } = BEEPTEST;
 ---
 <Base title={title} description={description} path={path} ogImage="/beeptest/assets/img/og-beeptest.png" jsonLd={jsonLd}>
   <Fragment slot="head">
@@ -27,7 +27,10 @@ const { name, nav, footer } = BEEPTEST;
   <Fragment slot="nav">
     <div class="bt-bar">
       <a class="bt-mark" href="/beeptest/landing/">{name}</a>
-      <a class="bt-navcta" href={nav.cta.href}>{nav.cta.label}</a>
+      <div class="bt-bar-actions">
+        {merch.url && <a class="bt-navcta" href={merch.url}>{merch.label}</a>}
+        <a class="bt-navcta" href={nav.cta.href}>{nav.cta.label}</a>
+      </div>
     </div>
   </Fragment>
 

@@ -203,10 +203,11 @@ change made to quoted store text is `" - "` set as `" — "`.
 | facts.ts | `PRODUCTS[beeptest].status` "coming-soon" | fact | No App Store listing exists (Rob 2026-09-23, spec B16) | Excluded from "use them right now", "the apps we ship" and `makesOffer` |
 | beeptest.ts | `hero.lines`, `hero.payoff` | presentation copy | Rob 2026-09-23 | "cheat the system" changed to "cheat the beep"; spec §5.1 records why |
 | beeptest.ts | `hero.lede` | verbatim store copy | Store, description, opening two sentences | |
-| beeptest.ts | `pacing.heading`, `frames.items[0].caption` | verbatim store copy | Store, Screenshots table, caption 1 | |
+| beeptest.ts | `pacing.heading` | verbatim store copy | Store, Screenshots table, caption 1 | |
 | beeptest.ts | `pacing.body` | verbatim store copy | Store, description, PACING CUES | |
 | PacingBar | Timing: level 6, 11.0 km/h, 6.545455 s; cues at 0.7/0.8/0.9 | fact | `beep-test/protocols.json`, QPS level 6 and `audioDesign.pacingCues.fractionsOfShuttle` | Copied into `beeptest-protocol.ts`; a unit test checks it against the file's own formula and totals. Level 6 is arbitrary and is not presented as any standard |
-| beeptest.ts | `frames.items` (screen and caption) | verbatim store copy | Store, Screenshots table | Frames are marked "Screenshot pending" (B13) |
+| beeptest.ts | `frames.shots[].alt` | verbatim store copy | Each submitted screenshot's own headline and subline (`beep-test/docs/asc/screenshots/designed/README.md`) | Sentence case of the baked-in headlines |
+| Art | `/beeptest/assets/img/screens/*.webp` | own-asset | The eight App Store screenshots as submitted (`beep-test/docs/asc/screenshots/designed/`, 27 Sep 2026), resized to 645px | Captured with the app's DEBUG screenshot mode and fixed sample data; their text was cleared for the App Store listing |
 | beeptest.ts | `watch.body` | verbatim store copy | Store, description, APPLE WATCH | ⚠️ Watch device items 3a–3h are unrun (`beep-test/docs/device-test-results.md`). Re-verify before release |
 | beeptest.ts | `effort.warning`, `.detail`, `.aid` | verbatim store copy | Store, description, BEFORE YOU START, complete | `effort.warning` is the s5M(8) required sentence (B9) |
 | beeptest.ts | `effort.heading` "It is designed to beat you." | presentation copy | Paraphrases the required sentence; reinforces the risk rather than softening it | |
@@ -221,7 +222,8 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `pacing.eyebrow` "Pacing cues", `watch.eyebrow` "Apple Watch", `effort.eyebrow` "Before you start" | presentation copy | Store, description, block headings `PACING CUES`, `APPLE WATCH`, `BEFORE YOU START`, set in sentence case | Wording unchanged; case is not |
 | beeptest.ts | `watch.heading` "Run from your wrist." | presentation copy | Truncates the store's APPLE WATCH sentence, "Run from your wrist with haptics for every cue and beep." | The full sentence is `watch.body`, verbatim |
 | beeptest.ts | `pacing.beepLabel`, `pacing.caption` | presentation copy + fact | Caption values from `beeptest-protocol.ts` (level 6, 11.0 km/h, 6.545455 s) | "shown at real speed" is true: the CSS loop runs at `durationSec` |
-| beeptest.ts | `frames.eyebrow` "The app", `frames.heading`, `frames.pending` "Screenshot pending" | presentation copy | Spec §5.3, B13 | |
+| beeptest.ts | `frames.eyebrow` "The app", `frames.heading` | presentation copy | Spec §5.3 | |
+| beeptest.ts | `merch.label` "Merch", `merch.url` | presentation copy + fact | Rob 2026-10-06: a Shopify store via Printify | No link renders while `url` is null |
 | beeptest.ts | `footer.tagline`, `footer.links` labels | presentation copy + fact | "Made in Australia": `facts.ts` `CONTACT.madeIn` | |
 | beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
 | beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |

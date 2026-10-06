@@ -1,7 +1,7 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
 
-const { hero } = BEEPTEST;
+const { hero, merch } = BEEPTEST;
 
 // Manga speed lines: thin wedges converging on the centre. Computed at build
 // time and deterministic, so the SVG is identical on every build.
@@ -32,6 +32,7 @@ const RAYS = Array.from({ length: 64 }, (_, i) => {
       <div class="bt-cta">
         <a class="bt-btn" href={hero.primary.href}>{hero.primary.label}</a>
         <a class="bt-btn ghost" href={hero.secondary.href}>{hero.secondary.label}</a>
+        {merch.url && <a class="bt-btn ghost" href={merch.url}>{merch.label}</a>}
       </div>
     </div>
     <div class="bt-skull-wrap">

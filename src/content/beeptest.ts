@@ -62,14 +62,17 @@ export const BEEPTEST = {
   frames: {
     eyebrow: 'The app',
     heading: 'What you’ll be looking at',
-    pending: 'Screenshot pending',
-    // app-store-listing.md "Screenshots": screen and caption, in its order, verbatim.
-    items: [
-      { screen: 'Run screen mid-test', caption: 'Hear where you should be, three times a shuttle' },
-      { screen: 'Goal picker with live estimate', caption: 'See what your target actually means before you start' },
-      { screen: 'Progress chart with personal best', caption: 'Every test, against the goal you set' },
-      { screen: 'Pacer gauge', caption: 'Hold a set pace between tests' },
-      { screen: 'Course guide / camera measure', caption: 'A 20 metre course that is really 20 metres' },
+    // The App Store screenshots as submitted (beep-test docs/asc/screenshots/designed,
+    // 27 Sep 2026). Each alt is that screenshot's own headline and subline, verbatim.
+    shots: [
+      { file: '01-cheat-the-beep.webp', alt: 'Cheat the beep. Outsmart the test. Pacing cues, targets and a coach that heckles, built to get you over the line.' },
+      { file: '02-pace-trainer.webp', alt: 'Hear the pace before the beep. Pacing cues at 70, 80 and 90% of every shuttle, so you learn the pace instead of chasing it.' },
+      { file: '03-pacer.webp', alt: 'Learn any level’s pace. The Pacer holds you to a level’s exact speed on any run, so it’s in your legs before test day.' },
+      { file: '04-target.webp', alt: 'Set a target. Smash it. Pick today’s level before you start. When you reach it, the screen goes gold.' },
+      { file: '05-find-your-goal.webp', alt: 'Find your goal. Police, fire, defence or something else. Always confirm the current standard with the agency.' },
+      { file: '06-big-scary-goal.webp', alt: 'Chase your Big Scary Goal. Every test on one chart, with your Big Goal line right there to beat.' },
+      { file: '07-skull.webp', alt: 'A coach that talks back. The skull reacts to every run, from smug to rattled to stoked. It keeps you honest.' },
+      { file: '08-share.webp', alt: 'Show off the win. Share your level, distance and time over your own photo or video, story, feed or square.' },
     ],
   },
 
@@ -100,6 +103,13 @@ export const BEEPTEST = {
     // Store description, closing line, verbatim. D20: the first test is free.
     body: 'Your first test is free. No account, no sign-up — nothing leaves your phone.',
     skullAlt: 'The skull knocked flat and cracked through, with cartoon stars circling it',
+  },
+
+  merch: {
+    label: 'Merch',
+    /** The Shopify store (print on demand through Printify). Null until the store
+     *  exists; while null, no Merch link renders anywhere. Set the store's https URL. */
+    url: null as string | null,
   },
 
   launch: {
