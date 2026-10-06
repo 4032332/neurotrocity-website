@@ -86,6 +86,9 @@ const layered = field || spine;
     }
   </style>
   <slot name="head" />
+  <!-- Google Analytics 4: the same property as the hand-written pages in public/. -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-4HW41XNKNR"></script>
+  <script is:inline>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-4HW41XNKNR');</script>
 </head>
 <body class:list={[{ layered }]}>
   {field && <CortexField accent={accent} />}
