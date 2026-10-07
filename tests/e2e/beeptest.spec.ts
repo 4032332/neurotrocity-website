@@ -169,7 +169,7 @@ test('the flame and closing skulls show once generated, and never as broken imag
   await page.goto(LANDING);
   const beats = [
     ['skull-flame.webp', BEEPTEST.effort.skullAlt],
-    ['skull-closing.webp', BEEPTEST.free.skullAlt],
+    ['cast/skull-stoked.webp', BEEPTEST.free.skullAlt],
   ] as const;
   for (const [file, alt] of beats) {
     const img = page.getByAltText(alt);
@@ -310,3 +310,14 @@ test('Merch goes straight to the store, from the nav and the hero, and hides unt
     await expect(page.locator('.bt-hero').getByRole('link', { name: BEEPTEST.merch.label, exact: true })).toHaveAttribute('href', BEEPTEST.merch.url);
   }
 });
+
+test('the skull heckles in every section except the warning', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(LANDING);
+  for (const line of Object.values(BEEPTEST.heckles)) {
+    await expect(page.getByText(`“${line}”`, { exact: true })).toBeVisible();
+  }
+  // s5M(8): nothing jokes beside the risk warning.
+  await expect(page.locator('#before-you-start .bt-heckle')).toHaveCount(0);
+});
+

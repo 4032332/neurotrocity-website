@@ -1,5 +1,6 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
+import Heckle from './Heckle.astro';
 
 const { hero, merch } = BEEPTEST;
 
@@ -38,6 +39,7 @@ const RAYS = Array.from({ length: 64 }, (_, i) => {
     <div class="bt-skull-wrap">
       <img class="bt-skull" src="/beeptest/assets/img/skull-hero.webp" alt={hero.skullAlt}
            width="1200" height="1200" fetchpriority="high" decoding="async" />
+      <Heckle line={BEEPTEST.heckles.hero} class="bt-heckle--hero" />
     </div>
   </div>
 </section>

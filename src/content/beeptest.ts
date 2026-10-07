@@ -102,7 +102,17 @@ export const BEEPTEST = {
     payoff: '…that’s how you end up addicted for life.',
     // Store description, closing line, verbatim. D20: the first test is free.
     body: 'Your first test is free. No account, no sign-up — nothing leaves your phone.',
-    skullAlt: 'The skull knocked flat and cracked through, with cartoon stars circling it',
+    skullAlt: 'The skull, crying with laughter',
+  },
+
+  // The skull talks back, as it does in the app. Clean variants, verbatim from
+  // beep-test BeepCore/Sources/BeepCore/SkullLines.swift. Never on the warning panel.
+  heckles: {
+    hero: 'NOBODY BEATS ME FIRST TRY. NOBODY.',
+    pacing: 'WHO TAUGHT YOU TO PACE? WAS IT THE APP? IT WAS THE APP.',
+    watch: 'THE BEEPS ARE WARMED UP. ARE YOU?',
+    free: 'WANT MORE OF ME? THAT’LL COST YOU, CHAMPION.',
+    launch: 'OH GOOD. FRESH MEAT.',
   },
 
   merch: {

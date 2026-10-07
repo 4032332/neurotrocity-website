@@ -1,5 +1,6 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
+import Heckle from './Heckle.astro';
 import { pacingSchedule } from '../../content/beeptest-protocol';
 
 const { pacing } = BEEPTEST;
@@ -11,6 +12,7 @@ const s = pacingSchedule(pacing.demoLevel);
     <p class="bt-mono bt-eyebrow">{pacing.eyebrow}</p>
     <h2 class="bt-h2" id="bt-pacing-h">{pacing.heading}</h2>
     <p class="bt-body">{pacing.body}</p>
+    <Heckle line={BEEPTEST.heckles.pacing} art="skull-rattled.webp" artAlt="The skull, rattled and seeing stars" class="bt-heckle--row" />
 
     <figure class="bt-pace" style={`--dur:${s.durationSec}s`}>
       <div class="bt-track" aria-hidden="true">

@@ -1,12 +1,16 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
+import Heckle from './Heckle.astro';
 
 const { watch } = BEEPTEST;
 ---
 <section class="bt-sec" aria-labelledby="bt-watch-h">
-  <div class="bt-wrap">
-    <p class="bt-mono bt-eyebrow">{watch.eyebrow}</p>
-    <h2 class="bt-h2" id="bt-watch-h">{watch.heading}</h2>
-    <p class="bt-body">{watch.body}</p>
+  <div class="bt-wrap bt-split">
+    <div>
+      <p class="bt-mono bt-eyebrow">{watch.eyebrow}</p>
+      <h2 class="bt-h2" id="bt-watch-h">{watch.heading}</h2>
+      <p class="bt-body">{watch.body}</p>
+    </div>
+    <Heckle line={BEEPTEST.heckles.watch} art="hands-point.webp" artAlt="The skull pointing straight at you" class="bt-heckle--stack" />
   </div>
 </section>

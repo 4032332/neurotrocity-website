@@ -1,5 +1,6 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
+import Heckle from './Heckle.astro';
 import { buttondownAction } from '../../content/beeptest-signup';
 
 const { launch } = BEEPTEST;
@@ -9,8 +10,9 @@ const { launch } = BEEPTEST;
 // the form renders disabled and says the list opens soon.
 const action = buttondownAction(launch.buttondownUsername);
 ---
-<section class="bt-sec" id={launch.id} aria-labelledby="bt-launch-h">
-  <div class="bt-wrap">
+<section class="bt-sec bt-ember" id={launch.id} aria-labelledby="bt-launch-h">
+  <div class="bt-wrap bt-split bt-split--launch">
+    <div>
     <p class="bt-mono bt-eyebrow">{launch.eyebrow}</p>
     <h2 class="bt-h2" id="bt-launch-h">{launch.heading}</h2>
     <p class="bt-body">{launch.body}</p>
@@ -25,6 +27,8 @@ const action = buttondownAction(launch.buttondownUsername);
     </form>
     <p class="bt-status" data-bt-status role="status">{action ? '' : launch.closed}</p>
     <p class="bt-consent">{launch.consent} <a href="/beeptest/privacy/">{launch.privacyLink}</a>.</p>
+    </div>
+    <Heckle line={BEEPTEST.heckles.launch} art="hands-fist-through-screen.webp" artAlt="The skull punching through the screen" class="bt-heckle--stack" />
   </div>
 </section>
 

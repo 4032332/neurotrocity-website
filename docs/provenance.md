@@ -225,6 +225,9 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `frames.eyebrow` "The app", `frames.heading` | presentation copy | Spec §5.3 | |
 | beeptest.ts | `merch.label` "Merch", `merch.url` | presentation copy + fact | Rob 2026-10-06: a Shopify store via Printify | No link renders while `url` is null |
 | beeptest.ts | `footer.tagline`, `footer.links` labels | presentation copy + fact | "Made in Australia": `facts.ts` `CONTACT.madeIn` | |
+| beeptest.ts | `heckles.*` (five lines) | verbatim app copy | Clean variants from `beep-test/BeepCore/Sources/BeepCore/SkullLines.swift` (homeNeverRun, resultPersonalBest, countdown, paywall, homeNeverRun) | Never placed in the warning section (B24); scanned by the s5M(8) checks |
+| Art | `/beeptest/assets/img/cast/skull-{smug,rattled,stoked}.webp` | own-asset | The app's HD mood skulls (`beep-test/docs/asc/screenshots/designed/art/`), resized | Already public in the App Store screenshots |
+| Art | `/beeptest/assets/img/cast/hands-{point,fist-through-screen}.webp` | own-asset | `beep-test/art/floating-hands/04-point.png`, `03-fist-through-screen.png`, cut out of their black backgrounds | |
 | beeptest.ts | `footer.email` | fact | `facts.ts` `CONTACT.general` | `beeptest@` does not exist yet |
 | beeptest.ts | `docs.*` | presentation copy | Spec §7 | Pending text; drafts in `docs/legal-drafts/` await review |
 | copy.ts | `APPS_PAGE.apps.art.beeptest.alt` | presentation copy | Describes the own-asset tile image below | Scanned by the s5M(8) unit test |

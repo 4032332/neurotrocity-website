@@ -1,0 +1,10 @@
+---
+// The app's heckler: an inked speech box, optionally with the speaker's art.
+interface Props { line: string; art?: string; artAlt?: string; class?: string }
+const { line, art, artAlt = '', class: cls } = Astro.props;
+---
+<figure class:list={['bt-heckle', cls, { 'bt-heckle--art': art }]}>
+  {art && <img class="bt-heckle-art" src={`/beeptest/assets/img/cast/${art}`} alt={artAlt}
+               width="600" height="600" loading="lazy" decoding="async" />}
+  <blockquote class="bt-heckle-box"><p>“{line}”</p></blockquote>
+</figure>

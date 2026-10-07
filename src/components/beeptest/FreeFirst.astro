@@ -1,9 +1,11 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
+import Heckle from './Heckle.astro';
 import { hasBeeptestArt } from '../../content/beeptest-art';
 
 const { free } = BEEPTEST;
-const hasArt = hasBeeptestArt('skull-closing.webp');
+// The stoked skull, the app's own art (always present), crying with laughter.
+const hasArt = hasBeeptestArt('cast/skull-stoked.webp');
 ---
 <section class="bt-sec" aria-labelledby="bt-free-h">
   <div class:list={['bt-wrap', 'bt-split', { 'bt-no-art': !hasArt }]}>
@@ -11,10 +13,11 @@ const hasArt = hasBeeptestArt('skull-closing.webp');
       <h2 class="bt-h2" id="bt-free-h">{free.heading}</h2>
       <p class="bt-payoff">{free.payoff}</p>
       <p class="bt-body">{free.body}</p>
+      <Heckle line={BEEPTEST.heckles.free} class="bt-heckle--row" />
     </div>
     {hasArt && (
-      <img class="bt-beat" src="/beeptest/assets/img/skull-closing.webp" alt={free.skullAlt}
-           width="1000" height="1000" loading="lazy" decoding="async" />
+      <img class="bt-beat" src="/beeptest/assets/img/cast/skull-stoked.webp" alt={free.skullAlt}
+           width="600" height="600" loading="lazy" decoding="async" />
     )}
   </div>
 </section>
