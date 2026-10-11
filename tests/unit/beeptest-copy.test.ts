@@ -78,7 +78,7 @@ describe('the banned list itself', () => {
 
 describe('provenance traps', () => {
   it('finds the OG card text it scans (guards the guard)', () => {
-    expect(OG_TEXT).toEqual(['THE BEEP TEST SUCKS.', 'Before the Beep · coming soon']);
+    expect(OG_TEXT).toEqual(['THE BEEP TEST SUCKS.', 'Before the Beep · out now']);
   });
 
   it('never repeats the studio-wide iCloud rule, which is false for this app', () => {
@@ -87,8 +87,17 @@ describe('provenance traps', () => {
     expect(icloudRule).toContain('iCloud'); // guards the guard: RULES[2] is the rule we think it is
   });
 
-  it('links nowhere near the App Store', () => {
-    expect(ALL.some((s) => /apps\.apple\.com|itunes\.apple\.com/i.test(s))).toBe(false);
+  it('links to the App Store only through the one live listing URL', () => {
+    const LISTING = 'https://apps.apple.com/us/app/before-the-beep-beep-test/id6814849213';
+    expect(BEEPTEST.appStore.url).toBe(LISTING);
+    expect(product.appStore).toBe(LISTING);
+    const storeLinks = ALL.filter((s) => /apps\.apple\.com|itunes\.apple\.com/i.test(s));
+    expect(storeLinks.length).toBeGreaterThan(0);
+    for (const s of storeLinks) expect(s).toBe(LISTING);
+  });
+
+  it('says nothing about coming soon, notifications or a launch list now the app is live', () => {
+    expect(ALL.filter((s) => /coming soon|coming to|notif|launch list|not out yet|when it.s out/i.test(s))).toEqual([]);
   });
 
   it('uses the brand name the store title uses', () => {

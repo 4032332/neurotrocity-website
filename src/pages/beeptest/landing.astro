@@ -6,12 +6,11 @@ import ScreenFrames from '../../components/beeptest/ScreenFrames.astro';
 import Watch from '../../components/beeptest/Watch.astro';
 import Effort from '../../components/beeptest/Effort.astro';
 import FreeFirst from '../../components/beeptest/FreeFirst.astro';
-import LaunchList from '../../components/beeptest/LaunchList.astro';
 import { BEEPTEST } from '../../content/beeptest';
 
-const { name, meta } = BEEPTEST;
+const { name, meta, appStore } = BEEPTEST;
 
-// No offers, ratings or download URL: there is nothing to download yet (B16).
+// No offers or ratings (B16): only the store listing itself, now it is live (B25).
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -20,6 +19,7 @@ const jsonLd = {
   applicationCategory: 'HealthApplication',
   description: meta.description,
   url: `https://neurotrocity.com${meta.path}`,
+  downloadUrl: appStore.url,
   inLanguage: 'en-AU',
   author: { '@type': 'Organization', name: 'NeuroTrocity', url: 'https://neurotrocity.com' },
 };
@@ -31,5 +31,4 @@ const jsonLd = {
   <Watch />
   <Effort />
   <FreeFirst />
-  <LaunchList />
 </BeeptestLayout>

@@ -14,14 +14,14 @@ describe('facts', () => {
     ]);
   });
 
-  it('marks only Before the Beep as not yet released', () => {
-    expect(PRODUCTS.filter(p => !isReleased(p)).map(p => p.slug)).toEqual(['beeptest']);
+  it('marks every product as released now Before the Beep is live', () => {
+    expect(PRODUCTS.filter(p => !isReleased(p)).map(p => p.slug)).toEqual([]);
   });
 
   it('never tells a visitor they can use an app today that has no listing', () => {
     expect(JSON.stringify(HOME)).not.toContain('right now');
     // /apps/: "The apps we ship: …"
-    expect(APPS_PAGE.meta.description).not.toContain('Before the Beep');
+    expect(APPS_PAGE.meta.description).toContain('Before the Beep');
   });
 
   it('carries exactly one of path/url per product, never both, never neither', () => {

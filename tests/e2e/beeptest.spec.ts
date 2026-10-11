@@ -2,7 +2,6 @@ import { test, expect } from '@playwright/test';
 import { BEEPTEST } from '../../src/content/beeptest';
 import { pacingSchedule } from '../../src/content/beeptest-protocol';
 import { BANNED, REQUIRED_WARNING } from '../../src/content/beeptest-rules';
-import { buttondownAction } from '../../src/content/beeptest-signup';
 import { hasBeeptestArt } from '../../src/content/beeptest-art';
 
 const LANDING = '/beeptest/landing/';
@@ -27,9 +26,36 @@ test('the studio cortex field and spine are off', async ({ page }) => {
   await expect(page.locator('canvas')).toHaveCount(0);
 });
 
-test('no link points at the App Store yet', async ({ page }) => {
+const APP_STORE = 'https://apps.apple.com/us/app/before-the-beep-beep-test/id6814849213';
+
+test('every App Store link is the live listing, exactly, in the nav, hero and free-test section', async ({ page }) => {
   await page.goto(LANDING);
-  await expect(page.locator('a[href*="apps.apple.com"]')).toHaveCount(0);
+  const links = page.locator('a[href*="apps.apple.com"]');
+  await expect(links).toHaveCount(3);
+  for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) {
+    expect(href).toBe(APP_STORE);
+  }
+  await expect(page.locator('.bt-bar a.bt-navcta', { hasText: BEEPTEST.nav.cta.label })).toHaveAttribute('href', APP_STORE);
+  await expect(page.locator('.bt-hero').getByRole('link', { name: 'Download on the App Store' })).toHaveAttribute('href', APP_STORE);
+  await expect(page.locator('#download').getByRole('link', { name: 'Download on the App Store' })).toHaveAttribute('href', APP_STORE);
+  // Same tab: on an iPhone the listing hands straight over to the App Store app.
+  for (const t of await links.evaluateAll((els) => els.map((e) => e.getAttribute('target')))) expect(t).toBeNull();
+});
+
+for (const path of ['/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/', '/beeptest/support/']) {
+  test(`${path} says nothing about coming soon or getting notified`, async ({ page }) => {
+    await page.goto(path);
+    const text = await page.locator('body').innerText();
+    expect(text).not.toMatch(/coming soon|get notified|notify me|when it.s out|launch list|not out yet/i);
+  });
+}
+
+test('there is no email sign-up form on the landing page', async ({ page }) => {
+  await page.goto(LANDING);
+  await expect(page.locator('form')).toHaveCount(0);
+  await expect(page.locator('input[type="email"]')).toHaveCount(0);
+  await expect(page.locator('#launch')).toHaveCount(0);
+  expect(await page.content()).not.toMatch(/buttondown/i);
 });
 
 test('the hero skull loads', async ({ page }) => {
@@ -194,50 +220,6 @@ test('every image on the landing page actually loads', async ({ page }) => {
   }
 });
 
-test('the launch list is a plain labelled email field', async ({ page }) => {
-  await page.goto(LANDING);
-  const email = page.getByLabel(BEEPTEST.launch.label);
-  await expect(email).toHaveAttribute('type', 'email');
-  await expect(email).toHaveAttribute('name', 'email');
-  await expect(email).toHaveAttribute('autocomplete', 'email');
-  await expect(page.locator('#launch')).toContainText(BEEPTEST.launch.consent);
-  await expect(page.locator('#launch a[href="/beeptest/privacy/"]')).toHaveCount(1);
-});
-
-test('the launch list posts natively to Buttondown when configured, and is visibly closed when not', async ({ page }) => {
-  await page.goto(LANDING);
-  const form = page.locator('form[data-bt-signup]');
-  const action = buttondownAction(BEEPTEST.launch.buttondownUsername);
-  if (action === null) {
-    expect(await form.getAttribute('action')).toBeNull();
-    await expect(page.getByLabel(BEEPTEST.launch.label)).toBeDisabled();
-    await expect(page.locator('[data-bt-status]')).toHaveText(BEEPTEST.launch.closed);
-  } else {
-    await expect(form).toHaveAttribute('action', action);
-    await expect(form).toHaveAttribute('method', 'post');
-    await expect(form).toHaveAttribute('target', '_blank');
-    await expect(form.locator('input[name="embed"]')).toHaveValue('1');
-  }
-});
-
-test('the hero’s first button reaches the launch list', async ({ page }) => {
-  await page.goto(LANDING);
-  await page.getByRole('link', { name: BEEPTEST.hero.primary.label }).click();
-  await expect(page).toHaveURL(/#launch$/);
-  await expect(page.locator('#launch')).toBeInViewport();
-});
-
-test('nothing on the page fetches Buttondown', async ({ page }) => {
-  // B19: Buttondown's docs forbid fetch; CAPTCHA and errors need a real page.
-  const calls: string[] = [];
-  page.on('request', (r) => {
-    if (r.url().includes('buttondown') && ['fetch', 'xhr'].includes(r.resourceType())) calls.push(r.url());
-  });
-  await page.goto(LANDING);
-  await page.waitForLoadState('networkidle');
-  expect(calls).toEqual([]);
-});
-
 for (const path of ['/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/', '/beeptest/support/']) {
   test(`${path} renders no s5M(8)-banned phrase`, async ({ page }) => {
     await page.goto(path);
@@ -249,11 +231,11 @@ for (const path of ['/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/
   });
 }
 
-test('/apps/ shows Before the Beep as coming soon, linking to its page', async ({ page }) => {
+test('/apps/ shows Before the Beep as a live app, linking to its page like the other apps', async ({ page }) => {
   await page.goto('/apps/');
   const tile = page.locator('#apps a.app', { hasText: BEEPTEST.name });
   await expect(tile).toHaveAttribute('href', '/beeptest/landing/');
-  await expect(tile).toContainText('Coming soon');
+  await expect(tile).not.toContainText(/coming soon/i);
 });
 
 test('the free-test section jokes, then states the offer plainly', async ({ page }) => {
@@ -263,6 +245,7 @@ test('the free-test section jokes, then states the offer plainly', async ({ page
   await expect(section.locator('.bt-payoff')).toHaveText(BEEPTEST.free.payoff);
   // The joke never carries the fact alone: the offer is stated in plain words.
   await expect(section).toContainText('Your first test is free.');
+  await expect(section.getByRole('link', { name: 'Download on the App Store' })).toHaveAttribute('href', APP_STORE);
 });
 
 test('the /apps/ Before the Beep tile renders no s5M(8)-banned phrase', async ({ page }) => {

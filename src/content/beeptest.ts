@@ -12,6 +12,9 @@
  */
 import { CONTACT } from './facts';
 import { REQUIRED_WARNING } from './beeptest-rules';
+/** The live App Store listing (B25, 11 Oct 2026). Every download link points here. */
+const APP_STORE_URL = 'https://apps.apple.com/us/app/before-the-beep-beep-test/id6814849213';
+
 import { LAST_UPDATED, PRIVACY_SECTIONS, EULA_SECTIONS, SUPPORT_SECTIONS } from './beeptest-docs';
 
 export const BEEPTEST = {
@@ -19,13 +22,18 @@ export const BEEPTEST = {
 
   meta: {
     title: 'Before the Beep — beep test training for iPhone and Apple Watch',
-    // First sentence: the store promotional text, verbatim. Second: status.
+    // First sentence: the store promotional text, verbatim. Second: status (B25).
     description:
-      'Pacing cues at 70, 80 and 90 percent of every shuttle, so you learn the pace instead of guessing it. Coming to iPhone and Apple Watch.',
+      'Pacing cues at 70, 80 and 90 percent of every shuttle, so you learn the pace instead of guessing it. On the App Store for iPhone and Apple Watch.',
     path: '/beeptest/landing/',
   },
 
-  nav: { cta: { label: 'Get notified', href: '/beeptest/landing/#launch' } },
+  appStore: {
+    url: APP_STORE_URL,
+    label: 'Download on the App Store',
+  },
+
+  nav: { cta: { label: 'Download', href: APP_STORE_URL } },
 
   hero: {
     // Rob’s words, 23 Sep 2026, set as a three-size sequence. "cheat the beep",
@@ -39,7 +47,7 @@ export const BEEPTEST = {
     payoff: 'cheat the beep.',
     // Store description, opening two sentences, verbatim.
     lede: 'Most beep test apps play you a beep and leave you to guess the rest. This one tells you where you should be.',
-    primary: { label: 'Get told when it’s out', href: '#launch' },
+    primary: { label: 'Download on the App Store', href: APP_STORE_URL },
     secondary: { label: 'How it works', href: '#pacing' },
     skullAlt: 'The Before the Beep skull, drawn in thick black ink: cracked, dripping sweat, tongue hanging out',
   },
@@ -112,7 +120,6 @@ export const BEEPTEST = {
     pacing: 'WHO TAUGHT YOU TO PACE? WAS IT THE APP? IT WAS THE APP.',
     watch: 'THE BEEPS ARE WARMED UP. ARE YOU?',
     free: 'WANT MORE OF ME? THAT’LL COST YOU, CHAMPION.',
-    launch: 'OH GOOD. FRESH MEAT.',
   },
 
   merch: {
@@ -120,30 +127,6 @@ export const BEEPTEST = {
     /** The Shopify store (print on demand through Printify). Null until the store
      *  exists; while null, no Merch link renders anywhere. Set the store's https URL. */
     url: null as string | null,
-  },
-
-  launch: {
-    id: 'launch',
-    eyebrow: 'Coming soon',
-    heading: 'Not out yet.',
-    body: 'Leave your email and we’ll tell you when Before the Beep is on the App Store.',
-    label: 'Email address',
-    placeholder: 'you@example.com',
-    button: 'Notify me',
-    // Spam Act 2003 (Cth): who is sending, what it is about, and that
-    // unsubscribing is always possible.
-    consent:
-      'Sent by NeuroTrocity, through Buttondown, about the release of Before the Beep. Every email has an unsubscribe link.',
-    privacyLink: 'Privacy policy',
-    opened: 'Nearly there — finish up in the tab that just opened.',
-    closed: 'The launch list opens soon.',
-    /**
-     * The Buttondown username: the part after /embed-subscribe/ in the form
-     * code Buttondown gives you. Stays null until BOTH the Buttondown account
-     * exists AND the privacy policy describes the list (spec §5.7). While null
-     * the form renders disabled instead of posting anywhere.
-     */
-    buttondownUsername: null as string | null,
   },
 
   footer: {

@@ -7,12 +7,15 @@ const { free } = BEEPTEST;
 // The stoked skull, the app's own art (always present), crying with laughter.
 const hasArt = hasBeeptestArt('cast/skull-stoked.webp');
 ---
-<section class="bt-sec" aria-labelledby="bt-free-h">
+<section class="bt-sec" id="download" aria-labelledby="bt-free-h">
   <div class:list={['bt-wrap', 'bt-split', { 'bt-no-art': !hasArt }]}>
     <div>
       <h2 class="bt-h2" id="bt-free-h">{free.heading}</h2>
       <p class="bt-payoff">{free.payoff}</p>
       <p class="bt-body">{free.body}</p>
+      <div class="bt-cta">
+        <a class="bt-btn" href={BEEPTEST.appStore.url}>{BEEPTEST.appStore.label}</a>
+      </div>
       <Heckle line={BEEPTEST.heckles.free} class="bt-heckle--row" />
     </div>
     {hasArt && (

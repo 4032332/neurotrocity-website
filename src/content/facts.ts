@@ -10,9 +10,12 @@ interface ProductBase {
   accent: 'volt' | 'ember' | 'cyan' | 'jade' | 'flare';
   /** Only for the things on /apps/. Rewire is a service and omits it. */
   appCategory?: 'MobileApplication' | 'WebApplication';
-  /** Set while an app has no App Store listing. /apps/ labels its tile, and
-   *  every sentence claiming you can use our apps right now leaves it out. */
-  status?: 'coming-soon';
+  /** 'coming-soon' while an app has no App Store listing: /apps/ labels its tile,
+   *  and every sentence claiming you can use our apps right now leaves it out.
+   *  'live' (or unset) once it ships. */
+  status?: 'coming-soon' | 'live';
+  /** The App Store listing, once there is one. The tile still opens our landing page. */
+  appStore?: string;
 }
 
 /** A product carries either a site-relative `path` or an off-site `url`, never both, never neither. */
@@ -58,7 +61,8 @@ export const PRODUCTS: Product[] = [
     accent: 'jade', platforms: 'Web', appCategory: 'WebApplication',
     description: 'The calendar every agent hands out at Christmas, with your face on it and your listings in it — the whole folder done in one go.' },
   { slug: 'beeptest', name: 'Before the Beep', path: '/beeptest/landing/', accent: 'flare',
-    platforms: 'iPhone · Watch', appCategory: 'MobileApplication', status: 'coming-soon',
+    platforms: 'iPhone · Watch', appCategory: 'MobileApplication', status: 'live',
+    appStore: 'https://apps.apple.com/us/app/before-the-beep-beep-test/id6814849213',
     // Store promotional text, first sentence, verbatim (beep-test/docs/app-store-listing.md).
     description: 'Pacing cues at 70, 80 and 90 percent of every shuttle, so you learn the pace instead of guessing it.' },
 ];

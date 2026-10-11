@@ -210,7 +210,7 @@ const svg = await satori(
             style: { display: 'flex', flexDirection: 'column', marginLeft: 28, width: 512, color: '#F2EDE4' },
             children: [
               { type: 'div', props: { style: { fontSize: 72, lineHeight: 0.95, letterSpacing: -3 }, children: 'THE BEEP TEST SUCKS.' } },
-              { type: 'div', props: { style: { fontSize: 34, marginTop: 30, color: '#FF3B2F' }, children: 'Before the Beep · coming soon' } },
+              { type: 'div', props: { style: { fontSize: 34, marginTop: 30, color: '#FF3B2F' }, children: 'Before the Beep · out now' } },
             ],
           },
         },

@@ -124,6 +124,7 @@ measures, which is why the geometry is coded rather than generated (B6).
 | **B22** | **Merch links go straight to a Shopify store (print on demand via Printify), from the nav and the hero** | Rob, 6 Oct. One setting, `BEEPTEST.merch.url`; while it is null no Merch link renders, so there is never a dead link. Anything printed about the test follows §2.1, and no agency logo, crest or name |
 | **B23** | **The App Store screenshots replace the placeholder frames (supersedes B13)** | Rob, 6 Oct: "use the ones we submitted to the app store". The eight designed screenshots from `beep-test/docs/asc/screenshots/designed/`, their text already cleared for the listing; each alt is its own headline and subline |
 | **B24** | **The page takes on the app's personality: the heckler, the skull moods, floating hands and the ember glow** | Rob, 7 Oct. Speech boxes quote the app's own clean lines verbatim; the rattled, stoked and smug skulls and two floating-hands pieces are the app's art. **No heckler or hands in the warning section**: a joke beside "stop immediately if you feel dizzy" would undercut the warning (§2.1). The 'first hit' skull is now stoked; the flame skull fades into the page instead of sitting in a square |
+| **B25** | **The app is live: every pre-launch line goes, and the download button points at the store listing (supersedes B16, B17, B19 and §5.7)** | Rob, 11 Oct 2026: "We need to add a live link to the website landing page and remove any 'coming soon' sections." Listing: `https://apps.apple.com/us/app/before-the-beep-beep-test/id6814849213` (`BEEPTEST.appStore.url`, `PRODUCTS[beeptest].appStore`). A text button, "Download on the App Store", sits in the hero, the nav ("Download") and the free-test section; Apple's official badge artwork was not in the repo and was not fetched, so no imitation badge is drawn. Links open in the same tab so an iPhone hands straight to the App Store. The Buttondown launch list is removed with its component, helper and tests (Rob: the email list is not needed now); the privacy policy's one sentence about the list stays for now. `PRODUCTS[beeptest].status` is `live`; the /apps/ tile still opens the landing page, as DoseTrack and DisPoint do, and loses its "Coming soon" label. OG card: "Before the Beep · out now". The free-test joke stands: the first test is still free (D20) |
 
 ---
 
@@ -343,7 +344,7 @@ are ~3 MB each and are source material, not shippable assets.
   `https://neurotrocity.com/beeptest/landing/`. One line, different repo. Not changed from here
   without Rob asking.
 - **Real screenshots** — blocked upstream on the placeholder screening screen (B13).
-- **App Store link** — replaced by §5.7 until a listing exists (B16).
+- **App Store link** — live since 11 Oct 2026 (B25); §5.7 is superseded.
 - **`app-store-listing.md`** in the `beep-test` repo still presents
   `Beep Test: Shuttle Run Trainer` as a live title recommendation. Rob declined it on 23 Sep
   (§11.1); that document should be updated to record the decision.
