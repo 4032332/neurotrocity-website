@@ -228,18 +228,20 @@ export type Book = BookBase & (
 export const isLive = (b: Book): b is Extract<Book, { status: 'live' }> => b.status === 'live';
 
 export const BOOKS: Book[] = [
-  { slug: 'nurses', title: 'Nurse Sh*t', status: 'live', url: STORE_URL,
-    hook: 'What Nurses Really Want to Say at Crime Scenes',
+  // Second editions (Oct 2026): titles uncensored to match the covers; hooks
+  // are each cover's voice line, from colouring-books/<book>/kdp/listing-v2.md.
+  { slug: 'nurses', title: 'Nurse Shit', status: 'live', url: STORE_URL,
+    hook: 'Tell the patients and doctors how you really feel.',
     cover: '/assets/img/books/nurses.webp',
-    coverAlt: 'Cover: the title on a white panel over a pattern of pills, coffee cups and crime-scene tape' },
-  { slug: 'teachers', title: 'Teacher Sh*t', status: 'live', url: STORE_URL,
-    hook: 'What Primary Teachers Really Want to Say by Week Three',
+    coverAlt: 'Cover: the title in fat teal bubble letters, framed by flowers, syringes, stethoscopes and bandages' },
+  { slug: 'teachers', title: 'Little Kid Teacher Shit', status: 'live', url: STORE_URL,
+    hook: 'Everything you wish you could scream at the kids.',
     cover: '/assets/img/books/teachers.webp',
-    coverAlt: 'Cover: the title on a white panel over a pattern of pencils, rulers, apples, whistles and bucket hats' },
-  { slug: 'high-school', title: 'High School Sh*t', status: 'live', url: STORE_URL,
-    hook: 'What High School Teachers Really Want to Say by Period Five',
+    coverAlt: 'Cover: the title in fat yellow bubble letters, framed by flowers, pencils, paintbrushes, an apple and a school bell' },
+  { slug: 'high-school', title: 'Big Kid Teacher Shit', status: 'live', url: STORE_URL,
+    hook: 'Kids suck, especially the big ones.',
     cover: '/assets/img/books/high-school.webp',
-    coverAlt: 'Cover: the title on a white panel over a pattern of clocks, laptops, coffee cups, lanyards and clipboards' },
+    coverAlt: 'Cover: the title in fat pink bubble letters, framed by flowers, phones, headphones, a skateboard and a basketball' },
   // Coming-soon hooks: placeholder copy until each book has its listing.
   { slug: 'ambos', title: 'Ambo Sh*t', status: 'coming-soon', prop: 'defib',
     hook: 'What paramedics really want to say with the lights on' },

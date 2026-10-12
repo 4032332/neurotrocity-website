@@ -9,11 +9,12 @@ const SRC = process.env.BOOKS_SRC ?? path.resolve('../../Digital-products/colour
 const OUT = 'public/assets/img/books';
 fs.mkdirSync(OUT, { recursive: true });
 
-// slug -> wrap file inside <SRC>/<dir>/cover/
+// slug -> front cover inside <SRC>/<dir>/cover/print/ (front panel plus bleed,
+// already split from the wrap by the colouring-books pipeline)
 const BOOKS = {
-  nurses: 'nurses/cover/nurse-shit-cover.png',
-  teachers: 'teachers/cover/teacher-shit-cover.png',
-  'high-school': 'high-school/cover/high-school-shit-cover.png',
+  nurses: 'nurses/cover/print/front.png',
+  teachers: 'teachers/cover/print/front.png',
+  'high-school': 'high-school/cover/print/front.png',
 };
 
 // Front panel + outer bleed, as a fraction of the wrap's height (8.625in / 11.25in).
@@ -22,7 +23,8 @@ const FRONT_W_PER_H = 8.625 / 11.25;
 for (const [slug, rel] of Object.entries(BOOKS)) {
   const file = path.join(SRC, rel);
   const { width, height } = await sharp(file).metadata();
-  const frontW = Math.round(height * FRONT_W_PER_H);
+  // A wrap still needs its front panel cut out; a front.png is already it.
+  const frontW = Math.min(width, Math.round(height * FRONT_W_PER_H));
   await sharp(file)
     .extract({ left: width - frontW, top: 0, width: frontW, height })
     .resize({ width: 600 })

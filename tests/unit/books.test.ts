@@ -6,9 +6,9 @@ import { BOOKS, STORE_URL, isLive } from '../../src/content/facts';
 describe('BOOKS', () => {
   it('lists the six titles verbatim, live first', () => {
     expect(BOOKS.map(b => [b.title, b.status])).toEqual([
-      ['Nurse Sh*t', 'live'],
-      ['Teacher Sh*t', 'live'],
-      ['High School Sh*t', 'live'],
+      ['Nurse Shit', 'live'],
+      ['Little Kid Teacher Shit', 'live'],
+      ['Big Kid Teacher Shit', 'live'],
       ['Ambo Sh*t', 'coming-soon'],
       ['Christmas Crime Scenes', 'coming-soon'],
       ['Cop Sh*t', 'coming-soon'],
