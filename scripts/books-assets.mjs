@@ -15,6 +15,7 @@ const BOOKS = {
   nurses: 'nurses/cover/print/front.png',
   teachers: 'teachers/cover/print/front.png',
   'high-school': 'high-school/cover/print/front.png',
+  ambos: 'ambos/cover/print/front.png',
 };
 
 // Front panel + outer bleed, as a fraction of the wrap's height (8.625in / 11.25in).

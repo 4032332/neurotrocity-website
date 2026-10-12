@@ -9,7 +9,7 @@ describe('BOOKS', () => {
       ['Nurse Shit', 'live'],
       ['Little Kid Teacher Shit', 'live'],
       ['Big Kid Teacher Shit', 'live'],
-      ['Ambo Sh*t', 'coming-soon'],
+      ['Ambo Shit', 'live'],
       ['Christmas Crime Scenes', 'coming-soon'],
       ['Cop Sh*t', 'coming-soon'],
     ]);

@@ -230,7 +230,7 @@ export const isLive = (b: Book): b is Extract<Book, { status: 'live' }> => b.sta
 export const BOOKS: Book[] = [
   // Second editions (Oct 2026): titles uncensored to match the covers; hooks
   // are each cover's voice line, from colouring-books/<book>/kdp/listing-v2.md.
-  { slug: 'nurses', title: 'Nurse Shit', status: 'live', url: STORE_URL,
+  { slug: 'nurses', title: 'Nurse Shit', status: 'live', url: 'https://www.amazon.com.au/dp/B0HMP8WR1X',
     hook: 'Tell the patients and doctors how you really feel.',
     cover: '/assets/img/books/nurses.webp',
     coverAlt: 'Cover: the title in fat teal bubble letters, framed by flowers, syringes, stethoscopes and bandages' },
@@ -242,9 +242,11 @@ export const BOOKS: Book[] = [
     hook: 'Kids suck, especially the big ones.',
     cover: '/assets/img/books/high-school.webp',
     coverAlt: 'Cover: the title in fat pink bubble letters, framed by flowers, phones, headphones, a skateboard and a basketball' },
+  { slug: 'ambos', title: 'Ambo Shit', status: 'live', url: 'https://www.amazon.com.au/dp/B0HMQSB6H5',
+    hook: 'Tell the radio, patients, and hospital how you really feel.',
+    cover: '/assets/img/books/ambos.webp',
+    coverAlt: 'Cover: the title in fat green bubble letters, framed by flowers, a stretcher, a stethoscope, a radio and a traffic cone' },
   // Coming-soon hooks: placeholder copy until each book has its listing.
-  { slug: 'ambos', title: 'Ambo Sh*t', status: 'coming-soon', prop: 'defib',
-    hook: 'What paramedics really want to say with the lights on' },
   { slug: 'christmas', title: 'Christmas Crime Scenes', status: 'coming-soon', prop: 'santa-hat',
     hook: 'Festive felonies, ready to colour' },
   { slug: 'cops', title: 'Cop Sh*t', status: 'coming-soon', prop: 'doughnut',
