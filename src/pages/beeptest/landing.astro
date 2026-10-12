@@ -3,6 +3,7 @@ import BeeptestLayout from '../../components/beeptest/BeeptestLayout.astro';
 import Hero from '../../components/beeptest/Hero.astro';
 import PacingBar from '../../components/beeptest/PacingBar.astro';
 import ScreenFrames from '../../components/beeptest/ScreenFrames.astro';
+import Plan from '../../components/beeptest/Plan.astro';
 import Watch from '../../components/beeptest/Watch.astro';
 import Effort from '../../components/beeptest/Effort.astro';
 import FreeFirst from '../../components/beeptest/FreeFirst.astro';
@@ -27,6 +28,7 @@ const jsonLd = {
 <BeeptestLayout title={meta.title} description={meta.description} path={meta.path} jsonLd={jsonLd}>
   <Hero />
   <PacingBar />
+  <Plan />
   <ScreenFrames />
   <Watch />
   <Effort />

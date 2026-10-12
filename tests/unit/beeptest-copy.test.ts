@@ -104,3 +104,17 @@ describe('provenance traps', () => {
     expect(BEEPTEST.name).toBe('Before the Beep');
   });
 });
+
+describe('1.1.1: three free sessions and the plan (B26)', () => {
+  const docs = fs.readFileSync(new URL('../../src/content/beeptest-docs.ts', import.meta.url), 'utf8');
+  it('no copy says the first test is free or offers one free test', () => {
+    for (const s of [...ALL, docs]) expect(s).not.toMatch(/first test is free|one free test|your free test/i);
+  });
+  it('the free section states three free sessions', () => {
+    expect(BEEPTEST.free.body).toContain('Your first three sessions are free');
+  });
+  it('the plan is Mon / Thu / Sat, never back to back', () => {
+    expect(BEEPTEST.plan.sessions.map((s) => s.day)).toEqual(['Mon', 'Thu', 'Sat']);
+    expect(BEEPTEST.plan.body).toContain('never back to back');
+  });
+});

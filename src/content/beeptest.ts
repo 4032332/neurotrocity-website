@@ -91,6 +91,22 @@ export const BEEPTEST = {
     body: 'Run from your wrist with haptics for every cue and beep. Leave the phone on the sideline.',
   },
 
+  // 1.1.1 (B26): the weekly plan, per beep-test spec 2026-10-11 D155–D157.
+  plan: {
+    id: 'plan',
+    eyebrow: 'The plan',
+    // The 1.1.1 store tagline, "OUTSMART THE BEEP.", in sentence case.
+    heading: 'Outsmart the beep.',
+    body: 'First session: a benchmark beep test. Then three runs a week, never back to back. We suggest Monday, Thursday, Saturday, but it’s flexible.',
+    sessions: [
+      { day: 'Mon', name: 'Steady run', what: '500 m or 1 km at your PB pace, held by the Pacer.' },
+      { day: 'Thu', name: 'Goal intervals', what: 'Big Scary Goal pace. 30 s on, 30 s off, 4\u00a0reps, 3\u00a0sets.' },
+      { day: 'Sat', name: 'Beep test practice', what: 'The full test, with the cues at 70, 80 and\u00a090%.' },
+    ],
+    note: 'Never back to back. Miss a day and the rest of the week re-spaces itself around a rest day.',
+    extras: 'New in the app: a how-it-works walkthrough that plays the 70, 80 and 90% cues before your first run, and a Home dashboard with this week’s sessions, your PB, your Big Goal, the gap between them and your streak.',
+  },
+
   effort: {
     eyebrow: 'Before you start',
     heading: 'It is designed to beat you.',
@@ -108,8 +124,9 @@ export const BEEPTEST = {
     // The plain offer stays in `body`, so the joke never carries the fact alone.
     heading: 'The first hit is always free…',
     payoff: '…that’s how you end up addicted for life.',
-    // Store description, closing line, verbatim. D20: the first test is free.
-    body: 'Your first test is free. No account, no sign-up — nothing leaves your phone.',
+    // 1.1.1 (B26, D154): three free sessions, any mix of beep tests, Pacer runs
+    // and goal intervals. Second sentence: store description closing line, verbatim.
+    body: 'Your first three sessions are free: beep tests, Pacer runs or goal intervals, any mix. Then Xtreme Mode. No account, no sign-up — nothing leaves your phone.',
     skullAlt: 'The skull, crying with laughter',
   },
 

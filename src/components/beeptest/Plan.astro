@@ -1,0 +1,24 @@
+---
+import { BEEPTEST } from '../../content/beeptest';
+
+const { plan } = BEEPTEST;
+// B26: the 1.1.1 weekly plan. Three runs, suggested days, never back to back.
+---
+<section class="bt-sec" id={plan.id} aria-labelledby="bt-plan-h">
+  <div class="bt-wrap">
+    <p class="bt-mono bt-eyebrow">{plan.eyebrow}</p>
+    <h2 class="bt-h2" id="bt-plan-h">{plan.heading}</h2>
+    <p class="bt-body">{plan.body}</p>
+    <ol class="bt-plan">
+      {plan.sessions.map((s) => (
+        <li>
+          <span class="bt-mono bt-plan-day">{s.day}</span>
+          <strong>{s.name}</strong>
+          <span class="bt-plan-what">{s.what}</span>
+        </li>
+      ))}
+    </ol>
+    <p class="bt-mono bt-plan-note">{plan.note}</p>
+    <p class="bt-body bt-plan-extras">{plan.extras}</p>
+  </div>
+</section>

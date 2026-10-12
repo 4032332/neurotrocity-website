@@ -18,7 +18,7 @@ const MAIL = `<a href="mailto:${CONTACT.general}">${CONTACT.general}</a>`;
 const APPLE_EULA = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY = '<a href="/beeptest/privacy/">privacy policy</a>';
 
-export const LAST_UPDATED = '27 September 2026';
+export const LAST_UPDATED = '12 October 2026';
 
 const RISK = [
   REQUIRED_WARNING,
@@ -27,6 +27,7 @@ const RISK = [
 ] as const;
 
 const SUBSCRIPTION = [
+  'Your first three sessions (beep tests, Pacer runs or goal-interval sessions, in any mix) are free and need no subscription. After that, Xtreme Mode is needed to keep training.',
   'Before the Beep offers an optional paid subscription called <strong>Xtreme Mode</strong>, billed monthly (Xtreme Monthly) or annually (Xtreme Annual). Each comes with a 7-day free trial for eligible new subscribers. The price and billing period are shown in the app before you buy.',
   'Payment is charged to your Apple ID account when you confirm the purchase or, if you start a free trial, when the trial ends. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period, and your account is charged for the renewal within the 24 hours before that period ends.',
   'You can manage or cancel your subscription at any time in your Apple account settings (on iPhone: Settings → your name → Subscriptions), or from <strong>Settings → Xtreme Mode → Manage subscription</strong> in the app. Any unused part of a free trial ends when you buy a subscription.',
@@ -48,7 +49,7 @@ export const PRIVACY_SECTIONS: readonly DocSection[] = [
         'Your first name and goal, if you enter them.',
         'Your test results and history.',
         'Your settings.',
-        'A record of whether you have used your free test. This is kept in the device keychain, so it survives reinstalling the app.',
+        'A count of how many of your three free sessions you have used. This is kept in the device keychain, so it survives reinstalling the app.',
       ],
       'None of this leaves your device, and we have no copy of it.',
     ],
@@ -56,9 +57,9 @@ export const PRIVACY_SECTIONS: readonly DocSection[] = [
   {
     h: 'Apple Health',
     body: [
-      'Health access is optional. If you allow it, the app saves each completed test to Apple Health as a workout, with its walking and running distance and active energy. It reads your heart rate and your VO2max so your results and stats are complete.',
+      'Health access is optional. If you allow it, the app saves each completed beep test, Pacer run and goal-interval session to Apple Health as a workout, with its walking and running distance and active energy. It reads your heart rate and your VO2max so your results and stats are complete.',
       'Health data is used only to log your runs and show your stats. It is never used for advertising or marketing, never sold, and never shared with anyone. The app does not store it in iCloud or on any server.',
-      'You can change these permissions at any time in the Health app → Sharing → Apps → Before the Beep. Turning Health off does not stop you running or saving a test.',
+      'You can change these permissions at any time in the Health app → Sharing → Apps → Before the Beep. Turning Health off does not stop you running or saving a session.',
     ],
   },
   {
@@ -154,8 +155,8 @@ export const SUPPORT_SECTIONS: readonly DocSection[] = [
   {
     h: 'What does the app do with Apple Health?',
     body: [
-      'Health access is optional. If you allow it, the app saves each completed test as a workout with its distance and active energy, and reads your heart rate and VO2max for your stats. Nothing is sent to us.',
-      'To change it, open the Health app → Sharing → Apps → Before the Beep. Saying no does not stop you running or saving a test.',
+      'Health access is optional. If you allow it, the app saves each completed beep test, Pacer run and goal-interval session as a workout with its distance and active energy, and reads your heart rate and VO2max for your stats. Nothing is sent to us.',
+      'To change it, open the Health app → Sharing → Apps → Before the Beep. Saying no does not stop you running or saving a session.',
     ],
   },
   {

@@ -244,7 +244,7 @@ test('the free-test section jokes, then states the offer plainly', async ({ page
   await expect(section.locator('h2')).toHaveText(BEEPTEST.free.heading);
   await expect(section.locator('.bt-payoff')).toHaveText(BEEPTEST.free.payoff);
   // The joke never carries the fact alone: the offer is stated in plain words.
-  await expect(section).toContainText('Your first test is free.');
+  await expect(section).toContainText('Your first three sessions are free');
   await expect(section.getByRole('link', { name: 'Download on the App Store' })).toHaveAttribute('href', APP_STORE);
 });
 
@@ -304,3 +304,20 @@ test('the skull heckles in every section except the warning', async ({ page }) =
   await expect(page.locator('#before-you-start .bt-heckle')).toHaveCount(0);
 });
 
+
+test('the weekly plan renders Mon, Thu, Sat and never back to back (B26)', async ({ page }) => {
+  await page.goto(LANDING);
+  const section = page.locator('#plan');
+  await expect(section.locator('h2')).toHaveText('Outsmart the beep.');
+  await expect(section.locator('.bt-plan-day')).toHaveText(['Mon', 'Thu', 'Sat']);
+  await expect(section).toContainText('never back to back');
+  await expect(section).toContainText('Never back to back');
+});
+
+for (const path of ['/beeptest/landing/', '/beeptest/privacy/', '/beeptest/eula/', '/beeptest/support/']) {
+  test(`${path} never offers a single free test (B26)`, async ({ page }) => {
+    await page.goto(path);
+    const text = (await page.locator('body').innerText()).toLowerCase();
+    expect(text).not.toMatch(/first test is free|one free test|your free test/);
+  });
+}
