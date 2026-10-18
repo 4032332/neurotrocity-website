@@ -1,8 +1,9 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
 import Heckle from './Heckle.astro';
+import StoreBadge from './StoreBadge.astro';
 
-const { hero, merch } = BEEPTEST;
+const { hero, merch, appStore } = BEEPTEST;
 
 // Manga speed lines: thin wedges converging on the centre. Computed at build
 // time and deterministic, so the SVG is identical on every build.
@@ -15,6 +16,7 @@ const RAYS = Array.from({ length: 64 }, (_, i) => {
   const inner = 250 + ((i * 37) % 110);
   return `${at(a - spread, 900)} ${at(a + spread, 900)} ${at(a, inner)}`;
 });
+const POSTER = '/beeptest/assets/video/fist-poster.webp';
 ---
 <section class="bt-hero" aria-labelledby="bt-hero-h">
   <svg class="bt-rays" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
@@ -23,23 +25,55 @@ const RAYS = Array.from({ length: 64 }, (_, i) => {
   <div class="bt-impact" aria-hidden="true"></div>
 
   <div class="bt-wrap bt-hero-grid">
-    <div>
+    <!-- B27: the film. Silent, looping; the poster is the LCP and the only
+         frame shown with motion reduced (the script below never plays it). -->
+    <div class="bt-film-wrap">
+      <video class="bt-film" muted loop playsinline preload="metadata" poster={POSTER}
+             width="720" height="1280" aria-label={hero.filmLabel} data-autoplay>
+        <source src="/beeptest/assets/video/fist-loop.webm" type="video/webm" />
+        <source src="/beeptest/assets/video/fist-loop.mp4" type="video/mp4" />
+      </video>
+      <Heckle line={BEEPTEST.heckles.hero} class="bt-heckle--hero" />
+    </div>
+
+    <div class="bt-hero-copy">
       <h1 class="bt-h1" id="bt-hero-h">
         <span class="l1">{hero.lines[0]}</span>
         <span class="l2">{hero.lines[1]}</span>
         <span class="l3">{hero.lines[2]} <em>{hero.payoff}</em></span>
       </h1>
-      <p class="bt-lede">{hero.lede}</p>
-      <div class="bt-cta">
-        <a class="bt-btn" href={hero.primary.href}>{hero.primary.label}</a>
-        <a class="bt-btn ghost" href={hero.secondary.href}>{hero.secondary.label}</a>
-        {merch.url && <a class="bt-btn ghost" href={merch.url}>{merch.label}</a>}
+
+      <p class="bt-kicker bt-mono">{hero.kicker}</p>
+      <ul class="bt-benefits">
+        {hero.benefits.map((b, i) => (
+          <li class="bt-benefit">
+            <span class="bt-benefit-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span><strong>{b.title}</strong> <span class="bt-benefit-body">{b.body}</span></span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="bt-hero-cta">
+        <StoreBadge height={48} class="bt-badge--hero" eager />
+        <div class="bt-hero-cta-side">
+          <p class="bt-micro">{appStore.micro}</p>
+          <a class="bt-textlink" href={hero.secondary.href}>{hero.secondary.label} <span aria-hidden="true">↓</span></a>
+          {merch.url && <a class="bt-textlink" href={merch.url}>{merch.label}</a>}
+        </div>
       </div>
-    </div>
-    <div class="bt-skull-wrap">
-      <img class="bt-skull" src="/beeptest/assets/img/skull-hero.webp" alt={hero.skullAlt}
-           width="1200" height="1200" fetchpriority="high" decoding="async" />
-      <Heckle line={BEEPTEST.heckles.hero} class="bt-heckle--hero" />
     </div>
   </div>
 </section>
+
+<script>
+  // Autoplay only when motion is welcome; otherwise the poster stays put.
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  for (const v of document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]')) {
+    const sync = () => {
+      if (mq.matches) { v.pause(); v.removeAttribute('autoplay'); }
+      else { v.muted = true; v.play().catch(() => {}); }
+    };
+    sync();
+    mq.addEventListener('change', sync);
+  }
+</script>

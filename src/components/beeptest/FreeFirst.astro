@@ -1,6 +1,7 @@
 ---
 import { BEEPTEST } from '../../content/beeptest';
 import Heckle from './Heckle.astro';
+import StoreBadge from './StoreBadge.astro';
 import { hasBeeptestArt } from '../../content/beeptest-art';
 
 const { free } = BEEPTEST;
@@ -14,7 +15,7 @@ const hasArt = hasBeeptestArt('cast/skull-stoked.webp');
       <p class="bt-payoff">{free.payoff}</p>
       <p class="bt-body">{free.body}</p>
       <div class="bt-cta">
-        <a class="bt-btn" href={BEEPTEST.appStore.url}>{BEEPTEST.appStore.label}</a>
+        <StoreBadge height={56} />
       </div>
       <Heckle line={BEEPTEST.heckles.free} class="bt-heckle--row" />
     </div>

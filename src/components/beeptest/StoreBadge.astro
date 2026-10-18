@@ -1,0 +1,15 @@
+---
+// Apple's official "Download on the App Store" badge (B27), unmodified, linking
+// to the live listing in the same tab. Apple: black badge preferred, its grey
+// border is part of the artwork, at least 40 px tall on screen, and clear space
+// of a quarter of its height (the margin below), so nothing sits on it.
+import { BEEPTEST } from '../../content/beeptest';
+interface Props { height?: number; class?: string; eager?: boolean }
+const { height = 48, class: cls, eager = false } = Astro.props;
+const { url, label, badge } = BEEPTEST.appStore;
+// The SVG's own box is 119.66407 × 40.
+const width = Math.round((height * 119.66407) / 40);
+---
+<a class:list={['bt-badge', cls]} href={url} style={`--h:${height}px`}>
+  <img src={badge} alt={label} width={width} height={height} decoding="async" loading={eager ? 'eager' : 'lazy'} />
+</a>

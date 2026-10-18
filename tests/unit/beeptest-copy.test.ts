@@ -118,3 +118,17 @@ describe('1.1.1: three free sessions and the plan (B26)', () => {
     expect(BEEPTEST.plan.body).toContain('never back to back');
   });
 });
+
+describe('B27: the first screen', () => {
+  it('has four benefits, Outsmart the beep, and the Final Destination line', () => {
+    expect(BEEPTEST.hero.benefits).toHaveLength(4);
+    expect(BEEPTEST.hero.kicker).toBe('Outsmart the beep.');
+    expect(BEEPTEST.hero.lines[1]).toContain('Final Destination');
+    expect(BEEPTEST.appStore.micro).toBe('Free to try · iPhone + Apple Watch');
+  });
+  it('the benefits make no superlative or AI claim', () => {
+    for (const s of strings([BEEPTEST.hero.benefits, BEEPTEST.hero.kicker, BEEPTEST.appStore.micro])) {
+      expect(s).not.toMatch(/\bonly\b|\bbest\b|\bguarantee|\bpass\b|\bAI\b|smart coach/i);
+    }
+  });
+});

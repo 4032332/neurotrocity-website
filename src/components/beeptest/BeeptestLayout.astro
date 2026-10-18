@@ -5,6 +5,7 @@
 import Base from '../../layouts/Base.astro';
 import '../../styles/beeptest.css';
 import { BEEPTEST } from '../../content/beeptest';
+import StoreBadge from './StoreBadge.astro';
 
 interface Props {
   title: string;
@@ -16,7 +17,7 @@ interface Props {
 }
 
 const { title, description, path, jsonLd, noindex = false } = Astro.props;
-const { name, nav, footer, merch } = BEEPTEST;
+const { name, footer, merch } = BEEPTEST;
 ---
 <Base title={title} description={description} path={path} ogImage="/beeptest/assets/img/og-beeptest.png" jsonLd={jsonLd}>
   <Fragment slot="head">
@@ -29,7 +30,7 @@ const { name, nav, footer, merch } = BEEPTEST;
       <a class="bt-mark" href="/beeptest/landing/">{name}</a>
       <div class="bt-bar-actions">
         {merch.url && <a class="bt-navcta" href={merch.url}>{merch.label}</a>}
-        <a class="bt-navcta" href={nav.cta.href}>{nav.cta.label}</a>
+        <StoreBadge height={40} class="bt-badge--nav" eager />
       </div>
     </div>
   </Fragment>

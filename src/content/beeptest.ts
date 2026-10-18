@@ -31,9 +31,12 @@ export const BEEPTEST = {
   appStore: {
     url: APP_STORE_URL,
     label: 'Download on the App Store',
+    // Apple's official black badge, unmodified (B27): developer.apple.com
+    // marketing guidelines. 40 px tall minimum on screen, clear space a quarter
+    // of its height. Every store link renders this, never a text button.
+    badge: '/beeptest/assets/img/app-store-badge-black.svg',
+    micro: 'Free to try · iPhone + Apple Watch',
   },
-
-  nav: { cta: { label: 'Download', href: APP_STORE_URL } },
 
   hero: {
     // Rob’s words, 23 Sep 2026, set as a three-size sequence. "cheat the beep",
@@ -45,11 +48,17 @@ export const BEEPTEST = {
       'There’s only one way to beat it before it beats you…',
     ],
     payoff: 'cheat the beep.',
-    // Store description, opening two sentences, verbatim.
-    lede: 'Most beep test apps play you a beep and leave you to guess the rest. This one tells you where you should be.',
-    primary: { label: 'Download on the App Store', href: APP_STORE_URL },
+    // B27: the first screen sells the app without a scroll. The 1.1.1 store
+    // tagline as a kicker, then four benefits (Rob, 18 Oct 2026).
+    kicker: 'Outsmart the beep.',
+    benefits: [
+      { title: 'Pacing cues', body: 'At 70, 80 and 90% of every shuttle: know where you should be before the beep.' },
+      { title: 'A weekly plan', body: 'Steady runs, goal intervals and practice tests, three runs a week.' },
+      { title: 'Apple Watch', body: 'Run it from your wrist with haptic cues.' },
+      { title: '3 free sessions', body: 'No account. Nothing leaves your phone.' },
+    ],
     secondary: { label: 'How it works', href: '#pacing' },
-    skullAlt: 'The Before the Beep skull, drawn in thick black ink: cracked, dripping sweat, tongue hanging out',
+    filmLabel: 'The Before the Beep skull winds up a floating bony fist and punches the screen, which cracks into a lightning burst',
   },
 
   pacing: {

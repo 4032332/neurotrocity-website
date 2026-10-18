@@ -35,7 +35,11 @@ test('every App Store link is the live listing, exactly, in the nav, hero and fr
   for (const href of await links.evaluateAll((els) => els.map((e) => e.getAttribute('href')))) {
     expect(href).toBe(APP_STORE);
   }
-  await expect(page.locator('.bt-bar a.bt-navcta', { hasText: BEEPTEST.nav.cta.label })).toHaveAttribute('href', APP_STORE);
+  await expect(page.locator('.bt-bar').getByRole('link', { name: 'Download on the App Store' })).toHaveAttribute('href', APP_STORE);
+  // B27: every store link is Apple's badge, never a text button.
+  for (const alt of await links.evaluateAll((els) => els.map((e) => e.querySelector('img')?.getAttribute('alt')))) {
+    expect(alt).toBe('Download on the App Store');
+  }
   await expect(page.locator('.bt-hero').getByRole('link', { name: 'Download on the App Store' })).toHaveAttribute('href', APP_STORE);
   await expect(page.locator('#download').getByRole('link', { name: 'Download on the App Store' })).toHaveAttribute('href', APP_STORE);
   // Same tab: on an iPhone the listing hands straight over to the App Store app.
@@ -58,12 +62,49 @@ test('there is no email sign-up form on the landing page', async ({ page }) => {
   expect(await page.content()).not.toMatch(/buttondown/i);
 });
 
-test('the hero skull loads', async ({ page }) => {
+test('the hero film is silent, looping, inline, with a poster (B27)', async ({ page }) => {
   await page.goto(LANDING);
-  const img = page.locator('.bt-hero img');
-  await expect(img).toHaveAttribute('alt', BEEPTEST.hero.skullAlt);
-  expect(await img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0)).toBe(true);
+  const v = page.locator('.bt-hero video');
+  await expect(v).toHaveCount(1);
+  await expect(v).toHaveAttribute('poster', /fist-poster\.webp$/);
+  await expect(v).toHaveAttribute('aria-label', BEEPTEST.hero.filmLabel);
+  const p = await v.evaluate((el: HTMLVideoElement) => ({ muted: el.muted, loop: el.loop, inline: el.playsInline, pre: el.preload }));
+  expect(p).toEqual({ muted: true, loop: true, inline: true, pre: 'metadata' });
+  await expect.poll(() => v.evaluate((el: HTMLVideoElement) => !el.paused)).toBe(true);
 });
+
+test('with motion reduced the film never plays: poster only (B27)', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto(LANDING);
+  await page.waitForTimeout(800);
+  const v = page.locator('.bt-hero video');
+  expect(await v.evaluate((el: HTMLVideoElement) => ({ paused: el.paused, autoplay: el.autoplay, t: el.currentTime })))
+    .toEqual({ paused: true, autoplay: false, t: 0 });
+});
+
+for (const [w, h] of [[1280, 720], [1440, 900], [390, 844]]) {
+  test(`at ${w}×${h} the headline, four benefits and the badge are all on the first screen (B27)`, async ({ page }) => {
+    await page.setViewportSize({ width: w, height: h });
+    await page.goto(LANDING);
+    const hero = page.locator('.bt-hero');
+    const items = [
+      page.locator('h1 .l1'),
+      ...BEEPTEST.hero.benefits.map((b) => hero.locator('.bt-benefit', { hasText: b.title })),
+      hero.getByRole('link', { name: 'Download on the App Store' }),
+    ];
+    for (const el of items) {
+      await expect(el).toBeVisible();
+      const box = (await el.boundingBox())!;
+      expect(box.y + box.height, await el.innerText().catch(() => 'badge')).toBeLessThanOrEqual(h);
+    }
+    await expect(hero.getByText('THE BEEP TEST SUCKS.', { exact: false })).toBeVisible();
+    await expect(page.locator('h1')).toContainText('Final Destination');
+    await expect(page.locator('h1')).toContainText('cheat the beep');
+    // The nav badge too.
+    const nav = (await page.locator('.bt-bar .bt-badge').boundingBox())!;
+    expect(nav.height).toBeGreaterThanOrEqual(40);
+  });
+}
 
 test('the speed lines cover the whole hero, edge to edge', async ({ page }) => {
   // Motion off: the entrance scale(1.35) would inflate the box and hide a clipped SVG.
