@@ -43,3 +43,9 @@ main:focus{ outline:none }
   *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important }
   html{ scroll-behavior:auto }
 }
+
+/* The NeuroTrocity mark: the N logo plus the wordmark in the banner's colours.
+   Fixed across pages, unlike the page-accent dot the venture marks still use. */
+.mk.nt b{ color:var(--bone) }
+.mk.nt .t{ color:var(--lav) }
+.mk .nm{ width:30px; height:30px; flex:none; display:block; margin:-4px 0 }

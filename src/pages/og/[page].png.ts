@@ -8,6 +8,11 @@ import { HOME, REWIRE_PAGE, APPS_PAGE, PRODUCTS_PAGE } from '../../content/copy'
 const FONT_DIR = path.join(process.cwd(), 'public/assets/fonts');
 const titleFont = fs.readFileSync(path.join(FONT_DIR, 'Manrope-ExtraBold.ttf'));
 const monoFont = fs.readFileSync(path.join(FONT_DIR, 'IBMPlexMono-Medium.ttf'));
+const BRAND_DIR = path.join(process.cwd(), 'src/assets/brand');
+const dataUri = (file: string, type: string) =>
+  `data:${type};base64,${fs.readFileSync(path.join(BRAND_DIR, file)).toString('base64')}`;
+const neurons = dataUri('og-neurons.jpg', 'image/jpeg');
+const nMark = dataUri('og-n-mark.png', 'image/png');
 
 type Card = { title: string; eyebrow: string; accent: string };
 
@@ -54,6 +59,25 @@ function cardMarkup({ title, eyebrow, accent }: Card) {
         fontFamily: 'Manrope',
       },
       children: [
+        // brand neuron photo, faded out toward the copy on the left
+        {
+          type: 'img',
+          props: {
+            src: neurons,
+            width: 1200, height: 896,
+            style: { position: 'absolute', top: '-133px', left: '180px', opacity: 0.75 },
+          },
+        },
+        {
+          type: 'div',
+          props: {
+            style: {
+              position: 'absolute', top: 0, left: 0, width: '1200px', height: '630px', display: 'flex',
+              backgroundImage: 'linear-gradient(90deg, #07060E 0%, #07060EE6 38%, #07060E66 75%, #07060E33 100%)',
+            },
+            children: [],
+          },
+        },
         // abstract brand backdrop
         {
           type: 'div',
@@ -86,10 +110,11 @@ function cardMarkup({ title, eyebrow, accent }: Card) {
         {
           type: 'div',
           props: {
-            style: { display: 'flex', fontSize: '30px', fontWeight: 800, letterSpacing: '-0.03em', position: 'relative' },
+            style: { display: 'flex', alignItems: 'center', fontSize: '30px', fontWeight: 800, letterSpacing: '-0.03em', position: 'relative' },
             children: [
-              { type: 'span', props: { style: { color: '#EFEEF7' }, children: 'Neuro' } },
-              { type: 'span', props: { style: { color: '#7C6BFF' }, children: 'Trocity' } },
+              { type: 'img', props: { src: nMark, width: 64, height: 64, style: { marginRight: '14px' } } },
+              { type: 'span', props: { style: { color: '#F3F0EA' }, children: 'Neuro' } },
+              { type: 'span', props: { style: { color: '#A78AF9' }, children: 'Trocity' } },
             ],
           },
         },
