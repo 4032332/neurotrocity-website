@@ -18,7 +18,7 @@ const MAIL = `<a href="mailto:${CONTACT.general}">${CONTACT.general}</a>`;
 const APPLE_EULA = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY = '<a href="/beeptest/privacy/">privacy policy</a>';
 
-export const LAST_UPDATED = '12 October 2026';
+export const LAST_UPDATED = '23 October 2026';
 
 const RISK = [
   REQUIRED_WARNING,
@@ -38,8 +38,8 @@ export const PRIVACY_SECTIONS: readonly DocSection[] = [
   {
     h: 'The short version',
     body: [
-      'Before the Beep is made by NeuroTrocity, in Australia. The app has no accounts, no servers, no analytics and no advertising. Everything it records stays on your iPhone and Apple Watch. We never receive it.',
-      'Our App Store privacy label is “Data Not Collected”, because no data from the app is sent to us or to anyone else.',
+      'Before the Beep is made by NeuroTrocity, in Australia. The app has no accounts, no servers, no analytics and no advertising. Everything it records stays on your iPhone and Apple Watch, and in your own private iCloud account if you use iCloud. We never receive it.',
+      'Our App Store privacy label is “Data Not Collected”, because no data from the app is sent to us or to anyone else. Your iCloud backup is held by Apple in your own account, not by us.',
     ],
   },
   {
@@ -49,16 +49,30 @@ export const PRIVACY_SECTIONS: readonly DocSection[] = [
         'Your first name and goal, if you enter them.',
         'Your test results and history.',
         'Your settings.',
-        'A count of how many of your three free sessions you have used. This is kept in the device keychain, so it survives reinstalling the app.',
+        'A count of how many of your three free beep tests you have used. This is kept in the device keychain, so it survives reinstalling the app. It is never backed up to iCloud.',
       ],
-      'None of this leaves your device, and we have no copy of it.',
+      'None of this is sent to us, and we have no copy of it.',
+    ],
+  },
+  {
+    h: 'iCloud backup',
+    body: [
+      'If you are signed in to iCloud, the app backs up your name and goal, your settings and your run history to your own private iCloud account, so they come back on a new phone. Your run history can include the heart rate recorded during a run.',
+      'This uses Apple’s CloudKit private database. It is stored by Apple under your Apple Account, and only you can see it. We cannot see, access or read it, and it is never used for advertising.',
+      'Backup is free and needs no setup. If you are not signed in to iCloud, everything stays on your device. You can turn iCloud off for the app in Settings → your name → iCloud, and delete its backup there under Manage Storage.',
+    ],
+  },
+  {
+    h: 'Exporting your training log',
+    body: [
+      'With Xtreme Mode, you can export your training log as a CSV or PDF file. The file is made on your device and goes only where you choose to share or save it. Nothing is sent to us.',
     ],
   },
   {
     h: 'Apple Health',
     body: [
       'Health access is optional. If you allow it, the app saves each completed beep test, Pacer run and goal-interval session to Apple Health as a workout, with its walking and running distance and active energy. It reads your heart rate and your VO2max so your results and stats are complete.',
-      'Health data is used only to log your runs and show your stats. It is never used for advertising or marketing, never sold, and never shared with anyone. The app does not store it in iCloud or on any server.',
+      'Health data is used only to log your runs and show your stats. It is never used for advertising or marketing, never sold, and never shared with anyone. It is never stored on our servers. If you use iCloud backup, heart rate recorded during a run is part of your run history in your own private iCloud account.',
       'You can change these permissions at any time in the Health app → Sharing → Apps → Before the Beep. Turning Health off does not stop you running or saving a session.',
     ],
   },
@@ -95,7 +109,7 @@ export const PRIVACY_SECTIONS: readonly DocSection[] = [
   {
     h: 'Access, correction and deletion',
     body: [
-      'Because we hold no data from the app, there is nothing for us to access, correct or delete. You can delete everything the app keeps by deleting the app. Health data the app has written can be deleted in the Health app.',
+      'Because we hold no data from the app, there is nothing for us to access, correct or delete. You can delete everything the app keeps by deleting the app, and its iCloud backup in Settings → your name → iCloud → Manage Storage. Health data the app has written can be deleted in the Health app.',
       `For the email list, use the unsubscribe link, or email ${MAIL} and we will remove your address.`,
     ],
   },
