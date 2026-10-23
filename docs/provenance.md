@@ -242,3 +242,17 @@ change made to quoted store text is `" - "` set as `" — "`.
 | beeptest.ts | `hero.filmLabel` | presentation copy | Describes the hero film below | Rendered as the video's `aria-label`; replaces `hero.skullAlt` |
 | Art | `/beeptest/assets/video/fist-loop.{mp4,webm}`, `fist-poster.{webp,jpg}` | own-asset | Rob's own Higgsfield film, round 5: `beep-test/art/films-r5/fist.mp4` (720×1280, 24 fps). Trimmed 1.00–4.92 s (black fade-in, slow open and fade-out removed), audio stripped; H.264 CRF 23 faststart, VP9 CRF 36; poster is the 2.6 s frame | Spec B27. Not one of the in-app films |
 | Art | `/beeptest/assets/img/app-store-badge-black.svg` | third-party mark, used per licence | Apple's official black "Download on the App Store" badge (US-UK), downloaded 2026-10-18 from `developer.apple.com/assets/elements/badges/download-on-the-app-store.svg` (byte-identical to the toolbox.marketingtools.apple.com API badge), approved by Rob | Unmodified; ≥40 px tall; clear space a quarter of its height (Apple App Store marketing guidelines) |
+
+## DisPoint landing — `/dispoint/landing/` (2026-10-23 "Window seat" rebuild)
+
+All copy is carried over from the previous live page or restates facts already on it and in the
+app (free, no account, on-device OCR, no loyalty account linking, 2:1 Everyday Rewards→Qantas and
+Flybuys→Velocity, status bands from `DepartureStatus`). Deal rows, creator drops and the
+Lock Screen countdown are illustrative examples, as on the previous page.
+
+| Asset | Kind | Source |
+|---|---|---|
+| `dispoint/assets/img/landing/window-*.webp`, `window-1920.jpg` | generated photograph (no claim) | Higgsfield Cinema Studio Image 2.5, 4K, job `4456f8a2-cba8-4992-b792-e1b30af882ce` — window-seat view over a fictional reef coast. No airline livery, no logos. |
+| `dispoint/assets/img/landing/landing-*.webp`, `landing-1920.jpg` | generated photograph (no claim) | Higgsfield Cinema Studio Image 2.5, 4K, job `7d16e9d3-62c6-4dbd-9bb2-19cf602f8707` — jet on approach over a fictional harbour city. No airline livery, no logos. |
+| `dispoint/assets/img/screens/*.jpg` | own-asset | DisPoint App Store screenshots (existing). |
+| `dispoint/assets/fonts/BigShouldersDisplay-Black.woff2` | own-asset (licensed font) | Big Shoulders Display 900, Google Fonts, SIL Open Font License 1.1. |
