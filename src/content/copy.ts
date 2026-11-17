@@ -343,6 +343,7 @@ export const PRODUCTS_PAGE = {
     items: BOOKS,
     buy: 'Buy on Amazon',
     soon: 'Coming soon',
+    privacy: 'This page uses the Meta Pixel to count visits and clicks through to Amazon, so we can measure our ads. Meta may use it to show you ads.',
   },
 
   contact: {

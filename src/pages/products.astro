@@ -207,6 +207,22 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
 .foot .cols a:hover{ color:var(--flare) }
 .foot-base{ margin-top:30px; padding-top:0; font-family:var(--mono); font-size:11.5px; font-variant-numeric:tabular-nums }
 </style>
+<!-- Meta Pixel: Colour Atrocities Books. PageView, plus InitiateCheckout when a
+     visitor heads to Amazon (Meta can't see the sale itself). -->
+<script is:inline>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1662890222157692');
+fbq('track','PageView');
+document.addEventListener('click',function(ev){
+  var a=ev.target.closest&&ev.target.closest('a[href*="amazon.com.au"]');if(!a||!window.fbq)return;
+  var m=a.href.match(/\/dp\/([A-Z0-9]{10})/),t=a.querySelector('h3');
+  fbq('track','InitiateCheckout',{content_ids:m?[m[1]]:[],content_type:'product',content_name:t?t.textContent.trim():'NeuroTrocity store',currency:'AUD'});
+});
+</script>
+<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=1662890222157692&ev=PageView&noscript=1" /></noscript>
 </Fragment>
 
 <Fragment slot="nav">
@@ -284,6 +300,8 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
     </div>
   </div>
 </section>
+
+<p class="wrap pixel-note">{books.privacy}</p>
 
 <section class="sec contact" id="contact" data-soma="Contact">
   <div class="wrap">
