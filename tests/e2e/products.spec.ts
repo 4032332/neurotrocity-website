@@ -6,20 +6,20 @@ const soon = BOOKS.filter(b => !isLive(b));
 
 test('lists every book, live first', async ({ page }) => {
   await page.goto('/products/');
-  const titles = await page.locator('#books .book h3').allInnerTexts();
+  const titles = await page.locator('#books .row h3, #books .book h3').allInnerTexts();
   expect(titles).toEqual(BOOKS.map(b => b.title));
 });
 
 test('live tiles open Amazon in a new tab', async ({ page }) => {
   await page.goto('/products/');
-  const tiles = page.locator('#books a.book.live');
+  const tiles = page.locator('#books a.row');
   await expect(tiles).toHaveCount(live.length);
   for (let i = 0; i < live.length; i++) {
     const t = tiles.nth(i);
     await expect(t).toHaveAttribute('href', live[i].url);
     await expect(t).toHaveAttribute('target', '_blank');
     expect(await t.getAttribute('rel')).toContain('noopener');
-    await expect(t.locator('img')).toHaveAttribute('alt', live[i].coverAlt);
+    await expect(t.locator('.cov img')).toHaveAttribute('alt', live[i].coverAlt);
   }
 });
 
