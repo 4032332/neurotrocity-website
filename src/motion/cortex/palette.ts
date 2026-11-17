@@ -38,11 +38,11 @@ export const PALETTES: Record<Accent, Palette> = {
     dust: 0xB98CD8,
   },
   flare: {
-    clusters: [0xFF3B2F, 0xFFC93C, 0xFF4FA3],
-    c1: [1.0, 0.231, 0.184],
-    // Hazard yellow, not the shared cyan, so the field reads crime-scene red
-    // and tape yellow rather than drifting green next to Rewire.
-    c2: [1.0, 0.788, 0.235],
-    dust: 0xD88A86,
+    clusters: [0xFF3B2F, 0xFF4FA3, 0x7C6BFF],
+    c1: [0.62, 0.10, 0.16],
+    // Deep berry, not hazard yellow: the yellow-red field washed the copy out
+    // into amber haze. Darker endpoints keep text legible over it.
+    c2: [0.40, 0.10, 0.42],
+    dust: 0xB07A9A,
   },
 };

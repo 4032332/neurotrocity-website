@@ -230,7 +230,7 @@ export const isLive = (b: Book): b is Extract<Book, { status: 'live' }> => b.sta
 export const BOOKS: Book[] = [
   // Second editions (Oct 2026): titles uncensored to match the covers; hooks
   // are each cover's voice line, from colouring-books/<book>/kdp/listing-v2.md.
-  { slug: 'nurses', title: 'Nurse Shit', status: 'live', url: 'https://www.amazon.com.au/dp/B0HNFG6G3V',
+  { slug: 'nurses', title: 'Nurse Sh*t', status: 'live', url: 'https://www.amazon.com.au/dp/B0HNFG6G3V',
     hook: 'Tell the patients and doctors how you really feel.',
     cover: '/assets/img/books/nurses.webp',
     coverAlt: 'Cover: the title in fat teal bubble letters, framed by flowers, syringes, stethoscopes and bandages' },
@@ -242,7 +242,7 @@ export const BOOKS: Book[] = [
     hook: 'Kids suck, especially the big ones.',
     cover: '/assets/img/books/high-school.webp',
     coverAlt: 'Cover: the title in fat pink bubble letters, framed by flowers, phones, headphones, a skateboard and a basketball' },
-  { slug: 'ambos', title: 'Ambo Shit', status: 'live', url: 'https://www.amazon.com.au/dp/B0HNNYNXF1',
+  { slug: 'ambos', title: 'Ambo Sh*t', status: 'live', url: 'https://www.amazon.com.au/dp/B0HNNYNXF1',
     hook: 'Tell the radio, patients, and hospital how you really feel.',
     cover: '/assets/img/books/ambos.webp',
     coverAlt: 'Cover: the title in fat green bubble letters, framed by flowers, a stretcher, a stethoscope, a radio and a traffic cone' },

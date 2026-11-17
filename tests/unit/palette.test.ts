@@ -6,7 +6,7 @@ describe('cortex palettes', () => {
     const p = PALETTES.flare;
     expect(p).toBeTruthy();
     expect(p.clusters[0]).toBe(0xFF3B2F);
-    expect(p.c1).toEqual([1.0, 0.231, 0.184]);
+    expect(p.c1).toEqual([0.62, 0.10, 0.16]);
   });
 
   it('keeps every shader endpoint in 0..1', () => {
