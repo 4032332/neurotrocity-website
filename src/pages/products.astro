@@ -104,6 +104,38 @@ section.sec.range-top{ padding-top:clamp(28px,3vw,40px) }
 h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; text-wrap:balance }
 .sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65 }
 
+/* Live books: one row each, the cover then two inside pages, then the copy. */
+.rows{ margin-top:22px; display:grid; gap:18px }
+.row{
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1.7fr) minmax(0,1fr); gap:clamp(14px,2vw,26px); align-items:center;
+  padding:clamp(14px,1.6vw,20px); color:inherit; border:1px solid var(--line); border-radius:10px;
+  background:color-mix(in srgb, var(--ground-2) 88%, transparent);
+  transition:border-color .25s, background .25s, transform .25s;
+}
+.row .cov img{ width:100%; height:auto; display:block; border-radius:4px; box-shadow:0 10px 26px rgba(0,0,0,.45) }
+.row .peek{ display:flex; flex-direction:column; gap:10px }
+.row .tag{ color:var(--flare); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase }
+.row .pgs{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+.row .pgs img{ width:100%; height:auto; display:block; background:#fff; border-radius:3px; padding:4%; box-shadow:0 6px 18px rgba(0,0,0,.4); transition:transform .4s cubic-bezier(.22,1,.36,1) }
+.row .pgs img:first-child{ transform:rotate(-1.5deg) }
+.row .pgs img:last-child{ transform:rotate(1.5deg) }
+.row .body{ display:flex; flex-direction:column; align-self:stretch; justify-content:center }
+.row h3{ font-weight:800; letter-spacing:-.03em; font-size:clamp(22px,2.3vw,30px); color:var(--ink) }
+.row p{ margin-top:10px; color:#CFCBDC; font-size:15.5px; line-height:1.55 }
+.row .go{ margin-top:20px; display:inline-block; align-self:flex-start; padding:11px 16px; border-radius:6px; background:var(--flare); color:#07060E; font-family:var(--mono); font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase }
+.row .go .arw{ display:inline-block; transition:transform .25s }
+a.row:hover, a.row:focus-visible{ border-color:color-mix(in srgb, var(--flare) 58%, transparent); transform:translateY(-3px) }
+a.row:hover .pgs img{ transform:rotate(0) scale(1.03) }
+a.row:hover .go .arw{ transform:translateX(4px) }
+@media (max-width:820px){
+  .row{ grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) }
+  .row .body{ grid-column:1 / -1 }
+}
+@media (max-width:520px){
+  .row{ grid-template-columns:1fr }
+}
+.books{ margin-top:28px }
+
 /* ── #books: a range pane, then one 3:4 tile per book ─────────────────── */
 .range .note{ margin-top:14px; color:var(--muted); font-size:15.5px; line-height:1.62 }
 .books{ margin-top:22px; display:grid; gap:18px; grid-template-columns:repeat(3,1fr) }
@@ -214,11 +246,17 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
       <h2>{books.heading}</h2>
       <p class="note">{books.note}</p>
     </div>
-    <div class="books">
-      {books.items.map((b) => isLive(b) ? (
-        <a class="book live" href={b.url} target="_blank" rel="noopener">
-          <span class="art">
-            <img src={b.cover} alt={b.coverAlt} width="600" height="782" loading="lazy" decoding="async" />
+    <div class="rows">
+      {books.items.filter(isLive).map((b) => (
+        <a class="row" href={b.url} target="_blank" rel="noopener">
+          <span class="cov"><img src={b.cover} alt={b.coverAlt} width="600" height="782" loading="lazy" decoding="async" /></span>
+          <span class="peek">
+            <span class="mono tag">Sneak peek inside</span>
+            <span class="pgs">
+              {b.peeks.map((src, i) => (
+                <img src={src} alt={`${b.title}: inside page ${i + 1}, black line art ready to colour`} width="460" height="600" loading="lazy" decoding="async" />
+              ))}
+            </span>
           </span>
           <span class="body">
             <h3>{b.title}</h3>
@@ -226,7 +264,10 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
             <span class="go">{books.buy}<span class="vh"> (opens in a new tab)</span> <span class="arw" aria-hidden="true">↗</span></span>
           </span>
         </a>
-      ) : (
+      ))}
+    </div>
+    <div class="books">
+      {books.items.filter((b) => !isLive(b)).map((b) => !isLive(b) && (
         <div class="book soon">
           <span class="art">
             <ChalkOutline prop={b.prop} />

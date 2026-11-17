@@ -221,7 +221,9 @@ interface BookBase {
 }
 
 export type Book = BookBase & (
-  | { status: 'live'; url: string; cover: string; coverAlt: string }
+  | { status: 'live'; url: string; cover: string; coverAlt: string;
+      /** Two inside pages shown beside the cover: Amazon has no look-inside for these. */
+      peeks: readonly [string, string] }
   | { status: 'coming-soon'; prop: 'defib' | 'santa-hat' | 'doughnut' }
 );
 
@@ -233,22 +235,27 @@ export const BOOKS: Book[] = [
   { slug: 'nurses', title: 'Nurse Sh*t', status: 'live', url: 'https://www.amazon.com.au/dp/B0HNFG6G3V',
     hook: 'Tell the patients and doctors how you really feel.',
     cover: '/assets/img/books/nurses.webp',
+    peeks: ['/assets/img/books/pages/nurses-t1-10.webp', '/assets/img/books/pages/nurses-t2-10.webp'],
     coverAlt: 'Cover: the title in fat teal bubble letters, framed by flowers, syringes, stethoscopes and bandages' },
   { slug: 'teachers', title: 'Little Kid Teacher Shit', status: 'live', url: 'https://www.amazon.com.au/dp/B0HPGNB2MW',
     hook: 'Everything you wish you could scream at the kids.',
     cover: '/assets/img/books/teachers.webp',
+    peeks: ['/assets/img/books/pages/teachers-t1-05.webp', '/assets/img/books/pages/teachers-t2-01.webp'],
     coverAlt: 'Cover: the title in fat yellow bubble letters, framed by flowers, pencils, paintbrushes, an apple and a school bell' },
   { slug: 'high-school', title: 'Big Kid Teacher Shit', status: 'live', url: 'https://www.amazon.com.au/dp/B0HP9CR9T2',
     hook: 'Kids suck, especially the big ones.',
     cover: '/assets/img/books/high-school.webp',
+    peeks: ['/assets/img/books/pages/high-school-t1-01.webp', '/assets/img/books/pages/high-school-t2-14.webp'],
     coverAlt: 'Cover: the title in fat pink bubble letters, framed by flowers, phones, headphones, a skateboard and a basketball' },
   { slug: 'ambos', title: 'Ambo Sh*t', status: 'live', url: 'https://www.amazon.com.au/dp/B0HNNYNXF1',
     hook: 'Tell the radio, patients, and hospital how you really feel.',
     cover: '/assets/img/books/ambos.webp',
+    peeks: ['/assets/img/books/pages/ambos-t1-01.webp', '/assets/img/books/pages/ambos-t2-01.webp'],
     coverAlt: 'Cover: the title in fat green bubble letters, framed by flowers, a stretcher, a stethoscope, a radio and a traffic cone' },
   { slug: 'gym', title: 'Gym Sh*t', status: 'live', url: 'https://www.amazon.com.au/dp/B0HQ2PJSXJ',
     hook: 'For gym bros, gym girls and everyone who wipes the bench.',
     cover: '/assets/img/books/gym.webp',
+    peeks: ['/assets/img/books/pages/gym-t1-02.webp', '/assets/img/books/pages/gym-t2-13.webp'],
     coverAlt: 'Cover: the title in fat bubble letters on a cobalt ground, framed by flowers, dumbbells, kettlebells and shaker bottles' },
   // Coming-soon hooks: placeholder copy until each book has its listing.
   { slug: 'christmas', title: 'Christmas Crime Scenes', status: 'coming-soon', prop: 'santa-hat',
