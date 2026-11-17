@@ -66,7 +66,7 @@ body > header:has(.bar){
 @media (max-width:420px){ .bar .wrap{ gap:12px } }
 
 /* ── hero ──────────────────────────────────────────────────────────────── */
-.hero{ min-height:min(72vh,640px); display:flex; align-items:center; padding-block:70px }
+.hero{ display:flex; align-items:center; padding-block:110px 24px }
 /* .wrap is a flex item here, so it sizes to its content rather than honouring
    max-width, and margin:0 auto then centres the shrunken box. Fill the line instead. */
 .hero .wrap{ width:100% }
@@ -96,6 +96,7 @@ body > header:has(.bar){
 
 /* ── sections ──────────────────────────────────────────────────────────── */
 section.sec{ padding-block:clamp(64px,8vw,104px); position:relative }
+section.sec.range-top{ padding-top:clamp(28px,3vw,40px) }
 .eyebrow{ color:var(--muted); margin-bottom:16px }
 h2{ font-weight:800; font-size:var(--step-2); line-height:1.03; letter-spacing:-.034em; text-wrap:balance }
 .sub{ margin-top:16px; color:var(--muted); font-size:16.5px; line-height:1.65 }
@@ -203,7 +204,7 @@ footer{ padding:44px 0 52px; color:var(--muted); font-size:13px }
   </div>
 </div>
 
-<section class="sec" id="books" data-soma="Colouring books">
+<section class="sec range-top" id="books" data-soma="Colouring books">
   <div class="wrap">
     <div class="range pane">
       <p class="mono eyebrow">{books.eyebrow}</p>
