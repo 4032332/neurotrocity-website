@@ -18,7 +18,7 @@ const MAIL = `<a href="mailto:${CONTACT.general}">${CONTACT.general}</a>`;
 const APPLE_EULA = 'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/';
 const PRIVACY = '<a href="/beeptest/privacy/">privacy policy</a>';
 
-export const LAST_UPDATED = '23 October 2026';
+export const LAST_UPDATED = '21 November 2026';
 
 const RISK = [
   REQUIRED_WARNING,
@@ -79,7 +79,7 @@ export const PRIVACY_SECTIONS: readonly DocSection[] = [
   {
     h: 'Location',
     body: [
-      'If you allow it, the app uses your location only while it is open, on iPhone or Apple Watch, to measure your running speed during a free run. Your route is never recorded or stored, and your location never leaves your device. The beep test itself does not use location.',
+      'If you allow it, the app uses your location only while it is open, on iPhone or Apple Watch, to measure your running speed during a free run or intervals. Your route is never recorded or stored, and your location never leaves your device. The beep test itself does not use location.',
     ],
   },
   {
