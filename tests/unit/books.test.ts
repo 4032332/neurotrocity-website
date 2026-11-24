@@ -11,8 +11,8 @@ describe('BOOKS', () => {
       ['Big Kid Teacher Shit', 'live'],
       ['Ambo Sh*t', 'live'],
       ['Gym Sh*t', 'live'],
-      ['Cop Sh*t', 'coming-soon'],
-      ['Firefighter Sh*t', 'coming-soon'],
+      ['Cop Sh*t', 'live'],
+      ['Firefighter Sh*t', 'live'],
       ['Parent Sh*t', 'coming-soon'],
     ]);
   });

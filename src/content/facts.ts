@@ -261,14 +261,14 @@ export const BOOKS: Book[] = [
     cover: '/assets/img/books/gym.webp',
     peeks: ['/assets/img/books/pages/gym-t1-02.webp', '/assets/img/books/pages/gym-t2-13.webp'],
     coverAlt: 'Cover: the title in fat bubble letters on a cobalt ground, framed by flowers, dumbbells, kettlebells and shaker bottles' },
-  // Finished, not yet on Amazon AU (Nov 2026). Give each its listing url and
-  // status 'live' once it is published.
-  { slug: 'cops', title: 'Cop Sh*t', status: 'coming-soon',
+  // Parent Sh*t is finished but not yet on Amazon AU (Nov 2026). Give it its
+  // listing url and status 'live' once it is published.
+  { slug: 'cops', title: 'Cop Sh*t', status: 'live', url: 'https://www.amazon.com.au/dp/B0HSSPVDNV',
     hook: 'For Australian police officers and everyone who has shared the station fork.',
     cover: '/assets/img/books/cops.webp',
     peeks: ['/assets/img/books/pages/cops-t1-03.webp', '/assets/img/books/pages/cops-t2-02.webp'],
     coverAlt: 'Cover: the title in fat white bubble letters, framed by flowers, a police cap, handcuffs, a traffic cone, a magpie and a police dog' },
-  { slug: 'firefighters', title: 'Firefighter Sh*t', status: 'coming-soon',
+  { slug: 'firefighters', title: 'Firefighter Sh*t', status: 'live', url: 'https://www.amazon.com.au/dp/B0HSS6BQXH',
     hook: 'For firies and hose fairies.',
     cover: '/assets/img/books/firefighters.webp',
     peeks: ['/assets/img/books/pages/firefighters-t1-02.webp', '/assets/img/books/pages/firefighters-t2-03.webp'],
