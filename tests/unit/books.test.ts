@@ -4,15 +4,16 @@ import path from 'node:path';
 import { BOOKS, STORE_URL, isLive } from '../../src/content/facts';
 
 describe('BOOKS', () => {
-  it('lists the seven titles verbatim, live first', () => {
+  it('lists the eight titles verbatim, live first', () => {
     expect(BOOKS.map(b => [b.title, b.status])).toEqual([
       ['Nurse Sh*t', 'live'],
       ['Little Kid Teacher Shit', 'live'],
       ['Big Kid Teacher Shit', 'live'],
       ['Ambo Sh*t', 'live'],
       ['Gym Sh*t', 'live'],
-      ['Christmas Crime Scenes', 'coming-soon'],
       ['Cop Sh*t', 'coming-soon'],
+      ['Firefighter Sh*t', 'coming-soon'],
+      ['Parent Sh*t', 'coming-soon'],
     ]);
   });
 
@@ -21,17 +22,24 @@ describe('BOOKS', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it('gives every live book an Amazon url and a cover file that exists', () => {
+  it('gives every live book an Amazon url', () => {
     for (const b of BOOKS.filter(isLive)) {
       expect(b.url, b.slug).toMatch(/^https:\/\/www\.amazon\.com\.au\//);
-      expect(b.coverAlt.trim().length, b.slug).toBeGreaterThan(0);
-      expect(fs.existsSync(path.join('public', b.cover)), `${b.cover} missing`).toBe(true);
     }
   });
 
-  it('gives every coming-soon book a chalk-outline prop', () => {
+  it('gives every book a cover, alt text and two inside pages that exist', () => {
+    for (const b of BOOKS) {
+      expect(b.coverAlt.trim().length, b.slug).toBeGreaterThan(0);
+      for (const f of [b.cover, ...b.peeks]) {
+        expect(fs.existsSync(path.join('public', f)), `${f} missing`).toBe(true);
+      }
+    }
+  });
+
+  it('never gives a coming-soon book a link', () => {
     for (const b of BOOKS.filter(b => !isLive(b))) {
-      expect(['defib', 'santa-hat', 'doughnut']).toContain((b as { prop: string }).prop);
+      expect('url' in b, b.slug).toBe(false);
     }
   });
 

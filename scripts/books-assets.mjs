@@ -16,6 +16,10 @@ const BOOKS = {
   teachers: 'teachers/cover/print/front.png',
   'high-school': 'high-school/cover/print/front.png',
   ambos: 'ambos/cover/print/front.png',
+  cops: 'cops/cover/print/front.png',
+  // The published FIRE FIGHTER SH*T cover is the alt set, not print/.
+  firefighters: 'firefighters/cover/alt/front.png',
+  parents: 'parents/cover/print/front.png',
 };
 
 // Front panel + outer bleed, as a fraction of the wrap's height (8.625in / 11.25in).

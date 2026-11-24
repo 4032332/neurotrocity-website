@@ -6,7 +6,7 @@ const soon = BOOKS.filter(b => !isLive(b));
 
 test('lists every book, live first', async ({ page }) => {
   await page.goto('/products/');
-  const titles = await page.locator('#books .row h3, #books .book h3').allInnerTexts();
+  const titles = await page.locator('#books .row h3').allInnerTexts();
   expect(titles).toEqual(BOOKS.map(b => b.title));
 });
 
@@ -23,14 +23,14 @@ test('live tiles open Amazon in a new tab', async ({ page }) => {
   }
 });
 
-test('coming-soon tiles are not links and say so in text', async ({ page }) => {
+test('coming-soon rows are not links and say so in text', async ({ page }) => {
   await page.goto('/products/');
-  const tiles = page.locator('#books div.book.soon');
+  const tiles = page.locator('#books div.row.soon');
   await expect(tiles).toHaveCount(soon.length);
   await expect(tiles.locator('a')).toHaveCount(0);
   for (let i = 0; i < soon.length; i++) {
     await expect(tiles.nth(i)).toContainText(/coming soon/i);
-    await expect(tiles.nth(i).locator('svg.chalk')).toHaveCount(1);
+    await expect(tiles.nth(i).locator('.cov img')).toHaveAttribute('alt', soon[i].coverAlt);
   }
 });
 

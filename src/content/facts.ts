@@ -216,15 +216,19 @@ interface BookBase {
   slug: string;
   /** Verbatim as published on the cover. */
   title: string;
-  /** Live: the KDP subtitle up to the colon, from colouring-books/<book>/kdp/listing.md. */
+  /** The cover's voice line, from colouring-books/<book>/kdp/listing*.md. */
   hook: string;
+  cover: string;
+  coverAlt: string;
+  /** Two inside pages shown beside the cover: Amazon has no look-inside for these. */
+  peeks: readonly [string, string];
 }
 
+/** A coming-soon book is finished but not yet on Amazon: it has no url, so its
+ *  row is not a link and it is left out of the JSON-LD. */
 export type Book = BookBase & (
-  | { status: 'live'; url: string; cover: string; coverAlt: string;
-      /** Two inside pages shown beside the cover: Amazon has no look-inside for these. */
-      peeks: readonly [string, string] }
-  | { status: 'coming-soon'; prop: 'defib' | 'santa-hat' | 'doughnut' }
+  | { status: 'live'; url: string }
+  | { status: 'coming-soon' }
 );
 
 export const isLive = (b: Book): b is Extract<Book, { status: 'live' }> => b.status === 'live';
@@ -257,9 +261,21 @@ export const BOOKS: Book[] = [
     cover: '/assets/img/books/gym.webp',
     peeks: ['/assets/img/books/pages/gym-t1-02.webp', '/assets/img/books/pages/gym-t2-13.webp'],
     coverAlt: 'Cover: the title in fat bubble letters on a cobalt ground, framed by flowers, dumbbells, kettlebells and shaker bottles' },
-  // Coming-soon hooks: placeholder copy until each book has its listing.
-  { slug: 'christmas', title: 'Christmas Crime Scenes', status: 'coming-soon', prop: 'santa-hat',
-    hook: 'Festive felonies, ready to colour' },
-  { slug: 'cops', title: 'Cop Sh*t', status: 'coming-soon', prop: 'doughnut',
-    hook: 'What cops really want to say at the scene' },
+  // Finished, not yet on Amazon AU (Nov 2026). Give each its listing url and
+  // status 'live' once it is published.
+  { slug: 'cops', title: 'Cop Sh*t', status: 'coming-soon',
+    hook: 'For Australian police officers and everyone who has shared the station fork.',
+    cover: '/assets/img/books/cops.webp',
+    peeks: ['/assets/img/books/pages/cops-t1-03.webp', '/assets/img/books/pages/cops-t2-02.webp'],
+    coverAlt: 'Cover: the title in fat white bubble letters, framed by flowers, a police cap, handcuffs, a traffic cone, a magpie and a police dog' },
+  { slug: 'firefighters', title: 'Firefighter Sh*t', status: 'coming-soon',
+    hook: 'For firies and hose fairies.',
+    cover: '/assets/img/books/firefighters.webp',
+    peeks: ['/assets/img/books/pages/firefighters-t1-02.webp', '/assets/img/books/pages/firefighters-t2-03.webp'],
+    coverAlt: 'Cover: the title in fat red bubble letters, framed by flowers, helmets, a coiled hose, a hydrant, boots and a turnout coat' },
+  { slug: 'parents', title: 'Parent Sh*t', status: 'coming-soon',
+    hook: 'Tantrums, teenagers, and the joys of children!',
+    cover: '/assets/img/books/parents.webp',
+    peeks: ['/assets/img/books/pages/parents-t1-05.webp', '/assets/img/books/pages/parents-t2-03.webp'],
+    coverAlt: 'Cover: the title in fat purple bubble letters, framed by flowers, a teddy bear, a baby bottle, Lego, a lunchbox and a glass of wine' },
 ];

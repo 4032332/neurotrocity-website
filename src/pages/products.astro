@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import ChalkOutline from '../components/ChalkOutline.astro';
 import { PRODUCTS_PAGE } from '../content/copy';
 import { isLive } from '../content/facts';
 
@@ -134,55 +133,15 @@ a.row:hover .go .arw{ transform:translateX(4px) }
 @media (max-width:520px){
   .row{ grid-template-columns:1fr }
 }
-.books{ margin-top:28px }
-
-/* ── #books: a range pane, then one 3:4 tile per book ─────────────────── */
 .range .note{ margin-top:14px; color:var(--muted); font-size:15.5px; line-height:1.62 }
-.books{ margin-top:22px; display:grid; gap:18px; grid-template-columns:repeat(3,1fr) }
-@media (max-width:900px){ .books{ grid-template-columns:repeat(2,1fr) } }
-@media (max-width:520px){ .books{ grid-template-columns:1fr } }
-.book{
-  display:flex; flex-direction:column; overflow:hidden; color:inherit;
-  border:1px solid var(--line); border-radius:8px;
-  background:color-mix(in srgb, var(--ground-2) 80%, transparent);
-  transition:border-color .25s, background .25s, transform .25s;
-}
-.book .art{ display:block; position:relative; aspect-ratio:3/4; overflow:hidden; border-bottom:1px solid var(--line) }
-.book .art img{ width:100%; height:100%; display:block; object-fit:cover; transition:transform .5s cubic-bezier(.22,1,.36,1) }
-.book .body{ display:flex; flex-direction:column; flex:1; padding:18px 20px 22px }
-.book h3{ font-weight:800; letter-spacing:-.03em; font-size:clamp(20px,2vw,24px); color:var(--ink) }
-.book p{ margin-top:8px; color:var(--muted); font-size:14.5px; line-height:1.55 }
-.book .go{ margin-top:auto; padding-top:16px; font-family:var(--mono); font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--flare) }
-.book .go .arw{ display:inline-block; transition:transform .25s }
-a.book:hover, a.book:focus-visible{
-  border-color:color-mix(in srgb, var(--flare) 58%, transparent);
-  background:color-mix(in srgb, var(--flare) 7%, var(--ground-2));
-  transform:translateY(-3px);
-}
-a.book:hover .art img, a.book:focus-visible .art img{ transform:scale(1.03) }
-a.book:hover .go .arw, a.book:focus-visible .go .arw{ transform:translateX(4px) }
 
-/* Coming soon: a chalk outline on the dark, the title on a white cover
-   panel, and a strip of hazard tape. Not a link. */
-.book.soon .art{ background:var(--ground-2); color:#E9E6F2; display:grid; place-items:end center }
-.book.soon .chalk{ width:58%; height:auto; opacity:.9; margin-bottom:4% }
-.book.soon .panel{
-  position:absolute; left:10%; right:10%; top:9%; padding:8px 6px;
-  background:#fff; color:#000; text-align:center;
-  font-family:var(--display); font-weight:800; font-size:clamp(14px,1.5vw,17px); letter-spacing:-.01em; line-height:1.05;
-}
-.book.soon .tape{
-  position:absolute; left:-20%; right:-20%; bottom:22%; transform:rotate(-12deg);
-  background:#FFC93C; color:#07060E; padding:6px 0; text-align:center; white-space:nowrap;
-  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
-  box-shadow:0 2px 0 rgba(0,0,0,.35);
-}
-.book.soon .go{ color:var(--muted) }
+/* Coming soon: the same row, not a link, with a label where the button was. */
+.row .go.soon{ background:transparent; color:var(--muted); border:1px dashed var(--line-2); font-weight:600 }
 
 @media (prefers-reduced-motion:reduce){
-  .book, .book .art img, .book .go .arw{ transition:none }
-  a.book:hover, a.book:focus-visible{ transform:none }
-  a.book:hover .art img, a.book:focus-visible .art img{ transform:none }
+  .row, .row .pgs img, .row .go .arw{ transition:none }
+  a.row:hover, a.row:focus-visible{ transform:none }
+  a.row:hover .pgs img{ transform:none }
 }
 
 /* ── #contact ──────────────────────────────────────────────────────────── */
@@ -263,40 +222,31 @@ document.addEventListener('click',function(ev){
       <p class="note">{books.note}</p>
     </div>
     <div class="rows">
-      {books.items.filter(isLive).map((b) => (
-        <a class="row" href={b.url} target="_blank" rel="noopener">
-          <span class="cov"><img src={b.cover} alt={b.coverAlt} width="600" height="782" loading="lazy" decoding="async" /></span>
-          <span class="peek">
-            <span class="mono tag">Sneak peek inside</span>
-            <span class="pgs">
-              {b.peeks.map((src, i) => (
-                <img src={src} alt={`${b.title}: inside page ${i + 1}, black line art ready to colour`} width="460" height="600" loading="lazy" decoding="async" />
-              ))}
+      {books.items.map((b) => {
+        const inner = (
+          <Fragment>
+            <span class="cov"><img src={b.cover} alt={b.coverAlt} width="600" height="782" loading="lazy" decoding="async" /></span>
+            <span class="peek">
+              <span class="mono tag">Sneak peek inside</span>
+              <span class="pgs">
+                {b.peeks.map((src, i) => (
+                  <img src={src} alt={`${b.title}: inside page ${i + 1}, black line art ready to colour`} width="460" height="600" loading="lazy" decoding="async" />
+                ))}
+              </span>
             </span>
-          </span>
-          <span class="body">
-            <h3>{b.title}</h3>
-            <p>{b.hook}</p>
-            <span class="go">{books.buy}<span class="vh"> (opens in a new tab)</span> <span class="arw" aria-hidden="true">↗</span></span>
-          </span>
-        </a>
-      ))}
-    </div>
-    <div class="books">
-      {books.items.filter((b) => !isLive(b)).map((b) => !isLive(b) && (
-        <div class="book soon">
-          <span class="art">
-            <ChalkOutline prop={b.prop} />
-            <span class="panel" aria-hidden="true">{b.title}</span>
-            <span class="tape" aria-hidden="true">{books.soon} · {books.soon} · {books.soon}</span>
-          </span>
-          <span class="body">
-            <h3>{b.title}</h3>
-            <p>{b.hook}</p>
-            <span class="go">{books.soon}</span>
-          </span>
-        </div>
-      ))}
+            <span class="body">
+              <h3>{b.title}</h3>
+              <p>{b.hook}</p>
+              {isLive(b)
+                ? <span class="go">{books.buy}<span class="vh"> (opens in a new tab)</span> <span class="arw" aria-hidden="true">↗</span></span>
+                : <span class="go soon">{books.soon}</span>}
+            </span>
+          </Fragment>
+        );
+        return isLive(b)
+          ? <a class="row" href={b.url} target="_blank" rel="noopener">{inner}</a>
+          : <div class="row soon">{inner}</div>;
+      })}
     </div>
   </div>
 </section>
