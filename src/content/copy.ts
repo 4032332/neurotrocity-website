@@ -342,7 +342,7 @@ export const PRODUCTS_PAGE = {
     note: 'Swear-word colouring books for adults. Printed single-sided, so your pens can’t bleed through.',
     items: BOOKS,
     buy: 'Buy on Amazon',
-    soon: 'Coming soon to Amazon',
+    soon: 'Coming soon - only days away',
     privacy: 'This page uses the Meta Pixel to count visits and clicks through to Amazon, so we can measure our ads. Meta may use it to show you ads.',
   },
 
